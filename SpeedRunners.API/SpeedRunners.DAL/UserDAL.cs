@@ -34,7 +34,7 @@ namespace SpeedRunners.DAL
 
         public void DeleteAccessToken(string token)
         {
-            Db.Execute($"DELETE AccessToken WHERE Token = @{token}", new { token });
+            Db.Execute($"DELETE AccessToken WHERE Token = @{nameof(token)}", new { token });
         }
     }
 }

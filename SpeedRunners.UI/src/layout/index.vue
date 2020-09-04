@@ -52,7 +52,7 @@
     </v-navigation-drawer>
 
     <v-content dark>
-      <app-main />
+      <AppMain />
     </v-content>
 
     <v-footer dark class="body-2">
@@ -143,7 +143,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~@/styles/mixin.scss";
 @import "~@/styles/variables.scss";
 #ap {
   background: url('../assets/bg.jpg') no-repeat center center fixed !important;

@@ -11,17 +11,17 @@
           {{ stepTitle }}
         </v-card-title>
         <v-progress-linear
-          :indeterminate="step<3"
+          :indeterminate="step < 3"
         />
         <v-stepper v-model="step">
           <v-stepper-step
-            :complete="step>1"
+            :complete="step > 1"
             step="1"
           >
             {{ step1text }}
           </v-stepper-step>
           <v-stepper-step
-            :complete="step>2"
+            :complete="step > 2"
             step="2"
           >
             {{ step2text }}
@@ -77,7 +77,7 @@ export default {
               this.loginSuccess();
             }
           });
-        } else if (response.code === 555) {
+        } else if (response.code === -555) {
           this.validate();
         }
       });

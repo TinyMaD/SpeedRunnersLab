@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar v-model="show" :color='color' :top="true" :timeout="timeout">
+  <v-snackbar v-model="show" :color="color" :top="true" :timeout="timeout">
     {{ message }}
     <v-btn text @click="show = false">Close</v-btn>
   </v-snackbar>
@@ -10,10 +10,10 @@ export default {
   data() {
     return {
       show: true,
-      color: 'success',
+      color: "success",
       message: "",
       timeout: 6000
     };
-  },
+  }
 };
 </script>
