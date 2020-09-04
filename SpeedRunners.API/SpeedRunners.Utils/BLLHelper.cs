@@ -32,7 +32,16 @@ namespace SpeedRunners.Utils
             using IDbConnection conn = GetConnection;
             DbHelper dbhelper = new DbHelper(conn);
             TDAL dal = Activator.CreateInstance(typeof(TDAL), dbhelper) as TDAL;
-            @delegate?.Invoke(dal);
+            try
+            {
+                @delegate?.Invoke(dal);
+            }
+            catch (Exception)
+            {
+                dbhelper.RollbackTrans();
+                dbhelper.Dispose();
+                throw;
+            }
         }
 
         /// <summary>
@@ -48,7 +57,16 @@ namespace SpeedRunners.Utils
             using IDbConnection conn = GetConnection;
             DbHelper dbhelper = new DbHelper(conn);
             TDAL dal = Activator.CreateInstance(typeof(TDAL), dbhelper) as TDAL;
-            return @delegate.Invoke(dal);
+            try
+            {
+                return @delegate.Invoke(dal);
+            }
+            catch (Exception)
+            {
+                dbhelper.RollbackTrans();
+                dbhelper.Dispose();
+                throw;
+            }
         }
     }
 }

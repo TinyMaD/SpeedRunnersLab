@@ -101,6 +101,8 @@ namespace SpeedRunners.BLL
                 rankInfo.OldRankScore = srRankInfo.RankScore;
                 rankInfo.RankLevel = srRankInfo.RankLevel;
                 rankInfo.WeekPlayTime = weekPlayTime;
+
+                DAL.Db.BeginTrans();
                 DAL.AddRankInfo(rankInfo);
                 // 添加RankLog
                 MRankLog rankLog = new MRankLog
@@ -109,6 +111,7 @@ namespace SpeedRunners.BLL
                     RankScore = srRankInfo.RankScore.Value,
                 };
                 DAL.AddRankLog(rankLog);
+                DAL.Db.CommitTrans();
             });
         }
 
