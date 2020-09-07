@@ -49,7 +49,7 @@ service.interceptors.response.use(
     }
     // if the custom code is not 666, it is judged as an error.
     if (res.code !== 666) {
-      Vue.prototype.$snackbar.error({ message: res.message || "Error" });
+      Vue.prototype.$toast.error(res.message || "Error");
 
       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
         // to re-login
@@ -73,7 +73,7 @@ service.interceptors.response.use(
   },
   error => {
     console.log("err" + error); // for debug
-    Vue.prototype.$snackbar.error({ message: error.message });
+    Vue.prototype.$toast.error(error.message);
     return Promise.reject(error);
   }
 );

@@ -51,9 +51,9 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-content dark>
+    <v-main dark>
       <AppMain />
-    </v-content>
+    </v-main>
 
     <v-footer dark class="body-2">
       <v-col class="text-center" cols="12">
@@ -120,7 +120,7 @@ export default {
       var that = this;
       this.$store.dispatch("user/logoutLocal").then(() => {
         that.$router.push("/");
-        that.$snackbar.info({ message: "登出成功" });
+        that.$toast.info("登出成功");
       });
     },
     goToSteamLogin() {

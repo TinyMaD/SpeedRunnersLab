@@ -93,7 +93,7 @@ export default {
             }
           });
         } else {
-          this.$snackbar.error({ message: "登录失败" });
+          this.$toast.error("登录失败");
         }
       });
     },

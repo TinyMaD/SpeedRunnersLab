@@ -49,7 +49,7 @@ router.beforeEach(async(to, from, next) => {
         } catch (error) {
         // remove token and go to login page to re-login
           await store.dispatch("user/resetState");
-          Vue.prototype.$snackbar.error({ message: error || "Has Error" });
+          Vue.prototype.$toast.error(error || "Has Error");
           NProgress.done();
         }
       }
