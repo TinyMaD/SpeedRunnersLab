@@ -10,19 +10,23 @@ namespace SpeedRunners.DAL
         public RankDAL(DbHelper db) : base(db) { }
 
         #region RankInfo
-        public List<MRankInfo> GetRankList(IEnumerable<string> steamIDs = null)
+        public List<MRankInfo> GetRankList(IEnumerable<string> steamIDs = null, bool playSROnly = false)
         {
             string where = string.Empty;
             if (steamIDs?.Any() ?? false)
             {
-                where = $" AND PlatformID IN @{nameof(steamIDs)} ";
+                where += $" AND PlatformID IN @{nameof(steamIDs)} ";
+            }
+            if (playSROnly)
+            {
+                where += " AND GameID = 207140 ";
             }
             return Db.Query<MRankInfo>($"select * from RankInfo where RankType = 1 {where} order by RankScore desc", new { steamIDs }).ToList();
         }
 
         public List<MRankInfo> GetAddedChart()
         {
-            return Db.Query<MRankInfo>(@"select a.PlatformID, b.PersonaName, b.RankScore - a.minScore score from 
+            return Db.Query<MRankInfo>(@"select a.PlatformID, b.PersonaName, b.RankScore - a.minScore RankScore, b.AvatarS from 
 (
     select PlatformID, min(RankScore) minScore from
     (
@@ -32,12 +36,12 @@ namespace SpeedRunners.DAL
         left join RankLog d on c.PlatformID = d.PlatformID and c.Date = d.date
     )e group by PlatformID
 )a left join RankInfo b on a.PlatformID = b.PlatformID
-where b.RankScore - a.minScore > 0 order by score desc; ").ToList();
+where b.RankScore - a.minScore > 0 order by RankScore desc; ").ToList();
         }
 
         public List<MRankInfo> GetHourChart()
         {
-            return Db.Query<MRankInfo>(@"select PersonaName, WeekPlayTime from RankInfo where WeekPlayTime > 0 order by WeekPlayTime desc").ToList();
+            return Db.Query<MRankInfo>(@"select PlatformID, PersonaName, WeekPlayTime, AvatarS from RankInfo where WeekPlayTime > 0 order by WeekPlayTime desc").ToList();
         }
 
         public bool ExistRankInfo(string steamID)

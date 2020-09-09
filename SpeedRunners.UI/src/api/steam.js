@@ -27,3 +27,10 @@ export function searchPlayerBySteamID64(steamID64) {
     method: "get"
   });
 }
+
+export function getOnlineCount() {
+  return request({
+    url: `/steam/getOnlineCount`,
+    method: "get"
+  });
+}

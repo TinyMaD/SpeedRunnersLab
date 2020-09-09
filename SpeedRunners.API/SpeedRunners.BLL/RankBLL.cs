@@ -32,6 +32,18 @@ namespace SpeedRunners.BLL
         }
 
         /// <summary>
+        /// 获取正在玩SR的玩家
+        /// </summary>
+        /// <returns></returns>
+        public List<MRankInfo> GetPlaySRList()
+        {
+            return BeginDb(DAL =>
+            {
+                return DAL.GetRankList(playSROnly: true);
+            });
+        }
+
+        /// <summary>
         /// 获取新增天梯分排名
         /// </summary>
         /// <returns></returns>

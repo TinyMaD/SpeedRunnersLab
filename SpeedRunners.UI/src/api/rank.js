@@ -20,3 +20,24 @@ export function initUserData() {
     method: "get"
   });
 }
+
+export function getPlaySRList() {
+  return request({
+    url: "/rank/getPlaySRList",
+    method: "get"
+  });
+}
+
+export function getAddedChart() {
+  return request({
+    url: "/rank/getAddedChart",
+    method: "get"
+  });
+}
+
+export function getHourChart() {
+  return request({
+    url: "/rank/getHourChart",
+    method: "get"
+  });
+}

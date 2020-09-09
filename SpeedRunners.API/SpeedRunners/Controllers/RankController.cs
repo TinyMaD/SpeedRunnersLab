@@ -29,5 +29,9 @@ namespace SpeedRunners.Controllers
         [User]
         [HttpGet]
         public async Task InitUserData() => await BLL.InitUserData();
+
+        [Persona]
+        [HttpGet]
+        public List<MRankInfo> GetPlaySRList() => BLL.GetPlaySRList();
     }
 }
