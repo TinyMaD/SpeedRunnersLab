@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: "SpeedRunners游戏Lab - SRLab",
+  title: "老司机圣地 - SRLab",
 
   /**
    * @type {boolean} true | false

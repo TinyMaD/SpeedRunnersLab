@@ -59,13 +59,11 @@
       <v-col class="text-center" cols="12">
         <span class="caption">
           &copy;2018-{{ new Date().getFullYear() }}
-          <a
-            id="tinymad"
-            href="https://space.bilibili.com/3857585"
-            target="_blank"
-          >TinyMaD</a>
-          <br>made with
-          <v-icon color="red" size="14">mdi-heart</v-icon>&nbsp;for SpeedRunners
+          <a class="link" href="https://space.bilibili.com/3857585" target="_blank">TinyMaD</a>
+          <br>Made with
+          <v-icon color="red" size="14">mdi-heart</v-icon>&nbsp;for SpeedRunners<br>
+          <a class="link" href="http://beian.miit.gov.cn" target="_blank">蜀ICP备18005857号-1</a><br>
+          <a class="link" href="https://github.com/TinyMaD/SpeedRunnersLab" target="_blank">网站源代码</a>
         </span>
       </v-col>
     </v-footer>
@@ -148,11 +146,11 @@ export default {
   background: url('../assets/bg.jpg') no-repeat center center fixed !important;
   background-size: cover;
 }
-#tinymad {
+.link {
   color: white;
   text-decoration: none;
 }
-#tinymad:hover {
+.link:hover {
   color: white;
   text-decoration: underline;
 }

@@ -94,8 +94,12 @@ export default {
         },
         tooltip: {
           formatter: function(a) {
-            return a.data.personaName + "：" + a.data.weekPlayTime + " 小时";
+            return a.marker + a.data.personaName + "：" + a.data.weekPlayTime + " 小时";
           }
+          // trigger: "axis",
+          // axisPointer: { // 坐标轴指示器，坐标轴触发有效
+          //   type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
+          // }
         },
         dataset: {
           source: that.list
