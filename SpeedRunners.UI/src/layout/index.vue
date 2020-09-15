@@ -39,16 +39,14 @@
             <v-list-item-title>登 录</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-if="name!==''" @click.stop="logout()">
-          <v-list-item-action>
-            <v-icon>mdi-exit-to-app</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>登 出</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
       </v-list>
+      <template v-if="name!==''" v-slot:append>
+        <div class="pa-2">
+          <v-btn block @click.stop="logout()">
+            <v-icon left>mdi-exit-to-app</v-icon>登 出
+          </v-btn>
+        </div>
+      </template>
     </v-navigation-drawer>
 
     <v-main dark>

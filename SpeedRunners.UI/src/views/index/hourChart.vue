@@ -51,17 +51,17 @@ export default {
   mounted() {
     var that = this;
     getHourChart().then(response => {
-      this.dataCount = response.data.length;
-      this.list = response.data.reverse().map(function(x, i) {
+      this.list = response.data.reverse().filter(x => {
         x.weekPlayTime = (x.weekPlayTime / 60).toFixed(1);
-        if (x.weekPlayTime !== 0) {
-          that.richStyle[`a${i}`] = {
-            height: 25,
-            align: "center",
-            backgroundColor: { image: x.avatarS }
-          };
-          return x;
-        }
+        return x.weekPlayTime > 0;
+      });
+      this.dataCount = this.list.length;
+      this.list.forEach((x, i) => {
+        that.richStyle[`a${i}`] = {
+          height: 25,
+          align: "center",
+          backgroundColor: { image: x.avatarS }
+        };
       });
       this.$nextTick(() => {
         this.initChart();

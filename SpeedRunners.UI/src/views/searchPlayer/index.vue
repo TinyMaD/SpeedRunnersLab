@@ -81,7 +81,7 @@ export default {
   name: "SearchPlayer",
   data: () => ({
     content:
-      "查询Steam用户SpeedRunners游戏数据，查询速度：SteamID>自定义URL>昵称",
+      "查询Steam用户的SpeedRunners游戏数据，查询速度：SteamID（稳定）>自定义URL（稳定）>昵称（不稳定）",
     keyWords: "",
     loading: false,
     loadList: false,
