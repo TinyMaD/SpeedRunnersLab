@@ -96,7 +96,7 @@ export default {
           this.personstate +
           ";border-radius:2px;background-image: url(" +
           res.data[i].avatarM +
-          ");background-size: 41px;margin:auto;'><div class='right' style='display:" +
+          ");background-size: 37px;margin:auto;'><div class='right' style='display:" +
           this.srstate +
           ";'><img class='srIndex' style='height:20px;margin:27px -15px 0 0' src='img/srstate.png'/></div></div></td>";
 
