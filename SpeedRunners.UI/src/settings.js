@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: "老司机圣地 - SRLab",
+  title: "SRLab - 个人技术展示",
 
   /**
    * @type {boolean} true | false

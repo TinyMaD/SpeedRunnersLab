@@ -110,13 +110,13 @@ export default {
               x: "rankScore",
               y: "personaName"
             },
+            barWidth: 20,
             itemStyle: {
-              normal: {
-                color: function(params) {
-                  const colorList = ["#3fb1e3", "#6be6c1", "#626c91", "#a0a7e6", "#c4ebad", "#96dee8"];
-                  return colorList[(that.dataCount - params.dataIndex - 1) % 6];
-                }
-              }
+              color: function(params) {
+                const colorList = ["#3fb1e3", "#6be6c1", "#626c91", "#a0a7e6", "#c4ebad", "#96dee8"];
+                return colorList[(that.dataCount - params.dataIndex - 1) % 6];
+              },
+              barBorderRadius: [0, 10, 10, 0]
             },
             label: {
               normal: {

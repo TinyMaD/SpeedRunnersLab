@@ -121,13 +121,13 @@ export default {
               x: "weekPlayTime",
               y: "personaName"
             },
+            barWidth: 20,
             itemStyle: {
-              normal: {
-                color: function(params) {
-                  const colorList = ["#9b8bba", "#e098c7", "#8fd3e8", "#71669e", "#cc70af", "#7cb4cc"];
-                  return colorList[(that.dataCount - params.dataIndex - 1) % 6];
-                }
-              }
+              color: function(params) {
+                const colorList = ["#9b8bba", "#e098c7", "#8fd3e8", "#71669e", "#cc70af", "#7cb4cc"];
+                return colorList[(that.dataCount - params.dataIndex - 1) % 6];
+              },
+              barBorderRadius: [0, 10, 10, 0]
             },
             label: {
               normal: {
