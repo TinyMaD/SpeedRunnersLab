@@ -2,6 +2,7 @@
 using SpeedRunners.DAL;
 using SpeedRunners.Model;
 using SpeedRunners.Model.Rank;
+using SpeedRunners.Model.User;
 using SpeedRunners.Utils;
 using System;
 using System.Linq;
@@ -65,15 +66,25 @@ namespace SpeedRunners.BLL
             return MResponse.Fail("登录失败");
         }
 
-        public MUser GetUserByToken(string token)
+        public MAccessToken GetUserByToken(string token)
         {
             return BeginDb(DAL =>
             {
-                return DAL.GetUserByToken(token);
+                MAccessToken user = DAL.GetUserByToken(token);
+                if (token.Equals(user?.ExToken))
+                {
+                    DateTime create = Convert.ToDateTime(user.Token.Split("&")[1]);
+                    int expire = Convert.ToInt32(AppSettings.GetConfig("Refresh")) - 1;
+                    if (DateTime.Now - create > TimeSpan.FromMinutes(expire))
+                    {
+                        return null;
+                    }
+                }
+                return user;
             });
         }
 
-        public void UpdateAccessToken(MUser user)
+        public void UpdateAccessToken(MAccessToken user)
         {
             BeginDb(DAL =>
             {

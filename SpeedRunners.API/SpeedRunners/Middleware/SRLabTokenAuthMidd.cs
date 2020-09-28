@@ -6,6 +6,7 @@ using Newtonsoft.Json.Serialization;
 using SpeedRunners.BLL;
 using SpeedRunners.Filter;
 using SpeedRunners.Model;
+using SpeedRunners.Model.User;
 using System.Threading.Tasks;
 
 namespace SpeedRunners.Middleware
@@ -72,7 +73,7 @@ namespace SpeedRunners.Middleware
 
             // 获取当前用户信息
             UserBLL loginBLL = context.RequestServices.GetService<UserBLL>();
-            MUser user = loginBLL.GetUserByToken(token);
+            MAccessToken user = loginBLL.GetUserByToken(token);
             if (string.IsNullOrWhiteSpace(user?.PlatformID))
             {
                 if (isUser)
@@ -84,11 +85,14 @@ namespace SpeedRunners.Middleware
                     return AuthResult.DontNeed;
                 }
             }
-            string browser = context.Request?.Headers?["User-Agent"];
-            user.Browser = browser ?? "未知设备";
             // 给当前用户信息Service赋值
             MUser currentUser = context.RequestServices.GetService<MUser>();
-            currentUser.SetValue(user);
+            string browser = context.Request?.Headers?["User-Agent"];
+            currentUser.Browser = browser ?? "未知设备";
+            currentUser.TokenID = user.TokenID;
+            currentUser.Token = user.Token;
+            currentUser.PlatformID = user.PlatformID;
+            currentUser.LoginDate = user.LoginDate;
             return AuthResult.AuthSuccess;
         }
     }

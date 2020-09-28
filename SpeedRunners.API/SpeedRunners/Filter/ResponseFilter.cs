@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using SpeedRunners.BLL;
 using SpeedRunners.Model;
+using SpeedRunners.Model.User;
 using System;
 
 namespace SpeedRunners.Filter
@@ -93,8 +94,18 @@ namespace SpeedRunners.Filter
             if (DateTime.Now - create > TimeSpan.FromMinutes(refresh))
             {
                 // 过期则生成新的Token
-                _currentUser.Token = CommonUtils.CreateToken();
-                _loginBLL.UpdateAccessToken(_currentUser);
+                string newToken = CommonUtils.CreateToken();
+                MAccessToken param = new MAccessToken
+                {
+                    TokenID = _currentUser.TokenID,
+                    PlatformID = _currentUser.PlatformID,
+                    Browser = _currentUser.Browser,
+                    Token = newToken,
+                    ExToken = _currentUser.Token,
+                    LoginDate = _currentUser.LoginDate
+                };
+                _loginBLL.UpdateAccessToken(param);
+                return newToken;
             }
             return _currentUser.Token;
         }

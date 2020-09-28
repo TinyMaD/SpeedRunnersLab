@@ -1,4 +1,5 @@
 ﻿using SpeedRunners.Model;
+using SpeedRunners.Model.User;
 using SpeedRunners.Utils;
 
 namespace SpeedRunners.DAL
@@ -7,9 +8,9 @@ namespace SpeedRunners.DAL
     {
         public UserDAL(DbHelper db) : base(db) { }
 
-        public MUser GetUserByToken(string token)
+        public MAccessToken GetUserByToken(string token)
         {
-            return Db.QueryFirstOrDefault<MUser>($"SELECT TokenID, PlatformID, Browser, Token, LoginDate FROM AccessToken WHERE Token = @{nameof(token)}", new { token });
+            return Db.QueryFirstOrDefault<MAccessToken>($"SELECT TokenID, PlatformID, Browser, Token, LoginDate, ExToken FROM AccessToken WHERE Token = @{nameof(token)} OR ExToken = @{nameof(token)}", new { token });
         }
 
         public MUser GetUserByTokenID(int tokenID)
@@ -22,9 +23,9 @@ namespace SpeedRunners.DAL
             Db.Insert("AccessToken", user, new[] { nameof(user.TokenID), nameof(user.LoginDate), nameof(user.RankID) });
         }
 
-        public void UpdateAccessToken(MUser user)
+        public void UpdateAccessToken(MAccessToken user)
         {
-            Db.Execute($"UPDATE AccessToken SET Token = @{nameof(user.Token)}, Browser = @{nameof(user.Browser)} WHERE TokenID = @{nameof(user.TokenID)} AND PlatformID = @{nameof(user.PlatformID)}", user);
+            Db.Execute($"UPDATE AccessToken SET Token = @{nameof(user.Token)}, ExToken = @{nameof(user.ExToken)}, Browser = @{nameof(user.Browser)} WHERE TokenID = @{nameof(user.TokenID)} AND PlatformID = @{nameof(user.PlatformID)}", user);
         }
 
         public void DeleteAccessToken(MUser user)

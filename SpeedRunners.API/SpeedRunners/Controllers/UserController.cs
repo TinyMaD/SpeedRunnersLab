@@ -25,7 +25,7 @@ namespace SpeedRunners.Controllers
         [HttpGet("{tokenID}")]
         public MResponse LogoutOther(int tokenID) => BLL.DeleteAccessToken(tokenID);
 
-        [Persona]
+        [User]
         [HttpGet]
         public void LogoutLocal() => BLL.DeleteAccessToken();
     }
