@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using SpeedRunners.DAL;
 using SpeedRunners.Model;
 using SpeedRunners.Model.Rank;
@@ -43,7 +44,7 @@ namespace SpeedRunners.BLL
             catch (Exception)
             {
                 // 超时登录失败
-                return MResponse.Fail(code: -555);
+                return MResponse.Fail("登录超时", -555);
             }
             if (result.ToLower().Contains("is_valid:true"))
             {
