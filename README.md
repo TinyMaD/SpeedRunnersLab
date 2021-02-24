@@ -1,7 +1,7 @@
 # SpeedRunnersLab
 > 这是一个极简的以SpeedRunners游戏为主题的站点。主要运用的框架及组件库： Vuetify + vue-admin-template + ASP.NET Core + Steam标识登录
 
-[线上地址](http://www.tmdsr.cn)
+[线上地址](http://www.speedrunners.cn)
 
 > 被忽略的appsettings.json文件
 ```
