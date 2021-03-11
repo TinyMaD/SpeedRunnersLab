@@ -105,7 +105,7 @@ namespace SpeedRunners.BLL
                     DAL.AddRankInfo(rankInfo);
                     return;
                 }
-                int weekPlayTime = (int)playedGames.RecentlyPlayedGames.FirstOrDefault(x => x.AppId == 207140).Playtime2Weeks;
+                int weekPlayTime = (int)(playedGames.RecentlyPlayedGames.FirstOrDefault(x => x.AppId == 207140)?.Playtime2Weeks ?? 0);
                 // 添加RankInfo
                 rankInfo.RankType = 1;
                 rankInfo.RankCount = srRankInfo.RankCount;
@@ -113,7 +113,6 @@ namespace SpeedRunners.BLL
                 rankInfo.OldRankScore = srRankInfo.RankScore;
                 rankInfo.RankLevel = srRankInfo.RankLevel;
                 rankInfo.WeekPlayTime = weekPlayTime;
-
                 DAL.Db.BeginTrans();
                 DAL.AddRankInfo(rankInfo);
                 // 添加RankLog

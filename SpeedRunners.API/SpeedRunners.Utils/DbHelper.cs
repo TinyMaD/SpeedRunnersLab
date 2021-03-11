@@ -33,14 +33,9 @@ namespace SpeedRunners.Utils
 
         public void BeginTrans()
         {
+            connection.Open();
             transaction?.Dispose();
             transaction = null;
-            transaction = connection.BeginTransaction();
-        }
-
-        public void BeginTrans(IsolationLevel il)
-        {
-            transaction?.Dispose();
             transaction = connection.BeginTransaction();
         }
 

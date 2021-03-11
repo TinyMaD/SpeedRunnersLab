@@ -36,7 +36,7 @@ namespace SpeedRunners.Utils
             {
                 @delegate?.Invoke(dal);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 dbhelper.RollbackTrans();
                 dbhelper.Dispose();
