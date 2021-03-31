@@ -2,6 +2,7 @@
 using SpeedRunners.Utils;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace SpeedRunners.DAL
 {
@@ -12,14 +13,14 @@ namespace SpeedRunners.DAL
         #region RankInfo
         public List<MRankInfo> GetRankList(IEnumerable<string> steamIDs = null, bool playSROnly = false)
         {
-            string where = string.Empty;
+            StringBuilder where = new StringBuilder();
             if (steamIDs?.Any() ?? false)
             {
-                where += $" AND PlatformID IN @{nameof(steamIDs)} ";
+                where.Append($" AND PlatformID IN @{nameof(steamIDs)} ");
             }
             if (playSROnly)
             {
-                where += " AND GameID = 207140 ";
+                where.Append(" AND GameID = 207140 ");
             }
             return Db.Query<MRankInfo>($"select * from RankInfo where RankType = 1 {where} order by RankScore desc", new { steamIDs }).ToList();
         }
