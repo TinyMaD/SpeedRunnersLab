@@ -33,7 +33,7 @@
         </v-list-item>
         <v-list-item v-else @click.stop="goToSteamLogin()">
           <v-list-item-action>
-            <v-icon>mdi-exit-to-app</v-icon>
+            <v-icon>mdi-steam</v-icon>
           </v-list-item-action>
           <v-list-item-content>
             <v-list-item-title>登 录</v-list-item-title>
