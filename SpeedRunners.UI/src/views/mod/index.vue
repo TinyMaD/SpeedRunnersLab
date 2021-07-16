@@ -1,0 +1,136 @@
+<template>
+  <v-container fluid>
+    <div class="text-center">
+      <!-- <v-img
+        max-height="150"
+        max-width="250"
+        src="http://cdn-img.speedrunners.cn/TIM%E5%9B%BE%E7%89%8720200627145348.jpg"
+      /> -->
+      <v-btn
+        color="primary"
+        dark
+        @click="download"
+      >
+        下 载
+      </v-btn>
+      <v-dialog
+        v-model="dialog"
+        persistent
+        dark
+        width="500"
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            color="primary"
+            dark
+            v-bind="attrs"
+            v-on="on"
+          >
+            上 传
+          </v-btn>
+        </template>
+
+        <v-card>
+          <v-card-title>
+            {{ stepTitle }}
+          </v-card-title>
+          <v-progress-linear
+            v-model="progress"
+          />
+          <v-file-input
+            :show-size="true"
+            accept="image/*"
+            label="点击选择文件"
+            @change="changeFiles"
+          />
+          <v-divider />
+          <v-card-actions>
+            <v-spacer />
+            <v-btn
+              color="primary"
+              text
+              @click="dialog = false"
+            >
+              取 消
+            </v-btn>
+            <v-btn
+              color="primary"
+              @click="uploadFile"
+            >
+              提 交
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
+  </v-container>
+</template>
+<script>
+import * as qiniu from "qiniu-js";
+import { getUploadToken, getDownloadUrl } from "@/api/asset";
+
+export default {
+  name: "Mod",
+  data: () => ({
+    dialog: false,
+    file: {},
+    subscription: null,
+    progress: 0
+  }),
+  computed: {
+    stepTitle() {
+      return this.progress > 0 ? `正在上传，请耐心等待...${this.progress} %` : "上传MOD资源";
+    }
+  },
+  methods: {
+    changeFiles(file) {
+      this.file = file;
+    },
+    uploadFile() {
+      var that = this;
+      getUploadToken().then(response => {
+        const token = response.data;
+        // const putExtra = {
+        //    fname: "qiniu.txt"
+        //    customVars: { "x:test": "qiniu" },
+        //    metadata: { "x-qn-meta": "qiniu" }
+        // };
+        const config = {
+          useCdnDomain: true
+        };
+        const observable = qiniu.upload(that.file, that.file.name, token, null, config);
+        const observer = {
+          next(res) {
+            that.progress = res.total.percent;
+          },
+          error(err) {
+            that.$toast.error(`${err.name}:${err.message}`);
+          },
+          complete(res) {
+            that.progress = 100;
+            console.log(res);
+          }
+        };
+        that.subscription = observable.subscribe(observer);
+      });
+    },
+
+    download(name, downloadPath) {
+      name = "TIM图片20200627145348.jpg";
+      getDownloadUrl(name).then(response => {
+        var x = new XMLHttpRequest();
+        x.open("GET", response.data, true);
+        x.responseType = "blob";
+        x.onload = function(e) {
+          var url = window.URL.createObjectURL(x.response);
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = name;
+          a.click();
+        };
+        x.send();
+      });
+    }
+  }
+};
+</script>

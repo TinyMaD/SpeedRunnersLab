@@ -2,6 +2,10 @@
 @import './transition.scss';
 @import './sidebar.scss';
 
+.v-dialog .v-input{
+  max-width: 99%;
+}
+
 body {
   height: 100%;
   -moz-osx-font-smoothing: grayscale;

@@ -54,6 +54,7 @@ namespace SpeedRunners
             }
 
             //app.UseHttpsRedirection();
+            //app.UseHsts();
 
             app.UseRouting();
 

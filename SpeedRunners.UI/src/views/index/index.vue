@@ -12,11 +12,16 @@
                       {{ onlineCount }}人在玩
                       <v-divider />
                       <v-avatar v-for="player in playSRlist" :key="player.platformID" class="ma-1">
-                        <img
-                          :src="player.avatarM"
-                          :alt="player.personaName"
-                          :title="player.personaName"
-                        >
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <img
+                              :src="player.avatarM"
+                              v-bind="attrs"
+                              v-on="on"
+                            >
+                          </template>
+                          <span>{{ player.personaName }}</span>
+                        </v-tooltip>
                       </v-avatar>
                     </v-card>
                   </v-col>
