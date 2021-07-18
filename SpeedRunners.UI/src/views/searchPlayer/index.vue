@@ -120,7 +120,7 @@ export default {
             result === null ||
             (result.isGameInfo === false && result.playerList.length === 0)
           ) {
-            this.content = "未查询到相关结果，目标玩家可能未将Steam资料-隐私设置为空开";
+            this.content = "未查询到相关结果，目标玩家可能未将Steam资料-隐私设置为公开";
           }
           this.searchResult = result;
           this.loading = false;
@@ -132,7 +132,7 @@ export default {
             result === null ||
             (result.isGameInfo === false && result.playerList.length === 0)
           ) {
-            this.content = "未查询到相关结果，目标玩家可能未将Steam资料-隐私设置为空开";
+            this.content = "未查询到相关结果，目标玩家可能未将Steam资料-隐私设置为公开";
           }
           this.searchResult = result;
           this.loading = false;

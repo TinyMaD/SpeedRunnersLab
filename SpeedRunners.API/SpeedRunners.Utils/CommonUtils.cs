@@ -1,5 +1,7 @@
-﻿using System;
+﻿using SpeedRunners.Model;
+using System;
 using System.Reflection;
+using System.Text;
 
 namespace SpeedRunners
 {
@@ -24,5 +26,10 @@ namespace SpeedRunners
         /// </summary>
         /// <returns></returns>
         public static string CreateToken() => Guid.NewGuid().ToString("N") + "&" + DateTime.Now.ToString("s");
+
+        public static StringBuilder WhereIf(this StringBuilder builder, bool condition, string where)
+        {
+            return condition ? builder.Append(where) : builder;
+        }
     }
 }

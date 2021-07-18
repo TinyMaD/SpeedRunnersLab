@@ -1,6 +1,8 @@
 ﻿using Qiniu.Storage;
 using Qiniu.Util;
 using SpeedRunners.DAL;
+using SpeedRunners.Model;
+using SpeedRunners.Model.Asset;
 using SpeedRunners.Utils;
 using System;
 using System.Collections.Generic;
@@ -27,6 +29,16 @@ namespace SpeedRunners.BLL
             Mac mac = new Mac(_accessKey, _secretKey);
             string privateUrl = DownloadManager.CreatePrivateUrl(mac, domain, key, 10 * 60);
             return privateUrl;
+        }
+
+        public MPageResult<MMod> GetModList(MModPageParam param)
+        {
+            MPageResult<MMod> result = new MPageResult<MMod>();
+            BeginDb(DAL =>
+            {
+                result = DAL.GetModList(param);
+            });
+            return result;
         }
     }
 }

@@ -31,13 +31,10 @@
             <v-list-item-title v-text="name" />
           </v-list-item-content>
         </v-list-item>
-        <v-list-item v-else @click.stop="goToSteamLogin()">
-          <v-list-item-action>
-            <v-icon>mdi-steam</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title>登 录</v-list-item-title>
-          </v-list-item-content>
+        <v-list-item v-else>
+          <v-btn block light @click="goToSteamLogin()">
+            <v-icon left>mdi-steam</v-icon>登 录
+          </v-btn>
         </v-list-item>
       </v-list>
       <template v-if="name!==''" v-slot:append>

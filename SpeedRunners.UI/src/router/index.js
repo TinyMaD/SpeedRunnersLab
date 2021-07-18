@@ -48,11 +48,11 @@ export const constantRoutes = [
       component: () => import("@/views/rank/index"),
       meta: { title: "排行榜", icon: "mdi-trophy" }
     },
-    // {
-    //   path: "/mod",
-    //   component: () => import("@/views/mod/index"),
-    //   meta: { title: "MOD", icon: "mdi-file-download" }
-    // },
+    {
+      path: "/mod",
+      component: () => import("@/views/mod/index"),
+      meta: { title: "MOD", icon: "mdi-file-download" }
+    },
     {
       path: "/searchplayer",
       component: () => import("@/views/searchPlayer/index"),
