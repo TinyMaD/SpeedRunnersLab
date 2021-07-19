@@ -1,50 +1,46 @@
 <template>
   <v-container fluid>
-    <v-row>
-      <v-col cols="12" class="py-9">
-        <v-row justify="center" align="baseline">
-          <div style="width:1500px">
+    <v-row justify="center" align="baseline">
+      <div style="width:1500px">
+        <v-row>
+          <v-col cols="12" md="6" class="py-0 pr-md-1">
             <v-row>
-              <v-col cols="12" md="6" class="py-0 pr-md-1">
-                <v-row>
-                  <v-col cols="12" class="py-0">
-                    <v-card class="mb-2 pa-2" dark>
-                      {{ onlineCount }}人在玩
-                      <v-divider />
-                      <v-avatar v-for="player in playSRlist" :key="player.platformID" class="ma-1">
-                        <v-tooltip top>
-                          <template v-slot:activator="{ on, attrs }">
-                            <img
-                              :src="player.avatarM"
-                              v-bind="attrs"
-                              v-on="on"
-                            >
-                          </template>
-                          <span>{{ player.personaName }}</span>
-                        </v-tooltip>
-                      </v-avatar>
-                    </v-card>
-                  </v-col>
-                  <v-col cols="12" class="py-0">
-                    <v-card class="mb-2 pa-2" dark>
-                      <AddedChart />
-                    </v-card>
-                  </v-col>
-                </v-row>
+              <v-col cols="12" class="py-0">
+                <v-card class="mb-2 pa-2" dark>
+                  {{ onlineCount }}人在玩
+                  <v-divider />
+                  <v-avatar v-for="player in playSRlist" :key="player.platformID" class="ma-1">
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on, attrs }">
+                        <img
+                          :src="player.avatarM"
+                          v-bind="attrs"
+                          v-on="on"
+                        >
+                      </template>
+                      <span>{{ player.personaName }}</span>
+                    </v-tooltip>
+                  </v-avatar>
+                </v-card>
               </v-col>
-              <v-col cols="12" md="6" class="py-0 pl-md-1">
-                <v-row>
-                  <v-col class="py-0">
-                    <v-card class="mb-2 pa-2" dark>
-                      <HourChart />
-                    </v-card>
-                  </v-col>
-                </v-row>
+              <v-col cols="12" class="py-0">
+                <v-card class="mb-2 pa-2" dark>
+                  <AddedChart />
+                </v-card>
               </v-col>
             </v-row>
-          </div>
+          </v-col>
+          <v-col cols="12" md="6" class="py-0 pl-md-1">
+            <v-row>
+              <v-col class="py-0">
+                <v-card class="mb-2 pa-2" dark>
+                  <HourChart />
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-col>
         </v-row>
-      </v-col>
+      </div>
     </v-row>
   </v-container>
 </template>

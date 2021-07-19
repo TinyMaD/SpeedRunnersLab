@@ -1,38 +1,35 @@
 <!--祖传代码，待优化-->
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12">
-        <v-row justify="center">
-          <table class="table">
-            <tr id="tableHead">
-              <th id="thf" width="10%" />
-              <th id="online" width="13%" style="text-align:center;color:#81A636" />
-              <th width="33%">昵称</th>
-              <th width="25%">段位</th>
-              <th v-if="pc < 1640" id="thl" width="19%">天梯分</th>
-              <th v-else width="13%">天梯分</th>
-              <th v-if="pc > 1640" id="thl" width="6%" />
-            </tr>
-            <tbody id="tbody" />
-            <tr id="tfoot">
-              <td v-if="pc < 1640" id="tfootf" />
-              <td v-if="pc < 1640" />
-              <td v-if="pc < 1640" id="tfootl" colspan="3">*数据更新频率：10分钟/次</td>
-              <td v-if="pc > 1640" id="tfootf" />
-              <td v-if="pc > 1640" />
-              <td v-if="pc > 1640" />
-              <td v-if="pc > 1640" id="tfootl" colspan="3">*数据更新频率：10分钟/次</td>
-            </tr>
-          </table>
-        </v-row>
-      </v-col>
+    <v-row justify="center">
+      <table class="table">
+        <tr id="tableHead">
+          <th id="thf" width="10%" />
+          <th id="online" width="13%" style="text-align:center;color:#81A636" />
+          <th width="33%">昵称</th>
+          <th width="25%">段位</th>
+          <th v-if="pc < 1640" id="thl" width="19%">天梯分</th>
+          <th v-else width="13%">天梯分</th>
+          <th v-if="pc > 1640" id="thl" width="6%" />
+        </tr>
+        <tbody id="tbody" />
+        <tr id="tfoot">
+          <td v-if="pc < 1640" id="tfootf" />
+          <td v-if="pc < 1640" />
+          <td v-if="pc < 1640" id="tfootl" colspan="3">*数据更新频率：10分钟/次</td>
+          <td v-if="pc > 1640" id="tfootf" />
+          <td v-if="pc > 1640" />
+          <td v-if="pc > 1640" />
+          <td v-if="pc > 1640" id="tfootl" colspan="3">*数据更新频率：10分钟/次</td>
+        </tr>
+      </table>
     </v-row>
   </v-container>
 </template>
 
 <script>
 import { getRankList } from "@/api/rank";
+import $ from "jquery";
 export default {
   name: "Rank",
 
@@ -162,7 +159,7 @@ export default {
           break;
         default:
           // 在线就查看是否在玩游戏
-          if (GameID != "" && GameID != null) {
+          if (GameID !== "" && GameID != null) {
             // 在玩游戏，绿色
             this.personstate = "#81A636";
             if (GameID === "207140") {

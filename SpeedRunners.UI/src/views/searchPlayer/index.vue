@@ -1,72 +1,68 @@
 <template>
   <v-container fluid>
-    <v-row>
-      <v-col cols="12">
-        <v-row justify="center">
-          <v-card width="940px" min-height="800px" style="padding:10px" dark>
-            <v-text-field
-              v-model="keyWords"
-              :loading="loading"
-              color="success"
-              label="搜 索"
-              hint="请输入SteamID、自定义URL或者昵称"
-              append-icon="mdi-magnify"
-              clearable
-              @click:append="searchPlayer"
-              @keyup.enter.native="searchPlayer"
-            />
-            <div
-              v-if="searchResult==null||searchResult.isGameInfo==undefined||(searchResult.isGameInfo===false&&searchResult.playerList.length===0)"
-              class="transition-swing"
-              v-text="content"
-            />
-            <v-simple-table v-if="searchResult!=null&&searchResult.isGameInfo">
-              <template v-slot:default>
-                <tbody>
-                  <tr v-for="item in searchResult.gameInfo.stats" :key="item.name">
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.value }}</td>
-                  </tr>
-                </tbody>
-              </template>
-            </v-simple-table>
-            <v-list
-              v-if="searchResult!=null&&searchResult.isGameInfo===false&&searchResult.playerList.length>0"
-              subheader
-            >
-              <v-subheader>无效的SteamID或自定义URL，请选择想要查询的用户</v-subheader>
-              <v-list-item
-                v-for="(item, index) in searchResult.playerList"
-                :key="index"
-                @click="searchByID(item)"
-              >
-                <v-list-item-avatar>
-                  <v-img :src="item.avatar" />
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <v-list-item-title v-text="item.userName" />
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item
-                v-if="searchResult.total>0&&!loadList&&searchResult.total>searchResult.pageNo*20"
-                @click="getPlayerList()"
-              >
-                <v-list-item-content>
-                  <v-list-item-title v-text="loadingText" />
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-            <div v-if="loadList">
-              <v-skeleton-loader
-                v-for="item in 5"
-                :key="item"
-                type="list-item-avatar"
-                class="mx-auto"
-              />
-            </div>
-          </v-card>
-        </v-row>
-      </v-col>
+    <v-row justify="center">
+      <v-card width="940px" min-height="800px" style="padding:10px" dark>
+        <v-text-field
+          v-model="keyWords"
+          :loading="loading"
+          color="success"
+          label="搜 索"
+          hint="请输入SteamID、自定义URL或者昵称"
+          append-icon="mdi-magnify"
+          clearable
+          @click:append="searchPlayer"
+          @keyup.enter.native="searchPlayer"
+        />
+        <div
+          v-if="searchResult==null||searchResult.isGameInfo==undefined||(searchResult.isGameInfo===false&&searchResult.playerList.length===0)"
+          class="transition-swing"
+          v-text="content"
+        />
+        <v-simple-table v-if="searchResult!=null&&searchResult.isGameInfo">
+          <template v-slot:default>
+            <tbody>
+              <tr v-for="item in searchResult.gameInfo.stats" :key="item.name">
+                <td>{{ item.name }}</td>
+                <td>{{ item.value }}</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+        <v-list
+          v-if="searchResult!=null&&searchResult.isGameInfo===false&&searchResult.playerList.length>0"
+          subheader
+        >
+          <v-subheader>无效的SteamID或自定义URL，请选择想要查询的用户</v-subheader>
+          <v-list-item
+            v-for="(item, index) in searchResult.playerList"
+            :key="index"
+            @click="searchByID(item)"
+          >
+            <v-list-item-avatar>
+              <v-img :src="item.avatar" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.userName" />
+            </v-list-item-content>
+          </v-list-item>
+          <v-list-item
+            v-if="searchResult.total>0&&!loadList&&searchResult.total>searchResult.pageNo*20"
+            @click="getPlayerList()"
+          >
+            <v-list-item-content>
+              <v-list-item-title v-text="loadingText" />
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+        <div v-if="loadList">
+          <v-skeleton-loader
+            v-for="item in 5"
+            :key="item"
+            type="list-item-avatar"
+            class="mx-auto"
+          />
+        </div>
+      </v-card>
     </v-row>
   </v-container>
 </template>

@@ -1,48 +1,63 @@
 <template>
   <v-container fluid>
-    <v-row>
-      <v-col cols="12">
-        <v-row justify="center">
-          <v-card width="1500px" min-height="800px" class="d-flex flex-row" dark>
-            <div>
-              <v-list width="130px">
-                <v-list-group>
-                  <template v-slot:activator>
-                    <v-list-item-title>人 物</v-list-item-title>
-                  </template>
-                  <v-list-item
-                    v-for="(character, i) in characters"
-                    :key="i"
-                    link
-                  >
-                    <v-list-item-title class="text-center body-2" v-text="character" />
-                  </v-list-item>
-                </v-list-group>
-                <v-list-item
-                  v-for="(menu, i) in otherModMenu"
-                  :key="i"
-                  link
-                >
-                  <v-list-item-title v-text="menu" />
-                </v-list-item>
-              </v-list>
-            </div>
-            <div fluid class="d-flex flex-row pa-2" style="border-left:1px solid rgb(205,205,205)">
+    <v-row justify="center">
+      <v-card width="1500px" min-height="800px" class="d-flex flex-row" dark>
+        <div>
+          <v-list width="130px">
+            <v-list-item>
+              <v-btn block color="primary">
+                <v-icon>mdi-upload</v-icon>上 传
+              </v-btn>
+            </v-list-item>
+            <v-divider />
+            <v-list-group>
+              <template v-slot:activator>
+                <v-list-item-title>人 物</v-list-item-title>
+              </template>
+              <v-list-item
+                v-for="(character, i) in characters"
+                :key="i"
+                link
+              >
+                <v-list-item-title class="text-center body-2" v-text="character" />
+              </v-list-item>
+            </v-list-group>
+            <v-list-item
+              v-for="(menu, i) in otherModMenu"
+              :key="i"
+              link
+            >
+              <v-list-item-title v-text="menu" />
+            </v-list-item>
+          </v-list>
+        </div>
+        <div fluid class="pa-2" style="background-color:rgb(66,66,66)">
+          <template v-for="mod in 12">
+            <v-hover :key="mod" v-slot="{ hover }">
               <v-card
-                v-for="mod in 12"
-                :key="mod.id"
+                :key="mod"
+                :elevation="hover ? 12 : 2"
                 width="250px"
                 height="210px"
-                class="ma-2"
-                color="secondary"
+                class="ma-2 float-left"
               >
                 <v-img
-                  src="https://cdn.pixabay.com/photo/2020/07/12/07/47/bee-5396362_1280.jpg"
-                  class="white--text align-end"
-                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.5)"
+                  src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                  class="mod-img white--text"
+                  gradient="to bottom, rgba(0,0,0,0), rgba(0,0,0,.5)"
                   height="160px"
                 >
-                  <v-card-title v-text="mod.id" />
+                  <v-fade-transition>
+                    <v-overlay
+                      v-if="hover"
+                      absolute
+                      color="black"
+                    >
+                      <v-btn icon class="download-btn">
+                        <v-icon>mdi-download</v-icon>
+                      </v-btn>
+                    </v-overlay>
+                  </v-fade-transition>
                 </v-img>
 
                 <v-card-actions>
@@ -61,10 +76,18 @@
                   </v-btn>
                 </v-card-actions>
               </v-card>
-            </div>
-          </v-card>
-        </v-row>
-      </v-col>
+            </v-hover>
+          </template>
+          <div class="text-center">
+            <v-pagination
+              v-model="page"
+              circle
+              :length="15"
+              :total-visible="7"
+            />
+          </div>
+        </div>
+      </v-card>
     </v-row>
     <div class="text-center">
       <v-btn
@@ -135,6 +158,8 @@ export default {
   data: () => ({
     characters: ["Speedrunner", "Unic", "Cosmonaut", "Comrade", "Hothead", "Moonraker", "Buckshot", "Gil", "Falcon", "Neko", "Scout", "SkullDuggery", "Salem"],
     otherModMenu: ["轨 迹", "道 具", "HUD", "音 效", "背 景", "其 它"],
+    transparent: "rgba(255, 255, 255, 0)",
+    page: 1,
     dialog: false,
     file: {},
     subscription: null,
@@ -215,3 +240,15 @@ export default {
   }
 };
 </script>
+<style scoped>
+.mod-img {
+  transition: opacity .4s ease-in-out;
+}
+.download-btn{
+  width: 100px;
+  height: 100px;
+}
+.download-btn .v-icon{
+  font-size: 50px;
+}
+</style>
