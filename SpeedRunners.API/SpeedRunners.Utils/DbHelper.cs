@@ -84,7 +84,7 @@ namespace SpeedRunners.Utils
                 {
                     continue;
                 }
-                colStr.AppendFormat("{0} ,", col.Name);
+                colStr.AppendFormat("[{0}] ,", col.Name);
                 valueStr.AppendFormat("@{0} ,", col.Name);
                 dyParam.Add(string.Format("@{0}", col.Name), col.GetValue(model, null));
             }
