@@ -5,7 +5,7 @@
         <div>
           <v-list width="130px">
             <v-list-item>
-              <v-btn block color="primary">
+              <v-btn block color="primary" @click="drawer = true">
                 <v-icon>mdi-upload</v-icon>上 传
               </v-btn>
             </v-list-item>
@@ -38,15 +38,18 @@
                 :key="mod"
                 :elevation="hover ? 12 : 2"
                 width="250px"
-                height="210px"
+                height="200px"
                 class="ma-2 float-left"
               >
                 <v-img
                   src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-                  class="mod-img white--text"
+                  class="mod-img white--text align-end"
                   gradient="to bottom, rgba(0,0,0,0), rgba(0,0,0,.5)"
                   height="160px"
                 >
+                  <v-card-title class="text-caption" style="color:rgba(255,255,255,0.8)">
+                    黑8火球道具mod
+                  </v-card-title>
                   <v-fade-transition>
                     <v-overlay
                       v-if="hover"
@@ -61,19 +64,18 @@
                 </v-img>
 
                 <v-card-actions>
+                  <v-btn text x-small>
+                    <v-icon>mdi-download</v-icon>
+                    5,555
+                  </v-btn>
+                  <v-btn text x-small>
+                    <v-icon>mdi-star-outline</v-icon>
+                    6,666
+                  </v-btn>
                   <v-spacer />
-
-                  <v-btn icon>
-                    <v-icon>mdi-heart</v-icon>
-                  </v-btn>
-
-                  <v-btn icon>
-                    <v-icon>mdi-bookmark</v-icon>
-                  </v-btn>
-
-                  <v-btn icon>
-                    <v-icon>mdi-share-variant</v-icon>
-                  </v-btn>
+                  <div class="text-caption">
+                    859 KB
+                  </div>
                 </v-card-actions>
               </v-card>
             </v-hover>
@@ -147,14 +149,19 @@
         </v-card>
       </v-dialog>
     </div>
+    <ModInfo :visible.sync="drawer" />
   </v-container>
 </template>
 <script>
 import * as qiniu from "qiniu-js";
+import ModInfo from "./modInfo";
 import { getUploadToken, getDownloadUrl, getModList } from "@/api/asset";
 
 export default {
   name: "Mod",
+  components: {
+    ModInfo
+  },
   data: () => ({
     characters: ["Speedrunner", "Unic", "Cosmonaut", "Comrade", "Hothead", "Moonraker", "Buckshot", "Gil", "Falcon", "Neko", "Scout", "SkullDuggery", "Salem"],
     otherModMenu: ["轨 迹", "道 具", "HUD", "音 效", "背 景", "其 它"],
@@ -170,7 +177,8 @@ export default {
       pageSize: 10,
       keywords: ""
     },
-    list: []
+    list: [],
+    drawer: false
   }),
   computed: {
     stepTitle() {

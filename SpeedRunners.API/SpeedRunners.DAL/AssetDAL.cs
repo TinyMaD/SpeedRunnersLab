@@ -14,7 +14,7 @@ namespace SpeedRunners.DAL
         public MPageResult<MMod> GetModList(MModPageParam param)
         {
             StringBuilder where = new StringBuilder()
-                .WhereIf(param.ModID.Length > 0, $" AND [ID] IN @{nameof(param.ModID)} ")
+                .WhereIf(param.ModID.Count > 0, $" AND [ID] IN @{nameof(param.ModID)} ")
                 .WhereIf(param.Tag != 0, $" AND [Tag] = @{nameof(param.Tag)} ")
                 .WhereIf(!string.IsNullOrWhiteSpace(param.Keywords), $" AND FileName LIKE @{nameof(param.FuzzyKeywords)} ");
             GridReader reader = Db.QueryMultiple($@"SELECT COUNT(ID) FROM Mod WHERE 1 = 1 {where}
