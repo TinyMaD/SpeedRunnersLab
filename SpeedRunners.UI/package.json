@@ -22,7 +22,7 @@
     "qiniu-js": "^3.3.1",
     "vue": "2.6.10",
     "vue-router": "3.0.6",
-    "vuetify": "^2.2.11",
+    "vuetify": "~2.3.11",
     "vuetify-toast-snackbar-ng": "^0.7.3",
     "vuex": "3.1.0"
   },
