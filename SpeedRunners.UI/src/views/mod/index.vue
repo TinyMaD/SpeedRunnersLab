@@ -10,7 +10,7 @@
               </v-btn>
             </v-list-item>
             <v-divider />
-            <v-list-group>
+            <!-- <v-list-group>
               <template v-slot:activator>
                 <v-list-item-title>人 物</v-list-item-title>
               </template>
@@ -21,7 +21,7 @@
               >
                 <v-list-item-title class="text-center body-2" v-text="character" />
               </v-list-item>
-            </v-list-group>
+            </v-list-group> -->
             <v-list-item
               v-for="(menu, i) in otherModMenu"
               :key="i"
@@ -32,6 +32,27 @@
           </v-list>
         </div>
         <div fluid class="pa-2" style="background-color:rgb(66,66,66)">
+          <v-row no-gutters>
+            <v-col fluid>
+              <v-text-field
+                v-model="keywords"
+                color="success"
+                label="搜 索"
+                hint="请输入名称关键字"
+                append-icon="mdi-magnify"
+                clearable
+                @click:append="getList"
+                @keyup.enter.native="getList"
+              />
+            </v-col>
+            <div style="width:180px;margin-left:20px">
+              <v-switch
+                v-model="switchValue"
+                label="仅显示'已收藏'"
+                color="orange"
+              />
+            </div>
+          </v-row>
           <template v-for="mod in 12">
             <v-hover :key="mod" v-slot="{ hover }">
               <v-card
@@ -48,7 +69,7 @@
                   height="160px"
                 >
                   <v-card-title class="text-caption" style="color:rgba(255,255,255,0.8)">
-                    黑8火球道具mod
+                    一二三四五六七八九十一二三四五六七
                   </v-card-title>
                   <v-fade-transition>
                     <v-overlay
@@ -99,7 +120,7 @@
       >
         下 载
       </v-btn>
-      <v-dialog
+      <!-- <v-dialog
         v-model="dialog"
         persistent
         dark
@@ -147,15 +168,14 @@
             </v-btn>
           </v-card-actions>
         </v-card>
-      </v-dialog>
+      </v-dialog> -->
     </div>
     <ModInfo :visible.sync="drawer" />
   </v-container>
 </template>
 <script>
-import * as qiniu from "qiniu-js";
 import ModInfo from "./modInfo";
-import { getUploadToken, getDownloadUrl, getModList } from "@/api/asset";
+import { getDownloadUrl, getModList } from "@/api/asset";
 
 export default {
   name: "Mod",
@@ -164,13 +184,11 @@ export default {
   },
   data: () => ({
     characters: ["Speedrunner", "Unic", "Cosmonaut", "Comrade", "Hothead", "Moonraker", "Buckshot", "Gil", "Falcon", "Neko", "Scout", "SkullDuggery", "Salem"],
-    otherModMenu: ["轨 迹", "道 具", "HUD", "音 效", "背 景", "其 它"],
+    otherModMenu: ["人 物", "轨 迹", "道 具", "HUD", "音 效", "背 景", "其 它"],
     transparent: "rgba(255, 255, 255, 0)",
+    switchValue: false,
+    keywords: "",
     page: 1,
-    dialog: false,
-    file: {},
-    subscription: null,
-    progress: 0,
     searchParam: {
       tag: 0,
       pageNo: 1,
@@ -197,38 +215,6 @@ export default {
         this.list = res.data;
       });
     },
-    changeFiles(file) {
-      this.file = file;
-    },
-    uploadFile() {
-      var that = this;
-      getUploadToken().then(response => {
-        const token = response.data;
-        // const putExtra = {
-        //    fname: "qiniu.txt"
-        //    customVars: { "x:test": "qiniu" },
-        //    metadata: { "x-qn-meta": "qiniu" }
-        // };
-        const config = {
-          useCdnDomain: true
-        };
-        const observable = qiniu.upload(that.file, that.file.name, token, null, config);
-        const observer = {
-          next(res) {
-            that.progress = res.total.percent;
-          },
-          error(err) {
-            that.$toast.error(`${err.name}:${err.message}`);
-          },
-          complete(res) {
-            that.progress = 100;
-            console.log(res);
-          }
-        };
-        that.subscription = observable.subscribe(observer);
-      });
-    },
-
     download(name, downloadPath) {
       name = "TIM图片20200627145348.jpg";
       getDownloadUrl(name).then(response => {
