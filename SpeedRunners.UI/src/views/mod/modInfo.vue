@@ -1,15 +1,22 @@
 <template>
   <v-navigation-drawer
     v-model="drawer"
+    temporary
+    stateless
     width="500px"
     dark
     right
     absolute
-    temporary
-    @input="$emit('update:visible', drawer)"
+    @input="onChange"
   >
     <v-container>
-      <v-form v-model="valid">
+      <v-form ref="form" v-model="valid">
+        <v-select
+          required
+          :items="items"
+          label="类 型"
+          :rules="[v => !!v || '请选择类型']"
+        />
         <v-text-field
           v-model="fileName"
           color="green"
@@ -19,9 +26,12 @@
           required
           label="标 题"
         />
-        <v-btn>
-          上传封面
-        </v-btn>
+        <v-img max-width="250px" max-height="160px" src="https://avatars0.githubusercontent.com/u/3456749" />
+        <v-file-input
+          accept="image/*"
+          label="上传封面"
+          @change="changeImg"
+        />
         <v-progress-linear
           v-model="progress"
         />
@@ -39,14 +49,27 @@
         >
           提 交
         </v-btn>
+        <v-btn
+          color="info"
+          class="mr-4"
+          @click="doClose"
+        >
+          取 消
+        </v-btn>
       </v-form>
+      <ImgCropper :visible.sync="showCropper" :src="cropperImgUrl" />
     </v-container>
   </v-navigation-drawer>
 </template>
 <script>
 import * as qiniu from "qiniu-js";
+import Cropper from "cropperjs";
 import { getUploadToken } from "@/api/asset";
+import ImgCropper from "@/components/ImgCropper";
 export default {
+  components: {
+    ImgCropper
+  },
   props: {
     visible: {
       type: Boolean,
@@ -55,30 +78,56 @@ export default {
   },
   data() {
     return {
+      items: [
+        { text: "人 物", value: "1" },
+        { text: "轨 迹", value: "2" },
+        { text: "道 具", value: "3" },
+        { text: "HUD", value: "4" },
+        { text: "音 效", value: "5" },
+        { text: "背 景", value: "6" },
+        { text: "其 它", value: "7" }
+      ],
       drawer: this.visible,
+      showCropper: false,
+      cropperObj: {},
+      img: {},
+      cropperImgUrl: "",
       file: {},
       subscription: null,
       progress: 0,
       valid: false,
       fileName: "",
-      lastname: "",
       nameRules: [
         v => !!v || "请输入标题",
-        v => v.length <= 17 || "标题字数不能大于17"
-      ],
-      email: "",
-      emailRules: [
-        v => !!v || "E-mail is required",
-        v => /.+@.+/.test(v) || "E-mail must be valid"
+        v => !v || v.length <= 17 || "标题字数不能大于17"
       ]
     };
   },
   watch: {
     visible() {
       this.drawer = this.visible;
+    },
+    showCropper() {
+      if (this.showCropper) {
+        console.log(this.$refs.cropperImg);
+        const cropper = new Cropper(this.$refs.cropperImg, {
+          viewMode: 1,
+          aspectRatio: 16 / 9
+        });
+        this.cropperObj = cropper;
+      } else {
+        this.cropperObj.destroy();
+        this.cropperObj = null;
+      }
     }
   },
   methods: {
+    changeImg(file) {
+      if (file) {
+        this.cropperImgUrl = URL.createObjectURL(file);
+        this.showCropper = true;
+      }
+    },
     changeFiles(file) {
       this.file = file;
     },
@@ -109,6 +158,16 @@ export default {
         };
         that.subscription = observable.subscribe(observer);
       });
+    },
+    doClose() {
+      this.drawer = false;
+      this.onChange();
+    },
+    onChange() {
+      if (this.drawer === false) {
+        this.$emit("update:visible", false);
+        this.$refs.form.reset();
+      }
     }
   }
 };
