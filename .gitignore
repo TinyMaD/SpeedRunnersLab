@@ -23,7 +23,6 @@ tests/**/coverage/
 *.ntvs*
 *.njsproj
 
-SpeedRunners.UI/yarn.lock
 /SpeedRunners.API/SpeedRunners/bin
 *.user
 /SpeedRunners.API/SpeedRunners.Utils/bin

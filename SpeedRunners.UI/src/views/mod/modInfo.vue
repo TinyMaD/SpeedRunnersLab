@@ -26,7 +26,7 @@
           required
           label="标 题"
         />
-        <v-img max-width="250px" max-height="160px" src="https://avatars0.githubusercontent.com/u/3456749" />
+        <v-img max-width="250px" max-height="160px" :src="imgSrc" />
         <v-file-input
           accept="image/*"
           label="上传封面"
@@ -57,13 +57,13 @@
           取 消
         </v-btn>
       </v-form>
-      <ImgCropper :visible.sync="showCropper" :src="cropperImgUrl" />
+      <!-- <ImgCropper :visible.sync="showCropper" :src="cropperImgUrl" @done="getCroppedImg" /> -->
+      <ImgCropper :visible.sync="showCropper" :src="cropperImgUrl" @done="getCroppedImg" />
     </v-container>
   </v-navigation-drawer>
 </template>
 <script>
 import * as qiniu from "qiniu-js";
-import Cropper from "cropperjs";
 import { getUploadToken } from "@/api/asset";
 import ImgCropper from "@/components/ImgCropper";
 export default {
@@ -89,8 +89,7 @@ export default {
       ],
       drawer: this.visible,
       showCropper: false,
-      cropperObj: {},
-      img: {},
+      imgSrc: "https://avatars0.githubusercontent.com/u/3456749",
       cropperImgUrl: "",
       file: {},
       subscription: null,
@@ -106,19 +105,6 @@ export default {
   watch: {
     visible() {
       this.drawer = this.visible;
-    },
-    showCropper() {
-      if (this.showCropper) {
-        console.log(this.$refs.cropperImg);
-        const cropper = new Cropper(this.$refs.cropperImg, {
-          viewMode: 1,
-          aspectRatio: 16 / 9
-        });
-        this.cropperObj = cropper;
-      } else {
-        this.cropperObj.destroy();
-        this.cropperObj = null;
-      }
     }
   },
   methods: {
@@ -130,6 +116,9 @@ export default {
     },
     changeFiles(file) {
       this.file = file;
+    },
+    getCroppedImg(src) {
+      this.imgSrc = src;
     },
     uploadFile() {
       var that = this;
