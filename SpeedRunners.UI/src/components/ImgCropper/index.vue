@@ -1,28 +1,15 @@
 <template>
   <v-layout row align-content-space-around xs12>
-    <input
-      type="file"
-      name="image"
-      accept="image/*"
-      style="font-size: 1.2em; padding: 10px 0;"
-      @change="setImage"
-    >
     <v-dialog
       v-model="dialog"
       :max-width="dialogMaxWidth"
       :max-height="dialogMaxHeight"
       hide-overlay
+      persistent
       :disabled="!imgSrc"
     >
-      <img
-        v-show="cropSrc"
-        slot="activator"
-        :src="cropSrc"
-        style="width: 200px; border: 1px solid gray"
-        alt="Cropped Image"
-      >
       <v-card>
-        <v-card-title> <span class="headline">Crop tool</span> </v-card-title>
+        <v-card-title> <span class="headline">封面尽量直观展现MOD样式</span> </v-card-title>
         <v-card-text>
           <vue-cropper
             ref="cropper"
@@ -43,19 +30,29 @@
           />
         </v-card-text>
         <v-card-actions>
-          <!-- <v-tooltip> -->
-          <v-icon color="blue" @click="cropImage">crop</v-icon>
-          <!-- </v-tooltip> -->
-          <v-icon color="blue" dark @click="rotate('r');">rotate_right</v-icon>
-          <v-icon color="blue" dark @click="rotate('l');">rotate_left</v-icon>
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <v-icon
+                color="blue"
+                v-bind="attrs"
+                v-on="on"
+                @click="cropImage"
+              >
+                mdi-crop
+              </v-icon>
+            </template>
+            <span>裁 剪</span>
+          </v-tooltip>
+          <v-icon color="blue" dark @click="rotate('r');">mdi-rotate-right</v-icon>
+          <v-icon color="blue" dark @click="rotate('l');">mdi-rotate-left</v-icon>
 
           <v-spacer />
 
           <v-btn
             color="blue darken-1"
             text
-            @click="dialog = false;"
-          >Cancel</v-btn>
+            @click="dialog = false"
+          >取 消</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -65,23 +62,24 @@
 <script>
 import VueCropper from "vue-cropperjs";
 import "cropperjs/dist/cropper.css";
-// import axios from '@/axios.js'
 
 export default {
   components: {
     VueCropper
   },
   props: {
-    value: { type: Boolean, default: false },
-    // pk: { default: "image_key" },
     dialogMaxWidth: { type: String, default: "600px" },
     dialogMaxHeight: { type: String, default: "0.8vh" },
     maxWidth: { type: Number, default: 1920 },
     maxHeight: { type: Number, default: 1200 },
     // the URL of the blob image
-    objectUrl: {
+    src: {
       type: String,
       default: ""
+    },
+    visible: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -94,42 +92,19 @@ export default {
       cropBlob: null
     };
   },
-  computed: {
-    croppedFile() {
-      return new File([this.cropImg], this.file.name, { type: this.file.type });
+  watch: {
+    src() {
+      this.imgSrc = this.src;
+      this.$refs.cropper && this.$refs.cropper.replace(this.src);
     },
-    cropSrc() {
-      return this.cropImg || this.value;
+    visible() {
+      this.$data.dialog = this.visible;
+    },
+    dialog() {
+      this.$emit("update:visible", this.dialog);
     }
   },
   methods: {
-    setImage(e) {
-      // const file = e;
-      const file = e.target.files[0];
-      // this.file = file
-      this.filename = file.name;
-
-      if (!file.type.includes("image/")) {
-        alert("Please select an image file");
-        return;
-      }
-
-      if (typeof FileReader === "function") {
-        const reader = new FileReader();
-
-        reader.onload = event => {
-          this.imgSrc = event.target.result;
-          // rebuild cropperjs with the updated source
-          this.$refs.cropper.replace(event.target.result);
-          this.$emit("update:dataUrl", this.imgSrc);
-        };
-
-        reader.readAsDataURL(file);
-        this.dialog = true;
-      } else {
-        alert("Sorry, FileReader API not supported");
-      }
-    },
     cropImage() {
       // get image data for post processing, e.g. upload or setting image src
       // this.cropImg = this.$refs.cropper.getCroppedCanvas().toDataURL()
@@ -142,7 +117,7 @@ export default {
           blob => {
             this.cropImg = URL.createObjectURL(blob);
             this.croppedBlob = blob;
-            this.$emit("update:objectUrl", this.cropImg);
+            this.$emit("done", this.cropImg);
           },
           "image/jpeg",
           0.95

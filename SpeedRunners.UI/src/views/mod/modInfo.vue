@@ -19,7 +19,6 @@
         />
         <v-text-field
           v-model="fileName"
-          color="green"
           :rules="nameRules"
           :counter="17"
           clearable
@@ -29,7 +28,7 @@
         <v-img max-width="250px" max-height="160px" :src="imgSrc" />
         <v-file-input
           accept="image/*"
-          label="上传封面"
+          label="点击上传封面"
           @change="changeImg"
         />
         <v-progress-linear
@@ -38,7 +37,7 @@
         <v-file-input
           :show-size="true"
           accept="image/*"
-          label="点击选择文件"
+          label="点击上传文件"
           @change="changeFiles"
         />
         <v-btn
@@ -57,7 +56,6 @@
           取 消
         </v-btn>
       </v-form>
-      <!-- <ImgCropper :visible.sync="showCropper" :src="cropperImgUrl" @done="getCroppedImg" /> -->
       <ImgCropper :visible.sync="showCropper" :src="cropperImgUrl" @done="getCroppedImg" />
     </v-container>
   </v-navigation-drawer>
@@ -89,7 +87,7 @@ export default {
       ],
       drawer: this.visible,
       showCropper: false,
-      imgSrc: "https://avatars0.githubusercontent.com/u/3456749",
+      imgSrc: "",
       cropperImgUrl: "",
       file: {},
       subscription: null,
@@ -156,6 +154,7 @@ export default {
       if (this.drawer === false) {
         this.$emit("update:visible", false);
         this.$refs.form.reset();
+        this.imgSrc = "";
       }
     }
   }
