@@ -12,13 +12,14 @@
     <v-container>
       <v-form ref="form" v-model="valid">
         <v-select
+          v-model="formType"
           required
           :items="items"
           label="类 型"
           :rules="[v => !!v || '请选择类型']"
         />
         <v-text-field
-          v-model="fileName"
+          v-model="formTitle"
           :rules="nameRules"
           :counter="17"
           clearable
@@ -27,18 +28,25 @@
         />
         <v-img max-width="250px" max-height="160px" :src="imgSrc" />
         <v-file-input
+          ref="imgInput"
           accept="image/*"
           label="点击上传封面"
+          :rules="imgRules"
+          prepend-icon="mdi-camera"
           @change="changeImg"
+          @click="clearImg"
         />
         <v-progress-linear
           v-model="progress"
         />
         <v-file-input
+          ref="fileInput"
           :show-size="true"
-          accept="image/*"
+          :accept="fileAccept"
           label="点击上传文件"
+          :rules="fileRules"
           @change="changeFiles"
+          @click="clearFiles"
         />
         <v-btn
           :disabled="!valid"
@@ -77,13 +85,13 @@ export default {
   data() {
     return {
       items: [
-        { text: "人 物", value: "1" },
-        { text: "轨 迹", value: "2" },
-        { text: "道 具", value: "3" },
-        { text: "HUD", value: "4" },
-        { text: "音 效", value: "5" },
-        { text: "背 景", value: "6" },
-        { text: "其 它", value: "7" }
+        { text: "人 物", value: 1 },
+        { text: "轨 迹", value: 2 },
+        { text: "道 具", value: 3 },
+        { text: "HUD", value: 4 },
+        { text: "音 效", value: 5 },
+        { text: "背 景", value: 6 },
+        { text: "其 它", value: 7 }
       ],
       drawer: this.visible,
       showCropper: false,
@@ -93,12 +101,48 @@ export default {
       subscription: null,
       progress: 0,
       valid: false,
-      fileName: "",
+      formType: 1,
+      formTitle: "",
       nameRules: [
         v => !!v || "请输入标题",
         v => !v || v.length <= 17 || "标题字数不能大于17"
+      ],
+      imgRules: [
+        v => !!v || "请上传封面",
+        v => !v || v.size <= 5000000 || "图片大小不能超过 5 MB",
+        v => !v || v.type.indexOf("image") > -1 || "请选择图片类型文件"
+      ],
+      fileRules: [
+        v => !!v || "请上传文件",
+        v => !v || v.size <= 10000000 || "图片大小不能超过 10 MB",
+        v => !v || v.type.indexOf("image") > -1 || "请选择图片类型文件"
       ]
     };
+  },
+  computed: {
+    fileAccept() {
+      let accept = "";
+      switch (this.formType) {
+        case 1:
+        case 3:
+          accept = ".png,.xnb";
+          break;
+        case 2:
+          accept = ".png,.xnb,.srt";
+          break;
+        case 4:
+        case 6:
+          accept = ".png,.xnb,.zip,.rar";
+          break;
+        case 5:
+          accept = ".xnb,.zip,.rar,.ogg";
+          break;
+        case 7:
+          accept = ".png,.xnb,.srt,.zip,.rar,.ogg";
+          break;
+      }
+      return accept;
+    }
   },
   watch: {
     visible() {
@@ -107,7 +151,7 @@ export default {
   },
   methods: {
     changeImg(file) {
-      if (file) {
+      if (file && file.type.indexOf("image") > -1) {
         this.cropperImgUrl = URL.createObjectURL(file);
         this.showCropper = true;
       }
@@ -145,6 +189,12 @@ export default {
         };
         that.subscription = observable.subscribe(observer);
       });
+    },
+    clearImg() {
+      this.$refs.imgInput.clearableCallback();
+    },
+    clearFiles() {
+      this.$refs.fileInput.clearableCallback();
     },
     doClose() {
       this.drawer = false;

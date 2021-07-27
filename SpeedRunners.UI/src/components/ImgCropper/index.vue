@@ -13,18 +13,17 @@
         <v-card-text>
           <vue-cropper
             ref="cropper"
-            :guides="false"
-            :view-mode="0"
+            :aspect-ratio="250 / 160"
+            :view-mode="2"
             drag-mode="move"
-            :auto-crop-area="0.5"
+            :auto-crop-area="1"
             :min-container-width="250"
-            :min-container-height="180"
+            :min-container-height="160"
             :background="true"
             :rotatable="true"
             :src="imgSrc"
-            alt="Source Image"
             :modal="true"
-            :img-style="{ width: '400px', height: '400px' }"
+            :img-style="{ width: '500px', height: '500px' }"
             :center="false"
             :highlight="true"
           />
@@ -45,6 +44,8 @@
           </v-tooltip>
           <v-icon color="blue" dark @click="rotate('r');">mdi-rotate-right</v-icon>
           <v-icon color="blue" dark @click="rotate('l');">mdi-rotate-left</v-icon>
+          <v-icon color="blue" dark @click="flip(true);">mdi-flip-vertical</v-icon>
+          <v-icon color="blue" dark @click="flip(false);">mdi-flip-horizontal</v-icon>
 
           <v-spacer />
 
@@ -116,7 +117,6 @@ export default {
         .toBlob(
           blob => {
             this.cropImg = URL.createObjectURL(blob);
-            this.croppedBlob = blob;
             this.$emit("done", this.cropImg);
           },
           "image/jpeg",
