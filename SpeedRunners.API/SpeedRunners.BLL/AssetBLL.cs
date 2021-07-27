@@ -14,20 +14,29 @@ namespace SpeedRunners.BLL
     {
         private static readonly string _accessKey = AppSettings.GetConfig("AccessKey");
         private static readonly string _secretKey = AppSettings.GetConfig("SecretKey");
-        public string CreateUploadToken()
+        public string[] CreateUploadToken()
         {
             Mac mac = new Mac(_accessKey, _secretKey);
-            PutPolicy putPolicy = new PutPolicy
+            PutPolicy imgPolicy = new PutPolicy
+            {
+                Scope = "sr-img"
+            };
+            PutPolicy modPolicy = new PutPolicy
             {
                 Scope = "sr-mod"
             };
-            string token = Auth.CreateUploadToken(mac, putPolicy.ToJsonString());
-            return token;
+            string imgToken = Auth.CreateUploadToken(mac, imgPolicy.ToJsonString());
+            string fileToken = Auth.CreateUploadToken(mac, modPolicy.ToJsonString());
+            return new[] { imgToken, fileToken };
         }
-        public string CreateDownloadUrl(string key, string domain = "http://cdn-mod.speedrunners.cn")
+        public string CreateDownloadUrl(string key, string domain = "https://cdn-mod.speedrunners.cn")
         {
             Mac mac = new Mac(_accessKey, _secretKey);
             string privateUrl = DownloadManager.CreatePrivateUrl(mac, domain, key, 10 * 60);
+            BeginDb(DAL =>
+            {
+                DAL.UpdateDownloadNum(key);
+            });
             return privateUrl;
         }
 
@@ -37,8 +46,21 @@ namespace SpeedRunners.BLL
             BeginDb(DAL =>
             {
                 result = DAL.GetModList(param);
+                foreach (MMod item in result.List)
+                {
+                    item.ImgUrl = "https://cdn-img.speedrunners.cn/" + item.ImgUrl;
+                }
             });
             return result;
+        }
+
+        public void AddMod(MMod param)
+        {
+            param.AuthorID = CurrentUser.PlatformID;
+            BeginDb(DAL =>
+            {
+                DAL.AddMod(param);
+            });
         }
     }
 }

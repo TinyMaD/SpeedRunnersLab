@@ -5,7 +5,7 @@
         <div>
           <v-list width="130px">
             <v-list-item>
-              <v-btn block color="primary" @click="drawer = true">
+              <v-btn block color="primary" @click="clickUpload">
                 <v-icon>mdi-upload</v-icon>上 传
               </v-btn>
             </v-list-item>
@@ -22,20 +22,22 @@
                 <v-list-item-title class="text-center body-2" v-text="character" />
               </v-list-item>
             </v-list-group> -->
-            <v-list-item
-              v-for="(menu, i) in otherModMenu"
-              :key="i"
-              link
-            >
-              <v-list-item-title v-text="menu" />
-            </v-list-item>
+            <v-list-item-group v-model="searchParam.tag" mandatory>
+              <v-list-item
+                v-for="(menu, i) in otherModMenu"
+                :key="i"
+                @click="getList"
+              >
+                <v-list-item-title v-text="menu" />
+              </v-list-item>
+            </v-list-item-group>
           </v-list>
         </div>
-        <div fluid class="pa-2" style="background-color:rgb(66,66,66)">
+        <div fluid class="pa-2" style="background-color:rgb(66,66,66);width:1370px">
           <v-row no-gutters>
             <v-col fluid>
               <v-text-field
-                v-model="keywords"
+                v-model="searchParam.keywords"
                 color="success"
                 label="搜 索"
                 hint="请输入名称关键字"
@@ -53,23 +55,23 @@
               />
             </div>
           </v-row>
-          <template v-for="mod in 12">
-            <v-hover :key="mod" v-slot="{ hover }">
+          <template v-for="mod in data.list">
+            <v-hover :key="mod.id" v-slot="{ hover }">
               <v-card
-                :key="mod"
+                :key="mod.id"
                 :elevation="hover ? 12 : 2"
                 width="250px"
                 height="200px"
                 class="ma-2 float-left"
               >
                 <v-img
-                  src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+                  :src="mod.imgUrl"
                   class="mod-img white--text align-end"
                   gradient="to bottom, rgba(0,0,0,0), rgba(0,0,0,.5)"
                   height="160px"
                 >
                   <v-card-title class="text-caption" style="color:rgba(255,255,255,0.8)">
-                    一二三四五六七八九十一二三四五六七
+                    {{ mod.title }}
                   </v-card-title>
                   <v-fade-transition>
                     <v-overlay
@@ -77,7 +79,7 @@
                       absolute
                       color="black"
                     >
-                      <v-btn icon class="download-btn">
+                      <v-btn icon class="download-btn" @click="download(mod.title,mod.fileUrl)">
                         <v-icon>mdi-download</v-icon>
                       </v-btn>
                     </v-overlay>
@@ -85,17 +87,17 @@
                 </v-img>
 
                 <v-card-actions>
-                  <v-btn text x-small>
+                  <v-btn text x-small @click="download(mod.title,mod.fileUrl)">
                     <v-icon>mdi-download</v-icon>
-                    5,555
+                    {{ mod.download }}
                   </v-btn>
-                  <v-btn text x-small>
+                  <v-btn text x-small @click="doStar(mod.id)">
                     <v-icon>mdi-star-outline</v-icon>
-                    6,666
+                    {{ mod.star }}
                   </v-btn>
                   <v-spacer />
                   <div class="text-caption">
-                    859 KB
+                    {{ fileSize(mod.size) }}
                   </div>
                 </v-card-actions>
               </v-card>
@@ -103,77 +105,20 @@
           </template>
           <div class="text-center">
             <v-pagination
-              v-model="page"
+              v-model="searchParam.pageNo"
               circle
-              :length="15"
+              :length="pageCount"
               :total-visible="7"
             />
           </div>
         </div>
       </v-card>
     </v-row>
-    <div class="text-center">
-      <v-btn
-        color="primary"
-        dark
-        @click="download"
-      >
-        下 载
-      </v-btn>
-      <!-- <v-dialog
-        v-model="dialog"
-        persistent
-        dark
-        width="500"
-      >
-        <template v-slot:activator="{ on, attrs }">
-          <v-btn
-            color="primary"
-            dark
-            v-bind="attrs"
-            v-on="on"
-          >
-            上 传
-          </v-btn>
-        </template>
-
-        <v-card>
-          <v-card-title>
-            {{ stepTitle }}
-          </v-card-title>
-          <v-progress-linear
-            v-model="progress"
-          />
-          <v-file-input
-            :show-size="true"
-            accept="image/*"
-            label="点击选择文件"
-            @change="changeFiles"
-          />
-          <v-divider />
-          <v-card-actions>
-            <v-spacer />
-            <v-btn
-              color="primary"
-              text
-              @click="dialog = false"
-            >
-              取 消
-            </v-btn>
-            <v-btn
-              color="primary"
-              @click="uploadFile"
-            >
-              提 交
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog> -->
-    </div>
-    <ModInfo :visible.sync="drawer" />
+    <ModInfo :visible.sync="drawer" @success="getList" />
   </v-container>
 </template>
 <script>
+import { mapGetters } from "vuex";
 import ModInfo from "./modInfo";
 import { getDownloadUrl, getModList } from "@/api/asset";
 
@@ -187,20 +132,38 @@ export default {
     otherModMenu: ["人 物", "轨 迹", "道 具", "HUD", "音 效", "背 景", "其 它"],
     transparent: "rgba(255, 255, 255, 0)",
     switchValue: false,
-    keywords: "",
-    page: 1,
     searchParam: {
       tag: 0,
       pageNo: 1,
-      pageSize: 10,
+      pageSize: 15,
       keywords: ""
     },
-    list: [],
+    data: {
+      list: [],
+      total: 0
+    },
     drawer: false
   }),
   computed: {
+    ...mapGetters([
+      "name"
+    ]),
     stepTitle() {
       return this.progress > 0 ? `正在上传，请耐心等待...${this.progress} %` : "上传MOD资源";
+    },
+    pageCount() {
+      return parseInt(this.data.total / this.searchParam.pageSize) + 1;
+    },
+    fileSize() {
+      return function(fileLength) {
+        var unit = ["B", "KB", "MB", "GB", "TB"];
+        var unitIndex = 0;
+        while (fileLength >= 1024) {
+          fileLength /= 1024;
+          unitIndex++;
+        }
+        return parseInt(fileLength) + " " + unit[unitIndex];
+      };
     }
   },
   mounted() {
@@ -211,13 +174,22 @@ export default {
   methods: {
     getList() {
       getModList(this.searchParam).then(res => {
-        console.log(res.data);
-        this.list = res.data;
+        this.data = res.data;
       });
     },
-    download(name, downloadPath) {
-      name = "TIM图片20200627145348.jpg";
-      getDownloadUrl(name).then(response => {
+    clickUpload() {
+      if (this.name !== "") {
+        this.drawer = true;
+      } else {
+        this.$toast.info("请登录后再上传");
+      }
+    },
+    doStar() {
+      this.$toast.info("正在疯狂开发中。。。");
+    },
+    download(title, fileUrl) {
+      title = `${title}.${fileUrl.split(".").pop()}`;
+      getDownloadUrl(fileUrl).then(response => {
         var x = new XMLHttpRequest();
         x.open("GET", response.data, true);
         x.responseType = "blob";
@@ -225,7 +197,7 @@ export default {
           var url = window.URL.createObjectURL(x.response);
           var a = document.createElement("a");
           a.href = url;
-          a.download = name;
+          a.download = title;
           a.click();
         };
         x.send();

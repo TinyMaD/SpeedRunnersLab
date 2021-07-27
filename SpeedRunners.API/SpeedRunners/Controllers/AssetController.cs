@@ -13,13 +13,19 @@ namespace SpeedRunners.Controllers
     [ApiController]
     public class AssetController : BaseController<AssetBLL>
     {
-        //[User]
+        [User]
         [HttpGet]
-        public string GetUploadToken() => BLL.CreateUploadToken();
+        public string[] GetUploadToken() => BLL.CreateUploadToken();
+
+        [User]
         [HttpPost]
         public string GetDownloadUrl([FromBody] dynamic data) => BLL.CreateDownloadUrl(data.fileName.Value);
 
         [HttpPost]
         public MPageResult<MMod> GetModList([FromBody] MModPageParam param) => BLL.GetModList(param);
+
+        [User]
+        [HttpPost]
+        public void AddMod([FromBody] MMod param) => BLL.AddMod(param);
     }
 }

@@ -86,7 +86,6 @@ export default {
   data() {
     return {
       imgSrc: "",
-      cropImg: null,
       dialog: false,
       file: null,
       filename: null,
@@ -116,8 +115,7 @@ export default {
         })
         .toBlob(
           blob => {
-            this.cropImg = URL.createObjectURL(blob);
-            this.$emit("done", this.cropImg);
+            this.$emit("done", blob);
           },
           "image/jpeg",
           0.95

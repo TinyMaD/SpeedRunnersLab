@@ -16,7 +16,7 @@
           required
           :items="items"
           label="类 型"
-          :rules="[v => !!v || '请选择类型']"
+          :rules="[v => v!==undefined || '请选择类型']"
         />
         <v-text-field
           v-model="formTitle"
@@ -27,6 +27,9 @@
           label="标 题"
         />
         <v-img max-width="250px" max-height="160px" :src="imgSrc" />
+        <v-progress-linear
+          v-model="imgProgress"
+        />
         <v-file-input
           ref="imgInput"
           accept="image/*"
@@ -37,7 +40,7 @@
           @click="clearImg"
         />
         <v-progress-linear
-          v-model="progress"
+          v-model="fileProgress"
         />
         <v-file-input
           ref="fileInput"
@@ -52,7 +55,7 @@
           :disabled="!valid"
           color="success"
           class="mr-4"
-          @click="uploadFile"
+          @click="submitMod"
         >
           提 交
         </v-btn>
@@ -70,7 +73,7 @@
 </template>
 <script>
 import * as qiniu from "qiniu-js";
-import { getUploadToken } from "@/api/asset";
+import { getUploadToken, addMod } from "@/api/asset";
 import ImgCropper from "@/components/ImgCropper";
 export default {
   components: {
@@ -85,23 +88,26 @@ export default {
   data() {
     return {
       items: [
-        { text: "人 物", value: 1 },
-        { text: "轨 迹", value: 2 },
-        { text: "道 具", value: 3 },
-        { text: "HUD", value: 4 },
-        { text: "音 效", value: 5 },
-        { text: "背 景", value: 6 },
-        { text: "其 它", value: 7 }
+        { text: "人 物", value: 0 },
+        { text: "轨 迹", value: 1 },
+        { text: "道 具", value: 2 },
+        { text: "HUD", value: 3 },
+        { text: "音 效", value: 4 },
+        { text: "背 景", value: 5 },
+        { text: "其 它", value: 6 }
       ],
       drawer: this.visible,
       showCropper: false,
       imgSrc: "",
       cropperImgUrl: "",
+      img: {},
       file: {},
-      subscription: null,
-      progress: 0,
+      fileName: "",
+      uploading: false,
+      imgProgress: 0,
+      fileProgress: 0,
       valid: false,
-      formType: 1,
+      formType: undefined,
       formTitle: "",
       nameRules: [
         v => !!v || "请输入标题",
@@ -114,8 +120,7 @@ export default {
       ],
       fileRules: [
         v => !!v || "请上传文件",
-        v => !v || v.size <= 10000000 || "图片大小不能超过 10 MB",
-        v => !v || v.type.indexOf("image") > -1 || "请选择图片类型文件"
+        v => !v || v.size <= 10000000 || "文件大小不能超过 10 MB"
       ]
     };
   },
@@ -123,21 +128,21 @@ export default {
     fileAccept() {
       let accept = "";
       switch (this.formType) {
-        case 1:
-        case 3:
+        case 0:
+        case 2:
           accept = ".png,.xnb";
           break;
-        case 2:
+        case 1:
           accept = ".png,.xnb,.srt";
           break;
-        case 4:
-        case 6:
+        case 3:
+        case 5:
           accept = ".png,.xnb,.zip,.rar";
           break;
-        case 5:
+        case 4:
           accept = ".xnb,.zip,.rar,.ogg";
           break;
-        case 7:
+        case 6:
           accept = ".png,.xnb,.srt,.zip,.rar,.ogg";
           break;
       }
@@ -159,35 +164,85 @@ export default {
     changeFiles(file) {
       this.file = file;
     },
-    getCroppedImg(src) {
-      this.imgSrc = src;
+    getCroppedImg(blob) {
+      this.imgSrc = URL.createObjectURL(blob);
+      const metadata = {
+        type: "image/jpeg"
+      };
+      const imgName = `${Date.now()}${Math.floor(Math.random() * 10)}`;
+      this.img = new File([blob], imgName + ".jpg", metadata);
     },
-    uploadFile() {
-      var that = this;
+    submitMod() {
+      const that = this;
       getUploadToken().then(response => {
-        const token = response.data;
-        // const putExtra = {
-        //    fname: "qiniu.txt"
-        //    customVars: { "x:test": "qiniu" },
-        //    metadata: { "x-qn-meta": "qiniu" }
-        // };
-        const config = {
-          useCdnDomain: true
-        };
-        const observable = qiniu.upload(that.file, that.file.name, token, null, config);
-        const observer = {
-          next(res) {
-            that.progress = res.total.percent;
-          },
-          error(err) {
-            that.$toast.error(`${err.name}:${err.message}`);
-          },
-          complete(res) {
-            that.progress = 100;
-            console.log(res);
+        const imgToken = response.data[0];
+        const fileToken = response.data[1];
+        that.uploadFile(imgToken, fileToken);
+      });
+    },
+    uploadFile(imgToken, fileToken) {
+      const that = this;
+      // const putExtra = {
+      //    fname: "qiniu.txt"
+      //    customVars: { "x:test": "qiniu" },
+      //    metadata: { "x-qn-meta": "qiniu" }
+      // };
+      const config = {
+        useCdnDomain: true
+      };
+      // 上传封面
+      const imgObservable = qiniu.upload(this.img, this.img.name, imgToken, null, config);
+      const imgObserver = {
+        next(res) {
+          that.imgProgress = res.total.percent;
+        },
+        error(err) {
+          that.$toast.error(`${err.name}:${err.message}`);
+        },
+        complete(res) {
+          that.imgProgress = 100;
+          if (that.fileProgress === 100) {
+            that.addModInfo();
           }
-        };
-        that.subscription = observable.subscribe(observer);
+        }
+      };
+      imgObservable.subscribe(imgObserver);
+      // 上传文件
+      this.fileName = `${Date.now()}${Math.floor(Math.random() * 10)}.${this.file.name.split(".").pop()}`;
+      const fileObservable = qiniu.upload(this.file, this.fileName, fileToken, null, config);
+      const fileObserver = {
+        next(res) {
+          that.fileProgress = res.total.percent;
+        },
+        error(err) {
+          that.$toast.error(`${err.name}:${err.message}`);
+        },
+        complete(res) {
+          that.fileProgress = 100;
+          if (that.imgProgress === 100) {
+            that.addModInfo();
+          }
+        }
+      };
+      fileObservable.subscribe(fileObserver);
+    },
+    addModInfo() {
+      if (this.uploading) { return }
+      this.uploading = true;
+      const that = this;
+      const param = {};
+      param.tag = this.formType;
+      param.title = this.formTitle;
+      param.imgUrl = this.img.name;
+      param.fileUrl = this.fileName;
+      param.size = this.file.size;
+      addMod(param).then(res => {
+        that.$toast.success("上传成功");
+        that.$emit("success");
+        that.uploading = false;
+        that.doClose();
+      }).catch(() => {
+        that.uploading = false;
       });
     },
     clearImg() {

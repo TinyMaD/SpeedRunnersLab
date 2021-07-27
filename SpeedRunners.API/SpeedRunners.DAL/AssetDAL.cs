@@ -15,8 +15,8 @@ namespace SpeedRunners.DAL
         {
             StringBuilder where = new StringBuilder()
                 .WhereIf(param.ModID.Count > 0, $" AND [ID] IN @{nameof(param.ModID)} ")
-                .WhereIf(param.Tag != 0, $" AND [Tag] = @{nameof(param.Tag)} ")
-                .WhereIf(!string.IsNullOrWhiteSpace(param.Keywords), $" AND FileName LIKE @{nameof(param.FuzzyKeywords)} ");
+                .WhereIf(true, $" AND [Tag] = @{nameof(param.Tag)} ")
+                .WhereIf(!string.IsNullOrWhiteSpace(param.Keywords), $" AND Title LIKE @{nameof(param.FuzzyKeywords)} ");
             GridReader reader = Db.QueryMultiple($@"SELECT COUNT(ID) FROM Mod WHERE 1 = 1 {where}
 SELECT *
 FROM(SELECT ROW_NUMBER() OVER(ORDER BY id) AS RowNum, *
@@ -33,7 +33,7 @@ WHERE 1 = 1 {where}
 
         public void AddMod(MMod param)
         {
-            Db.Insert("Mod", param, new[] { nameof(param.UploadDate) });
+            Db.Insert("Mod", param, new[] { nameof(param.ID), nameof(param.UploadDate) });
         }
 
         public void UpdateLikeNum(int modID, int like, int dislike)
@@ -53,10 +53,10 @@ WHERE 1 = 1 {where}
             Db.Execute(sql, new { like, dislike });
         }
 
-        public void UpdateDownloadNum(int modID)
+        public void UpdateDownloadNum(string key)
         {
-            string sql = $@"UPDATE Download = Download + 1 FROM Mod WHERE [ID] = {modID}";
-            Db.Execute(sql);
+            string sql = $@"UPDATE Mod SET Download = Download + 1 WHERE [FileUrl] = @{nameof(key)}";
+            Db.Execute(sql, new { key });
         }
 
         public void AddModStar(int modID, string platformID)

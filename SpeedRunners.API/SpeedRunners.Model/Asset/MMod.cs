@@ -7,8 +7,10 @@ namespace SpeedRunners.Model.Asset
     public class MMod
     {
         public int ID { get; set; }
-        public string ImgName { get; set; }
-        public string FileName { get; set; }
+        public int Tag { get; set; }
+        public string Title { get; set; }
+        public string ImgUrl { get; set; }
+        public string FileUrl { get; set; }
         public string AuthorID { get; set; }
         public int Like { get; set; }
         public int Dislike { get; set; }

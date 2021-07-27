@@ -20,3 +20,10 @@ export function getModList(param) {
     data: param
   });
 }
+export function addMod(param) {
+  return request({
+    url: `/asset/addMod`,
+    method: "post",
+    data: param
+  });
+}
