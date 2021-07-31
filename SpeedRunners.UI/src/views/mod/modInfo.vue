@@ -10,7 +10,7 @@
     @input="onChange"
   >
     <v-container>
-      <v-form ref="form" v-model="valid">
+      <v-form ref="form" v-model="valid" :disabled="uploading">
         <v-select
           v-model="formType"
           required
@@ -52,7 +52,7 @@
           @click="clearFiles"
         />
         <v-btn
-          :disabled="!valid"
+          :disabled="!valid||uploading"
           color="success"
           class="mr-4"
           @click="submitMod"
@@ -60,6 +60,7 @@
           提 交
         </v-btn>
         <v-btn
+          :disabled="uploading"
           color="info"
           class="mr-4"
           @click="doClose"
@@ -120,7 +121,7 @@ export default {
       ],
       fileRules: [
         v => !!v || "请上传文件",
-        v => !v || v.size <= 10000000 || "文件大小不能超过 10 MB"
+        v => !v || v.size <= 20000000 || "文件大小不能超过 20 MB"
       ]
     };
   },
@@ -173,6 +174,7 @@ export default {
       this.img = new File([blob], imgName + ".jpg", metadata);
     },
     submitMod() {
+      this.uploading = true;
       const that = this;
       getUploadToken().then(response => {
         const imgToken = response.data[0];
@@ -200,7 +202,6 @@ export default {
           that.$toast.error(`${err.name}:${err.message}`);
         },
         complete(res) {
-          that.imgProgress = 100;
           if (that.fileProgress === 100) {
             that.addModInfo();
           }
@@ -218,7 +219,6 @@ export default {
           that.$toast.error(`${err.name}:${err.message}`);
         },
         complete(res) {
-          that.fileProgress = 100;
           if (that.imgProgress === 100) {
             that.addModInfo();
           }
@@ -227,8 +227,6 @@ export default {
       fileObservable.subscribe(fileObserver);
     },
     addModInfo() {
-      if (this.uploading) { return }
-      this.uploading = true;
       const that = this;
       const param = {};
       param.tag = this.formType;

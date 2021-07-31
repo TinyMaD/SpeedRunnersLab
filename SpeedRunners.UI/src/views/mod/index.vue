@@ -26,7 +26,7 @@
               <v-list-item
                 v-for="(menu, i) in otherModMenu"
                 :key="i"
-                @click="getList"
+                @click="changeList"
               >
                 <v-list-item-title v-text="menu" />
               </v-list-item>
@@ -105,10 +105,12 @@
           </template>
           <div class="text-center">
             <v-pagination
+              v-show="pageCount>1"
               v-model="searchParam.pageNo"
               circle
               :length="pageCount"
               :total-visible="7"
+              @input="getList"
             />
           </div>
         </div>
@@ -172,6 +174,10 @@ export default {
     });
   },
   methods: {
+    changeList() {
+      this.searchParam.pageNo = 1;
+      this.getList();
+    },
     getList() {
       getModList(this.searchParam).then(res => {
         this.data = res.data;
