@@ -33,6 +33,9 @@ WHERE 1 = 1 {where}
 
         public void AddMod(MMod param)
         {
+            string sql = $@"SELECT 1 from Mod WHERE imgUrl = @{nameof(param.ImgUrl)}";
+            bool exist = Db.ExecuteScalar<int>(sql, param) == 1;
+            if (exist) return;
             Db.Insert("Mod", param, new[] { nameof(param.ID), nameof(param.UploadDate) });
         }
 

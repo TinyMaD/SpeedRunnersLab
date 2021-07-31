@@ -79,7 +79,7 @@
                       absolute
                       color="black"
                     >
-                      <v-btn icon class="download-btn" @click="download(mod.title,mod.fileUrl)">
+                      <v-btn icon class="download-btn" @click.stop="download(mod.title,mod.fileUrl)">
                         <v-icon>mdi-download</v-icon>
                       </v-btn>
                     </v-overlay>
@@ -87,11 +87,11 @@
                 </v-img>
 
                 <v-card-actions>
-                  <v-btn text x-small @click="download(mod.title,mod.fileUrl)">
+                  <v-btn text x-small @click.stop="download(mod.title,mod.fileUrl)">
                     <v-icon>mdi-download</v-icon>
                     {{ mod.download }}
                   </v-btn>
-                  <v-btn text x-small @click="doStar(mod.id)">
+                  <v-btn text x-small @click.stop="doStar(mod.id)">
                     <v-icon>mdi-star-outline</v-icon>
                     {{ mod.star }}
                   </v-btn>
@@ -154,7 +154,7 @@ export default {
       return this.progress > 0 ? `正在上传，请耐心等待...${this.progress} %` : "上传MOD资源";
     },
     pageCount() {
-      return parseInt(this.data.total / this.searchParam.pageSize) + 1;
+      return this.data.total === 0 ? 1 : parseInt((this.data.total - 1) / this.searchParam.pageSize) + 1;
     },
     fileSize() {
       return function(fileLength) {
