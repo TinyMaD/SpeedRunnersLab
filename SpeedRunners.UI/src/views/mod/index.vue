@@ -191,6 +191,11 @@ export default {
       });
     },
     changeSwitch() {
+      if (this.name === "") {
+        this.$toast.info("请先登录再操作");
+        this.switchValue = false;
+        return;
+      }
       this.searchParam.onlyStar = this.switchValue;
       this.getList();
     },
@@ -203,7 +208,7 @@ export default {
     },
     doStar(mod) {
       if (this.name === "") {
-        this.$toast.info("请先登录再收藏");
+        this.$toast.info("请登录后再收藏");
         return;
       }
       operateModStar(mod.id, !mod.star).then(res => {
