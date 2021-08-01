@@ -17,5 +17,7 @@ namespace SpeedRunners.Model.Asset
         public int Download { get; set; }
         public long Size { get; set; }
         public DateTime UploadDate { get; set; }
+        public int StarCount { get; set; }
+        public bool Star { get; set; } = false;
     }
 }

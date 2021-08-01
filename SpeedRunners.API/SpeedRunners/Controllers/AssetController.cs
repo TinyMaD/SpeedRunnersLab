@@ -21,11 +21,16 @@ namespace SpeedRunners.Controllers
         [HttpPost]
         public string GetDownloadUrl([FromBody] dynamic data) => BLL.CreateDownloadUrl(data.fileName.Value);
 
+        [Persona]
         [HttpPost]
         public MPageResult<MMod> GetModList([FromBody] MModPageParam param) => BLL.GetModList(param);
 
         [User]
         [HttpPost]
         public void AddMod([FromBody] MMod param) => BLL.AddMod(param);
+
+        [User]
+        [HttpGet("{modID}/{star}")]
+        public void OperateModStar(int modID, bool star) => BLL.OperateModStar(modID, star);
     }
 }

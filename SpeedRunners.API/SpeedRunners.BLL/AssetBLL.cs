@@ -45,7 +45,8 @@ namespace SpeedRunners.BLL
             MPageResult<MMod> result = new MPageResult<MMod>();
             BeginDb(DAL =>
             {
-                result = DAL.GetModList(param);
+                string currentUserID = CurrentUser?.PlatformID ?? string.Empty;
+                result = DAL.GetModList(param, currentUserID);
                 foreach (MMod item in result.List)
                 {
                     item.ImgUrl = "https://cdn-img.speedrunners.cn/" + item.ImgUrl;
@@ -60,6 +61,21 @@ namespace SpeedRunners.BLL
             BeginDb(DAL =>
             {
                 DAL.AddMod(param);
+            });
+        }
+
+        public void OperateModStar(int modID, bool Star)
+        {
+            BeginDb(DAL =>
+            {
+                if (Star)
+                {
+                    DAL.AddModStar(modID, CurrentUser.PlatformID);
+                }
+                else
+                {
+                    DAL.DeleteModStar(modID, CurrentUser.PlatformID);
+                }
             });
         }
     }

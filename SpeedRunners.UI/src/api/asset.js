@@ -27,3 +27,9 @@ export function addMod(param) {
     data: param
   });
 }
+export function operateModStar(modID, star) {
+  return request({
+    url: `/asset/operateModStar/${modID}/${star}`,
+    method: "get"
+  });
+}

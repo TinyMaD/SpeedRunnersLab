@@ -52,6 +52,7 @@
                 v-model="switchValue"
                 label="仅显示'已收藏'"
                 color="orange"
+                @change="changeSwitch"
               />
             </div>
           </v-row>
@@ -91,9 +92,9 @@
                     <v-icon>mdi-download</v-icon>
                     {{ mod.download }}
                   </v-btn>
-                  <v-btn text x-small @click.stop="doStar(mod.id)">
-                    <v-icon>mdi-star-outline</v-icon>
-                    {{ mod.star }}
+                  <v-btn text x-small :color="mod.star?'orange':'white'" @click.stop="doStar(mod)">
+                    <v-icon>{{ starIcon(mod.star) }}</v-icon>
+                    {{ mod.starCount }}
                   </v-btn>
                   <v-spacer />
                   <div class="text-caption">
@@ -122,7 +123,7 @@
 <script>
 import { mapGetters } from "vuex";
 import ModInfo from "./modInfo";
-import { getDownloadUrl, getModList } from "@/api/asset";
+import { getDownloadUrl, getModList, operateModStar } from "@/api/asset";
 
 export default {
   name: "Mod",
@@ -135,6 +136,7 @@ export default {
     transparent: "rgba(255, 255, 255, 0)",
     switchValue: false,
     searchParam: {
+      onlyStar: false,
       tag: 0,
       pageNo: 1,
       pageSize: 15,
@@ -166,6 +168,11 @@ export default {
         }
         return parseInt(fileLength) + " " + unit[unitIndex];
       };
+    },
+    starIcon() {
+      return function(star) {
+        return star ? "mdi-star" : "mdi-star-outline";
+      };
     }
   },
   mounted() {
@@ -183,6 +190,10 @@ export default {
         this.data = res.data;
       });
     },
+    changeSwitch() {
+      this.searchParam.onlyStar = this.switchValue;
+      this.getList();
+    },
     clickUpload() {
       if (this.name !== "") {
         this.drawer = true;
@@ -190,8 +201,15 @@ export default {
         this.$toast.info("请登录后再上传");
       }
     },
-    doStar() {
-      this.$toast.info("正在疯狂开发中。。。");
+    doStar(mod) {
+      if (this.name === "") {
+        this.$toast.info("请先登录再收藏");
+        return;
+      }
+      operateModStar(mod.id, !mod.star).then(res => {
+        this.$toast.success(`${(mod.star ? "取消" : "")}收藏成功`);
+        this.getList();
+      });
     },
     download(title, fileUrl) {
       title = `${title}.${fileUrl.split(".").pop()}`;
