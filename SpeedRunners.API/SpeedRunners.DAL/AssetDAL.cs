@@ -48,18 +48,18 @@ FROM ModStar
 WHERE ModID IN @{nameof(modIDs)}
 GROUP BY ModID"
 , new { modIDs });
-            if (!string.IsNullOrWhiteSpace(currentUserID))
+            foreach (var item in result.List)
             {
-                foreach (var item in result.List)
+                var (modID, starCount) = starCountList.FirstOrDefault(x => x.Item1 == item.ID);
+                if (modID != 0)
+                {
+                    item.StarCount = starCount;
+                }
+                if (!string.IsNullOrWhiteSpace(currentUserID))
                 {
                     if (starModIDs.Any(x => x == item.ID))
                     {
                         item.Star = true;
-                    }
-                    var (modID, starCount) = starCountList.FirstOrDefault(x => x.Item1 == item.ID);
-                    if (modID != 0)
-                    {
-                        item.StarCount = starCount;
                     }
                 }
             }
