@@ -47,7 +47,7 @@ SELECT ModID, COUNT(ModID)
 FROM ModStar 
 WHERE ModID IN @{nameof(modIDs)}
 GROUP BY ModID"
-,new { modIDs });
+, new { modIDs });
             if (!string.IsNullOrWhiteSpace(currentUserID))
             {
                 foreach (var item in result.List)
@@ -71,7 +71,7 @@ GROUP BY ModID"
             string sql = $@"SELECT 1 from Mod WHERE imgUrl = @{nameof(param.ImgUrl)}";
             bool exist = Db.ExecuteScalar<int>(sql, param) == 1;
             if (exist) return;
-            Db.Insert("Mod", param, new[] { nameof(param.ID), nameof(param.UploadDate) });
+            Db.Insert("Mod", param, new[] { nameof(param.ID), nameof(param.UploadDate), nameof(param.Star), nameof(param.StarCount) });
         }
 
         public void UpdateLikeNum(int modID, int like, int dislike)
