@@ -1,6 +1,7 @@
 "use strict";
 const path = require("path");
 const defaultSettings = require("./src/settings.js");
+const PrerenderSPAPlugin = require("prerender-spa-plugin");
 
 function resolve(dir) {
   return path.join(__dirname, dir);
@@ -28,7 +29,15 @@ module.exports = {
       alias: {
         "@": resolve("src")
       }
-    }
+    },
+    plugins: [
+      new PrerenderSPAPlugin({
+      // Required - The path to the webpack-outputted app to prerender.
+        staticDir: resolve("dist"),
+        // Required - Routes to render.
+        routes: ["/", "/rank", "/mod", "/searchplayer"]
+      })
+    ]
   },
   /**
    * You will need to set publicPath if you plan to deploy your site under a sub path,
