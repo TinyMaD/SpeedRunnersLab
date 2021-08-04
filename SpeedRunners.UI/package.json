@@ -23,6 +23,7 @@
     "qiniu-js": "^3.3.1",
     "vue": "2.6.10",
     "vue-cropperjs": "4.2.0",
+    "vue-meta": "^2.4.0",
     "vue-router": "3.0.6",
     "vuetify": "~2.3.11",
     "vuetify-toast-snackbar-ng": "^0.7.3",

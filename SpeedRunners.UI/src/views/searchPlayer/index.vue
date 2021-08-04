@@ -148,6 +148,17 @@ export default {
         }
       );
     }
+  },
+  metaInfo() {
+    return {
+      meta: [
+        {
+          vmid: "keywords",
+          name: "keywords",
+          content: "SR游戏数据查询,SpeedRunners玩家数据查询," + this.$baseKeywords
+        }
+      ]
+    };
   }
 };
 </script>

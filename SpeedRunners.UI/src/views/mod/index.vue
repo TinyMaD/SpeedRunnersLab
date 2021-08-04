@@ -232,6 +232,17 @@ export default {
         x.send();
       });
     }
+  },
+  metaInfo() {
+    return {
+      meta: [
+        {
+          vmid: "keywords",
+          name: "keywords",
+          content: "游戏MOD,轨迹,Trail,Mod of SpeedRunners,HUD," + this.$baseKeywords
+        }
+      ]
+    };
   }
 };
 </script>

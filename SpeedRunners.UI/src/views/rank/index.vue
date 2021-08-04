@@ -251,6 +251,17 @@ export default {
         default:
       }
     }
+  },
+  metaInfo() {
+    return {
+      meta: [
+        {
+          vmid: "keywords",
+          name: "keywords",
+          content: "SpeedRunners排行榜,SpeedRunners天梯,Rank,league," + this.$baseKeywords
+        }
+      ]
+    };
   }
 };
 </script>
