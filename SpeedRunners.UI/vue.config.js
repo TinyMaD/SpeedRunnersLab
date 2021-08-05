@@ -2,7 +2,7 @@
 const path = require("path");
 const defaultSettings = require("./src/settings.js");
 const PrerenderSPAPlugin = require("prerender-spa-plugin");
-const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;
+// const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;
 
 function resolve(dir) {
   return path.join(__dirname, dir);
@@ -49,10 +49,10 @@ module.exports = {
           }
 
           return renderedRoute;
-        },
-        renderer: new Renderer({
-          renderAfterTime: 5000 // Wait 5 seconds.
-        })
+        }
+        // renderer: new Renderer({
+        //   renderAfterElementExists: "data-vue-meta"
+        // })
       })
     ]
   },
