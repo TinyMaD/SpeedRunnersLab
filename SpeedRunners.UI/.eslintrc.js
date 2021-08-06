@@ -106,7 +106,7 @@ module.exports = {
     'no-lone-blocks': 2,
     'no-mixed-spaces-and-tabs': 2,
     'no-multi-spaces': 2,
-    'no-multi-str': 2,
+    'no-multi-str': 0,
     'no-multiple-empty-lines': [2, {
       'max': 1
     }],

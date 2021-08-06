@@ -7,7 +7,8 @@
             <v-row>
               <v-col cols="12" class="py-0">
                 <v-card class="mb-2 pa-2" dark>
-                  {{ onlineCount }}人在玩
+                  全球在线：
+                  <NumberAnimate :num="onlineCount" />
                   <v-divider />
                   <v-avatar v-for="player in playSRlist" :key="player.platformID" class="ma-1">
                     <v-tooltip top>
@@ -47,13 +48,15 @@
 <script>
 import AddedChart from "./addedChart";
 import HourChart from "./hourChart";
+import NumberAnimate from "@/components/NumberAnimate";
 import { getOnlineCount } from "@/api/steam";
 import { getPlaySRList } from "@/api/rank";
 export default {
   name: "Index",
   components: {
     AddedChart,
-    HourChart
+    HourChart,
+    NumberAnimate
   },
   data: () => ({
     onlineCount: 0,
