@@ -7,12 +7,27 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <script src="//upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.3.min.js"></script>
     <title><%= webpackConfig.name %></title>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3M80SJ8MQF"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-3M80SJ8MQF');
+    </script>
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but <%= webpackConfig.name %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>很抱歉，这个网站必须开启JavaScript才能访问。请开启后再继续。</strong>
     </noscript>
-    <div id="app"></div>
+    <div id="app">
+      <div style="text-align: center;">
+        <div style="font-size: 12px;">欢迎来到SpeedRunnersLab(SRLab)。在这里可以浏览SpeedRunners高手们的游戏动态、数据资料、热门赛事等信息，同时提供丰富有趣的MOD资源。
+        </div>
+      </div>
+    </div>
     <!-- built files will be auto injected -->
   </body>
 </html>

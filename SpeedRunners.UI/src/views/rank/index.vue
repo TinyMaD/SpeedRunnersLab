@@ -145,7 +145,6 @@ export default {
         $(".rowImg")
           .width("30px")
           .height("30px");
-        $("#body").css("height", $("#rankDiv").height() + 60);
       }
       $(".table tr:even").css("background-color", "#262626");
       $(".table tr:odd").css("background-color", "#3E3E3E");
@@ -288,18 +287,6 @@ export default {
   max-width: 940px;
   height: 105px;
   margin: 0 auto;
-}
-
-#body {
-  background-color: rgb(42, 47, 55);
-  width: 100%;
-  height: 1300px;
-  background-image: url("https://static.wixstatic.com/media/50a395_3805b01fbb764978a7bd9d360c3806a3~mv2.png/v1/fill/w_1001,h_801,al_c,usm_0.66_1.00_0.01/50a395_3805b01fbb764978a7bd9d360c3806a3~mv2.png"),
-    url("https://static.wixstatic.com/media/50a395_949aa855f1d14df3a28978309b909c2f~mv2.png/v1/fill/w_661,h_801,al_c,usm_0.66_1.00_0.01/50a395_949aa855f1d14df3a28978309b909c2f~mv2.png"),
-    url("https://static.wixstatic.com/media/50a395_4c0a696715194752bf05ac43dd3ec8d2~mv2.png/v1/fill/w_518,h_801,al_c,usm_0.66_1.00_0.01/50a395_4c0a696715194752bf05ac43dd3ec8d2~mv2.png");
-  background-repeat: repeat-x, no-repeat, no-repeat;
-  background-position: bottom, 3% 30%, 97% 28%;
-  background-size: auto, 300px, 250px;
 }
 
 #bg {
