@@ -9,6 +9,10 @@ export default {
     num: {
       type: Number,
       default: 0
+    },
+    color: {
+      type: String,
+      default: "white"
     }
   },
   data() {
@@ -22,10 +26,12 @@ export default {
     }
   },
   mounted() {
+    var that = this;
     this.numberRun = $("#numberRun").numberAnimate({
       num: 0,
       speed: 1500,
-      symbol: ","
+      symbol: ",",
+      color: that.color
     });
   }
 };

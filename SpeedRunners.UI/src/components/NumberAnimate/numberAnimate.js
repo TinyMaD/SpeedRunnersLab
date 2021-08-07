@@ -12,6 +12,7 @@ import $ from "jquery";
 (function($) {
   $.fn.numberAnimate = function(setting) {
     var defaults = {
+      color: "white",
       speed: 1000, // 动画速度
       num: "", // 初始化值
       iniAnimate: true, // 是否要初始化动画效果
@@ -60,7 +61,6 @@ import $ from "jquery";
       // console.log(arrStr);
       return arrStr;
     };
-
     // 设置DOM symbol:分割符号
     var setNumDom = function(arrStr) {
       var shtml = '<div class="mt-number-animate">';
@@ -125,6 +125,7 @@ import $ from "jquery";
     var init = function($parent) {
     // 初始化
       $parent.html(setNumDom(numToArr(setting.num)));
+      $parent.css("color", setting.color);
       runAnimate($parent);
     };
 

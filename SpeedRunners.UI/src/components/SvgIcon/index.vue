@@ -1,5 +1,6 @@
 <template>
-  <div v-if="isExternal" :style="styleExternalIcon" class="svg-external-icon svg-icon" v-on="$listeners" />
+  <!-- <div v-if="isExternal" :style="styleExternalIcon" class="svg-external-icon svg-icon" v-on="$listeners" /> -->
+  <v-icon v-if="iconClass.startsWith('mdi')" class="ma-1">{{ iconName }}</v-icon>
   <svg v-else :class="svgClass" aria-hidden="true" v-on="$listeners">
     <use :href="iconName" />
   </svg>
@@ -26,13 +27,16 @@ export default {
       return isExternal(this.iconClass);
     },
     iconName() {
+      if (this.iconClass.startsWith("mdi")) {
+        return this.iconClass;
+      }
       return `#icon-${this.iconClass}`;
     },
     svgClass() {
       if (this.className) {
-        return "svg-icon " + this.className;
+        return "svg-icon ma-1 " + this.className;
       } else {
-        return "svg-icon";
+        return "svg-icon ma-1";
       }
     },
     styleExternalIcon() {
@@ -47,8 +51,8 @@ export default {
 
 <style scoped>
 .svg-icon {
-  width: 1em;
-  height: 1em;
+  width: 1.8em;
+  height: 1.8em;
   vertical-align: -0.15em;
   fill: currentColor;
   overflow: hidden;

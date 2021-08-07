@@ -14,7 +14,7 @@
       <template v-slot:extension>
         <v-tabs align-with-title>
           <v-tab v-for="route in navBars" :key="route.path" :to="route.path">
-            <v-icon class="ma-1">{{ route.meta.icon }}</v-icon>
+            <svg-icon :icon-class="route.meta.icon" />
             {{ route.meta.title }}
           </v-tab>
         </v-tabs>

@@ -44,9 +44,14 @@ export const constantRoutes = [
       meta: { title: "首 页", icon: "mdi-home-analytics" }
     },
     {
+      path: "/match",
+      component: () => import("@/views/match/index"),
+      meta: { title: "赛 事", icon: "jiangbei" }
+    },
+    {
       path: "/rank",
       component: () => import("@/views/rank/index"),
-      meta: { title: "排行榜", icon: "mdi-trophy" }
+      meta: { title: "排行榜", icon: "zhandouzuozhan" }
     },
     {
       path: "/mod",
