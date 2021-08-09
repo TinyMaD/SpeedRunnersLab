@@ -1,8 +1,7 @@
 "use strict";
 const path = require("path");
 const defaultSettings = require("./src/settings.js");
-const PrerenderSPAPlugin = require("prerender-spa-plugin");
-// const Renderer = PrerenderSPAPlugin.PuppeteerRenderer;
+const NyanProgressPlugin = require("nyan-progress-webpack-plugin");
 
 function resolve(dir) {
   return path.join(__dirname, dir);
@@ -32,29 +31,7 @@ module.exports = {
       }
     },
     plugins: [
-      new PrerenderSPAPlugin({
-      // Required - The path to the webpack-outputted app to prerender.
-        staticDir: resolve("dist"),
-        // Required - Routes to render.
-        // routes: ["/", "/rank", "/mod", "/searchplayer"],
-        routes: ["/"]
-        // postProcess(renderedRoute) {
-        // // Ignore any redirects.
-        //   renderedRoute.route = renderedRoute.originalRoute;
-        //   // Basic whitespace removal. (Don't use this in production.)
-        //   // renderedRoute.html = renderedRoute.html.split(/>[\s]+</gmi).join('><')
-        //   // Remove /index.html from the output path if the dir name ends with a .html file extension.
-        //   // For example: /dist/dir/special.html/index.html -> /dist/dir/special.html
-        //   if (["/rank", "/mod", "/searchplayer"].indexOf(renderedRoute.route) > -1) {
-        //     renderedRoute.outputPath = path.join(__dirname, "dist", renderedRoute.route + ".html");
-        //   }
-
-        //   return renderedRoute;
-        // }
-        // renderer: new Renderer({
-        //   renderAfterElementExists: "data-vue-meta"
-        // })
-      })
+      new NyanProgressPlugin()
     ]
   },
   /**

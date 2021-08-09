@@ -8,7 +8,7 @@
               <v-col cols="12" class="py-0">
                 <v-card class="mb-2 pa-2" dark>
                   <div style="color:#81A636">全球在线</div>
-                  <NumberAnimate :num="onlineCount" color="#81A636" />
+                  <Odometer :value="onlineCount" class="text-h4" style="color:#81A636" />
                   <v-divider />
                   <v-avatar v-for="player in playSRlist" :key="player.platformID" class="ma-1">
                     <v-tooltip top>
@@ -48,7 +48,7 @@
 <script>
 import AddedChart from "./addedChart";
 import HourChart from "./hourChart";
-import NumberAnimate from "@/components/NumberAnimate";
+import Odometer from "@/components/Odometer";
 import { getOnlineCount } from "@/api/steam";
 import { getPlaySRList } from "@/api/rank";
 export default {
@@ -56,7 +56,7 @@ export default {
   components: {
     AddedChart,
     HourChart,
-    NumberAnimate
+    Odometer
   },
   data: () => ({
     onlineCount: 0,
