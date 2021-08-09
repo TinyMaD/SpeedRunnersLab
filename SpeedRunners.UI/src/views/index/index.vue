@@ -68,7 +68,7 @@ export default {
     //   return lg ? "lg" : sm ? "sm" : xs ? "xs" : md ? "md" : xl ? "xl" : "";
     // }
   },
-  mounted: function() {
+  mounted() {
     getOnlineCount().then(response => {
       this.onlineCount = response.data;
     });

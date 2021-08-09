@@ -27,13 +27,14 @@ namespace SpeedRunners.DAL
 
         public List<MRankInfo> GetAddedChart()
         {
-            return Db.Query<MRankInfo>(@"select a.PlatformID, b.PersonaName, b.RankScore - a.minScore RankScore, b.AvatarS from 
+            int dayOfRange = 14;
+            return Db.Query<MRankInfo>($@"select a.PlatformID, b.PersonaName, b.RankScore - a.minScore RankScore, b.AvatarS from 
 (
     select PlatformID, min(RankScore) minScore from
     (
-        select PlatformID, RankScore from RankLog where Date >= getdate() - 6
+        select PlatformID, RankScore from RankLog where Date >= getdate() - {dayOfRange - 1}
         union
-        select c.PlatformID, d.RankScore from(select PlatformID, max(Date) Date from RankLog where Date < getdate() - 6 group by PlatformID)c
+        select c.PlatformID, d.RankScore from(select PlatformID, max(Date) Date from RankLog where Date < getdate() - {dayOfRange - 1} group by PlatformID)c
         left join RankLog d on c.PlatformID = d.PlatformID and c.Date = d.date
     )e group by PlatformID
 )a left join RankInfo b on a.PlatformID = b.PlatformID

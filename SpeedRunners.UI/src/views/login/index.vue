@@ -64,7 +64,7 @@ export default {
       return text;
     }
   },
-  mounted: function() {
+  mounted() {
     this.handleLogin();
   },
   methods: {

@@ -78,7 +78,7 @@ export default {
       this.chart = echarts.init(this.$el);
       this.chart.setOption({
         title: {
-          text: "七日新增天梯分",
+          text: "两周新增天梯分",
           left: "center",
           top: 15,
           textStyle: {
