@@ -8,7 +8,7 @@
               <v-col cols="12" class="py-0">
                 <v-card class="mb-2 pa-2" dark>
                   <div style="color:#81A636">全球在线</div>
-                  <Odometer :value="onlineCount" class="text-h4" style="color:#81A636" />
+                  <Odometer :value="onlineCount" class="text-h4" color="#81A636" />
                   <v-divider />
                   <v-avatar v-for="player in playSRlist" :key="player.platformID" class="ma-1">
                     <v-tooltip top>

@@ -1,5 +1,5 @@
 <template>
-  <span :class="className" />
+  <span :class="className" :style="{color:color}" />
 </template>
 
 <script>
@@ -15,6 +15,7 @@ export default {
   name: "Odometer",
   props: {
     value: { type: Number, default: () => 0 },
+    color: { type: String, default: () => "white" },
     theme: { type: String, default: () => "minimal" },
     format: { type: String, default: () => "(,ddd)" },
     duration: { type: Number, default: () => 1000 },
