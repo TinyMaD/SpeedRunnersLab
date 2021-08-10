@@ -51,15 +51,15 @@ namespace SpeedRunners.BLL
         /// <returns></returns>
         public async Task<List<MRankInfo>> GetRankScore(IEnumerable<string> rankIDs)
         {
+            List<MRankInfo> rankInfoList = new List<MRankInfo>();
             string ids = string.Join(',', rankIDs);
             string url = "http://league.speedrunners.doubledutchgames.com/Service/GetRankingList?ids=" + ids;
             string result = await HttpHelper.HttpGet(url);
-            if (!string.IsNullOrEmpty(result))
+            if (result.Contains("score"))
             {
                 JArray ja = JArray.Parse(result);
                 if (ja.Count() > 0)
                 {
-                    List<MRankInfo> rankInfoList = new List<MRankInfo>();
                     foreach (JToken item in ja)
                     {
                         MRankInfo rankInfo = new MRankInfo
@@ -72,10 +72,9 @@ namespace SpeedRunners.BLL
                         };
                         rankInfoList.Add(rankInfo);
                     }
-                    return rankInfoList;
                 }
             }
-            return null;
+            return rankInfoList;
         }
 
         /// <summary>
