@@ -41,3 +41,24 @@ export function getHourChart() {
     method: "get"
   });
 }
+
+export function getPrizePool() {
+  return request({
+    url: "/rank/getPrizePool",
+    method: "get"
+  });
+}
+
+export function updateParticipate(participate) {
+  return request({
+    url: `/rank/updateParticipate/${participate}`,
+    method: "get"
+  });
+}
+
+export function getParticipateList() {
+  return request({
+    url: "/rank/getParticipateList",
+    method: "get"
+  });
+}

@@ -4,6 +4,8 @@ const getters = {
   steamId: state => state.user.steamId,
   avatar: state => state.user.avatar,
   name: state => state.user.name,
+  rankType: state => state.user.rankType,
+  participate: state => state.user.participate,
   permission_routes: state => state.permission.routes
 };
 export default getters;

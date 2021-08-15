@@ -33,5 +33,15 @@ namespace SpeedRunners.Controllers
         [Persona]
         [HttpGet]
         public List<MRankInfo> GetPlaySRList() => BLL.GetPlaySRList();
+
+        [User]
+        [HttpGet("{participate}")]
+        public bool UpdateParticipate(bool participate) => BLL.UpdateParticipate(participate);
+
+        [HttpGet]
+        public int GetPrizePool() => BLL.GetPrizePool();
+
+        [HttpGet]
+        public List<MParticipateList> GetParticipateList() => BLL.GetParticipateList();
     }
 }

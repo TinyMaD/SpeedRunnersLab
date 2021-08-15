@@ -23,7 +23,7 @@
 
     <v-navigation-drawer v-model="drawerRight" dark app clipped temporary>
       <v-list>
-        <v-list-item v-if="name!==''">
+        <v-list-item v-if="avatar!==''">
           <v-list-item-avatar>
             <v-img :src="avatar" />
           </v-list-item-avatar>
@@ -37,7 +37,7 @@
           </v-btn>
         </v-list-item>
       </v-list>
-      <template v-if="name!==''" v-slot:append>
+      <template v-if="avatar!==''" v-slot:append>
         <div class="pa-2">
           <v-btn block @click.stop="logout()">
             <v-icon left>mdi-exit-to-app</v-icon>登 出

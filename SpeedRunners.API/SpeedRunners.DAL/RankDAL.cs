@@ -11,7 +11,7 @@ namespace SpeedRunners.DAL
         public RankDAL(DbHelper db) : base(db) { }
 
         #region RankInfo
-        public List<MRankInfo> GetRankList(IEnumerable<string> steamIDs = null, bool playSROnly = false)
+        public List<MRankInfo> GetRankList(IEnumerable<string> steamIDs = null, bool playSROnly = false, int participate = 0)
         {
             StringBuilder where = new StringBuilder();
             if (steamIDs?.Any() ?? false)
@@ -21,6 +21,10 @@ namespace SpeedRunners.DAL
             if (playSROnly)
             {
                 where.Append(" AND GameID = 207140 ");
+            }
+            if (participate != 0)
+            {
+                where.Append($" AND participate = {participate} ");
             }
             return Db.Query<MRankInfo>($"select * from RankInfo where RankType = 1 {where} order by RankScore desc", new { steamIDs }).ToList();
         }
@@ -71,6 +75,12 @@ where b.RankScore - a.minScore > 0 order by RankScore desc; ").ToList();
         {
             Db.Insert("RankInfo", rankInfo, new[] { nameof(rankInfo.CreateTime), nameof(rankInfo.ModifyTime) });
         }
+
+        public bool UpdateParticipate(string CurrentUserID, bool participate)
+        {
+            return Db.Execute($"UPDATE RankInfo SET participate = {(participate ? 1 : 0)}  WHERE PlatformID = {CurrentUserID}") > 0;
+        }
+
         #endregion
 
         #region RankLog
@@ -84,5 +94,10 @@ where b.RankScore - a.minScore > 0 order by RankScore desc; ").ToList();
             Db.Insert("RankLog", rankLog, new[] { nameof(rankLog.Date) });
         }
         #endregion
+
+        public int GetPrizePool()
+        {
+            return Db.ExecuteScalar<int>($"SELECT SUM(Amount) FROM sponsor");
+        }
     }
 }

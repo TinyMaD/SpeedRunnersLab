@@ -9,32 +9,262 @@
           >
             <v-row class="d-flex justify-center">
               <div><v-img
-                width="500"
+                style="margin-top:5px"
+                width="450"
                 src="img/sxltext.png"
               /></div>
             </v-row>
             <v-row class="d-flex justify-center">
-              <p style="padding-top:5rem;color:#e4c269;letter-spacing:.3rem;font-weight: 700">当前总奖金</p>
+              <p style="padding-top:4rem;color:#e4c269;letter-spacing:.3rem;font-weight: 700">当前总奖金</p>
             </v-row>
             <v-col cols="12" class="d-flex justify-center" style="font-size: 6rem!important;line-height: 6rem;font-weight: 700!important;font-family: Roboto,sans-serif!important;letter-spacing:.5rem;margin-top:-2rem">
-              <p style="color:#e4c269;padding-top:5px;">¥</p>
-              <Odometer :value="prizePool" color="#e4c269" />
+              <p style="color:#e4c269;padding-top:5px;">&yen;</p>
+              <Odometer :value="prizePool" color="#e4c269" :duration="1500" />
             </v-col>
+            <v-row class="d-flex justify-center">
+              <v-btn
+                class="mt-10 baom-btn text-h-4"
+                color="rgb(39,31,10)"
+                @click.stop="showDialog"
+              >
+                {{ btnText }}
+              </v-btn>
+            </v-row>
           </v-img>
+          <v-sheet width="100%">
+            <div class="title text-h4 pa-2" v-text="'报名玩家'" />
+            <div class="d-flex justify-center">
+              <v-simple-table style="width:1000px">
+                <template v-slot:default>
+                  <thead>
+                    <tr>
+                      <th />
+                      <th />
+                      <th>
+                        昵 称
+                      </th>
+                      <th>
+                        天梯分
+                      </th>
+                      <th>
+                        总时长
+                      </th>
+                      <th>
+                        最近两周时长
+                      </th>
+                      <th>
+                        资 质
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item,index) in participateList" :key="item.platformID">
+                      <td>{{ index + 1 }}</td>
+                      <td><v-avatar size="35"><img :src="item.avatarM"></v-avatar></td>
+                      <td>{{ item.personaName }}</td>
+                      <td>{{ item.rankScore }}</td>
+                      <td>{{ item.playTime }}</td>
+                      <td>{{ item.weekPlayTime }}</td>
+                      <td>{{ item.sxlScore }}</td>
+                    </tr>
+                  </tbody>
+                </template>
+              </v-simple-table>
+            </div>
+          </v-sheet>
+          <v-sheet
+            v-for="(item,index) in matchContent"
+            :key="index"
+            width="100%"
+          >
+            <div class="title text-h4 pa-2" v-text="item.title" />
+            <div
+              v-for="(content,i) in item.content"
+              :key="i"
+              class="text-body-1 pa-1 my-1"
+              v-text="content"
+            />
+          </v-sheet>
         </v-row>
       </v-card>
     </v-row>
+    <v-dialog
+      v-model="dialog"
+      persistent
+      width="500"
+    >
+      <v-card dark>
+        <v-card-title class="text-h5">
+          提 示
+        </v-card-title>
+
+        <v-card-text>
+          {{ participateText }}
+        </v-card-text>
+
+        <v-divider />
+
+        <v-card-actions>
+          <v-btn
+            color="primary"
+            :text="participate !== 0"
+            :loading="loading"
+            :disabled="loading"
+            @click="updateParticipate"
+          >
+            {{ saveBtnText }}
+          </v-btn>
+          <v-spacer />
+          <v-btn
+            color="primary"
+            :text="participate === 0"
+            :disabled="loading"
+            @click="dialog = false"
+          >
+            {{ cancelBtnText }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 <script>
 import Odometer from "@/components/Odometer";
+import { getPrizePool, updateParticipate, getParticipateList } from "@/api/rank";
+import { mapGetters } from "vuex";
 export default {
   name: "Match",
   components: {
     Odometer
   },
   data: () => ({
-    prizePool: 1760
-  })
+    loading: false,
+    dialog: false,
+    prizePool: 0,
+    participateList: [],
+    matchContent: [
+      {
+        title: "比赛时间",
+        content: [
+          "2021.10.1 ~ 2021.10.7（国庆期间，具体时间待定）"
+        ]
+      },
+      {
+        title: "参赛资格",
+        content: [
+          "中文沟通无障碍、与裁判网络延迟低的玩家均可报名",
+          "“资质”排名前12位的报名选手将获得参赛资格",
+          "“资质” = “天梯分” + “游戏时长分”",
+          "“天梯分” ： 排位赛获取的总分数",
+          "“游戏时长分” = “有效游戏时长” X 10 。注：游戏时长均为SpeedRunners的游戏时长，单位为小时，请将你的Steam个人隐私权限设置为公开",
+          "“有效游戏时长” = 总游戏时长 - 最近两周游戏时长。注：“有效游戏时长”超过1000小时，按1000小时计算，“最近两周”为报名截止前两周，与报名时间无关",
+          "例：小明天梯分为10000，总游戏时长为1200小时，报名截止时最近两周游戏时长300小时，他的资质为10000 + (1200 - 300) X 10 = 19000",
+          " ",
+          "“资质”排名前4位选手直接锁定胜者组8个名额中的4个",
+          "“资质”排名后8位选手进入小组赛"
+        ]
+      },
+      {
+        title: "小组赛阶段",
+        content: [
+          "赛制：循环1v1（即每个选手都会与其余7位选手比赛）",
+          "场次：3场",
+          "地图：待定",
+          "采取记章、记场（按章记分后分数相同的选手会按获胜场数排序）",
+          "小组赛前4位选手进入胜者组",
+          "小组赛后4位选手进入败者组"
+        ]
+      },
+      {
+        title: "决赛阶段",
+        content: [
+          "赛制：双败制，强强对阵，详情请关注底部对阵图（暂无）",
+          "场次：胜者组半决赛、败者组决赛、总决赛抢8（bo15），其余场抢6（bo11）",
+          "地图：待定",
+          "热身赛：胜者组半决赛、败者组决赛、总决赛，赛前进行两场热身赛，热身赛结果不影响比赛成绩，地图待定"
+        ]
+      },
+      {
+        title: "其他信息",
+        content: [
+          "努力完善中，请持续保持关注......"
+        ]
+      }
+    ]
+  }),
+  computed: {
+    ...mapGetters([
+      "avatar",
+      "rankType",
+      "participate"
+    ]),
+    btnText() {
+      return this.participate === 0 ? "我要报名" : "您已报名";
+    },
+    participateText() {
+      return this.participate === 0 ? "为便于赛程统计，报名截止后，您在本站的昵称将停止更新，直到赛事结束。" : "少侠留步！";
+    },
+    saveBtnText() {
+      return this.participate === 0 ? "报 名" : "狠心取消报名";
+    },
+    cancelBtnText() {
+      return this.participate === 0 ? "取 消" : "陪你们玩玩";
+    }
+  },
+  mounted() {
+    getPrizePool().then(response => {
+      this.prizePool = response.data;
+    });
+    getParticipateList().then(response => {
+      this.participateList = response.data;
+    });
+  },
+  methods: {
+    showDialog() {
+      if (this.avatar === "") {
+        this.$toast.info("请先登录后，再报名");
+        return;
+      }
+      if (this.rankType === 0) {
+        this.$toast.error("您的账号还未拥有SpeedRunners游戏");
+        return;
+      }
+      this.dialog = true;
+    },
+    updateParticipate() {
+      this.loading = true;
+      var that = this;
+      const participate = this.participate === 0;
+      updateParticipate(participate).then(res => {
+        if (res.data) {
+          that.$store.dispatch("user/getInfo");
+          that.dialog = false;
+          that.$toast.success((participate ? "" : "取消") + "报名成功");
+        } else {
+          that.$toast.error((participate ? "" : "取消") + "报名失败，请稍后再试");
+        }
+        that.loading = false;
+      }).catch(() => {
+        that.loading = false;
+      });
+    }
+  }
 };
 </script>
+<style lang="scss" scoped>
+  .title {
+    color: #e4c269;
+    margin: 0 !important;
+    border-bottom: 2px solid #e4c269;
+    letter-spacing: 0 !important;
+  }
+  .baom-btn {
+    color: #e4c269;
+    border: 1px solid #e4c269!important;
+    font-size: 25px!important;
+    font-weight: 700!important;
+    letter-spacing:3px;
+    width: 180px !important;
+    height: 60px !important;
+  }
+</style>

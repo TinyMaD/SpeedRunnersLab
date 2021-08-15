@@ -3,6 +3,7 @@ using SpeedRunners.Model;
 using SpeedRunners.Model.Rank;
 using SpeedRunners.Utils;
 using Steam.Models.SteamCommunity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,6 +29,24 @@ namespace SpeedRunners.BLL
             return BeginDb(DAL =>
             {
                 return DAL.GetRankList(steamIDs);
+            });
+        }
+
+        public List<MParticipateList> GetParticipateList()
+        {
+            return BeginDb(DAL =>
+            {
+                var list = DAL.GetRankList(null, false, 1);
+                return list.Select(x => new MParticipateList
+                {
+                    PlatformID = x.PlatformID,
+                    PersonaName = x.PersonaName,
+                    AvatarM = x.AvatarM,
+                    RankScore = x.RankScore,
+                    WeekPlayTime = Math.Round((decimal)x.WeekPlayTime / 60, 1),
+                    PlayTime = Math.Round((decimal)x.PlayTime / 60, 1),
+                    SxlScore = (int)Math.Round((decimal)(x.PlayTime - x.WeekPlayTime) / 6) + (int)x.RankScore
+                }).OrderByDescending(x => x.SxlScore).ToList();
             });
         }
 
@@ -155,6 +174,24 @@ namespace SpeedRunners.BLL
                 DAL.AddRankLog(rankLog);
             });
             return MResponse.Success();
+        }
+
+        public bool UpdateParticipate(bool participate)
+        {
+            return BeginDb(DAL =>
+            {
+                return DAL.UpdateParticipate(CurrentUser?.PlatformID, participate);
+            });
+        }
+
+        public int GetPrizePool()
+        {
+            int amount = 1760;
+            BeginDb(DAL =>
+            {
+                amount += DAL.GetPrizePool();
+            });
+            return amount;
         }
     }
 }

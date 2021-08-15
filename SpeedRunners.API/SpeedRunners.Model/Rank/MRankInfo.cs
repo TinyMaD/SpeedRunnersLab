@@ -21,5 +21,7 @@ namespace SpeedRunners.Model.Rank
         public DateTime? ModifyTime { get; set; }
         public decimal? OldRankScore { get; set; }
         public int WeekPlayTime { get; set; }
+        public int PlayTime { get; set; }
+        public int Participate { get; set; }
     }
 }
