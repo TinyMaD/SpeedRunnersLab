@@ -20,7 +20,7 @@
             </v-row>
 
             <v-col cols="12" class="d-flex justify-center" style="font-size: 6rem!important;line-height: 6rem;font-weight: 700!important;font-family: Roboto,sans-serif!important;letter-spacing:.5rem;margin-top:-2rem">
-              <p style="color:#e4c269;padding-top:5px;">&yen;</p>
+              <p style="color:#e4c269;padding-top:5px;">¥</p>
               <Odometer :value="prizePool" color="#e4c269" :duration="1500" />
             </v-col>
 
@@ -35,7 +35,7 @@
             </v-row>
           </v-img>
 
-          <v-sheet width="100%">
+          <v-sheet width="100%" class="sheett">
             <div class="title text-h4 pa-2" v-text="'前言'" />
             <div
               v-for="(content,i) in qianyan"
@@ -45,40 +45,62 @@
             />
           </v-sheet>
 
-          <v-sheet width="100%">
+          <v-sheet width="100%" class="sheett">
             <div class="title text-h4 pa-2" v-text="'报名玩家'" />
-            <div class="d-flex justify-center">
-              <v-simple-table style="width:1000px">
-                <template v-slot:default>
-                  <thead>
-                    <tr>
-                      <th />
-                      <th />
-                      <th>昵 称</th>
-                      <th>天梯分</th>
-                      <th>总时长</th>
-                      <th>最近两周时长</th>
-                      <th>资 质</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(item,index) in participateList" :key="index">
-                      <td>{{ index + 1 }}</td>
-                      <td><v-avatar size="35"><img :src="item.avatarM"></v-avatar></td>
-                      <td>{{ item.personaName }}</td>
-                      <td>{{ item.rankScore }}</td>
-                      <td>{{ item.playTime }}</td>
-                      <td>{{ item.weekPlayTime }}</td>
-                      <td>{{ item.sxlScore }}</td>
-                    </tr>
-                  </tbody>
-                </template>
-              </v-simple-table>
-            </div>
+            <v-simple-table>
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th />
+                    <th />
+                    <th>昵 称</th>
+                    <th>天梯分</th>
+                    <th>总时长</th>
+                    <th>最近两周时长</th>
+                    <th>资 质</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item,index) in participateList" :key="index">
+                    <td>{{ index + 1 }}</td>
+                    <td><v-avatar size="35"><img :src="item.avatarM"></v-avatar></td>
+                    <td>{{ item.personaName }}</td>
+                    <td>{{ item.rankScore }}</td>
+                    <td>{{ item.playTime }}</td>
+                    <td>{{ item.weekPlayTime }}</td>
+                    <td>{{ item.sxlScore }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
           </v-sheet>
+
+          <v-sheet width="100%" class="sheett">
+            <div class="title text-h4 pa-2" v-text="'参赛奖励'" />
+            <div class="text-body-1 pa-1 my-1" v-text="'前十名将获得成就徽章（仅在本站展示）：'" />
+            <v-tooltip v-for="i in 10" :key="i-100" top>
+              <template v-slot:activator="{ on, attrs }">
+                <svg-icon
+                  v-bind="attrs"
+                  class="text-h4"
+                  :icon-class="`sxl-${i}`"
+                  v-on="on"
+                />
+              </template>
+              <span>{{ badgeText(i) }}</span>
+            </v-tooltip>
+            <div
+              v-for="(prize,i) in prizeText"
+              :key="i"
+              class="text-body-1 pa-1 my-1"
+              v-text="prize"
+            />
+          </v-sheet>
+
           <v-sheet
             v-for="(item,index) in matchContent"
             :key="index"
+            class="sheett"
             width="100%"
           >
             <div class="title text-h4 pa-2" v-text="item.title" />
@@ -133,6 +155,7 @@
 import Odometer from "@/components/Odometer";
 import { getPrizePool, updateParticipate, getParticipateList } from "@/api/rank";
 import { mapGetters } from "vuex";
+import { sectionToChinese } from "@/utils";
 export default {
   name: "Match",
   components: {
@@ -143,6 +166,7 @@ export default {
     dialog: false,
     prizePool: 0,
     participateList: [],
+    prizeList: [],
     qianyan: [
       "由于SR圈环境的特殊性，圈内少有专注竞技性的比赛。公认的高端赛——King of Speed，国内玩家虽有在其名列前茅的水平，但苦于高延迟，而不能愉快的玩耍。",
       "此时，国内首个专注于竞技性的SR比赛——神行令，由此诞生！",
@@ -194,7 +218,8 @@ export default {
       {
         title: "其他信息",
         content: [
-          "努力完善中，请持续保持关注......"
+          "努力完善中，请持续保持关注......",
+          "※最终解释权归本站所有"
         ]
       }
     ]
@@ -216,11 +241,40 @@ export default {
     },
     cancelBtnText() {
       return this.participate === 0 ? "取 消" : "陪你们玩玩";
+    },
+    prizeText() {
+      var prizeText = ["奖金（随当前总奖金变动）："];
+      this.prizeList.forEach(function(item, index, array) {
+        prizeText.push(`第 ${index + 1} 名： ${item} 元`);
+      });
+      return prizeText.concat(
+        `第 ${this.prizeList.length + 1} 名 ~ 第 12 名：ROLL 50 元`,
+        "奖金算法：",
+        "每上升一个名次，奖金翻倍，差额最大为500元",
+        "第五名奖金增至100元时，开设第六名奖金即50元，以此类推（满100，激活下一个名次）",
+        "计算值向下取整，舍去的金额之和加在最低名次奖金上",
+        "没有获得奖金的参赛选手中ROLL50元");
+    },
+    badgeText() {
+      return function(num) {
+        const numText = sectionToChinese(num);
+        return `2021国服第${numText === "一十" ? "十" : numText}`;
+      };
     }
   },
   mounted() {
     getPrizePool().then(response => {
       this.prizePool = response.data;
+      this.getPrizeBase(50, this.prizePool - 50, this.prizeList);
+      var total = this.prizePool - 50 - this.prizeList.reduce((a, b) => a + b, 0);
+      this.calculate(this.prizeList, total);
+      this.prizeList.reverse();
+      for (let i = 0; i < this.prizeList.length; i++) {
+        this.prizeList[i] = parseInt(this.prizeList[i]);
+      }
+      var prizeAll = this.prizeList.reduce((a, b) => a + b, 0);
+      var balance = this.prizePool - 50 - prizeAll;
+      this.prizeList[this.prizeList.length - 1] += balance;
     });
     getParticipateList().then(response => {
       this.participateList = response.data;
@@ -254,6 +308,37 @@ export default {
       }).catch(() => {
         that.loading = false;
       });
+    },
+    getPrizeBase(prize, total, prizeList) {
+      if (total >= prize) {
+        prizeList.push(prize);
+        total -= prize;
+        prize = prize > 500 ? prize + 500 : prize * 2;
+        this.getPrizeBase(prize, total, prizeList);
+      }
+    },
+    calculate(prizeList, total) {
+      const partList = [];
+      const index = prizeList.findIndex(x => x > 500);
+      for (let i = 0; i < prizeList.length; i++) {
+        let part = 1;
+        if (i <= index) {
+          part = Math.pow(2, i);
+        } else {
+          part = partList[index];
+        }
+        partList.push(part);
+      }
+      const partAll = partList.reduce((a, b) => a + b, 0);
+      const avg = total / partAll;
+      if (avg * partList[partList.length - 1] <= 1) return;
+      for (let i = 0; i < prizeList.length; i++) {
+        let money = avg * partList[i];
+        money = (i > 0 && prizeList[i] + money - prizeList[i - 1] > 500) ? prizeList[i - 1] + 500 - prizeList[i] : money;
+        prizeList[i] += money;
+        total -= money;
+      }
+      this.calculate(prizeList, total);
     }
   }
 };
@@ -273,5 +358,8 @@ export default {
     letter-spacing:3px;
     width: 180px !important;
     height: 60px !important;
+  }
+  .sheett{
+    padding-bottom: 1rem;
   }
 </style>
