@@ -45,7 +45,7 @@ namespace SpeedRunners.BLL
                     RankScore = x.RankScore,
                     WeekPlayTime = Math.Round((decimal)x.WeekPlayTime / 60, 1),
                     PlayTime = Math.Round((decimal)x.PlayTime / 60, 1),
-                    SxlScore = (int)Math.Round((decimal)(x.PlayTime - x.WeekPlayTime) / 6) + (int)x.RankScore
+                    SxlScore = (x.PlayTime - x.WeekPlayTime > 60000 ? 10000 : (int)Math.Round((decimal)(x.PlayTime - x.WeekPlayTime) / 6)) + (int)x.RankScore
                 }).OrderByDescending(x => x.SxlScore).ToList();
             });
         }
