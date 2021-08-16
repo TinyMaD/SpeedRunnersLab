@@ -14,13 +14,16 @@
                 src="img/sxltext.png"
               /></div>
             </v-row>
+
             <v-row class="d-flex justify-center">
               <p style="padding-top:4rem;color:#e4c269;letter-spacing:.3rem;font-weight: 700">当前总奖金</p>
             </v-row>
+
             <v-col cols="12" class="d-flex justify-center" style="font-size: 6rem!important;line-height: 6rem;font-weight: 700!important;font-family: Roboto,sans-serif!important;letter-spacing:.5rem;margin-top:-2rem">
               <p style="color:#e4c269;padding-top:5px;">&yen;</p>
               <Odometer :value="prizePool" color="#e4c269" :duration="1500" />
             </v-col>
+
             <v-row class="d-flex justify-center">
               <v-btn
                 class="mt-10 baom-btn text-h-4"
@@ -31,6 +34,17 @@
               </v-btn>
             </v-row>
           </v-img>
+
+          <v-sheet width="100%">
+            <div class="title text-h4 pa-2" v-text="'前言'" />
+            <div
+              v-for="(content,i) in qianyan"
+              :key="i"
+              class="text-body-1 pa-1 my-1"
+              v-text="content"
+            />
+          </v-sheet>
+
           <v-sheet width="100%">
             <div class="title text-h4 pa-2" v-text="'报名玩家'" />
             <div class="d-flex justify-center">
@@ -40,25 +54,15 @@
                     <tr>
                       <th />
                       <th />
-                      <th>
-                        昵 称
-                      </th>
-                      <th>
-                        天梯分
-                      </th>
-                      <th>
-                        总时长
-                      </th>
-                      <th>
-                        最近两周时长
-                      </th>
-                      <th>
-                        资 质
-                      </th>
+                      <th>昵 称</th>
+                      <th>天梯分</th>
+                      <th>总时长</th>
+                      <th>最近两周时长</th>
+                      <th>资 质</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(item,index) in participateList" :key="item.platformID">
+                    <tr v-for="(item,index) in participateList" :key="index">
                       <td>{{ index + 1 }}</td>
                       <td><v-avatar size="35"><img :src="item.avatarM"></v-avatar></td>
                       <td>{{ item.personaName }}</td>
@@ -90,20 +94,17 @@
     </v-row>
     <v-dialog
       v-model="dialog"
-      persistent
+      :persistent="participate === 0"
       width="500"
     >
       <v-card dark>
         <v-card-title class="text-h5">
           提 示
         </v-card-title>
-
         <v-card-text>
           {{ participateText }}
         </v-card-text>
-
         <v-divider />
-
         <v-card-actions>
           <v-btn
             color="primary"
@@ -142,6 +143,12 @@ export default {
     dialog: false,
     prizePool: 0,
     participateList: [],
+    qianyan: [
+      "由于SR圈环境的特殊性，圈内少有专注竞技性的比赛。公认的高端赛——King of Speed，国内玩家虽有在其名列前茅的水平，但苦于高延迟，而不能愉快的玩耍。",
+      "此时，国内首个专注于竞技性的SR比赛——神行令，由此诞生！",
+      "公正严谨的赛制、实力强劲的对手、超低的延迟，将助你激发真正的实力，捍卫国服荣耀。没错，这个试炼就是为你而准备，你才是真正的国服前十！",
+      "神行令出，群雄逐鹿，鹿死谁手，你我......拭目以待！"
+    ],
     matchContent: [
       {
         title: "比赛时间",
