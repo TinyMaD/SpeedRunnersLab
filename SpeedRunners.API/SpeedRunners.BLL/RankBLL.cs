@@ -1,6 +1,7 @@
 ﻿using SpeedRunners.DAL;
 using SpeedRunners.Model;
 using SpeedRunners.Model.Rank;
+using SpeedRunners.Model.Sponsor;
 using SpeedRunners.Utils;
 using Steam.Models.SteamCommunity;
 using System;
@@ -154,12 +155,17 @@ namespace SpeedRunners.BLL
             MRankInfo srRankInfo = (await _steamBLL.GetRankScore(new[] { CurrentUser.RankID })).FirstOrDefault();
             if (srRankInfo == null)
             {
-                return MResponse.Fail("此账号尚未拥有SpeedRunners游戏");
+                bool hasSR = (await _steamBLL.GetOwnedGames(CurrentUser.PlatformID))?.OwnedGames?.Any(x => x.AppId == 207140) ?? false;
+                if (!hasSR) return MResponse.Fail("此账号尚未拥有SpeedRunners游戏");
+                srRankInfo.RankType = 2;
             }
-            BeginDb(DAL =>
+            else
             {
                 srRankInfo.RankType = 1;
                 srRankInfo.OldRankScore = srRankInfo.RankScore;
+            }
+            BeginDb(DAL =>
+            {
                 DAL.UpdateRankInfo(srRankInfo, true);
                 if (DAL.ExistRankLog(CurrentUser.PlatformID))
                 {
@@ -184,14 +190,12 @@ namespace SpeedRunners.BLL
             });
         }
 
-        public int GetPrizePool()
+        public List<MSponsor> GetSponsor()
         {
-            int amount = 1760;
-            BeginDb(DAL =>
+            return BeginDb(DAL =>
             {
-                amount += DAL.GetPrizePool();
+                return DAL.GetSponsor();
             });
-            return amount;
         }
     }
 }

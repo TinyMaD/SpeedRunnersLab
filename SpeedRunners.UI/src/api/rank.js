@@ -42,9 +42,9 @@ export function getHourChart() {
   });
 }
 
-export function getPrizePool() {
+export function getSponsor() {
   return request({
-    url: "/rank/getPrizePool",
+    url: "/rank/getSponsor",
     method: "get"
   });
 }

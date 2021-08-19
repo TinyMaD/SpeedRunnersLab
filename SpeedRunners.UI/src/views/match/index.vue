@@ -97,6 +97,58 @@
             />
           </v-sheet>
 
+          <v-sheet width="100%" class="sheett">
+            <div class="title text-h4 pa-2" v-text="'赞助'" />
+            <div
+              v-for="(content,i) in sponorContent"
+              :key="i"
+              class="text-body-1 pa-1 my-1"
+              v-text="content"
+            />
+            <v-simple-table style="width:500px">
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th>赞助者</th>
+                    <th>金 额</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item,index) in sponorList" :key="index">
+                    <td>{{ item.name }}</td>
+                    <td>{{ `${item.amount} 元` }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+            <div class="text-body-1 pa-1 my-1" v-text="'赞助方式：'" />
+            <v-tooltip right>
+              <template v-slot:activator="{ on, attrs }">
+                <svg-icon
+                  style="background-color:white;border-radius:50%"
+                  v-bind="attrs"
+                  class="text-h5"
+                  :icon-class="`zhifubao`"
+                  v-on="on"
+                />
+              </template>
+              <v-img max-width="210" src="img/zfb.png" />
+            </v-tooltip>
+            <v-tooltip right>
+              <template v-slot:activator="{ on, attrs }">
+                <svg-icon
+                  style="color:rgb(42,174,103);background-color:white;border-radius:50%"
+                  v-bind="attrs"
+                  class="text-h5"
+                  :icon-class="`weixinzhifu`"
+                  v-on="on"
+                />
+              </template>
+              <v-img max-width="210" src="img/wx.png" />
+            </v-tooltip>
+            <div class="text-body-1 pa-1 my-1" v-text="'其他赞助方式请联系站长（邮箱）supremelang@qq.com'" />
+          </v-sheet>
+
           <v-sheet
             v-for="(item,index) in matchContent"
             :key="index"
@@ -153,7 +205,7 @@
 </template>
 <script>
 import Odometer from "@/components/Odometer";
-import { getPrizePool, updateParticipate, getParticipateList } from "@/api/rank";
+import { getSponsor, updateParticipate, getParticipateList } from "@/api/rank";
 import { mapGetters } from "vuex";
 import { sectionToChinese } from "@/utils";
 export default {
@@ -165,6 +217,7 @@ export default {
     loading: false,
     dialog: false,
     prizePool: 0,
+    sponorList: [],
     participateList: [],
     prizeList: [],
     qianyan: [
@@ -172,6 +225,12 @@ export default {
       "此时，国内首个专注于竞技性的SR比赛——神行令，由此诞生！",
       "公正严谨的赛制、实力强劲的对手、超低的延迟，将助你激发真正的实力，捍卫国服荣耀。没错，这个试炼就是为你而准备，你才是真正的国服前十！",
       "神行令出，群雄逐鹿，鹿死谁手，你我......拭目以待！"
+    ],
+    sponorContent: [
+      "感谢所有的赞助者，无论金额大小，正因为有大家的支持，本赛事才得以举办",
+      "本赛事奖金全部由赞助者赞助，赞助者赞助的资金将100%进入总奖金池",
+      "为保证赞助金公开透明，赞助时请务必备注好你的ID（独特、你自己认识），未备注将按匿名标识记录。站长将在收到赞助后24小时之内维护赞助者名单，赞助者若在名单内未找到自己ID，可到QQ群（319422487）进行反馈",
+      "赞助者名单："
     ],
     matchContent: [
       {
@@ -263,8 +322,11 @@ export default {
     }
   },
   mounted() {
-    getPrizePool().then(response => {
-      this.prizePool = response.data;
+    getSponsor().then(response => {
+      this.sponorList = response.data;
+      this.prizePool = this.sponorList.reduce((a, b) => a + b.amount, 0);
+      console.log(this.sponorList);
+      console.log(this.prizePool);
       this.getPrizeBase(50, this.prizePool - 50, this.prizeList);
       var total = this.prizePool - 50 - this.prizeList.reduce((a, b) => a + b, 0);
       this.calculate(this.prizeList, total);

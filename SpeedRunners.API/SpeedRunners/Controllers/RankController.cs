@@ -2,6 +2,7 @@
 using SpeedRunners.BLL;
 using SpeedRunners.Model;
 using SpeedRunners.Model.Rank;
+using SpeedRunners.Model.Sponsor;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -39,7 +40,7 @@ namespace SpeedRunners.Controllers
         public bool UpdateParticipate(bool participate) => BLL.UpdateParticipate(participate);
 
         [HttpGet]
-        public int GetPrizePool() => BLL.GetPrizePool();
+        public List<MSponsor> GetSponsor() => BLL.GetSponsor();
 
         [HttpGet]
         public List<MParticipateList> GetParticipateList() => BLL.GetParticipateList();

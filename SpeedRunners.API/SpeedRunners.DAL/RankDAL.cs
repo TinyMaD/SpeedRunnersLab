@@ -1,4 +1,5 @@
 ﻿using SpeedRunners.Model.Rank;
+using SpeedRunners.Model.Sponsor;
 using SpeedRunners.Utils;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,9 +96,9 @@ where b.RankScore - a.minScore > 0 order by RankScore desc; ").ToList();
         }
         #endregion
 
-        public int GetPrizePool()
+        public List<MSponsor> GetSponsor()
         {
-            return Db.ExecuteScalar<int>($"SELECT SUM(Amount) FROM sponsor");
+            return Db.Query<MSponsor>($"SELECT Name, Amount FROM sponsor ORDER BY Amount DESC").ToList();
         }
     }
 }
