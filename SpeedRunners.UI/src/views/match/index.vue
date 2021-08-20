@@ -125,10 +125,10 @@
             <v-tooltip right>
               <template v-slot:activator="{ on, attrs }">
                 <svg-icon
-                  style="background-color:white;border-radius:50%"
+                  style="background-color:rgb(6,180,253);border-radius:50%"
                   v-bind="attrs"
                   class="text-h5"
-                  :icon-class="`zhifubao`"
+                  icon-class="zfb"
                   v-on="on"
                 />
               </template>
@@ -137,10 +137,10 @@
             <v-tooltip right>
               <template v-slot:activator="{ on, attrs }">
                 <svg-icon
-                  style="color:rgb(42,174,103);background-color:white;border-radius:50%"
+                  style="color:white;background-color:rgb(42,174,103);border-radius:50%"
                   v-bind="attrs"
                   class="text-h5"
-                  :icon-class="`weixinzhifu`"
+                  icon-class="wx"
                   v-on="on"
                 />
               </template>
@@ -325,8 +325,6 @@ export default {
     getSponsor().then(response => {
       this.sponorList = response.data;
       this.prizePool = this.sponorList.reduce((a, b) => a + b.amount, 0);
-      console.log(this.sponorList);
-      console.log(this.prizePool);
       this.getPrizeBase(50, this.prizePool - 50, this.prizeList);
       var total = this.prizePool - 50 - this.prizeList.reduce((a, b) => a + b, 0);
       this.calculate(this.prizeList, total);
@@ -338,9 +336,7 @@ export default {
       var balance = this.prizePool - 50 - prizeAll;
       this.prizeList[this.prizeList.length - 1] += balance;
     });
-    getParticipateList().then(response => {
-      this.participateList = response.data;
-    });
+    this.getParticipators();
   },
   methods: {
     showDialog() {
@@ -363,12 +359,18 @@ export default {
           that.$store.dispatch("user/getInfo");
           that.dialog = false;
           that.$toast.success((participate ? "" : "取消") + "报名成功");
+          that.getParticipators();
         } else {
           that.$toast.error((participate ? "" : "取消") + "报名失败，请稍后再试");
         }
         that.loading = false;
       }).catch(() => {
         that.loading = false;
+      });
+    },
+    getParticipators() {
+      getParticipateList().then(response => {
+        this.participateList = response.data;
       });
     },
     getPrizeBase(prize, total, prizeList) {
