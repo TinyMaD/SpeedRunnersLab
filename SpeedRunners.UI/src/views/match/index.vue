@@ -77,7 +77,7 @@
 
           <v-sheet width="100%" class="sheett">
             <div class="title text-h4 pa-2" v-text="'参赛奖励'" />
-            <div class="text-body-1 pa-1 my-1" v-text="'前十名将获得成就徽章（仅在本站展示）：'" />
+            <div class="text-body-1 pa-1 my-1" v-text="'前10名选手将获得成就徽章（仅在本站展示）：'" />
             <v-tooltip v-for="i in 10" :key="i-100" top>
               <template v-slot:activator="{ on, attrs }">
                 <svg-icon
@@ -121,7 +121,7 @@
                 </tbody>
               </template>
             </v-simple-table>
-            <div class="text-body-1 pa-1 my-1" v-text="'赞助方式：'" />
+            <div class="text-body-1 pa-1 my-1" v-text="'赞助方式（扫下方二维码）：'" />
             <v-tooltip right>
               <template v-slot:activator="{ on, attrs }">
                 <svg-icon
@@ -229,7 +229,7 @@ export default {
     sponorContent: [
       "感谢所有的赞助者，无论金额大小，正因为有大家的支持，本赛事才得以举办",
       "本赛事奖金全部由赞助者赞助，赞助者赞助的资金将100%进入总奖金池",
-      "为保证赞助金公开透明，赞助时请务必备注好你的ID（独特、你自己认识），未备注将按匿名标识记录。站长将在收到赞助后24小时之内维护赞助者名单，赞助者若在名单内未找到自己ID，可到QQ群（319422487）进行反馈",
+      "为保证赞助金公开透明，赞助时请备注好你的ID（独特、你自己认识），未备注将按匿名标识记录。站长将在收到赞助后24小时之内维护赞助者名单，赞助者若在名单内未找到自己ID，可到QQ群（319422487）进行反馈",
       "赞助者名单："
     ],
     matchContent: [
@@ -260,7 +260,7 @@ export default {
           "赛制：循环1v1（即每个选手都会与其余7位选手比赛）",
           "场次：3场",
           "地图：待定",
-          "采取记章、记场（按章记分后分数相同的选手会按获胜场数排序）",
+          "采取记章、记场（按章记分后，分数相同的选手会按获胜场数排序）",
           "小组赛前4位选手进入胜者组",
           "小组赛后4位选手进入败者组"
         ]
@@ -293,7 +293,7 @@ export default {
       return this.participate === 0 ? "我要报名" : "您已报名";
     },
     participateText() {
-      return this.participate === 0 ? "为便于赛程统计，报名截止后，您在本站的昵称将停止更新，直到赛事结束。" : "少侠留步！";
+      return this.participate === 0 ? "为便于赛程统计，报名截止后，您在本站的数据将停止更新，直到赛事结束。" : "少侠留步！";
     },
     saveBtnText() {
       return this.participate === 0 ? "报 名" : "狠心取消报名";
