@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using SpeedRunners.Model;
+using System.IO;
 using System.Net;
+using System.Text;
 
 namespace SpeedRunners.Filter
 {
@@ -38,7 +40,13 @@ namespace SpeedRunners.Filter
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.ExceptionHandled = true;
                 //采用log4net 进行错误日志记录
-                _logger.LogError($"{context.Exception.Message}\r\n{context.Exception.StackTrace}");
+                using var reader = new StreamReader(context.HttpContext.Request.Body, Encoding.UTF8);
+                string bodyStr = reader?.ReadToEnd();
+                _logger.LogError($@"
+【接口】：{context.HttpContext.Request.Path}
+【参数】：{bodyStr}
+【错误】{context.Exception.Message}
+{context.Exception.StackTrace}");
             }
         }
     }
