@@ -24,7 +24,7 @@
               <Odometer :value="prizePool" color="#e4c269" :duration="1500" />
             </v-col>
 
-            <v-row class="d-flex justify-center">
+            <!-- <v-row class="d-flex justify-center">
               <v-btn
                 class="mt-10 baom-btn text-h-4"
                 color="rgb(39,31,10)"
@@ -32,7 +32,7 @@
               >
                 {{ btnText }}
               </v-btn>
-            </v-row>
+            </v-row> -->
           </v-img>
 
           <v-sheet width="100%" class="sheett">
