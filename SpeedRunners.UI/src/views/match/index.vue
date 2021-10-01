@@ -36,6 +36,11 @@
           </v-img>
 
           <v-sheet width="100%" class="sheett">
+            <div class="title text-h4 pa-2" v-text="'赛程'" />
+            <iframe src="https://challonge.com/zh_CN/sxl1/module" width="100%" height="700" frameborder="0" scrolling="auto" allowtransparency="true" />
+          </v-sheet>
+
+          <v-sheet width="100%" class="sheett">
             <div class="title text-h4 pa-2" v-text="'前言'" />
             <div
               v-for="(content,i) in qianyan"
@@ -236,7 +241,7 @@ export default {
       {
         title: "比赛时间",
         content: [
-          "2021.10.1 ~ 2021.10.7（国庆期间，具体时间待定）"
+          "2021.10.1 ~ 2021.10.7（每日19点开始）"
         ]
       },
       {
@@ -259,7 +264,7 @@ export default {
         content: [
           "赛制：循环1v1（即每个选手都会与其余7位选手比赛）",
           "场次：3场",
-          "地图：待定",
+          "地图：随机官图、工坊图",
           "采取记章、记场（按章记分后，分数相同的选手会按获胜场数排序）",
           "小组赛前4位选手进入胜者组",
           "小组赛后4位选手进入败者组"
@@ -268,10 +273,10 @@ export default {
       {
         title: "决赛阶段",
         content: [
-          "赛制：双败制，强强对阵，详情请关注底部对阵图（暂无）",
+          "赛制：双败制，强强对阵",
           "场次：胜者组半决赛、败者组决赛、总决赛抢8（bo15），其余场抢6（bo11）",
-          "地图：待定",
-          "热身赛：胜者组半决赛、败者组决赛、总决赛，赛前进行两场热身赛，热身赛结果不影响比赛成绩，地图待定"
+          "地图：随机官图、工坊图",
+          "热身赛：胜者组半决赛、败者组决赛、总决赛，赛前进行两场热身赛，热身赛结果不影响比赛成绩，随机官图、工坊图各一张"
         ]
       },
       {
