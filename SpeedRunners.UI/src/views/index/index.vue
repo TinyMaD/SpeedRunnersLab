@@ -29,6 +29,12 @@
                   <AddedChart />
                 </v-card>
               </v-col>
+              <v-col v-if="new Date()<new Date('2021-12-01')" cols="12" class="py-0">
+                <v-card class="mb-2 pa-2" dark>
+                  支付宝扫码领红包，你用了红包我也会得钱，等于对本站的支持<v-icon color="red" size="20">mdi-heart</v-icon>
+                  <v-img width="300" src="img/zfbhb.jpg" />
+                </v-card>
+              </v-col>
             </v-row>
           </v-col>
           <v-col cols="12" md="6" class="py-0 pl-md-1">
