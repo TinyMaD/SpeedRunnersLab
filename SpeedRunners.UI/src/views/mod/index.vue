@@ -28,7 +28,7 @@
                 :key="i"
                 @click="changeList"
               >
-                <v-list-item-title v-text="menu" />
+                <v-list-item-title {{menu}} />
               </v-list-item>
             </v-list-item-group>
           </v-list>
@@ -266,6 +266,17 @@ export default {
         x.send();
       });
     }
+  },
+  metaInfo() {
+    return {
+      meta: [
+        {
+          vmid: "keywords",
+          name: "keywords",
+          content: "游戏MOD,轨迹,Trail,Mod of SpeedRunners,HUD," + this.$baseKeywords
+        }
+      ]
+    };
   }
 };
 </script>
