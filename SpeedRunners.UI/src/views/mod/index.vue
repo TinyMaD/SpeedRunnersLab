@@ -28,7 +28,7 @@
                 :key="i"
                 @click="changeList"
               >
-                <v-list-item-title {{menu}} />
+                <v-list-item-title v-text="menu" />
               </v-list-item>
             </v-list-item-group>
           </v-list>
