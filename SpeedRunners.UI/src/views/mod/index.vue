@@ -33,7 +33,11 @@
             </v-list-item-group>
           </v-list>
         </div>
-        <div fluid class="pa-2" style="background-color:rgb(66,66,66);width:1370px">
+        <div
+          fluid
+          class="pa-2"
+          style="background-color:rgb(66,66,66);width:1370px"
+        >
           <v-row no-gutters>
             <v-col fluid>
               <v-text-field
@@ -44,7 +48,7 @@
                 append-icon="mdi-magnify"
                 clearable
                 @click:append="getList"
-                @keyup.enter.native="getList"
+                @keyup.enter.native="changeList"
               />
             </v-col>
             <div style="width:180px;margin-left:20px">
@@ -71,16 +75,19 @@
                   gradient="to bottom, rgba(0,0,0,0), rgba(0,0,0,.5)"
                   height="160px"
                 >
-                  <v-card-title class="text-caption" style="color:rgba(255,255,255,0.8)">
+                  <v-card-title
+                    class="text-caption"
+                    style="color:rgba(255,255,255,0.8)"
+                  >
                     {{ mod.title }}
                   </v-card-title>
                   <v-fade-transition>
-                    <v-overlay
-                      v-if="hover"
-                      absolute
-                      color="black"
-                    >
-                      <v-btn icon class="download-btn" @click.stop="download(mod.title,mod.fileUrl)">
+                    <v-overlay v-if="hover" absolute color="black">
+                      <v-btn
+                        icon
+                        class="download-btn"
+                        @click.stop="download(mod.title, mod.fileUrl)"
+                      >
                         <v-icon>mdi-download</v-icon>
                       </v-btn>
                     </v-overlay>
@@ -88,11 +95,20 @@
                 </v-img>
 
                 <v-card-actions>
-                  <v-btn text x-small @click.stop="download(mod.title,mod.fileUrl)">
+                  <v-btn
+                    text
+                    x-small
+                    @click.stop="download(mod.title, mod.fileUrl)"
+                  >
                     <v-icon>mdi-download</v-icon>
                     {{ mod.download }}
                   </v-btn>
-                  <v-btn text x-small :color="mod.star?'orange':'white'" @click.stop="doStar(mod)">
+                  <v-btn
+                    text
+                    x-small
+                    :color="mod.star ? 'orange' : 'white'"
+                    @click.stop="doStar(mod)"
+                  >
                     <v-icon>{{ starIcon(mod.star) }}</v-icon>
                     {{ mod.starCount }}
                   </v-btn>
@@ -106,7 +122,7 @@
           </template>
           <div class="text-center">
             <v-pagination
-              v-show="pageCount>1"
+              v-show="pageCount > 1"
               v-model="searchParam.pageNo"
               circle
               :length="pageCount"
@@ -131,7 +147,21 @@ export default {
     ModInfo
   },
   data: () => ({
-    characters: ["Speedrunner", "Unic", "Cosmonaut", "Comrade", "Hothead", "Moonraker", "Buckshot", "Gil", "Falcon", "Neko", "Scout", "SkullDuggery", "Salem"],
+    characters: [
+      "Speedrunner",
+      "Unic",
+      "Cosmonaut",
+      "Comrade",
+      "Hothead",
+      "Moonraker",
+      "Buckshot",
+      "Gil",
+      "Falcon",
+      "Neko",
+      "Scout",
+      "SkullDuggery",
+      "Salem"
+    ],
     otherModMenu: ["人 物", "轨 迹", "道 具", "HUD", "音 效", "背 景", "其 它"],
     transparent: "rgba(255, 255, 255, 0)",
     switchValue: false,
@@ -149,14 +179,16 @@ export default {
     drawer: false
   }),
   computed: {
-    ...mapGetters([
-      "name"
-    ]),
+    ...mapGetters(["name"]),
     stepTitle() {
-      return this.progress > 0 ? `正在上传，请耐心等待...${this.progress} %` : "上传MOD资源";
+      return this.progress > 0
+        ? `正在上传，请耐心等待...${this.progress} %`
+        : "上传MOD资源";
     },
     pageCount() {
-      return this.data.total === 0 ? 1 : parseInt((this.data.total - 1) / this.searchParam.pageSize) + 1;
+      return this.data.total === 0
+        ? 1
+        : parseInt((this.data.total - 1) / this.searchParam.pageSize) + 1;
     },
     fileSize() {
       return function(fileLength) {
@@ -186,6 +218,7 @@ export default {
       this.getList();
     },
     getList() {
+      console.log(this.searchParam);
       getModList(this.searchParam).then(res => {
         this.data = res.data;
       });
@@ -197,6 +230,7 @@ export default {
         return;
       }
       this.searchParam.onlyStar = this.switchValue;
+      this.searchParam.pageNo = 1;
       this.getList();
     },
     clickUpload() {
@@ -212,7 +246,7 @@ export default {
         return;
       }
       operateModStar(mod.id, !mod.star).then(res => {
-        this.$toast.success(`${(mod.star ? "取消" : "")}收藏成功`);
+        this.$toast.success(`${mod.star ? "取消" : ""}收藏成功`);
         this.getList();
       });
     },
@@ -232,29 +266,18 @@ export default {
         x.send();
       });
     }
-  },
-  metaInfo() {
-    return {
-      meta: [
-        {
-          vmid: "keywords",
-          name: "keywords",
-          content: "游戏MOD,轨迹,Trail,Mod of SpeedRunners,HUD," + this.$baseKeywords
-        }
-      ]
-    };
   }
 };
 </script>
 <style scoped>
 .mod-img {
-  transition: opacity .4s ease-in-out;
+  transition: opacity 0.4s ease-in-out;
 }
-.download-btn{
+.download-btn {
   width: 100px;
   height: 100px;
 }
-.download-btn .v-icon{
+.download-btn .v-icon {
   font-size: 50px;
 }
 </style>
