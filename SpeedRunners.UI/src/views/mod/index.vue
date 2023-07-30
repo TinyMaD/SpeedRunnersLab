@@ -218,7 +218,6 @@ export default {
       this.getList();
     },
     getList() {
-      console.log(this.searchParam);
       getModList(this.searchParam).then(res => {
         this.data = res.data;
       });
