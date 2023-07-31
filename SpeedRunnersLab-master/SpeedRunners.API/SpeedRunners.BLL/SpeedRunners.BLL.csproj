@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Qiniu.SDK" Version="8.0.0" />
+    <PackageReference Include="SteamWebAPI2" Version="4.2.5" />
+    <PackageReference Include="System.Net.NameResolution" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SpeedRunners.DAL\SpeedRunners.DAL.csproj" />
+    <ProjectReference Include="..\SpeedRunners.Utils\SpeedRunners.Utils.csproj" />
+  </ItemGroup>
+
+</Project>
