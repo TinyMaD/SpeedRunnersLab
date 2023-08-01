@@ -52,25 +52,29 @@ namespace SpeedRunners.BLL
         public async Task<List<MRankInfo>> GetRankScore(IEnumerable<string> rankIDs)
         {
             List<MRankInfo> rankInfoList = new List<MRankInfo>();
-            string ids = string.Join(',', rankIDs);
-            string url = "http://league.speedrunners.doubledutchgames.com/Service/GetRankingList?ids=" + ids;
-            string result = await HttpHelper.HttpGet(url);
-            if (result.Contains("score"))
+            IEnumerable<List<string>> listGroup = rankIDs.Select((v, i) => new { i = i / 99, v }).GroupBy(n => n.i).Select(g => g.Select(v => v.v).ToList());
+            foreach (var group in listGroup)
             {
-                JArray ja = JArray.Parse(result);
-                if (ja.Count() > 0)
+                string ids = string.Join(',', group);
+                string url = "http://league.speedrunners.doubledutchgames.com/Service/GetRankingList?ids=" + ids;
+                string result = await HttpHelper.HttpGet(url);
+                if (result.Contains("score"))
                 {
-                    foreach (JToken item in ja)
+                    JArray ja = JArray.Parse(result);
+                    if (ja.Count() > 0)
                     {
-                        MRankInfo rankInfo = new MRankInfo
+                        foreach (JToken item in ja)
                         {
-                            RankID = JObject.Parse(item.ToString())["id"].ToString(),
-                            RankCount = (int)JObject.Parse(item.ToString())["elo_game_count"],
-                            //RankScore = Convert.ToDouble(JObject.Parse(item.ToString())["elo_rating"])
-                            RankScore = Convert.ToDecimal(JObject.Parse(item.ToString())["score"]),
-                            RankLevel = (int)JObject.Parse(item.ToString())["tier"]
-                        };
-                        rankInfoList.Add(rankInfo);
+                            MRankInfo rankInfo = new MRankInfo
+                            {
+                                RankID = JObject.Parse(item.ToString())["id"].ToString(),
+                                RankCount = (int)JObject.Parse(item.ToString())["elo_game_count"],
+                                //RankScore = Convert.ToDouble(JObject.Parse(item.ToString())["elo_rating"])
+                                RankScore = Convert.ToDecimal(JObject.Parse(item.ToString())["score"]),
+                                RankLevel = (int)JObject.Parse(item.ToString())["tier"]
+                            };
+                            rankInfoList.Add(rankInfo);
+                        }
                     }
                 }
             }
