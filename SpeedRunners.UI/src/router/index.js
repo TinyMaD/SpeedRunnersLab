@@ -1,6 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
-
+const version = require("@/utils/version");
 Vue.use(Router);
 
 /* Layout */
@@ -30,6 +30,7 @@ import Layout from "@/layout";
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
+
 export const constantRoutes = [
   {
     path: "/404",
@@ -38,37 +39,39 @@ export const constantRoutes = [
   {
     path: "/",
     component: Layout,
-    children: [{
-      path: "/",
-      component: () => import("@/views/index/index"),
-      meta: { title: "首 页", icon: "mdi-home-analytics" }
-    },
-    {
-      path: "/match",
-      component: () => import("@/views/match/index"),
-      meta: { title: "赛 事", icon: "jiangbei" }
-    },
-    {
-      path: "/rank",
-      component: () => import("@/views/rank/index"),
-      meta: { title: "排行榜", icon: "zhandouzuozhan" }
-    },
-    {
-      path: "/mod",
-      component: () => import("@/views/mod/index"),
-      meta: { title: "MOD", icon: "mdi-file-download" }
-    },
-    {
-      path: "/searchplayer",
-      component: () => import("@/views/searchPlayer/index"),
-      meta: { title: "资 料", icon: "mdi-account-search" }
-    },
-    {
-      path: "/login",
-      component: () => import("@/views/login/index"),
-      props: (route) => ({ query: route.fullPath.split("?")[1] }),
-      hidden: true
-    }]
+    children: [
+      {
+        path: "/",
+        component: () => import("@/views/index/index"),
+        meta: { title: "首 页", icon: "mdi-home-analytics" }
+      },
+      {
+        path: "/match",
+        component: () => import("@/views/match/index"),
+        meta: { title: "赛 事", icon: "jiangbei" }
+      },
+      {
+        path: "/rank",
+        component: () => import("@/views/rank/index"),
+        meta: { title: "排行榜", icon: "zhandouzuozhan" }
+      },
+      {
+        path: "/mod",
+        component: () => import("@/views/mod/index"),
+        meta: { title: "MOD", icon: "mdi-file-download" }
+      },
+      {
+        path: "/searchplayer",
+        component: () => import("@/views/searchPlayer/index"),
+        meta: { title: "资 料", icon: "mdi-account-search" }
+      },
+      {
+        path: "/login",
+        component: () => import("@/views/login/index"),
+        props: route => ({ query: route.fullPath.split("?")[1] }),
+        hidden: true
+      }
+    ]
   }
 
   // {
@@ -91,11 +94,13 @@ export const asyncRoutes = [
   {
     path: "/",
     component: Layout,
-    children: [{
-      path: "/plaza",
-      component: () => import("@/views/plaza/index"),
-      meta: { title: "广 场", icon: "mdi-camera-iris" }
-    }]
+    children: [
+      {
+        path: "/plaza",
+        component: () => import("@/views/plaza/index"),
+        meta: { title: "广 场", icon: "mdi-camera-iris" }
+      }
+    ]
   }
 ];
 
@@ -105,14 +110,25 @@ export const add404Router = [
   { path: "*", redirect: "/404", hidden: true }
 ];
 
-const createRouter = () => new Router({
-  mode: "history", // require service support
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
-});
+const createRouter = () =>
+  new Router({
+    mode: "history", // require service support
+    scrollBehavior: () => ({ y: 0 }),
+    routes: constantRoutes
+  });
 
 const router = createRouter();
-
+// 路由跳转后执行
+router.afterEach((to, from) => {
+  // 如果不想每个路由都检查是否有新版本，只需要在特定的页面才需要检查版本，可以在这里做白名单判断
+  // 兼容版本，如果是新版本则进行刷新并缓存
+  version.getPro();
+  console.log(getPro());
+});
+// 路由跳转前执行
+router.beforeEach((to, from, next) => {
+  next();
+});
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
   const newRouter = createRouter();
