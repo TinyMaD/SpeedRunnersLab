@@ -19,6 +19,7 @@ namespace SpeedRunners.Utils
                 request = (HttpWebRequest)WebRequest.Create(url);
                 request.Timeout = 10000;
                 request.Method = "GET";
+                request.KeepAlive = false;
                 if (cookie != null)
                 {
                     request.CookieContainer = cookie;
