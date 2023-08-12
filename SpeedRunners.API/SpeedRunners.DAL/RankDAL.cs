@@ -98,7 +98,7 @@ where b.RankScore - a.minScore > 0 order by RankScore desc; ").ToList();
 
         public List<MSponsor> GetSponsor()
         {
-            return Db.Query<MSponsor>($"SELECT Name, Amount FROM sponsor ORDER BY Amount DESC").ToList();
+            return Db.Query<MSponsor>($"SELECT Name, Amount FROM sponsor WHERE MatchNo = 102 ORDER BY Amount DESC").ToList();
         }
     }
 }

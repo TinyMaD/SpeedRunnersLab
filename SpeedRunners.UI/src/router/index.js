@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-const version = require("@/utils/version");
 Vue.use(Router);
 
 /* Layout */
@@ -118,17 +117,7 @@ const createRouter = () =>
   });
 
 const router = createRouter();
-// 路由跳转后执行
-router.afterEach((to, from) => {
-  // 如果不想每个路由都检查是否有新版本，只需要在特定的页面才需要检查版本，可以在这里做白名单判断
-  // 兼容版本，如果是新版本则进行刷新并缓存
-  version.getPro();
-  console.log(getPro());
-});
-// 路由跳转前执行
-router.beforeEach((to, from, next) => {
-  next();
-});
+
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
   const newRouter = createRouter();

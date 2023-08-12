@@ -24,7 +24,7 @@
               <Odometer :value="prizePool" color="#e4c269" :duration="1500" />
             </v-col>
 
-            <!-- <v-row class="d-flex justify-center">
+            <v-row class="d-flex justify-center">
               <v-btn
                 class="mt-10 baom-btn text-h-4"
                 color="rgb(39,31,10)"
@@ -32,10 +32,10 @@
               >
                 {{ btnText }}
               </v-btn>
-            </v-row> -->
+            </v-row>
           </v-img>
 
-          <v-sheet width="100%" class="sheett">
+          <!-- <v-sheet width="100%" class="sheett">
             <div class="title text-h4 pa-2" v-text="'赛程'" />
             <iframe src="https://challonge.com/zh_CN/sxl1/module" width="100%" height="700" frameborder="0" scrolling="auto" allowtransparency="true" />
           </v-sheet>
@@ -48,7 +48,7 @@
               class="text-body-1 pa-1 my-1"
               v-text="content"
             />
-          </v-sheet>
+          </v-sheet> -->
 
           <v-sheet width="100%" class="sheett">
             <div class="title text-h4 pa-2" v-text="'报名玩家'" />
@@ -153,6 +153,21 @@
             </v-tooltip>
             <div class="text-body-1 pa-1 my-1" v-text="'其他赞助方式请联系站长（邮箱）supremelang@qq.com'" />
           </v-sheet>
+          <v-sheet
+            class="sheett"
+            width="100%"
+          >
+            <div class="title text-h4 pa-2" v-text="'比赛时间'" />
+            <div
+              class="text-body-1 pa-1 my-1"
+              v-text="'小组赛：2023.9.23 ~ 2023.9.24（每日19点开始）'"
+            />
+            <div
+              class="text-body-1 pa-1 my-1"
+              v-text="'决 赛：2023.9.30 ~ 2023.10.2（每日19点开始）'"
+            />
+            <v-img max-width="700px" src="img/rl102.png" />
+          </v-sheet>
 
           <v-sheet
             v-for="(item,index) in matchContent"
@@ -239,12 +254,6 @@ export default {
     ],
     matchContent: [
       {
-        title: "比赛时间",
-        content: [
-          "2021.10.1 ~ 2021.10.7（每日19点开始）"
-        ]
-      },
-      {
         title: "参赛资格",
         content: [
           "中文沟通无障碍、与裁判网络延迟低的玩家均可报名",
@@ -265,6 +274,7 @@ export default {
           "赛制：循环1v1（即每个选手都会与其余7位选手比赛）",
           "场次：3场",
           "地图：随机官图、工坊图",
+          "B/P：不ban地图，直接点官图右下角随机官图和随机工坊图按钮（工坊图、官图交替进行）",
           "采取记章、记场（按章记分后，分数相同的选手会按获胜场数排序）",
           "小组赛前4位选手进入胜者组",
           "小组赛后4位选手进入败者组"
@@ -275,13 +285,15 @@ export default {
         content: [
           "赛制：双败制，强强对阵",
           "场次：胜者组半决赛、败者组决赛、总决赛抢8（bo15），其余场抢6（bo11）",
-          "地图：随机官图、工坊图",
+          "地图：待定",
+          "B/P：待定",
           "热身赛：胜者组半决赛、败者组决赛、总决赛，赛前进行两场热身赛，热身赛结果不影响比赛成绩，随机官图、工坊图各一张"
         ]
       },
       {
         title: "其他信息",
         content: [
+          "请参赛者加神行令比赛QQ群：743740882",
           "努力完善中，请持续保持关注......",
           "※最终解释权归本站所有"
         ]
@@ -298,7 +310,7 @@ export default {
       return this.participate === 0 ? "我要报名" : "您已报名";
     },
     participateText() {
-      return this.participate === 0 ? "为便于赛程统计，报名截止后，您在本站的数据将停止更新，直到赛事结束。" : "少侠留步！";
+      return this.participate === 0 ? "为便于赛程统计，比赛期间，您在本站的Steam昵称将停止更新。" : "少侠留步！";
     },
     saveBtnText() {
       return this.participate === 0 ? "报 名" : "狠心取消报名";
@@ -315,14 +327,14 @@ export default {
         `第 ${this.prizeList.length + 1} 名 ~ 第 12 名：ROLL 50 元`,
         "奖金算法：",
         "每上升一个名次，奖金翻倍，差额最大为500元",
-        "第五名奖金增至100元时，开设第六名奖金即50元，以此类推（满100，激活下一个名次）",
+        "总奖金增至2900元时，开设第六名奖金即50元，总奖金增至4700元时，开设第七名奖金即50元，以此类推",
         "计算值向下取整，舍去的金额之和加在最低名次奖金上",
         "没有获得奖金的参赛选手中ROLL50元");
     },
     badgeText() {
       return function(num) {
         const numText = sectionToChinese(num);
-        return `2021国服第${numText === "一十" ? "十" : numText}`;
+        return `2023国服第${numText === "一十" ? "十" : numText}`;
       };
     }
   },

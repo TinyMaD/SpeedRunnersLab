@@ -5,6 +5,7 @@ import NProgress from "nprogress"; // progress bar
 import "nprogress/nprogress.css"; // progress bar style
 import { getToken, isInChina } from "@/utils/auth"; // get token from cookie
 import getPageTitle from "@/utils/get-page-title";
+const version = require("@/utils/version");
 
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
@@ -57,7 +58,11 @@ router.beforeEach(async(to, from, next) => {
   }
 });
 
-router.afterEach(() => {
+router.afterEach(async() => {
   // finish progress bar
   NProgress.done();
+  // 如果不想每个路由都检查是否有新版本，只需要在特定的页面才需要检查版本，可以在这里做白名单判断
+  // 兼容版本，如果是新版本则进行刷新并缓存
+  const versionInfo = await version.getPro();
+  console.log("versionInfo", versionInfo);
 });

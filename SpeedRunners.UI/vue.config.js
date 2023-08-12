@@ -2,7 +2,7 @@
 const path = require("path");
 const defaultSettings = require("./src/settings.js");
 const NyanProgressPlugin = require("nyan-progress-webpack-plugin");
-//前端发布后浏览器缓存问题解决
+// 前端发布后浏览器缓存问题解决
 const version = require("./src/utils/version");
 version.create();
 
