@@ -47,7 +47,7 @@
                 hint="请输入名称关键字"
                 append-icon="mdi-magnify"
                 clearable
-                @click:append="getList"
+                @click:append="changeList"
                 @keyup.enter.native="changeList"
               />
             </v-col>
