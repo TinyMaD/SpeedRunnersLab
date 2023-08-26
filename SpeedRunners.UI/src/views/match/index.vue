@@ -239,6 +239,7 @@ export default {
     prizePool: 0,
     sponorList: [],
     participateList: [],
+    speRuleList: [],
     prizeList: [],
     qianyan: [
       "由于SR圈环境的特殊性，圈内少有专注竞技性的比赛。公认的高端赛——King of Speed，国内玩家虽有在其名列前茅的水平，但苦于高延迟，而不能愉快的玩耍。",
@@ -323,13 +324,22 @@ export default {
       this.prizeList.forEach(function(item, index, array) {
         prizeText.push(`第 ${index + 1} 名： ${item} 元`);
       });
+      var speRuleText = [];
+      if (this.speRuleList.length > 0) {
+        speRuleText.push("额外奖金：");
+        this.speRuleList.forEach(function(item, index, array) {
+          speRuleText.push(`${item.speRule}`);
+        });
+      }
       return prizeText.concat(
         `第 ${this.prizeList.length + 1} 名 ~ 第 12 名：ROLL 50 元`,
+        speRuleText,
         "奖金算法：",
         "每上升一个名次，奖金翻倍，差额最大为500元",
         "总奖金增至2900元时，开设第六名奖金即50元，总奖金增至4700元时，开设第七名奖金即50元，以此类推",
         "计算值向下取整，舍去的金额之和加在最低名次奖金上",
-        "没有获得奖金的参赛选手中ROLL50元");
+        "获得无固定奖金名次的参赛选手中ROLL50元",
+        "额外奖金由赞助者自定义发放规则，不参与算法计算");
     },
     badgeText() {
       return function(num) {
@@ -341,16 +351,21 @@ export default {
   mounted() {
     getSponsor().then(response => {
       this.sponorList = response.data;
+      var normalRuleList = this.sponorList.filter(item => item.speRule == null);
+      this.speRuleList = this.sponorList.filter(item => item.speRule != null);
+
       this.prizePool = this.sponorList.reduce((a, b) => a + b.amount, 0);
-      this.getPrizeBase(50, this.prizePool - 50, this.prizeList);
-      var total = this.prizePool - 50 - this.prizeList.reduce((a, b) => a + b, 0);
+      var normalPrizePool = normalRuleList.reduce((a, b) => a + b.amount, 0);
+
+      this.getPrizeBase(50, normalPrizePool - 50, this.prizeList);
+      var total = normalPrizePool - 50 - this.prizeList.reduce((a, b) => a + b, 0);
       this.calculate(this.prizeList, total);
       this.prizeList.reverse();
       for (let i = 0; i < this.prizeList.length; i++) {
         this.prizeList[i] = parseInt(this.prizeList[i]);
       }
       var prizeAll = this.prizeList.reduce((a, b) => a + b, 0);
-      var balance = this.prizePool - 50 - prizeAll;
+      var balance = normalPrizePool - 50 - prizeAll;
       this.prizeList[this.prizeList.length - 1] += balance;
     });
     this.getParticipators();

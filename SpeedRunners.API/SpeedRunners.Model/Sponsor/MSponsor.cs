@@ -8,5 +8,6 @@ namespace SpeedRunners.Model.Sponsor
     {
         public string Name { get; set; }
         public int Amount { get; set; }
+        public string SpeRule { get; set; }
     }
 }
