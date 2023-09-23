@@ -24,7 +24,7 @@
               <Odometer :value="prizePool" color="#e4c269" :duration="1500" />
             </v-col>
 
-            <v-row class="d-flex justify-center">
+            <!-- <v-row class="d-flex justify-center">
               <v-btn
                 class="mt-10 baom-btn text-h-4"
                 color="rgb(39,31,10)"
@@ -32,15 +32,15 @@
               >
                 {{ btnText }}
               </v-btn>
-            </v-row>
+            </v-row> -->
           </v-img>
 
-          <!-- <v-sheet width="100%" class="sheett">
+          <v-sheet width="100%" class="sheett">
             <div class="title text-h4 pa-2" v-text="'赛程'" />
-            <iframe src="https://challonge.com/zh_CN/sxl1/module" width="100%" height="700" frameborder="0" scrolling="auto" allowtransparency="true" />
+            <iframe src="https://challonge.com/zh_CN/sxl2/module" width="100%" height="700" frameborder="0" scrolling="auto" allowtransparency="true" />
           </v-sheet>
 
-          <v-sheet width="100%" class="sheett">
+          <!-- <v-sheet width="100%" class="sheett">
             <div class="title text-h4 pa-2" v-text="'前言'" />
             <div
               v-for="(content,i) in qianyan"
