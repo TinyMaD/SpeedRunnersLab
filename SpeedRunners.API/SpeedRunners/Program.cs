@@ -22,12 +22,12 @@ namespace SpeedRunners
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    //webBuilder.UseUrls("https://0.0.0.0:888");// 程序监听端口改为888
                     webBuilder.UseStartup<Startup>()
-                    .UseKestrel((context, options) =>
-                    {
-                        options.Configure(context.Configuration.GetSection("Kestrel"));
-                    });
+                    .UseIISIntegration();// IIS
+                    //.UseKestrel((context, options) =>
+                    //{
+                    //    options.Configure(context.Configuration.GetSection("Kestrel"));
+                    //});// 控制台
                 });
     }
 }
