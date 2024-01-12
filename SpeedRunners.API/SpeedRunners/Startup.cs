@@ -8,6 +8,9 @@ using SpeedRunners.Filter;
 using SpeedRunners.Middleware;
 using SpeedRunners.Model;
 using SpeedRunners.Service;
+using SpeedRunners.Utils;
+using System.Net;
+using System.Net.Http;
 
 namespace SpeedRunners
 {
@@ -44,10 +47,16 @@ namespace SpeedRunners
             services.AddAllBLL();
             // 注册当前用户信息
             services.AddScoped<MUser>();
-            services.Configure<KestrelServerOptions>(options =>
+            //services.Configure<KestrelServerOptions>(options =>
+            //{
+            //    options.AllowSynchronousIO = true;
+            //});
+            services.Configure<IISServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;
             });
+            // 设置代理
+            HttpHelper.SetProxy();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
