@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace SpeedRunners.Utils
 {
@@ -19,7 +19,7 @@ namespace SpeedRunners.Utils
         /// <returns>委托执行结果</returns>
         protected delegate TReturn DbDelegate<TReturn>(TDAL dal);
 
-        private IDbConnection GetConnection => new SqlConnection(AppSettings.GetConfig("ConnectionString"));
+        private IDbConnection GetConnection => new MySqlConnection(AppSettings.GetConfig("ConnectionString"));
 
         /// <summary>
         /// 没有返回值的 访问数据库方法
