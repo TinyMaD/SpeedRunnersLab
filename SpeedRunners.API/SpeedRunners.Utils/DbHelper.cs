@@ -85,8 +85,8 @@ namespace SpeedRunners.Utils
                     continue;
                 }
                 colStr.AppendFormat("[{0}] ,", col.Name);
-                valueStr.AppendFormat("@{0} ,", col.Name);
-                dyParam.Add(string.Format("@{0}", col.Name), col.GetValue(model, null));
+                valueStr.AppendFormat("?{0} ,", col.Name);
+                dyParam.Add(string.Format("?{0}", col.Name), col.GetValue(model, null));
             }
             string sql = string.Format("INSERT INTO {0}({1}) VALUES({2}); {3}", tableName, colStr.ToString().TrimEnd(','), valueStr.ToString().TrimEnd(','), isNeedKey ? "select @@identity;" : string.Empty);
             return sql;

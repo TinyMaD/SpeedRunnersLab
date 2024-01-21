@@ -17,7 +17,7 @@ namespace SpeedRunners.DAL
             StringBuilder where = new StringBuilder();
             if (steamIDs?.Any() ?? false)
             {
-                where.Append($" AND PlatformID IN @{nameof(steamIDs)} ");
+                where.Append($" AND PlatformID IN ?{nameof(steamIDs)} ");
             }
             if (playSROnly)
             {
@@ -53,7 +53,7 @@ where b.RankScore - a.minScore > 0 order by RankScore desc; ").ToList();
 
         public bool ExistRankInfo(string steamID)
         {
-            return Db.ExecuteScalar<int>($"SELECT 1 FROM RankInfo WHERE PlatformID = @{nameof(steamID)}", new { steamID }) > 0;
+            return Db.ExecuteScalar<int>($"SELECT 1 FROM RankInfo WHERE PlatformID = ?{nameof(steamID)}", new { steamID }) > 0;
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ where b.RankScore - a.minScore > 0 order by RankScore desc; ").ToList();
                 // 加入其它列
                 cols = $"";
             }
-            Db.Execute($"UPDATE RankInfo SET RankType = @{nameof(rankInfo.RankType)}, RankCount = @{nameof(rankInfo.RankCount)}, RankScore = @{nameof(rankInfo.RankScore)}, OldRankScore = @{nameof(rankInfo.OldRankScore)}, RankLevel = @{nameof(rankInfo.RankLevel)} {cols}  WHERE PlatformID = @{nameof(rankInfo.PlatformID)}", rankInfo);
+            Db.Execute($"UPDATE RankInfo SET RankType = ?{nameof(rankInfo.RankType)}, RankCount = ?{nameof(rankInfo.RankCount)}, RankScore = ?{nameof(rankInfo.RankScore)}, OldRankScore = ?{nameof(rankInfo.OldRankScore)}, RankLevel = ?{nameof(rankInfo.RankLevel)} {cols}  WHERE PlatformID = ?{nameof(rankInfo.PlatformID)}", rankInfo);
         }
 
         public void AddRankInfo(MRankInfo rankInfo)
@@ -87,7 +87,7 @@ where b.RankScore - a.minScore > 0 order by RankScore desc; ").ToList();
         #region RankLog
         public bool ExistRankLog(string steamID)
         {
-            return Db.ExecuteScalar<int>($"SELECT 1 FROM RankLog WHERE PlatformID = @{nameof(steamID)}", new { steamID }) > 0;
+            return Db.ExecuteScalar<int>($"SELECT 1 FROM RankLog WHERE PlatformID = ?{nameof(steamID)}", new { steamID }) > 0;
         }
 
         public void AddRankLog(MRankLog rankLog)
