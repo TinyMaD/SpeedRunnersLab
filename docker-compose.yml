@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  srlab.mysql:
+    image: mysql:8.0.18
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=tmd@123
+    volumes:
+      - /mysql:/var/lib/mysql
+      - /mysql-dump:/docker-entrypoint-initdb.d/:ro
+    networks:
+      - srlab-net
+
+  srlab.api:
+    build: /SpeedRunners.API/
+    restart: always
+    ports:
+      - "888:888"
+    depends_on:
+      - srlab.mysql
+    networks:
+      - srlab-net
+
+  srlab.ui: 
+    build: /SpeedRunners.UI/
+    restart: always
+    ports:
+      - "9528:80"
+    depends_on:
+      - srlab.api
+    networks:
+      - srlab-net
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-app
+    volumes:
+      - ./SpeedRunners.UI/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - 80:80
+    depends_on:
+      - srlab.ui
+    networks:
+      - srlab-net
+
+networks:
+  srlab-net:
+    driver: bridge
