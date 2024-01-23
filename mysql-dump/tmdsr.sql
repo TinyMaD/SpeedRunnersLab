@@ -1,10 +1,3 @@
-create database if not exists tmdsr;
-GRANT ALL PRIVILEGES ON tmdsr.* TO 'myuser'@'%' IDENTIFIED BY 'mysql';
-GRANT ALL PRIVILEGES ON tmdsr.* TO 'myuser'@'localhost' IDENTIFIED BY 'mysql';
-USE tmdsr;
-
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
 -- Table structure for AccessToken

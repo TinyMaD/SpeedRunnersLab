@@ -8,24 +8,25 @@ services:
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=tmd@123
+      - MYSQL_DATABASE=tmdsr
     volumes:
-      - /mysql:/var/lib/mysql
-      - /mysql-dump:/docker-entrypoint-initdb.d/:ro
+      - ./mysql:/var/lib/mysql
+      - ./mysql-dump:/docker-entrypoint-initdb.d
     networks:
       - srlab-net
 
   srlab.api:
-    build: /SpeedRunners.API/
+    build: ./SpeedRunners.API/
     restart: always
     ports:
-      - "888:888"
+      - "888:80"
     depends_on:
       - srlab.mysql
     networks:
       - srlab-net
 
   srlab.ui: 
-    build: /SpeedRunners.UI/
+    build: ./SpeedRunners.UI/
     restart: always
     ports:
       - "9528:80"
