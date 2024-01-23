@@ -23,11 +23,10 @@ namespace SpeedRunners
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>()
-                    .UseIISIntegration();// IIS
-                    //.UseKestrel((context, options) =>
-                    //{
-                    //    options.Configure(context.Configuration.GetSection("Kestrel"));
-                    //});// ¿ØÖÆÌ¨
+                    //.UseIISIntegration();// IIS
+                    .ConfigureKestrel(serverOptions =>
+                    {
+                    });
                 });
     }
 }

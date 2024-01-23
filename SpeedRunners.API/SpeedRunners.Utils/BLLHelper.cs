@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using MySql.Data.MySqlClient;
+using MySqlConnector;
 
 namespace SpeedRunners.Utils
 {

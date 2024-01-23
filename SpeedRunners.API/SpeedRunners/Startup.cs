@@ -47,14 +47,14 @@ namespace SpeedRunners
             services.AddAllBLL();
             // 注册当前用户信息
             services.AddScoped<MUser>();
-            //services.Configure<KestrelServerOptions>(options =>
-            //{
-            //    options.AllowSynchronousIO = true;
-            //});
-            services.Configure<IISServerOptions>(options =>
+            services.Configure<KestrelServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;
             });
+            //services.Configure<IISServerOptions>(options =>
+            //{
+            //    options.AllowSynchronousIO = true;
+            //});
             // 设置代理
             HttpHelper.SetProxy();
         }
