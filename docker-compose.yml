@@ -3,6 +3,7 @@ version: '3'
 services:
   srlab.mysql:
     image: mysql:8.0.18
+    container_name: srlab-mysql
     ports:
       - "3306:3306"
     restart: always
@@ -17,6 +18,7 @@ services:
 
   srlab.api:
     build: ./SpeedRunners.API/
+    container_name: srlab-api
     restart: always
     ports:
       - "888:80"
@@ -27,23 +29,17 @@ services:
 
   srlab.ui: 
     build: ./SpeedRunners.UI/
-    restart: always
-    ports:
-      - "9528:80"
-    depends_on:
-      - srlab.api
-    networks:
-      - srlab-net
-
-  nginx:
-    image: nginx:alpine
-    container_name: nginx-app
+    container_name: srlab-ui
     volumes:
       - ./SpeedRunners.UI/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./SpeedRunners.UI/nginx/api.speedrunners.cn.pem:/etc/nginx/api.speedrunners.cn.pem
+      - ./SpeedRunners.UI/nginx/api.speedrunners.cn.key:/etc/nginx/api.speedrunners.cn.key
+    restart: always
     ports:
-      - 80:80
+      - 80
+      - 443
     depends_on:
-      - srlab.ui
+      - srlab.api
     networks:
       - srlab-net
 
