@@ -1,6 +1,7 @@
 ﻿using SpeedRunners.Model;
 using SpeedRunners.Model.User;
 using SpeedRunners.Utils;
+using System;
 
 namespace SpeedRunners.DAL
 {
@@ -20,7 +21,8 @@ namespace SpeedRunners.DAL
 
         public void AddAccessToken(MUser user)
         {
-            Db.Insert("AccessToken", user, new[] { nameof(user.TokenID), nameof(user.LoginDate), nameof(user.RankID) });
+            user.LoginDate = DateTime.Now;
+            Db.Insert("AccessToken", user, new[] { nameof(user.TokenID), nameof(user.RankID) });
         }
 
         public void UpdateAccessToken(MAccessToken user)

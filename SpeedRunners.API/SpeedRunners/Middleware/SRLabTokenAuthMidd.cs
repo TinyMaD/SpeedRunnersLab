@@ -53,7 +53,7 @@ namespace SpeedRunners.Middleware
             // 检查请求接口标注的特性
             bool isPersona = endpoint?.Metadata.GetMetadata<PersonaAttribute>() != null;
             bool isUser = endpoint?.Metadata.GetMetadata<UserAttribute>() != null;
-            string token = context.Request.Headers["srlab_token"];
+            string token = context.Request.Headers["srlab-token"];
             if (!isPersona && !isUser)
             {
                 return AuthResult.DontNeed;

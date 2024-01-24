@@ -28,8 +28,8 @@ namespace SpeedRunners.Utils
                 var enable = AppSettings.GetConfig("Proxy:Enable");
                 if (enable == "true")
                 {
-
-                    WebProxy proxyObject = new WebProxy("localhost", 7890);//str为IP地址 port为端口号
+                    var Address = AppSettings.GetConfig("Proxy:Address");//地址
+                    var proxyObject = new WebProxy(Address, false);
                     request.Proxy = proxyObject; //设置代理 
                 }
 
@@ -90,7 +90,8 @@ namespace SpeedRunners.Utils
                 var enable = AppSettings.GetConfig("Proxy:Enable");
                 if (enable == "true")
                 {
-                    WebProxy proxyObject = new WebProxy("localhost", 7890);//str为IP地址 port为端口号
+                    var Address = AppSettings.GetConfig("Proxy:Address");//地址
+                    var proxyObject = new WebProxy(Address, false);
                     req.Proxy = proxyObject; //设置代理 
                 }
 

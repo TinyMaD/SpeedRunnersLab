@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-const TokenKey = "srlab_token";
+const TokenKey = "srlab-token";
 const Expires = 10 * 365;
 
 export function getToken() {

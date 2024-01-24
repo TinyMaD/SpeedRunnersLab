@@ -61,7 +61,7 @@ namespace SpeedRunners.Filter
             bool isPersona = endpoint?.Metadata.GetMetadata<PersonaAttribute>() != null;
             bool isUser = endpoint?.Metadata.GetMetadata<UserAttribute>() != null;
             // 获取用户发送的cookie
-            string token = context.Request.Headers["srlab_token"];
+            string token = context.Request.Headers["srlab-token"];
 
             // 请求不需认证的接口，返回原Token
             if (!isPersona && !isUser)

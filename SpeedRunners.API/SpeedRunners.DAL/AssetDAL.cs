@@ -70,7 +70,9 @@ GROUP BY ModID"
             string sql = $@"SELECT 1 FROM `Mod` WHERE imgUrl = ?{nameof(param.ImgUrl)}";
             bool exist = Db.ExecuteScalar<int>(sql, param) == 1;
             if (exist) return;
-            Db.Insert("Mod", param, new[] { nameof(param.ID), nameof(param.UploadDate), nameof(param.Star), nameof(param.StarCount) });
+
+            param.UploadDate = DateTime.Now;
+            Db.Insert("Mod", param, new[] { nameof(param.ID), nameof(param.Star), nameof(param.StarCount) });
         }
 
         public void UpdateLikeNum(int modID, int like, int dislike)

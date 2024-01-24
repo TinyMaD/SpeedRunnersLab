@@ -1,6 +1,7 @@
 ﻿using SpeedRunners.Model.Rank;
 using SpeedRunners.Model.Sponsor;
 using SpeedRunners.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -74,7 +75,9 @@ where b.RankScore - a.minScore > 0 order by RankScore desc; ").ToList();
 
         public void AddRankInfo(MRankInfo rankInfo)
         {
-            Db.Insert("RankInfo", rankInfo, new[] { nameof(rankInfo.CreateTime), nameof(rankInfo.ModifyTime) });
+            rankInfo.CreateTime = DateTime.Now;
+            rankInfo.ModifyTime = DateTime.Now;
+            Db.Insert("RankInfo", rankInfo);
         }
 
         public bool UpdateParticipate(string CurrentUserID, bool participate)
@@ -92,7 +95,8 @@ where b.RankScore - a.minScore > 0 order by RankScore desc; ").ToList();
 
         public void AddRankLog(MRankLog rankLog)
         {
-            Db.Insert("RankLog", rankLog, new[] { nameof(rankLog.Date) });
+            rankLog.Date = DateTime.Now;
+            Db.Insert("RankLog", rankLog);
         }
         #endregion
 

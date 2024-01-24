@@ -24,6 +24,8 @@ services:
       - "888:80"
     networks:
       - srlab-net
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   srlab.ui: 
     build: ./SpeedRunners.UI/

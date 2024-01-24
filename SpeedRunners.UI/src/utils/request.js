@@ -17,7 +17,7 @@ service.interceptors.request.use(
     // let each request carry token
     const token = getToken();
     if (token) {
-      config.headers["srlab_token"] = token;
+      config.headers["srlab-token"] = token;
     }
     return config;
   },
