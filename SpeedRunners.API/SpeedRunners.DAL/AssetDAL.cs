@@ -29,9 +29,9 @@ namespace SpeedRunners.DAL
                     where.Append($" AND `ID` IN ({starModIDsStr}) ");
                 }
             }
-            GridReader reader = Db.QueryMultiple($@"SELECT COUNT(ID) FROM Mod WHERE 1 = 1 {where};
+            GridReader reader = Db.QueryMultiple($@"SELECT COUNT(ID) FROM `Mod` WHERE 1 = 1 {where};
 SELECT *
- FROM Mod
+ FROM `Mod`
 WHERE 1 = 1 {where} 
 ORDER BY ID DESC
 LIMIT {(param.PageNo - 1) * param.PageSize}, {param.PageNo * param.PageSize} ", param);
@@ -67,7 +67,7 @@ GROUP BY ModID"
 
         public void AddMod(MMod param)
         {
-            string sql = $@"SELECT 1 from Mod WHERE imgUrl = ?{nameof(param.ImgUrl)}";
+            string sql = $@"SELECT 1 FROM `Mod` WHERE imgUrl = ?{nameof(param.ImgUrl)}";
             bool exist = Db.ExecuteScalar<int>(sql, param) == 1;
             if (exist) return;
             Db.Insert("Mod", param, new[] { nameof(param.ID), nameof(param.UploadDate), nameof(param.Star), nameof(param.StarCount) });
@@ -86,7 +86,7 @@ GROUP BY ModID"
                 strList.Add($" `dislike` = `dislike` + ?{nameof(dislike)} ");
             }
             string updateSql = string.Join(',', strList);
-            string sql = $@"UPDATE {updateSql} FROM Mod WHERE `ID` = {modID}";
+            string sql = $@"UPDATE {updateSql} FROM `Mod` WHERE `ID` = {modID}";
             Db.Execute(sql, new { like, dislike });
         }
 
