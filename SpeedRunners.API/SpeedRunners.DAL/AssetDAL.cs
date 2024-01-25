@@ -34,7 +34,7 @@ SELECT *
  FROM `Mod`
 WHERE 1 = 1 {where} 
 ORDER BY ID DESC
-LIMIT {(param.PageNo - 1) * param.PageSize}, {param.PageNo * param.PageSize} ", param);
+LIMIT ?{nameof(param.Offset)}, ?{nameof(param.PageSize)}; ", param);
             var result = new MPageResult<MMod>
             {
                 Total = reader.ReadFirst<int>(),
