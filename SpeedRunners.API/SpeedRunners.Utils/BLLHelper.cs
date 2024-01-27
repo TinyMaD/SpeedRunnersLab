@@ -30,7 +30,7 @@ namespace SpeedRunners.Utils
         protected void BeginDb(DbDelegate @delegate)
         {
             using IDbConnection conn = GetConnection;
-            DbHelper dbhelper = new DbHelper(conn);
+            using DbHelper dbhelper = new DbHelper(conn);
             TDAL dal = Activator.CreateInstance(typeof(TDAL), dbhelper) as TDAL;
             try
             {
@@ -55,7 +55,7 @@ namespace SpeedRunners.Utils
         protected TReturn BeginDb<TReturn>(DbDelegate<TReturn> @delegate)
         {
             using IDbConnection conn = GetConnection;
-            DbHelper dbhelper = new DbHelper(conn);
+            using DbHelper dbhelper = new DbHelper(conn);
             TDAL dal = Activator.CreateInstance(typeof(TDAL), dbhelper) as TDAL;
             try
             {
