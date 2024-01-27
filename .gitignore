@@ -39,3 +39,4 @@ tests/**/coverage/
 /SpeedRunners.API/SpeedRunners/appsettings.json
 /SpeedRunners.Scheduler/obj
 /SpeedRunners.Scheduler/App.config
+/SpeedRunners.Scheduler/bin/Release/netcoreapp3.1
