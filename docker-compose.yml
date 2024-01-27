@@ -21,8 +21,6 @@ services:
     build: ./SpeedRunners.API/
     container_name: srlab-api
     restart: always
-    ports:
-      - "888:80"
     environment:
       - TZ=Asia/Shanghai
     networks:
