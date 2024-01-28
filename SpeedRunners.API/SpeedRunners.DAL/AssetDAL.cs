@@ -94,7 +94,7 @@ GROUP BY ModID"
 
         public void UpdateDownloadNum(string key)
         {
-            string sql = $@"UPDATE Mod SET Download = Download + 1 WHERE `FileUrl` = ?{nameof(key)}";
+            string sql = $@"UPDATE `Mod` SET Download = Download + 1 WHERE `FileUrl` = ?{nameof(key)}";
             Db.Execute(sql, new { key });
         }
 
