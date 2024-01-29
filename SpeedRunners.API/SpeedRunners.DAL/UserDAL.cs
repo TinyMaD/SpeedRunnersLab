@@ -32,12 +32,12 @@ namespace SpeedRunners.DAL
 
         public void DeleteAccessToken(MUser user)
         {
-            Db.Execute($"DELETE AccessToken WHERE TokenID = ?{nameof(user.TokenID)} AND PlatformID = ?{nameof(user.PlatformID)}", user);
+            Db.Execute($"DELETE FROM AccessToken WHERE TokenID = ?{nameof(user.TokenID)} AND PlatformID = ?{nameof(user.PlatformID)}", user);
         }
 
         public void DeleteAccessToken(string token)
         {
-            Db.Execute($"DELETE AccessToken WHERE Token = ?{nameof(token)}", new { token });
+            Db.Execute($"DELETE FROM AccessToken WHERE Token = ?{nameof(token)}", new { token });
         }
     }
 }

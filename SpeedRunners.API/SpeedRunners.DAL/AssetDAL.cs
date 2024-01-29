@@ -106,7 +106,7 @@ GROUP BY ModID"
 
         public void DeleteModStar(int modStarID, string currentUserID)
         {
-            string sql = $@"DELETE ModStar WHERE `ModID` = {modStarID} AND PlatformID = {currentUserID}";
+            string sql = $@"DELETE FROM ModStar WHERE `ModID` = {modStarID} AND PlatformID = {currentUserID}";
             Db.Execute(sql);
         }
     }
