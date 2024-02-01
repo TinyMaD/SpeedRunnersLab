@@ -38,9 +38,9 @@ namespace SpeedRunners.DAL
 (
     select PlatformID, min(RankScore) minScore from
     (
-        select PlatformID, RankScore from RankLog where Date >= CURDATE() - {dayOfRange - 1}
+        select PlatformID, RankScore from RankLog where Date >= DATE_SUB(CURDATE(), interval {dayOfRange - 1} day)
         union
-        select c.PlatformID, d.RankScore from(select PlatformID, max(Date) Date from RankLog where Date < CURDATE() - {dayOfRange - 1} group by PlatformID)c
+        select c.PlatformID, d.RankScore from(select PlatformID, max(Date) Date from RankLog where Date < DATE_SUB(CURDATE(), interval {dayOfRange - 1} day) group by PlatformID)c
         left join RankLog d on c.PlatformID = d.PlatformID and c.Date = d.date
     )e group by PlatformID
 )a left join RankInfo b on a.PlatformID = b.PlatformID
