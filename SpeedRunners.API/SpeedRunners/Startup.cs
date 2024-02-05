@@ -32,7 +32,7 @@ namespace SpeedRunners
             services.AddCors(options =>
             {
                 options.AddPolicy("default",
-                builder => builder.WithOrigins(Configuration.GetSection($"AllowedHosts:{Env.EnvironmentName}").Value.ToString()).AllowAnyHeader().AllowAnyMethod());
+                builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             });
             // ×¢²áÈ«¾ÖConfiguration
             services.AddSingleton(new AppSettings(Configuration));
