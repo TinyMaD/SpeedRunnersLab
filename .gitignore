@@ -1,10 +1,4 @@
-﻿################################################################################
-# 此 .gitignore 文件已由 Microsoft(R) Visual Studio 自动创建。
-################################################################################
-
-/SpeedRunners.API/.vs/SpeedRunners.API/v16
-/SpeedRunners.API/SpeedRunners/obj
-/SpeedRunners.API/SpeedRunners/appsettings.Development.json
+﻿/SpeedRunners.API/.vs/SpeedRunners.API/v16
 /SpeedRunners.UI/README-zh.md
 .DS_Store
 node_modules/
@@ -27,7 +21,8 @@ tests/**/coverage/
 PublishProfiles
 /SpeedRunners.API/SpeedRunners/Logs
 /SpeedRunners.API/SpeedRunners/.config
-/SpeedRunners.API/SpeedRunners/appsettings.json
 /SpeedRunners.Scheduler/App.config
 bin
 obj
+appsettings.Development.json
+appsettings.Production.json
