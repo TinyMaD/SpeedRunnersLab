@@ -25,6 +25,14 @@ namespace SpeedRunners.DAL
 
                 if (param.OnlyStar)
                 {
+                    if (!starModIDs?.Any() ?? true)
+                    {
+                        return new MPageResult<MMod>
+                        {
+                            Total = 0,
+                            List = new List<MMod>()
+                        };
+                    }
                     string starModIDsStr = string.Join(',', starModIDs);
                     where.Append($" AND `ID` IN ({starModIDsStr}) ");
                 }
