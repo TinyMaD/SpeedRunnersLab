@@ -73,7 +73,7 @@ service.interceptors.response.use(
   },
   error => {
     console.log("err" + error); // for debug
-    Vue.prototype.$toast.error(error.message);
+    Vue.prototype.$toast.error("恭喜您发现了彩蛋(BUG),站长表示正在改...");
     return Promise.reject(error);
   }
 );
