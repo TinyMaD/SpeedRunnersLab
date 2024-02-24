@@ -28,12 +28,12 @@
 
     public static class MResponseMethod
     {
-        public static MResponse<T> Success<T>(this T data)
+        public static MResponse<T> Success<T>(this T data, string msg = "成功")
         {
             return new MResponse<T>
             {
                 Code = 666,
-                Message = "成功",
+                Message = msg,
                 Data = data,
             };
         }

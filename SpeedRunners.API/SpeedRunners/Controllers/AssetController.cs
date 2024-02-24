@@ -32,5 +32,8 @@ namespace SpeedRunners.Controllers
         [User]
         [HttpGet("{modID}/{star}")]
         public void OperateModStar(int modID, bool star) => BLL.OperateModStar(modID, star);
+
+        [HttpGet]
+        public Task<MResponse> GetAfdianSponsor() => BLL.GetAfdianSponsorAsync();
     }
 }

@@ -33,3 +33,9 @@ export function operateModStar(modID, star) {
     method: "get"
   });
 }
+export function getAfdianSponsor() {
+  return request({
+    url: `/asset/getAfdianSponsor`,
+    method: "get"
+  });
+}
