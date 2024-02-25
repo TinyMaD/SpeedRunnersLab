@@ -28,7 +28,9 @@
             <v-img :src="avatar" />
           </v-list-item-avatar>
           <v-list-item-content>
-            <v-list-item-title v-text="name" />
+            <v-list-item-title>
+              {{ name }}
+            </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
         <v-list-item v-else>
@@ -36,6 +38,19 @@
             <v-icon left>mdi-steam</v-icon>登 录
           </v-btn>
         </v-list-item>
+      </v-list>
+      <v-divider class="mt-2" />
+      <v-list nav dense>
+        <v-list-item-group>
+          <v-list-item v-for="route in sideBars" :key="route.path" :to="route.path">
+            <v-list-item-icon>
+              <svg-icon :icon-class="route.meta.icon" />
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>{{ route.meta.title }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
       </v-list>
       <template v-if="avatar!==''" v-slot:append>
         <div class="pa-2">
@@ -106,6 +121,9 @@ export default {
     ]),
     navBars() {
       return this.permission_routes.find(route => route.path === "/").children.filter(x => x.hidden !== true);
+    },
+    sideBars() {
+      return this.permission_routes.find(route => route.path === "/").children.filter(x => x.hidden === true && x.meta);
     }
   },
   methods: {

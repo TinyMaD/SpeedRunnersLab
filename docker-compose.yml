@@ -33,6 +33,7 @@ services:
     container_name: srlab-ui
     volumes:
       - ./SpeedRunners.UI/nginx:/etc/nginx/conf.d
+      - ./SpeedRunners.UI/dist:/usr/share/nginx/html
     restart: always
     ports:
       - "80:80"
