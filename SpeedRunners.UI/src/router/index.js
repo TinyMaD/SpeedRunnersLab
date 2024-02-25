@@ -69,6 +69,12 @@ export const constantRoutes = [
         component: () => import("@/views/login/index"),
         props: route => ({ query: route.fullPath.split("?")[1] }),
         hidden: true
+      },
+      {
+        path: "/log",
+        component: () => import("@/views/other/log"),
+        meta: { title: "更新日志", icon: "mdi-list-box" },
+        hidden: true
       }
     ]
   }

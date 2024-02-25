@@ -1,0 +1,43 @@
+[
+    {
+        "title": "全面升级",
+        "version": "v2.0.0",
+        "date": "2020-08-31",
+        "list": [
+            {
+                "text": "前后端分离，并分别使用成熟脚手架进行开发",
+                "type": "cloud"
+            },
+            {
+                "text": "引入Vuetify前端组件",
+                "type": "beautify"
+            }
+        ],
+        "type": "holyshit"
+    },
+   {
+        "title": "引入统计图表",
+        "version": "v1.1.0",
+        "date": "2020-04-05",
+        "list": [
+            {
+                "text": "添加每周新增天梯分、最近游戏时间图表",
+                "type": "feature"
+            }
+        ],
+        "type": "important"
+    },
+    {
+        "title": "项目启动",
+        "version": "v1.0.0",
+        "date": "2018-03-10",
+        "list": [
+            {
+                "text": "第一版代码，粗糙但有意义",
+                "type": "stone"
+            }
+        ],
+        "type": "holyshit",
+        "img":"https://b244.photo.store.qq.com/psb?/V14YvYaX05oOHI/teA8nK1arALpZcsYN7JT7xZVDsDUxR0qbuGXW1FF3Hc!/b/dPQAAAAAAAAA&amp;bo=MQWoAjEFqAIRECc!"
+    }
+]

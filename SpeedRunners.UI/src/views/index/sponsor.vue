@@ -1,17 +1,17 @@
 <template>
   <div :class="className" :style="{width:width}">
     <div class="title text-h5 pa-2" v-text="title" />
-    
-     <v-tooltip top v-for="sponsor in list" :key="sponsor.user.user_id">
+
+    <v-tooltip v-for="sponsor in list" :key="sponsor.user.user_id" top>
       <template v-slot:activator="{ on, attrs }">
         <v-chip class="mt-3 mr-2" pill v-bind="attrs" v-on="on">
-        <v-avatar left>
-        <v-img :src="sponsor.user.avatar"></v-img>
-        </v-avatar>
-        ¥ {{sponsor.all_sum_amount}}
-      </v-chip>
+          <v-avatar left>
+            <v-img :src="sponsor.user.avatar" />
+          </v-avatar>
+          ¥ {{ sponsor.all_sum_amount }}
+        </v-chip>
       </template>
-      <span>{{sponsor.user.name}}</span>
+      <span>{{ sponsor.user.name }}</span>
     </v-tooltip>
     <div
       v-for="(content,i) in sponorContent"
@@ -53,17 +53,17 @@ export default {
       ]
     };
   },
+  computed: {
+    title() {
+      return `感谢 ${this.totalCount} 名赞助者`;
+    }
+  },
   mounted() {
     var that = this;
     getAfdianSponsor().then(response => {
       that.totalCount = response.data.total_count;
       that.list = response.data.list;
     });
-  },
-  computed: {
-    title() {
-      return `感谢 ${this.totalCount} 名赞助者`;
-    }
   }
 };
 </script>
