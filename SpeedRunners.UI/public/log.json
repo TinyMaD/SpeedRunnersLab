@@ -1,5 +1,73 @@
 [
     {
+        "title": "MOD资源管理",
+        "version": "v2.2.0",
+        "date": "2021-08-01",
+        "list": [
+            {
+                "text": "对接七牛云实现MOD上传下载管理",
+                "type": "cloud"
+            },
+            {
+                "text": "添加MOD上传下载界面",
+                "type": "feature"
+            },
+            {
+                "text": "引入ImgCropper裁剪封面",
+                "type": "feature"
+            },
+            {
+                "text": "添加MOD搜索功能",
+                "type": "feature"
+            },
+            {
+                "text": "添加MOD收藏功能",
+                "type": "feature"
+            },
+            {
+                "text": "调整MOD页面、ImgCropper组件样式",
+                "type": "beautify"
+            }
+        ],
+        "type": "holyshit"
+    },
+    {
+        "title": "SRCN域名注册",
+        "version": "v2.1.1",
+        "date": "2020-09-09",
+        "list": [
+            {
+                "text": "优化登录验证，修复登录状态频繁掉线",
+                "type": "fix"
+            },
+            {
+                "text": "注册 speedrunners.cn 并替换 tmdsr.cn",
+                "type": "stone"
+            }
+        ],
+        "type": "ordinary"
+    },
+    {
+        "title": "完善前端",
+        "version": "v2.1.0",
+        "date": "2020-09-09",
+        "list": [
+            {
+                "text": "添加首页统计图表",
+                "type": "feature"
+            },
+            {
+                "text": "替换全局消息组件",
+                "type": "cloud"
+            },
+            {
+                "text": "调整样式",
+                "type": "beautify"
+            }
+        ],
+        "type": "important"
+    },
+    {
         "title": "全面升级",
         "version": "v2.0.0",
         "date": "2020-08-31",
@@ -11,9 +79,25 @@
             {
                 "text": "引入Vuetify前端组件",
                 "type": "beautify"
+            },
+            {
+                "text": "添加查询玩家SR游戏数据功能",
+                "type": "feature"
             }
         ],
         "type": "holyshit"
+    },
+    {
+        "title": "手机端图表调整",
+        "version": "v1.2.1",
+        "date": "2020-04-06",
+        "list": [
+            {
+                "text": "优化手机端统计图表样式",
+                "type": "beautify"
+            }
+        ],
+        "type": "unimportant"
     },
     {
         "title": "新用户登录提示",
@@ -27,7 +111,7 @@
         ],
         "type": "unimportant"
     },
-   {
+    {
         "title": "引入统计图表",
         "version": "v1.1.0",
         "date": "2020-03-30",
