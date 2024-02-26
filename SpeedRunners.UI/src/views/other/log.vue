@@ -66,7 +66,7 @@
   </v-container>
 </template>
 <script>
-import log from "public/log.json";
+import log from "../../../public/log.json";
 import XCard from "@/components/XCard";
 
 export default {
