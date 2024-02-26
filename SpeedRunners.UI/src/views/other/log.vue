@@ -57,7 +57,9 @@
                     </div>
                   </div>
                 </div>
-              </XCard>
+                <v-img
+                  :src="eachPost.img"
+                /></XCard>
             </VTimelineItem>
           </VSlideYTransition>
         </VTimeline>
@@ -66,7 +68,7 @@
   </v-container>
 </template>
 <script>
-import log from "../../../public/log.json";
+import axios from "axios";
 import XCard from "@/components/XCard";
 
 export default {
@@ -75,8 +77,17 @@ export default {
   },
   data() {
     return {
-      timelinePost: log
+      timelinePost: []
     };
+  },
+  mounted() {
+    axios.get(`/log.json?timestamp=${new Date().getTime()}`)
+      .then(response => {
+        this.timelinePost = response.data;
+      })
+      .catch(error => {
+        console.log(error);
+      });
   },
   methods: {
     postDetails(list, type) {

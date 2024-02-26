@@ -73,7 +73,7 @@ export const constantRoutes = [
       {
         path: "/log",
         component: () => import("@/views/other/log"),
-        meta: { title: "更新日志", icon: "mdi-list-box" },
+        meta: { title: "开发日志", icon: "mdi-list-box" },
         hidden: true
       }
     ]
