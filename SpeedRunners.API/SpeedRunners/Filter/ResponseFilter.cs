@@ -21,7 +21,7 @@ namespace SpeedRunners.Filter
             _loginBLL = loginBLL;
         }
 
-        public override void OnResultExecuting(ResultExecutingContext context)
+        public override void OnActionExecuted(ActionExecutedContext context)
         {
             // 统一出参格式
             MResponse response = new MResponse();
@@ -46,7 +46,7 @@ namespace SpeedRunners.Filter
             AddRefreshToken(context.HttpContext, response);
 
             context.Result = new ObjectResult(response);
-            base.OnResultExecuting(context);
+            base.OnActionExecuted(context);
         }
 
         /// <summary>
