@@ -36,13 +36,15 @@
                       'cloud',
                       'feature',
                       'fix',
-                      'beautify'
+                      'beautify',
+                      'other'
                     ]"
                     :key="eachType"
                   >
                     <div v-if="postDetails(eachPost.list,eachType).length != 0">
                       <div class="body-2 font-weight-bold">
-                        <VIcon left small>{{ getListIcon(eachType) }} </VIcon><span style="vertical-align: middle">{{
+                        <VIcon left small>{{ getListIcon(eachType) }} </VIcon>
+                        <span style="vertical-align: middle">{{
                           getTypeName(eachType)
                         }}</span>
                       </div>
@@ -145,6 +147,8 @@ export default {
           return "mdi-rocket";
         case "cloud":
           return "mdi-cloud";
+        case "other":
+          return "mdi-wrench";
         default:
           break;
       }

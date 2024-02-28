@@ -1,11 +1,131 @@
 [
     {
+        "title": "开发者日志",
+        "version": "v2.6.0",
+        "date": "2024-02-26",
+        "list": [
+            {
+                "text": "挂载前端静态文件，优化发布速度",
+                "type": "cloud"
+            },
+            {
+                "text": "添加开发者日志功能",
+                "type": "feature"
+            },
+            {
+                "text": "修复系统异常会导致掉线的BUG",
+                "type": "fix"
+            }
+        ],
+        "type": "important"
+    },
+    {
+        "title": "赞助者名单",
+        "version": "v2.5.0",
+        "date": "2024-02-24",
+        "list": [
+            {
+                "text": "添加爱发电赞助者名单",
+                "type": "feature"
+            },
+            {
+                "text": "优化接口报错提示内容",
+                "type": "other"
+            },
+            {
+                "text": "修复点击仅展示收藏MOD报错的BUG",
+                "type": "fix"
+            }
+        ],
+        "type": "ordinary"
+    },
+    {
+        "title": "Docker容器化",
+        "version": "v2.4.0",
+        "date": "2024-01-12",
+        "list": [
+            {
+                "text": "服务器被黑后改用Docker部署",
+                "type": "cloud"
+            },
+            {
+                "text": "SqlServer对Docker兼容性低，数据库改为MySQL",
+                "type": "cloud"
+            },
+            {
+                "text": "合并任务调度器代码",
+                "type": "cloud"
+            },
+            {
+                "text": "修复各种架构调整后的BUG",
+                "type": "fix"
+            }
+        ],
+        "type": "ordinary"
+    },
+    {
+        "title": "第二届神行令",
+        "version": "v2.3.1",
+        "date": "2023-08-12",
+        "list": [
+            {
+                "text": "修复MOD分页查询BUG",
+                "type": "fix"
+            },
+            {
+                "text": "开启第二届神行令",
+                "type": "stone"
+            },
+            {
+                "text": "添加定制奖金发放规则",
+                "type": "feature"
+            },
+            {
+                "text": "浏览器检测到新版本后强制刷新",
+                "type": "other"
+            }
+        ],
+        "type": "important"
+    },
+    {
+        "title": "首届神行令",
+        "version": "v2.3.0",
+        "date": "2021-08-20",
+        "list": [
+            {
+                "text": "优化SEO索引",
+                "type": "cloud"
+            },
+            {
+                "text": "添加赛事等相关功能",
+                "type": "feature"
+            },
+            {
+                "text": "前端引入滚动数字组件odometer",
+                "type": "cloud"
+            },
+            {
+                "text": "天梯分统计区间改为两周",
+                "type": "other"
+            },
+            {
+                "text": "开启首届神行令，并完善赛事规则",
+                "type": "stone"
+            },
+            {
+                "text": "添加赞助老板名单",
+                "type": "feature"
+            }
+        ],
+        "type": "holyshit"
+    },
+    {
         "title": "MOD资源管理",
         "version": "v2.2.0",
         "date": "2021-08-01",
         "list": [
             {
-                "text": "对接七牛云实现MOD上传下载管理",
+                "text": "对接七牛云实现MOD上传下载管理、网站加速",
                 "type": "cloud"
             },
             {
