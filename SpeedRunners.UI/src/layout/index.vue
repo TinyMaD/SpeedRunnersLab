@@ -67,13 +67,45 @@
 
     <v-footer dark class="body-2">
       <v-col class="text-center" cols="12">
+        <v-btn
+          class="mx-4"
+          icon
+          href="https://github.com/TinyMaD/SpeedRunnersLab"
+          target="_blank"
+        >
+          <svg-icon
+            class-name="text-caption"
+            icon-class="github2"
+          />
+        </v-btn>
+        <v-btn
+          class="mx-4"
+          icon
+          href="https://space.bilibili.com/3857585"
+          target="_blank"
+        >
+          <svg-icon
+            class-name="text-caption"
+            icon-class="bilibili1"
+          />
+        </v-btn>
+        <v-btn
+          class="mx-4"
+          icon
+          href="https://www.cnblogs.com/tinymad"
+          target="_blank"
+        >
+          <svg-icon
+            class-name="text-caption"
+            icon-class="cnblogs1"
+          />
+        </v-btn>
+        <v-divider />
         <span class="caption">
-          &copy;2018-{{ new Date().getFullYear() }}
-          <a class="link" href="https://space.bilibili.com/3857585" target="_blank">TinyMaD</a>
+          &copy;2018-{{ new Date().getFullYear() }} TinyMaD
           <br>Made with
           <v-icon color="red" size="14">mdi-heart</v-icon>&nbsp;for SpeedRunners<br>
           <a class="link" href="http://beian.miit.gov.cn" target="_blank">蜀ICP备18005857号-2</a><br>
-          <a class="link" href="https://github.com/TinyMaD/SpeedRunnersLab" target="_blank">网站源代码</a>
         </span>
       </v-col>
     </v-footer>
