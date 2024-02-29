@@ -67,45 +67,86 @@
 
     <v-footer dark class="body-2">
       <v-col class="text-center" cols="12">
-        <v-btn
-          class="mx-4"
-          icon
-          href="https://github.com/TinyMaD/SpeedRunnersLab"
-          target="_blank"
-        >
-          <svg-icon
-            class-name="text-caption"
-            icon-class="github2"
-          />
-        </v-btn>
-        <v-btn
-          class="mx-4"
-          icon
-          href="https://space.bilibili.com/3857585"
-          target="_blank"
-        >
-          <svg-icon
-            class-name="text-caption"
-            icon-class="bilibili1"
-          />
-        </v-btn>
-        <v-btn
-          class="mx-4"
-          icon
-          href="https://www.cnblogs.com/tinymad"
-          target="_blank"
-        >
-          <svg-icon
-            class-name="text-caption"
-            icon-class="cnblogs1"
-          />
-        </v-btn>
-        <v-divider />
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="mx-4"
+              icon
+              href="https://github.com/TinyMaD/SpeedRunnersLab"
+              target="_blank"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <svg-icon
+                class-name="text-caption"
+                icon-class="github2"
+              />
+            </v-btn>
+          </template>
+          <span>Github</span>
+        </v-tooltip>
+
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="mx-4"
+              icon
+              href="https://space.bilibili.com/3857585"
+              target="_blank"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <svg-icon
+                class-name="text-caption"
+                icon-class="bilibili1"
+              />
+            </v-btn>
+          </template>
+          <span>Bilibili</span>
+        </v-tooltip>
+
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="mx-4"
+              icon
+              href="https://steamcommunity.com/id/tinymad"
+              target="_blank"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon size="26px">mdi-steam</v-icon>
+            </v-btn>
+          </template>
+          <span>Steam</span>
+        </v-tooltip>
+
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="mx-4"
+              icon
+              href="https://www.cnblogs.com/tinymad"
+              target="_blank"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <svg-icon
+                class-name="text-caption"
+                icon-class="cnblogs1"
+              />
+            </v-btn>
+          </template>
+          <span>技术博客</span>
+        </v-tooltip>
+        <span class="caption">
+          <br>Made with
+          <v-icon color="red" size="14">mdi-heart</v-icon>&nbsp;for <a class="link" href="https://store.steampowered.com/app/207140/SpeedRunners" target="_blank">SpeedRunners</a><br>
+        </span>
         <span class="caption">
           &copy;2018-{{ new Date().getFullYear() }} TinyMaD
-          <br>Made with
-          <v-icon color="red" size="14">mdi-heart</v-icon>&nbsp;for SpeedRunners<br>
-          <a class="link" href="http://beian.miit.gov.cn" target="_blank">蜀ICP备18005857号-2</a><br>
+          <br>
+          <a style="color: white;" href="http://beian.miit.gov.cn" target="_blank">蜀ICP备18005857号-2</a><br>
         </span>
       </v-col>
     </v-footer>
