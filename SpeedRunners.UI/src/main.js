@@ -6,6 +6,7 @@ import "@/styles/index.scss"; // global css
 import App from "./App";
 import store from "./store";
 import router from "./router";
+import i18n from "./i18n";
 import Meta from "vue-meta";
 
 import "@/icons"; // icon
@@ -21,6 +22,7 @@ Vue.prototype.$baseKeywords =
 
 new Vue({
   el: "#app",
+  i18n,
   router,
   store,
   vuetify,

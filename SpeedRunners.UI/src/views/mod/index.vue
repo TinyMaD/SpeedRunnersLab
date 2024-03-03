@@ -5,8 +5,8 @@
         <div>
           <v-list width="130px">
             <v-list-item>
-              <v-btn block color="primary" @click="clickUpload">
-                <v-icon>mdi-upload</v-icon>上 传
+              <v-btn block color="primary" :small="isZh ? false : true" @click="clickUpload">
+                <v-icon>mdi-upload</v-icon>{{ $t('mod.upload') }}
               </v-btn>
             </v-list-item>
             <v-divider />
@@ -28,7 +28,7 @@
                 :key="i"
                 @click="changeList"
               >
-                <v-list-item-title v-text="menu" />
+                <v-list-item-title>{{ menu }}</v-list-item-title>
               </v-list-item>
             </v-list-item-group>
           </v-list>
@@ -43,8 +43,8 @@
               <v-text-field
                 v-model="searchParam.keywords"
                 color="success"
-                label="搜 索"
-                hint="请输入名称关键字"
+                :label="$t('common.search')"
+                :hint=" $t('common.keywords') "
                 append-icon="mdi-magnify"
                 clearable
                 @click:append="changeList"
@@ -54,14 +54,14 @@
             <div style="width:180px;margin-left:20px">
               <v-switch
                 v-model="switchValue"
-                label="仅显示'已收藏'"
+                :label="$t('mod.yourStar')"
                 color="orange"
                 @change="changeSwitch"
               />
             </div>
           </v-row>
-          <template v-for="mod in data.list">
-            <v-hover :key="mod.id" v-slot="{ hover }">
+          <template>
+            <v-hover v-for="mod in data.list" :key="mod.id" v-slot="{ hover }">
               <v-card
                 :key="mod.id"
                 :elevation="hover ? 12 : 2"
@@ -162,7 +162,6 @@ export default {
       "SkullDuggery",
       "Salem"
     ],
-    otherModMenu: ["人 物", "轨 迹", "道 具", "HUD", "音 效", "背 景", "其 它"],
     transparent: "rgba(255, 255, 255, 0)",
     switchValue: false,
     searchParam: {
@@ -180,6 +179,12 @@ export default {
   }),
   computed: {
     ...mapGetters(["name"]),
+    isZh() {
+      return this.$i18n.locale === "zh";
+    },
+    otherModMenu() {
+      return [this.$t("mod.character"), this.$t("mod.trail"), this.$t("mod.item"), "HUD", this.$t("mod.sound"), this.$t("mod.bg"), this.$t("mod.other")];
+    },
     stepTitle() {
       return this.progress > 0
         ? `正在上传，请耐心等待...${this.progress} %`

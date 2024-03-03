@@ -14,7 +14,7 @@
       <span>{{ sponsor.user.name }}</span>
     </v-tooltip>
     <div
-      v-for="(content,i) in sponorContent"
+      v-for="(content,i) in sponsorContent"
       :key="i"
       class="text-body-1 pa-1 my-1"
       v-text="content"
@@ -45,17 +45,19 @@ export default {
   data() {
     return {
       totalCount: 0,
-      list: [],
-      sponorContent: [
-        "本网站的运行需要租用服务器、域名等，这也是最大的开销。服务器、域名到期后，网站则面临停运",
-        "本站之前由我个人运营，但一个人的力量始终有限，一台最低配置的服务器也要七百左右一年",
-        "如果本站给您带来了一点点帮助和感动的话，可以点击下方链接按钮赞助本站，让我继续为大家服务（爱发电的赞助记录会实时展示在上方，收支明细在爱发电动态）"
-      ]
+      list: []
     };
   },
   computed: {
     title() {
-      return `感谢 ${this.totalCount} 名赞助者`;
+      return this.$t("index.sponsorTitle", [this.totalCount]);
+    },
+    sponsorContent() {
+      return [
+        this.$t("index.sponsorContent1"),
+        this.$t("index.sponsorContent2"),
+        this.$t("index.sponsorContent3")
+      ];
     }
   },
   mounted() {

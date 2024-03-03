@@ -10,8 +10,8 @@
       <div class="bullshit">
         <div class="bullshit__oops">OOPS!</div>
         <div class="bullshit__headline">{{ message }}</div>
-        <div class="bullshit__info">请检查你输入的网址是否正确，或者点击下方按钮返回首页.</div>
-        <a href="/" class="bullshit__return-home">返回首页</a>
+        <div class="bullshit__info">{{ $t('404.check') }}</div>
+        <a href="/" class="bullshit__return-home">{{ $t('404.back') }}</a>
       </div>
     </div>
   </div>
@@ -23,7 +23,7 @@ export default {
   name: "Page404",
   computed: {
     message() {
-      return "貌似你还不能进入这片领域...";
+      return this.$t("404.error");
     }
   }
 };

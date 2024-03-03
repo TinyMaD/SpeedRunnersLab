@@ -105,7 +105,7 @@
           <v-sheet width="100%" class="sheett">
             <div class="title text-h4 pa-2" v-text="'赞助'" />
             <div
-              v-for="(content,i) in sponorContent"
+              v-for="(content,i) in sponsorContent"
               :key="i"
               class="text-body-1 pa-1 my-1"
               v-text="content"
@@ -119,7 +119,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(item,index) in sponorList" :key="index">
+                  <tr v-for="(item,index) in sponsorList" :key="index">
                     <td>{{ item.name }}</td>
                     <td>{{ `${item.amount} 元` }}</td>
                   </tr>
@@ -237,7 +237,7 @@ export default {
     loading: false,
     dialog: false,
     prizePool: 0,
-    sponorList: [],
+    sponsorList: [],
     participateList: [],
     speRuleList: [],
     prizeList: [],
@@ -247,7 +247,7 @@ export default {
       "公正严谨的赛制、实力强劲的对手、超低的延迟，将助你激发真正的实力，捍卫国服荣耀。没错，这个试炼就是为你而准备，你才是真正的国服前十！",
       "神行令出，群雄逐鹿，鹿死谁手，你我......拭目以待！"
     ],
-    sponorContent: [
+    sponsorContent: [
       "感谢所有的赞助者，无论金额大小，正因为有大家的支持，本赛事才得以举办",
       "本赛事奖金全部由赞助者赞助，赞助者赞助的资金将100%进入总奖金池",
       "为保证赞助金公开透明，赞助时请备注好你的ID（独特、你自己认识），未备注将按匿名标识记录。站长将在收到赞助后24小时之内维护赞助者名单，赞助者若在名单内未找到自己ID，可到QQ群（319422487）进行反馈",
@@ -350,11 +350,11 @@ export default {
   },
   mounted() {
     getSponsor().then(response => {
-      this.sponorList = response.data;
-      var normalRuleList = this.sponorList.filter(item => item.speRule == null);
-      this.speRuleList = this.sponorList.filter(item => item.speRule != null);
+      this.sponsorList = response.data;
+      var normalRuleList = this.sponsorList.filter(item => item.speRule == null);
+      this.speRuleList = this.sponsorList.filter(item => item.speRule != null);
 
-      this.prizePool = this.sponorList.reduce((a, b) => a + b.amount, 0);
+      this.prizePool = this.sponsorList.reduce((a, b) => a + b.amount, 0);
       var normalPrizePool = normalRuleList.reduce((a, b) => a + b.amount, 0);
 
       this.getPrizeBase(50, normalPrizePool - 50, this.prizeList);

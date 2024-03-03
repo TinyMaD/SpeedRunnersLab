@@ -48,6 +48,12 @@ export default {
       return `${this.dataCount * this.height + this.bottom + 60}px`;
     }
   },
+  watch: {
+    "$i18n.locale"(newValue) {
+      var titleText = this.$t("index.addedChartTitle");
+      this.chart.setOption({ title: { text: titleText }});
+    }
+  },
   mounted() {
     var that = this;
     getAddedChart().then(response => {
@@ -78,7 +84,7 @@ export default {
       this.chart = echarts.init(this.$el);
       this.chart.setOption({
         title: {
-          text: "两周新增天梯分",
+          text: that.$t("index.addedChartTitle"),
           left: "center",
           top: 15,
           textStyle: {

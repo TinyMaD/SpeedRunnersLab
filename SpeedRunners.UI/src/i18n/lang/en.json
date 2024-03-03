@@ -1,0 +1,63 @@
+{
+  "404": {
+    "error": "The webmaster said that you can not enter this page...",
+    "check": "Please check that the URL you entered is correct, or click the button below to return to the homepage.",
+    "back": "Back to home"
+  },
+  "500": {
+    "msg": "Ops！Server error"
+  },
+  "index": {
+    "online": "Online",
+    "sponsorContent1": "The operation of this website requires renting servers, domain names, etc., which is also the largest expense. \nAfter the server and domain name expire, the website will be shut down.",
+    "sponsorContent2": "This site was run by me personally before, but one person’s power is always limited. A server with the minimum configuration will cost about 700 yuan a year.",
+    "sponsorContent3": "If this site has brought you a little help and touch, you can click the link button below to sponsor this site and let me continue to serve you (Aipower's sponsorship record will be displayed in real time above, and the income and expenditure details can be found in Aipower News)",
+    "sponsorTitle": "Thanks to {0} sponsors",
+    "addedChartTitle": "Added score in 2 weeks",
+    "hourChartTile": "Play time in 2 weeks",
+    "hourChartUnit": "hrs"
+  },
+  "layout": {
+    "login": "Login",
+    "logout": "Logout",
+    "logoutSucc": "Logout successful"
+  },
+  "routes": {
+    "home": "Home",
+    "match": "Match",
+    "rank": "Rank",
+    "mod": "MOD",
+    "searchplayer": "Stats",
+    "plaza": "Discover",
+    "log": "Log"
+  },
+  "mod": {
+    "upload": "Upload",
+    "yourStar": "Your stars",
+    "trail": "Trails",
+    "character": "Characters",
+    "item": "Items",
+    "sound": "Sounds",
+    "bg": "Background",
+    "other": "Others"
+  },
+  "common": {
+    "search": "Search",
+    "keywords": "Please enter name keyword"
+  },
+  "rank": {
+    "personaName": "Name",
+    "tier": "League",
+    "score": "Score",
+    "updateInfo": "*Data update frequency: every 10 mins",
+    "diamond": "Diamond",
+    "platinum": "Platinum",
+    "gold": "Gold",
+    "silver": "Silver",
+    "bronze": "Bronze",
+    "expert": "Expert",
+    "advanced": "Advanced",
+    "beginner": "Beginner",
+    "entry": "Entry"
+  }
+}

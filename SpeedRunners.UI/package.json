@@ -6,9 +6,9 @@
   "scripts": {
     "test:unit": "jest --clearCache && vue-cli-service test:unit",
     "lint": "eslint --ext .js,.vue src",
-    "build:prod": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
+    "build:prod": "vue-cli-service build",
     "build:stage": "vue-cli-service build --mode staging",
-    "dev": "SET NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve --open",
+    "dev": "vue-cli-service serve --open",
     "preview": "node build/index.js --preview",
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
   },
@@ -24,6 +24,7 @@
     "qiniu-js": "^3.3.1",
     "vue": "2.6.10",
     "vue-cropperjs": "4.2.0",
+    "vue-i18n": "8",
     "vue-meta": "^2.4.0",
     "vue-router": "3.0.6",
     "vuetify": "~2.3.11",

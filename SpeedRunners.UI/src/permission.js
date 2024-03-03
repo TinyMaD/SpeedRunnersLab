@@ -1,5 +1,6 @@
 import router from "./router";
 import store from "./store";
+import i18n from "./i18n";
 import Vue from "vue";
 import NProgress from "nprogress"; // progress bar
 import "nprogress/nprogress.css"; // progress bar style
@@ -14,7 +15,7 @@ router.beforeEach(async(to, from, next) => {
   NProgress.start();
 
   // set page title
-  document.title = getPageTitle(to.meta.title);
+  document.title = getPageTitle(i18n.t(`routes.${to.meta.title}`));
 
   const hasToken = getToken();
   const hasRoles = store.getters.permission_routes && store.getters.permission_routes.length > 0;

@@ -6,21 +6,21 @@
         <tr id="tableHead">
           <th id="thf" width="10%" />
           <th id="online" width="13%" style="text-align:center;color:#81A636" />
-          <th width="33%">昵称</th>
-          <th width="25%">段位</th>
-          <th v-if="pc < 1640" id="thl" width="19%">天梯分</th>
-          <th v-else width="13%">天梯分</th>
+          <th width="33%">{{ $t('rank.personaName') }}</th>
+          <th width="25%">{{ $t('rank.tier') }}</th>
+          <th v-if="pc < 1640" id="thl" width="19%">{{ $t('rank.score') }}</th>
+          <th v-else width="13%">{{ $t('rank.score') }}</th>
           <th v-if="pc > 1640" id="thl" width="6%" />
         </tr>
         <tbody id="tbody" />
         <tr id="tfoot">
           <td v-if="pc < 1640" id="tfootf" />
           <td v-if="pc < 1640" />
-          <td v-if="pc < 1640" id="tfootl" colspan="3">*数据更新频率：10分钟/次</td>
+          <td v-if="pc < 1640" id="tfootl" colspan="3">{{ $t('rank.updateInfo') }}</td>
           <td v-if="pc > 1640" id="tfootf" />
           <td v-if="pc > 1640" />
           <td v-if="pc > 1640" />
-          <td v-if="pc > 1640" id="tfootl" colspan="3">*数据更新频率：10分钟/次</td>
+          <td v-if="pc > 1640" id="tfootl" colspan="3">{{ $t('rank.updateInfo') }}</td>
         </tr>
       </table>
     </v-row>
@@ -48,6 +48,34 @@ export default {
     pcUpScore: "",
     leveMarginTop: 6
   }),
+  computed: {
+    getlvlName(level) {
+      switch (level) {
+        case 0:
+          return this.$t("rank.entry");
+        case 1:
+          return this.$t("rank.beginner");
+        case 2:
+          return this.$t("rank.advanced");
+        case 3:
+          return this.$t("rank.expert");
+        case 4:
+          return this.$t("rank.bronze");
+        case 5:
+          return this.$t("rank.silver");
+        case 6:
+          return this.$t("rank.gold");
+        case 7:
+          return this.$t("rank.platinum");
+        case 8:
+          return this.$t("rank.diamond");
+        case 9:
+          return "KOS";
+        default:
+          return "";
+      }
+    }
+  },
   mounted() {
     this.pc = $(window).width();
     if (this.pc < 451) {
@@ -178,63 +206,63 @@ export default {
       var height = (4 * width) / 3; // 图片长度
       switch (level) {
         case 0:
-          this.levelName = "新手";
+          this.levelName = this.$t("rank.entry");
           this.t = 0;
           this.right = width / 3;
           this.bottom = height / 4;
           this.left = 0;
           break;
         case 1:
-          this.levelName = "入门";
+          this.levelName = this.$t("rank.beginner");
           this.t = 0;
           this.right = (width * 2) / 3;
           this.bottom = height / 4;
           this.left = width / 3;
           break;
         case 2:
-          this.levelName = "进阶";
+          this.levelName = this.$t("rank.advanced");
           this.t = 0;
           this.right = width;
           this.bottom = height / 4;
           this.left = (width * 2) / 3;
           break;
         case 3:
-          this.levelName = "专家";
+          this.levelName = this.$t("rank.expert");
           this.t = height / 4;
           this.right = width / 3;
           this.bottom = height / 2;
           this.left = 0;
           break;
         case 4:
-          this.levelName = "青铜";
+          this.levelName = this.$t("rank.bronze");
           this.t = height / 4;
           this.right = (width * 2) / 3;
           this.bottom = height / 2;
           this.left = width / 3;
           break;
         case 5:
-          this.levelName = "白银";
+          this.levelName = this.$t("rank.silver");
           this.t = height / 4;
           this.right = width;
           this.bottom = height / 2;
           this.left = (width * 2) / 3;
           break;
         case 6:
-          this.levelName = "黄金";
+          this.levelName = this.$t("rank.gold");
           this.t = height / 2;
           this.right = width / 3;
           this.bottom = (height * 3) / 4;
           this.left = 0;
           break;
         case 7:
-          this.levelName = "铂金";
+          this.levelName = this.$t("rank.platinum");
           this.t = height / 2;
           this.right = (width * 2) / 3;
           this.bottom = (height * 3) / 4;
           this.left = width / 3;
           break;
         case 8:
-          this.levelName = "钻石";
+          this.levelName = this.$t("rank.diamond");
           this.t = height * 0.5;
           this.right = width;
           this.bottom = (height * 3) / 4;

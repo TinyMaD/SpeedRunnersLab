@@ -48,6 +48,18 @@ export default {
       return `${this.dataCount * this.height + this.bottom + 60}px`;
     }
   },
+  watch: {
+    "$i18n.locale"(newValue) {
+      var titleText = this.$t("index.hourChartTile");
+      var unit = this.$t("index.hourChartUnit");
+      this.chart.setOption({ title: { text: titleText },
+        tooltip: {
+          formatter: function(a) {
+            return a.marker + a.data.personaName + "：" + a.data.weekPlayTime + " " + unit;
+          }
+        }});
+    }
+  },
   mounted() {
     var that = this;
     getHourChart().then(response => {
@@ -81,7 +93,7 @@ export default {
       this.chart = echarts.init(this.$el);
       this.chart.setOption({
         title: {
-          text: "两周游戏时间",
+          text: that.$t("index.hourChartTile"),
           left: "center",
           top: 15,
           textStyle: {
@@ -94,7 +106,7 @@ export default {
         },
         tooltip: {
           formatter: function(a) {
-            return a.marker + a.data.personaName + "：" + a.data.weekPlayTime + " 小时";
+            return a.marker + a.data.personaName + "：" + a.data.weekPlayTime + " " + that.$t("index.hourChartUnit");
           }
           // trigger: "axis",
           // axisPointer: { // 坐标轴指示器，坐标轴触发有效

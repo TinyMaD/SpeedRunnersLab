@@ -11,11 +11,43 @@
         />
       </v-toolbar-title>
       <VSpacer />
+      <v-menu
+        offset-y
+        transition="slide-y-transition"
+        open-on-hover
+        dark
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            v-bind="attrs"
+            elevation="0"
+            v-on="on"
+          >
+            <v-icon>mdi-translate</v-icon>
+            <v-icon size="15">mdi-chevron-down</v-icon>
+          </v-btn>
+
+        </template>
+        <v-list nav dense>
+          <v-list-item-group @change="changeLanguege">
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>中文</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>English</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-menu>
       <template v-slot:extension>
         <v-tabs align-with-title>
           <v-tab v-for="route in navBars" :key="route.path" :to="route.path">
             <svg-icon :icon-class="route.meta.icon" />
-            {{ route.meta.title }}
+            {{ $t(`routes.${route.meta.title}`) }}
           </v-tab>
         </v-tabs>
       </template>
@@ -35,7 +67,7 @@
         </v-list-item>
         <v-list-item v-else>
           <v-btn block light @click="goToSteamLogin()">
-            <v-icon left>mdi-steam</v-icon>登 录
+            <v-icon left>mdi-steam</v-icon>{{ $t('layout.login') }}
           </v-btn>
         </v-list-item>
       </v-list>
@@ -47,7 +79,7 @@
               <svg-icon :icon-class="route.meta.icon" />
             </v-list-item-icon>
             <v-list-item-content>
-              <v-list-item-title>{{ route.meta.title }}</v-list-item-title>
+              <v-list-item-title> {{ $t(`routes.${route.meta.title}`) }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list-item-group>
@@ -55,7 +87,7 @@
       <template v-if="avatar!==''" v-slot:append>
         <div class="pa-2">
           <v-btn block @click.stop="logout()">
-            <v-icon left>mdi-exit-to-app</v-icon>登 出
+            <v-icon left>mdi-exit-to-app</v-icon>{{ $t('layout.logout') }}
           </v-btn>
         </div>
       </template>
@@ -173,6 +205,7 @@
 import { AppMain } from "./components";
 import { goLoginURL } from "@/utils/auth";
 import { mapGetters } from "vuex";
+import getPageTitle from "@/utils/get-page-title";
 
 export default {
   name: "Layout",
@@ -200,11 +233,17 @@ export default {
     }
   },
   methods: {
+    changeLanguege(num) {
+      var lang = num ? "en" : "zh";
+      this.$i18n.locale = lang;
+      localStorage.setItem("lang", lang);
+      document.title = getPageTitle(this.$i18n.t(`routes.${this.$route.meta.title}`));
+    },
     logout() {
       var that = this;
       this.$store.dispatch("user/logoutLocal").then(() => {
         that.$router.push("/");
-        that.$toast.info("登出成功");
+        that.$toast.info(that.$t("layout.logoutSucc"));
       });
     },
     goToSteamLogin() {

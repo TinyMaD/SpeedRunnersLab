@@ -1,6 +1,7 @@
 import axios from "axios";
 import Vue from "vue";
 import store from "@/store";
+import i18n from "@/i18n";
 import { getToken, setToken, removeToken } from "@/utils/auth";
 
 // create an axios instance
@@ -73,7 +74,7 @@ service.interceptors.response.use(
   },
   error => {
     console.log("err" + error); // for debug
-    Vue.prototype.$toast.error("恭喜您发现了彩蛋(BUG),站长表示正在改...");
+    Vue.prototype.$toast.error(i18n.t("500.msg"));
     return Promise.reject(error);
   }
 );

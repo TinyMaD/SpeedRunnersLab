@@ -9,7 +9,7 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <script src="//upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.3.min.js"></script>
     <script src="//at.alicdn.com/t/c/font_2725683_sc5ekdyqhva.js"></script>
-    <title>首页 - SRLab - SR数据展示</title>
+    <title>SRLab</title>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3M80SJ8MQF"></script>
@@ -24,10 +24,13 @@
   <body>
     <noscript>
       <strong>很抱歉，这个网站必须开启JavaScript才能访问。请开启后重试。</strong>
+      <strong>Sorry, this website requires JavaScript to be enabled to access. Please enable it and try again.</strong>
     </noscript>
     <div id="app">
       <div style="text-align: center;">
-        <div style="font-size: 12px;">欢迎来到SpeedRunnersLab(SRLab)。在这里可以浏览SpeedRunners高手们的游戏动态、数据资料、热门赛事等信息，同时提供丰富有趣的MOD资源。
+        <div style="font-size: 12px;" class="chinese">欢迎来到SpeedRunnersLab(SRLab)。在这里可以浏览SpeedRunners高手们的游戏动态、数据资料、热门赛事等信息，同时提供丰富有趣的MOD资源。
+        </div>
+        <div style="font-size: 12px;" class="english">Welcome to SpeedRunnersLab (SRLab). Here you can browse the game dynamics, data, popular events and other information of SpeedRunners experts, and also provide many interesting MOD files.
         </div>
         <div class="loading">
           <div class="spinner">
@@ -51,13 +54,39 @@
             </div>
           </div>
         </div>
-        <h6>载入中...</h6>
-        <div style="font-size: 12px;">
+        <h6 class="chinese">载入中...</h6>
+        <div style="font-size: 12px;" class="chinese">
         首次加载以及版本更新后需要数秒钟时间下载数据，请稍后...
+        </div>
+        <h6 class="english">Loading...</h6>
+        <div style="font-size: 12px;" class="english">
+        It will take a few seconds to download the data after the first load and version update, please wait...
         </div>
       </div>
     </div>
     <!-- built files will be auto injected -->
+     <script>
+      // 读取浏览器语言设置
+      var userLang = navigator.language || navigator.userLanguage;
+      // 根据语言设置显示对应的内容
+      if (userLang.startsWith("zh")) {
+        // 显示中文内容
+        document.querySelectorAll('.chinese').forEach(function(element) {
+          element.style.display = 'block';
+        });
+        document.querySelectorAll('.english').forEach(function(element) {
+          element.style.display = 'none';
+        });
+      } else {
+        // 显示英文内容
+        document.querySelectorAll('.chinese').forEach(function(element) {
+          element.style.display = 'none';
+        });
+        document.querySelectorAll('.english').forEach(function(element) {
+          element.style.display = 'block';
+        });
+      }
+    </script>
   </body>
   <style type="text/css">
     .icon {

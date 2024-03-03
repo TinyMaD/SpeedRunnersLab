@@ -42,27 +42,27 @@ export const constantRoutes = [
       {
         path: "/",
         component: () => import("@/views/index/index"),
-        meta: { title: "首 页", icon: "mdi-home-analytics" }
+        meta: { title: "home", icon: "mdi-home-analytics" }
       },
       {
         path: "/match",
         component: () => import("@/views/match/index"),
-        meta: { title: "赛 事", icon: "jiangbei" }
+        meta: { title: "match", icon: "jiangbei" }
       },
       {
         path: "/rank",
         component: () => import("@/views/rank/index"),
-        meta: { title: "排行榜", icon: "zhandouzuozhan" }
+        meta: { title: "rank", icon: "zhandouzuozhan" }
       },
       {
         path: "/mod",
         component: () => import("@/views/mod/index"),
-        meta: { title: "MOD", icon: "mdi-file-download" }
+        meta: { title: "mod", icon: "mdi-file-download" }
       },
       {
         path: "/searchplayer",
         component: () => import("@/views/searchPlayer/index"),
-        meta: { title: "资 料", icon: "mdi-account-search" }
+        meta: { title: "searchplayer", icon: "mdi-account-search" }
       },
       {
         path: "/login",
@@ -73,7 +73,7 @@ export const constantRoutes = [
       {
         path: "/log",
         component: () => import("@/views/other/log"),
-        meta: { title: "开发日志", icon: "mdi-list-box" },
+        meta: { title: "log", icon: "mdi-list-box" },
         hidden: true
       }
     ]
@@ -103,7 +103,7 @@ export const asyncRoutes = [
       {
         path: "/plaza",
         component: () => import("@/views/plaza/index"),
-        meta: { title: "广 场", icon: "mdi-camera-iris" }
+        meta: { title: "plaza", icon: "mdi-camera-iris" }
       }
     ]
   }
