@@ -39,11 +39,32 @@
     "item": "道 具",
     "sound": "音 效",
     "bg": "背 景",
-    "other": "其 它"
+    "other": "其 它",
+    "uploadingTitle": "正在上传，请耐心等待...{0} %",
+    "loadTitle": "上传MOD资源",
+    "star": "收藏成功",
+    "unstar": "已取消收藏",
+    "uploadCover": "点击上传封面",
+    "uploadFile": "点击上传文件",
+    "loadSucc": "上传成功",
+    "inputTitle": "请输入标题",
+    "lengthWarn": "标题字数不能大于17",
+    "loadCoverPlz": "请上传封面",
+    "bigImgWarn": "图片大小不能超过 5 MB",
+    "mustImg": "请选择图片类型文件",
+    "uploadFilePlz": "请上传文件",
+    "bigFileWarn": "文件大小不能超过 20 MB",
+    "invalidWarn": "无效的SteamID或自定义URL，请选择想要查询的用户"
   },
   "common": {
     "search": "搜 索",
-    "keywords": "请输入名称关键字"
+    "keywords": "请输入名称关键字",
+    "loginPlz": "请先登录",
+    "type": "类 型",
+    "selectType": "请选择类型",
+    "title": "标 题",
+    "submit": "提 交",
+    "cancel": "取 消"
   },
   "rank": {
     "personaName": "昵称",
@@ -59,5 +80,11 @@
     "advanced": "进阶",
     "beginner": "入门",
     "entry": "新手"
+  },
+  "stats": {
+    "enterSteamID": "请输入SteamID、自定义URL或者昵称",
+    "content": "查询Steam用户的SpeedRunners游戏数据，查询速度：SteamID（稳定）>自定义URL（稳定）>昵称（不稳定）",
+    "showMore": "剩{0}条结果—点击加载更多—",
+    "noResult": "未查询到相关结果，目标玩家可能未将Steam资料-隐私设置为公开"
   }
 }

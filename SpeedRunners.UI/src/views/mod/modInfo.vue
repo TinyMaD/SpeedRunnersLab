@@ -15,8 +15,8 @@
           v-model="formType"
           required
           :items="items"
-          label="类 型"
-          :rules="[v => v!==undefined || '请选择类型']"
+          :label=" $t('common.type') "
+          :rules="[v => v!==undefined || $t('common.selectType')]"
         />
         <v-text-field
           v-model="formTitle"
@@ -24,7 +24,7 @@
           :counter="17"
           clearable
           required
-          label="标 题"
+          :label="$t('common.title')"
         />
         <v-img max-width="250px" max-height="160px" :src="imgSrc" />
         <v-progress-linear
@@ -33,7 +33,7 @@
         <v-file-input
           ref="imgInput"
           accept="image/*"
-          label="点击上传封面"
+          :label="$t('mod.uploadCover')"
           :rules="imgRules"
           prepend-icon="mdi-camera"
           @change="changeImg"
@@ -46,7 +46,7 @@
           ref="fileInput"
           :show-size="true"
           :accept="fileAccept"
-          label="点击上传文件"
+          :label="$t('mod.uploadFile')"
           :rules="fileRules"
           @change="changeFiles"
           @click="clearFiles"
@@ -57,7 +57,7 @@
           class="mr-4"
           @click="submitMod"
         >
-          提 交
+          {{ $t('common.submit') }}
         </v-btn>
         <v-btn
           :disabled="uploading"
@@ -65,7 +65,7 @@
           class="mr-4"
           @click="doClose"
         >
-          取 消
+          {{ $t('common.cancel') }}
         </v-btn>
       </v-form>
       <ImgCropper :visible.sync="showCropper" :src="cropperImgUrl" @done="getCroppedImg" />
@@ -88,15 +88,6 @@ export default {
   },
   data() {
     return {
-      items: [
-        { text: "人 物", value: 0 },
-        { text: "轨 迹", value: 1 },
-        { text: "道 具", value: 2 },
-        { text: "HUD", value: 3 },
-        { text: "音 效", value: 4 },
-        { text: "背 景", value: 5 },
-        { text: "其 它", value: 6 }
-      ],
       drawer: this.visible,
       showCropper: false,
       imgSrc: "",
@@ -111,21 +102,32 @@ export default {
       formType: undefined,
       formTitle: "",
       nameRules: [
-        v => !!v || "请输入标题",
-        v => !v || v.length <= 17 || "标题字数不能大于17"
+        v => !!v || this.$t("mod.inputTitle"),
+        v => !v || v.length <= 17 || this.$t("mod.lengthWarn")
       ],
       imgRules: [
-        v => !!v || "请上传封面",
-        v => !v || v.size <= 5000000 || "图片大小不能超过 5 MB",
-        v => !v || v.type.indexOf("image") > -1 || "请选择图片类型文件"
+        v => !!v || this.$t("mod.loadCoverPlz"),
+        v => !v || v.size <= 5000000 || this.$t("mod.bigImgWarn"),
+        v => !v || v.type.indexOf("image") > -1 || this.$t("mod.mustImg")
       ],
       fileRules: [
-        v => !!v || "请上传文件",
-        v => !v || v.size <= 20000000 || "文件大小不能超过 20 MB"
+        v => !!v || this.$t("mod.uploadFilePlz"),
+        v => !v || v.size <= 20000000 || this.$t("mod.bigFileWarn")
       ]
     };
   },
   computed: {
+    items() {
+      return [
+        { text: this.$t("mod.character"), value: 0 },
+        { text: this.$t("mod.trail"), value: 1 },
+        { text: this.$t("mod.item"), value: 2 },
+        { text: "HUD", value: 3 },
+        { text: this.$t("mod.sound"), value: 4 },
+        { text: this.$t("mod.bg"), value: 5 },
+        { text: this.$t("mod.other"), value: 6 }
+      ];
+    },
     fileAccept() {
       let accept = "";
       switch (this.formType) {
@@ -235,7 +237,7 @@ export default {
       param.fileUrl = this.fileName;
       param.size = this.file.size;
       addMod(param).then(res => {
-        that.$toast.success("上传成功");
+        that.$toast.success(that.$t("mod.loadSucc"));
         that.$emit("success");
         that.uploading = false;
         that.doClose();

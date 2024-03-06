@@ -39,11 +39,32 @@
     "item": "Items",
     "sound": "Sounds",
     "bg": "Background",
-    "other": "Others"
+    "other": "Others",
+    "uploadingTitle": "Uploading, please wait patiently...{0} %",
+    "loadTitle": "Upload MOD resources",
+    "star": "Starred successful",
+    "unstar": "Unstar",
+    "uploadCover": "Click to upload cover",
+    "uploadFile": "Click to upload file",
+    "loadSucc": "Upload successful",
+    "inputTitle": "Please enter a title",
+    "lengthWarn": "The number of characters cannot be greater than 17",
+    "loadCoverPlz": "Please upload the cover",
+    "bigImgWarn": "Image size cannot exceed 5 MB",
+    "mustImg": "The file must be image",
+    "uploadFilePlz": "Please upload file",
+    "bigFileWarn": "File size cannot exceed 20 MB",
+    "invalidWarn": "Invalid SteamID or vanity URL, please select the player you want to query"
   },
   "common": {
     "search": "Search",
-    "keywords": "Please enter name keyword"
+    "keywords": "Please enter name keyword",
+    "loginPlz": "Please log in first",
+    "type": "Type",
+    "selectType": "Please select the type",
+    "title": "Title",
+    "submit": "Submit",
+    "cancel": "Cancel"
   },
   "rank": {
     "personaName": "Name",
@@ -59,5 +80,11 @@
     "advanced": "Advanced",
     "beginner": "Beginner",
     "entry": "Entry"
+  },
+  "stats": {
+    "enterSteamID": "Please enter SteamID, vanity URL or name",
+    "content": "Query the SpeedRunners stats of Steam user, query speed: SteamID (stable) > Vanity URL (stable) > name (unstable)",
+    "showMore": "{0} results left—Click to show more—",
+    "noResult": "No relevant results were found. The player may not have set the Steam profile-privacy to public."
   }
 }

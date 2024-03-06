@@ -6,8 +6,8 @@
           v-model="keyWords"
           :loading="loading"
           color="success"
-          label="搜 索"
-          hint="请输入SteamID、自定义URL或者昵称"
+          :label="$t('common.search')"
+          :hint="$t('stats.enterSteamID')"
           append-icon="mdi-magnify"
           clearable
           @click:append="searchPlayer"
@@ -32,7 +32,7 @@
           v-if="searchResult!=null&&searchResult.isGameInfo===false&&searchResult.playerList.length>0"
           subheader
         >
-          <v-subheader>无效的SteamID或自定义URL，请选择想要查询的用户</v-subheader>
+          <v-subheader>{{ $t('mod.invalidWarn') }}</v-subheader>
           <v-list-item
             v-for="(item, index) in searchResult.playerList"
             :key="index"
@@ -42,7 +42,7 @@
               <v-img :src="item.avatar" />
             </v-list-item-avatar>
             <v-list-item-content>
-              <v-list-item-title v-text="item.userName" />
+              <v-list-item-title>{{ item.userName }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
           <v-list-item
@@ -50,7 +50,7 @@
             @click="getPlayerList()"
           >
             <v-list-item-content>
-              <v-list-item-title v-text="loadingText" />
+              <v-list-item-title>{{ loadingText }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -75,24 +75,26 @@ import {
 } from "@/api/steam";
 export default {
   name: "SearchPlayer",
-  data: () => ({
-    content:
-      "查询Steam用户的SpeedRunners游戏数据，查询速度：SteamID（稳定）>自定义URL（稳定）>昵称（不稳定）",
-    keyWords: "",
-    loading: false,
-    loadList: false,
-    searchResult: {
-      gameInfo: {},
-      sessionID: "",
-      total: 0,
-      pageNo: 1,
-      playerList: []
-    }
-  }),
+  data() {
+    return {
+      keyWords: "",
+      loading: false,
+      loadList: false,
+      searchResult: {
+        gameInfo: {},
+        sessionID: "",
+        total: 0,
+        pageNo: 1,
+        playerList: []
+      }
+    };
+  },
   computed: {
+    content() {
+      return this.$t("stats.content");
+    },
     loadingText() {
-      return `剩${this.searchResult.total -
-        this.searchResult.pageNo * 20}条结果—点击加载更多—`;
+      return this.$t("stats.showMore", [this.searchResult.total - this.searchResult.pageNo * 20]);
     }
   },
   methods: {
@@ -116,7 +118,7 @@ export default {
             result === null ||
             (result.isGameInfo === false && result.playerList.length === 0)
           ) {
-            this.content = "未查询到相关结果，目标玩家可能未将Steam资料-隐私设置为公开";
+            this.content = this.$t("stats.noResult");
           }
           this.searchResult = result;
           this.loading = false;
@@ -128,7 +130,7 @@ export default {
             result === null ||
             (result.isGameInfo === false && result.playerList.length === 0)
           ) {
-            this.content = "未查询到相关结果，目标玩家可能未将Steam资料-隐私设置为公开";
+            this.content = this.$t("stats.noResult");
           }
           this.searchResult = result;
           this.loading = false;

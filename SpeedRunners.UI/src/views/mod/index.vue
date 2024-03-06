@@ -187,8 +187,8 @@ export default {
     },
     stepTitle() {
       return this.progress > 0
-        ? `正在上传，请耐心等待...${this.progress} %`
-        : "上传MOD资源";
+        ? this.$t("mod.uploadingTitle", [this.progress])
+        : this.$t("mod.loadTitle");
     },
     pageCount() {
       return this.data.total === 0
@@ -229,7 +229,7 @@ export default {
     },
     changeSwitch() {
       if (this.name === "") {
-        this.$toast.info("请先登录再操作");
+        this.$toast.info(this.$t("common.loginPlz"));
         this.switchValue = false;
         return;
       }
@@ -241,16 +241,16 @@ export default {
       if (this.name !== "") {
         this.drawer = true;
       } else {
-        this.$toast.info("请登录后再上传");
+        this.$toast.info(this.$t("common.loginPlz"));
       }
     },
     doStar(mod) {
       if (this.name === "") {
-        this.$toast.info("请登录后再收藏");
+        this.$toast.info(this.$t("common.loginPlz"));
         return;
       }
       operateModStar(mod.id, !mod.star).then(res => {
-        this.$toast.success(`${mod.star ? "取消" : ""}收藏成功`);
+        this.$toast.success(mod.star ? this.$t("mod.unstar") : this.$t("mod.star"));
         this.getList();
       });
     },
