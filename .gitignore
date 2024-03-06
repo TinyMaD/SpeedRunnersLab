@@ -12,7 +12,6 @@ tests/**/coverage/
 # Editor directories and files
 .idea
 .vs
-.vscode
 *.suo
 *.ntvs*
 *.njsproj
@@ -26,3 +25,5 @@ bin
 obj
 appsettings.Development.json
 appsettings.Production.json
+SpeedRunners.API/.vscode
+.vscode/*
