@@ -53,11 +53,7 @@ export default {
       return this.$t("index.sponsorTitle", [this.totalCount]);
     },
     sponsorContent() {
-      return [
-        this.$t("index.sponsorContent1"),
-        this.$t("index.sponsorContent2"),
-        this.$t("index.sponsorContent3")
-      ];
+      return this.$t("index.sponsorContent");
     }
   },
   mounted() {

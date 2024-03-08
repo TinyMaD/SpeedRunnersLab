@@ -86,12 +86,15 @@ export default {
         total: 0,
         pageNo: 1,
         playerList: []
-      }
+      },
+      contentType: 0
     };
   },
   computed: {
     content() {
-      return this.$t("stats.content");
+      return this.contentType
+        ? this.$t("stats.noResult")
+        : this.$t("stats.content");
     },
     loadingText() {
       return this.$t("stats.showMore", [this.searchResult.total - this.searchResult.pageNo * 20]);
@@ -118,7 +121,7 @@ export default {
             result === null ||
             (result.isGameInfo === false && result.playerList.length === 0)
           ) {
-            this.content = this.$t("stats.noResult");
+            this.contentType = 1;
           }
           this.searchResult = result;
           this.loading = false;
@@ -130,7 +133,7 @@ export default {
             result === null ||
             (result.isGameInfo === false && result.playerList.length === 0)
           ) {
-            this.content = this.$t("stats.noResult");
+            this.contentType = 1;
           }
           this.searchResult = result;
           this.loading = false;

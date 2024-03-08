@@ -9,12 +9,14 @@
   },
   "index": {
     "online": "Online",
-    "sponsorContent1": "The operation of this website requires renting servers, domain names, etc., which is also the largest expense. \nAfter the server and domain name expire, the website will be shut down.",
-    "sponsorContent2": "This site was run by me personally before, but one person’s power is always limited. A server with the minimum configuration will cost about 700 yuan a year.",
-    "sponsorContent3": "If this site has brought you a little help and touch, you can click the link button below to sponsor this site and let me continue to serve you (Aipower's sponsorship record will be displayed in real time above, and the income and expenditure details can be found in Aipower News)",
+    "sponsorContent": [
+      "The operation of this website requires renting servers, domain names, etc., which is also the largest expense. After the server and domain name expire, the website will be shut down.",
+      "This site was run by me personally before, but one person's power is always limited. A server with the minimum configuration will cost about 700 yuan a year.",
+      "If this site has brought you a little help and touch, you can click the link button below to sponsor this site and let me continue to serve you (Aipower's sponsorship record will be displayed in real time above, and the income and expenditure details can be found in Aipower News)"
+    ],
     "sponsorTitle": "Thanks to {0} sponsors",
-    "addedChartTitle": "Added score in 2 weeks",
-    "hourChartTile": "Play time in 2 weeks",
+    "addedChartTitle": "Added score past 2 weeks",
+    "hourChartTile": "Playtime past 2 weeks",
     "hourChartUnit": "hrs"
   },
   "layout": {
@@ -69,7 +71,7 @@
   "rank": {
     "personaName": "Name",
     "tier": "League",
-    "score": "Score",
+    "score": "Rank score",
     "updateInfo": "*Data update frequency: every 10 mins",
     "diamond": "Diamond",
     "platinum": "Platinum",
@@ -79,12 +81,20 @@
     "expert": "Expert",
     "advanced": "Advanced",
     "beginner": "Beginner",
-    "entry": "Entry"
+    "entry": "Entry",
+    "playTime": "Total playtime",
+    "past2weeks": "Playtime past 2 weeks"
   },
   "stats": {
     "enterSteamID": "Please enter SteamID, vanity URL or name",
     "content": "Query the SpeedRunners stats of Steam user, query speed: SteamID (stable) > Vanity URL (stable) > name (unstable)",
     "showMore": "{0} results left—Click to show more—",
     "noResult": "No relevant results were found. The player may not have set the Steam profile-privacy to public."
+  },
+  "match": {
+    "prizePool": "Total Prize Pool",
+    "schedule": "Schedule",
+    "participant": "Participant",
+    "points": "Points"
   }
 }

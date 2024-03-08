@@ -16,7 +16,7 @@
             </v-row>
 
             <v-row class="d-flex justify-center">
-              <p style="padding-top:4rem;color:#e4c269;letter-spacing:.3rem;font-weight: 700">当前总奖金</p>
+              <p style="padding-top:4rem;color:#e4c269;letter-spacing:.3rem;font-weight: 700">{{ $t('match.prizePool') }}</p>
             </v-row>
 
             <v-col cols="12" class="d-flex justify-center" style="font-size: 6rem!important;line-height: 6rem;font-weight: 700!important;font-family: Roboto,sans-serif!important;letter-spacing:.5rem;margin-top:-2rem">
@@ -36,8 +36,8 @@
           </v-img>
 
           <v-sheet width="100%" class="sheett">
-            <div class="title text-h4 pa-2" v-text="'赛程'" />
-            <iframe src="https://challonge.com/zh_CN/sxl2/module" width="100%" height="700" frameborder="0" scrolling="auto" allowtransparency="true" />
+            <div class="title text-h4 pa-2" v-text="$t('match.schedule')" />
+            <iframe :src="scheduleSrc" width="100%" height="700" frameborder="0" scrolling="auto" allowtransparency="true" />
           </v-sheet>
 
           <!-- <v-sheet width="100%" class="sheett">
@@ -51,18 +51,18 @@
           </v-sheet> -->
 
           <v-sheet width="100%" class="sheett">
-            <div class="title text-h4 pa-2" v-text="'报名玩家'" />
+            <div class="title text-h4 pa-2" v-text="$t('match.participant')" />
             <v-simple-table>
               <template v-slot:default>
                 <thead>
                   <tr>
                     <th />
                     <th />
-                    <th>昵 称</th>
-                    <th>天梯分</th>
-                    <th>总时长</th>
-                    <th>最近两周时长</th>
-                    <th>资 质</th>
+                    <th>{{ $t('rank.personaName') }}</th>
+                    <th>{{ $t('rank.score') }}</th>
+                    <th>{{ $t('rank.playTime') }}</th>
+                    <th>{{ $t('rank.past2weeks') }}</th>
+                    <th>{{ $t('match.points') }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -307,6 +307,9 @@ export default {
       "rankType",
       "participate"
     ]),
+    scheduleSrc() {
+      return `https://challonge.com/${(this.$i18n.locale === "zh" ? "zh_CN" : "en")}/sxl2/module`;
+    },
     btnText() {
       return this.participate === 0 ? "我要报名" : "您已报名";
     },
