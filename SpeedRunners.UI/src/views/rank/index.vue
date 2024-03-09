@@ -48,34 +48,6 @@ export default {
     pcUpScore: "",
     leveMarginTop: 6
   }),
-  computed: {
-    getlvlName(level) {
-      switch (level) {
-        case 0:
-          return this.$t("rank.entry");
-        case 1:
-          return this.$t("rank.beginner");
-        case 2:
-          return this.$t("rank.advanced");
-        case 3:
-          return this.$t("rank.expert");
-        case 4:
-          return this.$t("rank.bronze");
-        case 5:
-          return this.$t("rank.silver");
-        case 6:
-          return this.$t("rank.gold");
-        case 7:
-          return this.$t("rank.platinum");
-        case 8:
-          return this.$t("rank.diamond");
-        case 9:
-          return "KOS";
-        default:
-          return "";
-      }
-    }
-  },
   mounted() {
     this.pc = $(window).width();
     if (this.pc < 451) {
