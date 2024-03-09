@@ -103,7 +103,7 @@ export default {
       formTitle: "",
       nameRules: [
         v => !!v || this.$t("mod.inputTitle"),
-        v => !v || v.length <= 17 || this.$t("mod.lengthWarn")
+        v => !v || v.length <= (this.$i18n.locale === "zh" ? 17 : 30) || this.$t("mod.lengthWarn")
       ],
       imgRules: [
         v => !!v || this.$t("mod.loadCoverPlz"),
