@@ -15,6 +15,7 @@ namespace SpeedRunners.Controllers
             TBLL bll = new Lazy<TBLL>(HttpContext.RequestServices.GetService<TBLL>()).Value;
             // 将注入的当前用户信息传入BLL中方便使用
             bll.CurrentUser = HttpContext.RequestServices.GetService<MUser>();
+            bll.HttpContext = HttpContext;
             return bll;
         }
     }

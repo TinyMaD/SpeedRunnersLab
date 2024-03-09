@@ -14,7 +14,7 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // do something before request is sent
-
+    config.headers["locale"] = i18n.locale;
     // let each request carry token
     const token = getToken();
     if (token) {

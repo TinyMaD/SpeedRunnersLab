@@ -40,16 +40,6 @@
             <iframe :src="scheduleSrc" width="100%" height="700" frameborder="0" scrolling="auto" allowtransparency="true" />
           </v-sheet>
 
-          <!-- <v-sheet width="100%" class="sheett">
-            <div class="title text-h4 pa-2" v-text="'前言'" />
-            <div
-              v-for="(content,i) in qianyan"
-              :key="i"
-              class="text-body-1 pa-1 my-1"
-              v-text="content"
-            />
-          </v-sheet> -->
-
           <v-sheet width="100%" class="sheett">
             <div class="title text-h4 pa-2" v-text="$t('match.participant')" />
             <v-simple-table>
@@ -81,8 +71,8 @@
           </v-sheet>
 
           <v-sheet width="100%" class="sheett">
-            <div class="title text-h4 pa-2" v-text="'参赛奖励'" />
-            <div class="text-body-1 pa-1 my-1" v-text="'前10名选手将获得成就徽章（仅在本站展示）：'" />
+            <div class="title text-h4 pa-2" v-text="$t('match.reward')" />
+            <div class="text-body-1 pa-1 my-1" v-text="$t('match.badgeContent')" />
             <v-tooltip v-for="i in 10" :key="i-100" top>
               <template v-slot:activator="{ on, attrs }">
                 <svg-icon
@@ -103,7 +93,7 @@
           </v-sheet>
 
           <v-sheet width="100%" class="sheett">
-            <div class="title text-h4 pa-2" v-text="'赞助'" />
+            <div class="title text-h4 pa-2" v-text="$t('match.support')" />
             <div
               v-for="(content,i) in sponsorContent"
               :key="i"
@@ -114,8 +104,8 @@
               <template v-slot:default>
                 <thead>
                   <tr>
-                    <th>赞助者</th>
-                    <th>金 额</th>
+                    <th>{{ $t('match.sponsor') }}</th>
+                    <th>{{ $t('match.amount') }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -126,7 +116,7 @@
                 </tbody>
               </template>
             </v-simple-table>
-            <div class="text-body-1 pa-1 my-1" v-text="'赞助方式（扫下方二维码）：'" />
+            <div class="text-body-1 pa-1 my-1" v-text=" $t('match.sponsorship') " />
             <v-tooltip right>
               <template v-slot:activator="{ on, attrs }">
                 <svg-icon
@@ -151,20 +141,18 @@
               </template>
               <v-img max-width="210" src="img/wx.png" />
             </v-tooltip>
-            <div class="text-body-1 pa-1 my-1" v-text="'其他赞助方式请联系站长（邮箱）supremelang@qq.com'" />
+            <div class="text-body-1 pa-1 my-1" v-text="$t('match.contactMe',['supremelang@qq.com'])" />
           </v-sheet>
           <v-sheet
             class="sheett"
             width="100%"
           >
-            <div class="title text-h4 pa-2" v-text="'比赛时间'" />
+            <div class="title text-h4 pa-2" v-text="$t('match.time')" />
             <div
+              v-for="(item,index) in timeContent"
+              :key="index"
               class="text-body-1 pa-1 my-1"
-              v-text="'小组赛：2023.9.23 ~ 2023.9.24（每日19点开始）'"
-            />
-            <div
-              class="text-body-1 pa-1 my-1"
-              v-text="'决 赛：2023.9.30 ~ 2023.10.2（每日19点开始）'"
+              v-text="item"
             />
             <v-img max-width="700px" src="img/rl102.png" />
           </v-sheet>
@@ -193,7 +181,7 @@
     >
       <v-card dark>
         <v-card-title class="text-h5">
-          提 示
+          {{ $t('common.notice') }}
         </v-card-title>
         <v-card-text>
           {{ participateText }}
@@ -240,66 +228,7 @@ export default {
     sponsorList: [],
     participateList: [],
     speRuleList: [],
-    prizeList: [],
-    qianyan: [
-      "由于SR圈环境的特殊性，圈内少有专注竞技性的比赛。公认的高端赛——King of Speed，国内玩家虽有在其名列前茅的水平，但苦于高延迟，而不能愉快的玩耍。",
-      "此时，国内首个专注于竞技性的SR比赛——神行令，由此诞生！",
-      "公正严谨的赛制、实力强劲的对手、超低的延迟，将助你激发真正的实力，捍卫国服荣耀。没错，这个试炼就是为你而准备，你才是真正的国服前十！",
-      "神行令出，群雄逐鹿，鹿死谁手，你我......拭目以待！"
-    ],
-    sponsorContent: [
-      "感谢所有的赞助者，无论金额大小，正因为有大家的支持，本赛事才得以举办",
-      "本赛事奖金全部由赞助者赞助，赞助者赞助的资金将100%进入总奖金池",
-      "为保证赞助金公开透明，赞助时请备注好你的ID（独特、你自己认识），未备注将按匿名标识记录。站长将在收到赞助后24小时之内维护赞助者名单，赞助者若在名单内未找到自己ID，可到QQ群（319422487）进行反馈",
-      "赞助者名单："
-    ],
-    matchContent: [
-      {
-        title: "参赛资格",
-        content: [
-          "中文沟通无障碍、与裁判网络延迟低的玩家均可报名",
-          "“资质”排名前12位的报名选手将获得参赛资格",
-          "“资质” = “天梯分” + “游戏时长分”",
-          "“天梯分” ： 排位赛获取的总分数",
-          "“游戏时长分” = “有效游戏时长” X 10 。注：游戏时长均为SpeedRunners的游戏时长，单位为小时，请将你的Steam个人隐私权限设置为公开",
-          "“有效游戏时长” = 总游戏时长 - 最近两周游戏时长。注：“有效游戏时长”超过1000小时，按1000小时计算，“最近两周”为报名截止前两周，与报名时间无关",
-          "例：小明天梯分为10000，总游戏时长为1200小时，报名截止时最近两周游戏时长300小时，他的资质为10000 + (1200 - 300) X 10 = 19000",
-          " ",
-          "“资质”排名前4位选手直接锁定胜者组8个名额中的4个",
-          "“资质”排名后8位选手进入小组赛"
-        ]
-      },
-      {
-        title: "小组赛阶段",
-        content: [
-          "赛制：循环1v1（即每个选手都会与其余7位选手比赛）",
-          "场次：3场",
-          "地图：随机官图、工坊图",
-          "B/P：不ban地图，直接点官图右下角随机官图和随机工坊图按钮（工坊图、官图交替进行）",
-          "采取记章、记场（按章记分后，分数相同的选手会按获胜场数排序）",
-          "小组赛前4位选手进入胜者组",
-          "小组赛后4位选手进入败者组"
-        ]
-      },
-      {
-        title: "决赛阶段",
-        content: [
-          "赛制：双败制，强强对阵",
-          "场次：胜者组半决赛、败者组决赛、总决赛抢8（bo15），其余场抢6（bo11）",
-          "地图：待定",
-          "B/P：待定",
-          "热身赛：胜者组半决赛、败者组决赛、总决赛，赛前进行两场热身赛，热身赛结果不影响比赛成绩，随机官图、工坊图各一张"
-        ]
-      },
-      {
-        title: "其他信息",
-        content: [
-          "请参赛者加神行令比赛QQ群：743740882",
-          "努力完善中，请持续保持关注......",
-          "※最终解释权归本站所有"
-        ]
-      }
-    ]
+    prizeList: []
   }),
   computed: {
     ...mapGetters([
@@ -307,6 +236,13 @@ export default {
       "rankType",
       "participate"
     ]),
+    matchContent() {
+      return this.$t("match.matchContent");
+    },
+    sponsorContent() { return this.$t("match.sponsorContent") },
+    timeContent() {
+      return [this.$t("match.groupStage") + "：2023.9.23 ~ 2023.9.24（每日19点开始）", this.$t("match.finalStage") + "：2023.9.30 ~ 2023.10.2（每日19点开始）"];
+    },
     scheduleSrc() {
       return `https://challonge.com/${(this.$i18n.locale === "zh" ? "zh_CN" : "en")}/sxl2/module`;
     },
@@ -323,26 +259,22 @@ export default {
       return this.participate === 0 ? "取 消" : "陪你们玩玩";
     },
     prizeText() {
-      var prizeText = ["奖金（随当前总奖金变动）："];
+      var that = this;
+      var prizeText = [this.$t("match.prize") + "："];
       this.prizeList.forEach(function(item, index, array) {
-        prizeText.push(`第 ${index + 1} 名： ${item} 元`);
+        prizeText.push(that.$t("match.standings", [index + 1]) + `： ${item} 元`);
       });
       var speRuleText = [];
       if (this.speRuleList.length > 0) {
-        speRuleText.push("额外奖金：");
+        speRuleText.push(this.$t("match.additional") + "：");
         this.speRuleList.forEach(function(item, index, array) {
           speRuleText.push(`${item.speRule}`);
         });
       }
       return prizeText.concat(
-        `第 ${this.prizeList.length + 1} 名 ~ 第 12 名：ROLL 50 元`,
+        `${that.$t("match.standings", [this.prizeList.length + 1])} ~ ${that.$t("match.standings", [12])}：ROLL 50 元`,
         speRuleText,
-        "奖金算法：",
-        "每上升一个名次，奖金翻倍，差额最大为500元",
-        "总奖金增至2900元时，开设第六名奖金即50元，总奖金增至4700元时，开设第七名奖金即50元，以此类推",
-        "计算值向下取整，舍去的金额之和加在最低名次奖金上",
-        "获得无固定奖金名次的参赛选手中ROLL50元",
-        "额外奖金由赞助者自定义发放规则，不参与算法计算");
+        this.$t("match.algorithm"));
     },
     badgeText() {
       return function(num) {

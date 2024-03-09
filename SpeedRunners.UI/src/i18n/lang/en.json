@@ -12,7 +12,7 @@
     "sponsorContent": [
       "The operation of this website requires renting servers, domain names, etc., which is also the largest expense. After the server and domain name expire, the website will be shut down.",
       "This site was run by me personally before, but one person's power is always limited. A server with the minimum configuration will cost about 700 yuan a year.",
-      "If this site has brought you a little help and touch, you can click the link button below to sponsor this site and let me continue to serve you (Aipower's sponsorship record will be displayed in real time above, and the income and expenditure details can be found in Aipower News)"
+      "If this site has brought you a little help and touch, you can click the link button below to sponsor this site and let me continue to serve you (afdian's sponsorship record will be displayed in real time above, and the income and expenditure details can be found in afdian News)"
     ],
     "sponsorTitle": "Thanks to {0} sponsors",
     "addedChartTitle": "Added score past 2 weeks",
@@ -31,7 +31,7 @@
     "mod": "MOD",
     "searchplayer": "Stats",
     "plaza": "Discover",
-    "log": "Log"
+    "log": "Change Log"
   },
   "mod": {
     "upload": "Upload",
@@ -66,7 +66,8 @@
     "selectType": "Please select the type",
     "title": "Title",
     "submit": "Submit",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "notice": "Notice"
   },
   "rank": {
     "personaName": "Name",
@@ -95,6 +96,84 @@
     "prizePool": "Total Prize Pool",
     "schedule": "Schedule",
     "participant": "Participant",
-    "points": "Points"
+    "points": "Points",
+    "reward": "Reward",
+    "badgeContent": "The top 10 players will receive achievement badge (only displayed on this site):",
+    "support": "Support",
+    "sponsor": "Sponsor",
+    "amount": "Amount",
+    "sponsorship": "Sponsorship method (scan the QR code below):",
+    "contactMe": "For other sponsorship methods, please contact me (email) {0}",
+    "time": "Match Time",
+    "groupStage": "Group stage",
+    "finalStage": "Final stage",
+    "sponsorContent": [
+      "Thanks to all the sponsors, no matter the amount, because of your support, this event can be held ",
+      "The prize money of this event is all sponsored by the sponsors, and 100% of the funds sponsored by the sponsors will enter the total prize pool ",
+      "In order to ensure that the sponsorship is open and transparent, please note your ID (unique, you could discern) when sponsoring. No remarks will be recorded as anonymous. I will maintain the sponsor list within 24 hours after receiving the sponsor, if you do not find your ID in the list, you can go to the QQ group (319422487) for feedback ",
+      "Sponsor list:"
+    ],
+    "matchContent": [
+      {
+        "title": "Qualification",
+        "content": [
+          "Chinese communication barrier-free, players with low network latency to referees are eligible to sign up",
+          "The top 12 players in the \"Points\" ranking will qualify for the competition",
+          "\"Points\" = \"Rank score\" + \"Playtime Score\"",
+          "\"Rank score\": Total score obtained from ranked matches",
+          "\"Playtime Score\" = \"Effective Playtime\" X 10. Note: Game time refers to the playtime of SpeedRunners, in hours. Please  set your Steam privacy settings to public",
+          "\"Effective Playtime\" = Total Playtime - playtime in the last two weeks. Note: If \"Effective Playtime\" exceeds 1000   hours, it will be calculated as 1000 hours. \"Last two weeks\" refers to the two weeks before the registration deadline,  regardless of the registration time",
+          "Example: Tom has 10000 Rank score, play speedrunners for 1200 hours, and has play 300 hours in the last two weeks. His points is calculated as 10000 + (1200 - 300) X 10 = 19000",
+          "The top 4 players in the \"Points\" ranking will directly secure 4 spots in the winner's group of 8",
+          "The remaining 8 players in the \"Points\" ranking will enter the group stage"
+        ]
+      },
+      {
+        "title": "Group Stage",
+        "content": [
+          "Format: Round-robin 1v1 (each player will compete against the other 7 players)",
+          "Number of matches: 3",
+          "Maps: Random official maps and workshop maps",
+          "B/P: No map banning, directly click the random official map and random workshop map buttons in the bottom right   corner of the official map selection screen (alternating between workshop maps and official maps)",
+          "Scoring: Points and wins (after scoring by points, players with the same score will be ranked by number of wins)",
+          "The top 4 players in the group stage will enter the winner's group",
+          "The bottom 4 players in the group stage will enter the loser's group"
+        ]
+      },
+      {
+        "title": "Final Stage",
+        "content": [
+          "Format: Double elimination, strong vs. strong matchups",
+          "Number of matches: Winner's group semifinals, loser's group finals, grand finals (bo15), and other matches (bo11)",
+          "Maps: To be determined",
+          "B/P: To be determined",
+          "Warm-up matches: Before the winner's group semifinals, loser's group finals, and grand finals, two warm-up matches will be   played. The results of the warm-up matches will not affect the competition results. One random official map and one random  workshop map will be used"
+        ]
+      },
+      {
+        "title": "Other Information",
+        "content": [
+          "Please join the SpeedRunners competition QQ group: 743740882",
+          "Work in progress, please continue to stay tuned...",
+          "※The final interpretation right belongs to this website"
+        ]
+      }
+    ],
+    "prize": "Prize (varies with total prize pool)",
+    "additional": "Extra bonus",
+    "standings": "No. {0}",
+    "algorithm": [
+      "Bonus Algorithm:",
+      "For each rank increase, the bonus doubles, with a maximum difference of 500 yuan",
+      "The calculated value is rounded down, and the sum of the discarded amounts is added to the lowest rank bonus",
+      "Among the participants who do not have a fixed bonus rank, there is a chance to roll for a 50 yuan bonus",
+      "Additional bonuses are distributed according to custom rules set by sponsors and are not included in the algorithm calculation"
+    ]
+  },
+  "components": {
+    "cropper": {
+      "title": "The cover should show more details of the MOD",
+      "crop": "Crop"
+    }
   }
 }

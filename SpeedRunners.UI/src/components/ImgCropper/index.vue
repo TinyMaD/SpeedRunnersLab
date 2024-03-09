@@ -9,7 +9,7 @@
       :disabled="!imgSrc"
     >
       <v-card>
-        <v-card-title> <span class="headline">封面尽量直观展现MOD样式</span> </v-card-title>
+        <v-card-title> <span :class="isZh ? 'headline' : ''">{{ $t('components.cropper.title') }}</span> </v-card-title>
         <v-card-text>
           <vue-cropper
             ref="cropper"
@@ -40,7 +40,7 @@
                 mdi-crop
               </v-icon>
             </template>
-            <span>裁 剪</span>
+            <span>{{ $t('components.cropper.crop') }}</span>
           </v-tooltip>
           <v-icon color="blue" dark @click="rotate('r');">mdi-rotate-right</v-icon>
           <v-icon color="blue" dark @click="rotate('l');">mdi-rotate-left</v-icon>
@@ -53,7 +53,7 @@
             color="blue darken-1"
             text
             @click="dialog = false"
-          >取 消</v-btn>
+          >{{ $t('common.cancel') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -91,6 +91,11 @@ export default {
       filename: null,
       cropBlob: null
     };
+  },
+  computed: {
+    isZh() {
+      return this.$i18n.locale === "zh";
+    }
   },
   watch: {
     src() {

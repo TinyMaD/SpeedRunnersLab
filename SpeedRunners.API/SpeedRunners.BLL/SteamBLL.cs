@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Linq;
 using SpeedRunners.Model.Rank;
 using SpeedRunners.Model.Steam;
 using SpeedRunners.Utils;
@@ -20,7 +21,6 @@ namespace SpeedRunners.BLL
         private static string ApiKey => AppSettings.GetConfig("ApiKey");
         private static uint AppId => 207140;
         private static SteamWebInterfaceFactory WebInterfaceFactory => new SteamWebInterfaceFactory(ApiKey);
-
         /// <summary>
         /// 获取全球游戏中人数
         /// </summary>
@@ -228,10 +228,11 @@ namespace SpeedRunners.BLL
                 return null;
             }
             JObject obj = JObject.Parse(response);
+            var language = HttpContext.Request.Headers["locale"].ToString();
             return new MSearchPlayerResult
             {
                 IsGameInfo = true,
-                GameInfo = ToChinese(obj["playerstats"])
+                GameInfo = language.Contains("zh") ? ToChinese(obj["playerstats"]) : obj["playerstats"]
             };
         }
 
