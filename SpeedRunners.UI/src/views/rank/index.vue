@@ -60,15 +60,6 @@ export default {
       response: {},
       pc: 0,
       imgSize: 150,
-      levelName: "",
-      t: 0,
-      right: 0,
-      bottom: 0,
-      left: 0,
-      srstate: "",
-      personstate: "",
-      moblieUpScore: "",
-      pcUpScore: "",
       leveMarginTop: 6
     };
   },
