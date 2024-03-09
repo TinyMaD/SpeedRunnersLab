@@ -14,7 +14,7 @@
         <tbody id="tbody">
           <tr v-for="(player, index) in response.data" :key="index" :class="index % 2 === 0 ? 'odd' : 'even'">
             <td v-if="index < 3"><img class="rowImg" :src="`img/${index + 1}.png`"></td>
-            <td v-else>{{ index }} </td>
+            <td v-else>{{ index+1 }} </td>
             <td class="avator">
               <div class="avatorImg" :style="getAvatorStyle(player)">
                 <div v-if="isPlayingSR(player)" class="right">
@@ -104,71 +104,16 @@ export default {
     getLevelStyle(rankLevel) {
       const height = (4 * this.imgSize) / 3;
       const width = this.imgSize;
-      let t, right, bottom, left;
-      switch (rankLevel) {
-        case 0:
-          t = 0;
-          right = width / 3;
-          bottom = height / 4;
-          left = 0;
-          break;
-        case 1:
-          t = 0;
-          right = (width * 2) / 3;
-          bottom = height / 4;
-          left = width / 3;
-          break;
-        case 2:
-          t = 0;
-          right = width;
-          bottom = height / 4;
-          left = (width * 2) / 3;
-          break;
-        case 3:
-          t = height / 4;
-          right = width / 3;
-          bottom = height / 2;
-          left = 0;
-          break;
-        case 4:
-          t = height / 4;
-          right = (width * 2) / 3;
-          bottom = height / 2;
-          left = width / 3;
-          break;
-        case 5:
-          t = height / 4;
-          right = width;
-          bottom = height / 2;
-          left = (width * 2) / 3;
-          break;
-        case 6:
-          t = height / 2;
-          right = width / 3;
-          bottom = (height * 3) / 4;
-          left = 0;
-          break;
-        case 7:
-          t = height / 2;
-          right = (width * 2) / 3;
-          bottom = (height * 3) / 4;
-          left = width / 3;
-          break;
-        case 8:
-          t = height * 0.5;
-          right = width;
-          bottom = (height * 3) / 4;
-          left = (width * 2) / 3;
-          break;
-        case 9:
-          t = (height * 3) / 4;
-          right = width / 3;
-          bottom = height;
-          left = 0;
-          break;
-        default:
-          break;
-      }
+
+      const levelIncrement = width / 3;
+      const levelMultiplier = rankLevel % 3;
+      const levelOffset = Math.floor(rankLevel / 3);
+
+      const t = (height / 4) * levelOffset;
+      const right = levelIncrement * (levelMultiplier + 1);
+      const bottom = (height / 4) * (levelOffset + 1);
+      const left = levelIncrement * levelMultiplier;
+
       return `clip: rect(${t}px ${right}px ${bottom}px ${left}px); margin: ${-1 * t + this.leveMarginTop}px 0 0 ${-1 * left}px; width: ${this.imgSize}px;`;
     },
     getLevelName(rankLevel) {

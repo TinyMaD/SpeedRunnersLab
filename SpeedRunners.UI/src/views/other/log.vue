@@ -32,8 +32,8 @@
                 <div class="caption mb-2">
                   <div
                     v-for="eachType in [
-                      'stone',
-                      'cloud',
+                      'milestone',
+                      'architecture',
                       'feature',
                       'fix',
                       'beautify',
@@ -83,7 +83,7 @@ export default {
     };
   },
   mounted() {
-    axios.get(`/log.json?timestamp=${new Date().getTime()}`)
+    axios.get(`/log-${this.$i18n.locale}.json?timestamp=${new Date().getTime()}`)
       .then(response => {
         this.timelinePost = response.data;
       })
@@ -96,8 +96,11 @@ export default {
       return list.filter(x => x.type === type);
     },
     getTypeName(name) {
+      if (this.$i18n.locale !== "zh") {
+        return name;
+      }
       switch (name) {
-        case "stone":
+        case "milestone":
           return "里程碑";
         case "feature":
           return "特性";
@@ -105,7 +108,7 @@ export default {
           return "修复";
         case "beautify":
           return "美化";
-        case "cloud":
+        case "architecture":
           return "架构";
         default:
           return "其他";
@@ -143,9 +146,9 @@ export default {
           return "mdi-bug";
         case "beautify":
           return "mdi-flower";
-        case "stone":
+        case "milestone":
           return "mdi-rocket";
-        case "cloud":
+        case "architecture":
           return "mdi-cloud";
         case "other":
           return "mdi-wrench";

@@ -1,0 +1,264 @@
+[
+    {
+        "title": "Change Log",
+        "version": "v2.6.0",
+        "date": "2024-02-26",
+        "list": [
+            {
+                "text": "Mount frontend static files to optimize deploy speed",
+                "type": "architecture"
+            },
+            {
+                "text": "Add change log feature",
+                "type": "feature"
+            },
+            {
+                "text": "Fix disconnection when system occurred exception",
+                "type": "fix"
+            }
+        ],
+        "type": "important"
+    },
+    {
+        "title": "Sponsors List",
+        "version": "v2.5.0",
+        "date": "2024-02-24",
+        "list": [
+            {
+                "text": "Add sponsors list of Afdian",
+                "type": "feature"
+            },
+            {
+                "text": "Optimize interface error message",
+                "type": "other"
+            },
+            {
+                "text": "Fix exception when click 'Your Stars'",
+                "type": "fix"
+            }
+        ],
+        "type": "ordinary"
+    },
+    {
+        "title": "Docker Containerization",
+        "version": "v2.4.0",
+        "date": "2024-01-12",
+        "list": [
+            {
+                "text": "Switch to Docker deployment after server compromise",
+                "type": "architecture"
+            },
+            {
+                "text": "Replace SqlServer with MySQL due to Docker compatibility issues",
+                "type": "architecture"
+            },
+            {
+                "text": "Merge task scheduler code",
+                "type": "architecture"
+            },
+            {
+                "text": "Fix bugs after architecture adjustments",
+                "type": "fix"
+            }
+        ],
+        "type": "ordinary"
+    },
+    {
+        "title": "Second SXL",
+        "version": "v2.3.1",
+        "date": "2023-08-12",
+        "list": [
+            {
+                "text": "Fix MOD pagination query bug",
+                "type": "fix"
+            },
+            {
+                "text": "Start the second SXL match",
+                "type": "milestone"
+            },
+            {
+                "text": "Add custom bonus distribution rules",
+                "type": "feature"
+            },
+            {
+                "text": "Force refresh browser after detecting new version",
+                "type": "other"
+            }
+        ],
+        "type": "important"
+    },
+    {
+        "title": "First SXL",
+        "version": "v2.3.0",
+        "date": "2021-08-20",
+        "list": [
+            {
+                "text": "Optimize SEO indexing",
+                "type": "architecture"
+            },
+            {
+                "text": "Add tournament and related features",
+                "type": "feature"
+            },
+            {
+                "text": "Introduce odometer scrolling number component in frontend",
+                "type": "architecture"
+            },
+            {
+                "text": "Change rank score statistics interval to two weeks",
+                "type": "other"
+            },
+            {
+                "text": "Start the SXL match and improve tournament rules",
+                "type": "milestone"
+            },
+            {
+                "text": "Add sponsors of SXL",
+                "type": "feature"
+            }
+        ],
+        "type": "holyshit"
+    },
+    {
+        "title": "MOD Resource Management",
+        "version": "v2.2.0",
+        "date": "2021-08-01",
+        "list": [
+            {
+                "text": "Integrate with Qiniu Cloud for MOD upload, download, and website acceleration",
+                "type": "architecture"
+            },
+            {
+                "text": "Add MOD upload and download feature",
+                "type": "feature"
+            },
+            {
+                "text": "Introduce ImgCropper for cover image",
+                "type": "feature"
+            },
+            {
+                "text": "Add search MOD feature",
+                "type": "feature"
+            },
+            {
+                "text": "Add your stars about the MOD feature",
+                "type": "feature"
+            },
+            {
+                "text": "Adjust MOD page and ImgCropper component styles",
+                "type": "beautify"
+            }
+        ],
+        "type": "holyshit"
+    },
+    {
+        "title": "SRCN Domain Registration",
+        "version": "v2.1.1",
+        "date": "2021-03-12",
+        "list": [
+            {
+                "text": "Optimize login validation and fix frequent disconnection issues",
+                "type": "fix"
+            },
+            {
+                "text": "Register speedrunners.cn and replace tmdsr.cn",
+                "type": "milestone"
+            }
+        ],
+        "type": "ordinary"
+    },
+    {
+        "title": "Frontend Enhancement",
+        "version": "v2.1.0",
+        "date": "2020-09-09",
+        "list": [
+            {
+                "text": "Add homepage statistics charts",
+                "type": "feature"
+            },
+            {
+                "text": "Replace global message component",
+                "type": "architecture"
+            },
+            {
+                "text": "Adjust styles",
+                "type": "beautify"
+            }
+        ],
+        "type": "important"
+    },
+    {
+        "title": "Comprehensive Upgrade",
+        "version": "v2.0.0",
+        "date": "2020-08-31",
+        "list": [
+            {
+                "text": "Separate frontend and backend development using mature scaffolding tools",
+                "type": "architecture"
+            },
+            {
+                "text": "Introduce Vuetify frontend component library",
+                "type": "beautify"
+            },
+            {
+                "text": "Add feature about query player's stats of SR",
+                "type": "feature"
+            }
+        ],
+        "type": "holyshit"
+    },
+    {
+        "title": "Mobile Chart Adjustment",
+        "version": "v1.2.1",
+        "date": "2020-04-06",
+        "list": [
+            {
+                "text": "Optimize mobile chart styles",
+                "type": "beautify"
+            }
+        ],
+        "type": "unimportant"
+    },
+    {
+        "title": "Publish notification",
+        "version": "v1.2.0",
+        "date": "2020-04-01",
+        "list": [
+            {
+                "text": "Add feature that publish notification in admin panel when new user login",
+                "type": "feature"
+            }
+        ],
+        "type": "unimportant"
+    },
+    {
+        "title": "Introduce Charting",
+        "version": "v1.1.0",
+        "date": "2020-03-30",
+        "list": [
+            {
+                "text": "Add charts about rank score and playtime",
+                "type": "feature"
+            },
+            {
+                "text": "Add global online player count",
+                "type": "feature"
+            }
+        ],
+        "type": "important",
+        "img": "img/v110.png"
+    },
+    {
+        "title": "Project Start",
+        "version": "v1.0.0",
+        "date": "2018-03-10",
+        "list": [
+            {
+                "text": "First version of the code, rough but meaningful",
+                "type": "milestone"
+            }
+        ],
+        "type": "holyshit",
+        "img": "img/v100.jpg"
+    }
+]

@@ -6,7 +6,7 @@
         "list": [
             {
                 "text": "挂载前端静态文件，优化发布速度",
-                "type": "cloud"
+                "type": "architecture"
             },
             {
                 "text": "添加开发者日志功能",
@@ -33,7 +33,7 @@
                 "type": "other"
             },
             {
-                "text": "修复点击仅展示收藏MOD报错的BUG",
+                "text": "修复点击'我的收藏'报错的BUG",
                 "type": "fix"
             }
         ],
@@ -46,15 +46,15 @@
         "list": [
             {
                 "text": "服务器被黑后改用Docker部署",
-                "type": "cloud"
+                "type": "architecture"
             },
             {
                 "text": "SqlServer对Docker兼容性低，数据库改为MySQL",
-                "type": "cloud"
+                "type": "architecture"
             },
             {
                 "text": "合并任务调度器代码",
-                "type": "cloud"
+                "type": "architecture"
             },
             {
                 "text": "修复各种架构调整后的BUG",
@@ -74,7 +74,7 @@
             },
             {
                 "text": "开启第二届神行令",
-                "type": "stone"
+                "type": "milestone"
             },
             {
                 "text": "添加定制奖金发放规则",
@@ -94,7 +94,7 @@
         "list": [
             {
                 "text": "优化SEO索引",
-                "type": "cloud"
+                "type": "architecture"
             },
             {
                 "text": "添加赛事等相关功能",
@@ -102,7 +102,7 @@
             },
             {
                 "text": "前端引入滚动数字组件odometer",
-                "type": "cloud"
+                "type": "architecture"
             },
             {
                 "text": "天梯分统计区间改为两周",
@@ -110,7 +110,7 @@
             },
             {
                 "text": "开启首届神行令，并完善赛事规则",
-                "type": "stone"
+                "type": "milestone"
             },
             {
                 "text": "添加赞助老板名单",
@@ -126,7 +126,7 @@
         "list": [
             {
                 "text": "对接七牛云实现MOD上传下载管理、网站加速",
-                "type": "cloud"
+                "type": "architecture"
             },
             {
                 "text": "添加MOD上传下载界面",
@@ -154,7 +154,7 @@
     {
         "title": "SRCN域名注册",
         "version": "v2.1.1",
-        "date": "2020-09-09",
+        "date": "2021-03-12",
         "list": [
             {
                 "text": "优化登录验证，修复登录状态频繁掉线",
@@ -162,7 +162,7 @@
             },
             {
                 "text": "注册 speedrunners.cn 并替换 tmdsr.cn",
-                "type": "stone"
+                "type": "milestone"
             }
         ],
         "type": "ordinary"
@@ -178,7 +178,7 @@
             },
             {
                 "text": "替换全局消息组件",
-                "type": "cloud"
+                "type": "architecture"
             },
             {
                 "text": "调整样式",
@@ -194,7 +194,7 @@
         "list": [
             {
                 "text": "前后端分离，并分别使用成熟脚手架进行开发",
-                "type": "cloud"
+                "type": "architecture"
             },
             {
                 "text": "引入Vuetify前端组件",
@@ -255,7 +255,7 @@
         "list": [
             {
                 "text": "第一版代码，粗糙但有意义",
-                "type": "stone"
+                "type": "milestone"
             }
         ],
         "type": "holyshit",
