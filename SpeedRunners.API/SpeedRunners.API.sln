@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeedRunners", "SpeedRunners\SpeedRunners.csproj", "{47E283EC-8775-436A-94EF-917089206A31}"
 EndProject
@@ -44,6 +44,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
+		RESX_NeutralResourcesLanguage = zh-Hans
 		SolutionGuid = {5CA27446-3F31-4F95-B9DC-8818209F97A3}
 	EndGlobalSection
 EndGlobal

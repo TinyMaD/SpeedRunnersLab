@@ -28,11 +28,3 @@ export function logoutLocal() {
     method: "get"
   });
 }
-
-export function validateSteam(query) {
-  return request({
-    baseURL: "https://steamcommunity.com/openid/login",
-    method: "post",
-    data: query
-  });
-}

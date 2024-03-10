@@ -175,5 +175,14 @@
       "title": "The cover should show more details of the MOD",
       "crop": "Crop"
     }
+  },
+  "login": {
+    "loginSuccess": "Login successful, automatically return to homepage after {0} seconds",
+    "logging": "Logging in, please wait patiently...",
+    "validating": "Verifying login information...",
+    "validateSucc": "Login information verified successfully",
+    "initData": "Initialize user data",
+    "initing": "Initializing user data...",
+    "initSucc": "Initialize user data successfully"
   }
 }

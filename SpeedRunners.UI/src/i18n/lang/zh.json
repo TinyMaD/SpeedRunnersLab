@@ -175,5 +175,14 @@
       "title": "封面尽量直观展现MOD样式",
       "crop": "裁 剪"
     }
+  },
+  "login": {
+    "loginSuccess": "登录成功，{0} 秒后自动返回首页",
+    "logging": "正在登录，请耐心等待...",
+    "validating": "正在验证登录信息...",
+    "validateSucc": "验证登录信息成功",
+    "initData": "初始化用户数据",
+    "initing": "正在初始化用户数据...",
+    "initSucc": "初始化用户数据成功"
   }
 }
