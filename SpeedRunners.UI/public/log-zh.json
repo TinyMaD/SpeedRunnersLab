@@ -1,5 +1,29 @@
 [
     {
+        "title": "国际化",
+        "version": "v2.7.0",
+        "date": "2024-03-10",
+        "list": [
+            {
+                "text": "优化天梯页面代码",
+                "type": "architecture"
+            },
+            {
+                "text": "项目国际化（支持英文），右上角添加支持选择语言按钮",
+                "type": "feature"
+            },
+            {
+                "text": "首次访问会根据浏览器语言设置自动匹配对应语言",
+                "type": "feature"
+            },
+            {
+                "text": "调整页脚内容",
+                "type": "beautify"
+            }
+        ],
+        "type": "important"
+    },
+    {
         "title": "开发者日志",
         "version": "v2.6.0",
         "date": "2024-02-26",

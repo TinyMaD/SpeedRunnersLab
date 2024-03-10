@@ -32,7 +32,7 @@
   </v-container>
 </template>
 <script>
-import { login, validateSteam } from "@/api/user";
+import { login } from "@/api/user";
 import { initUserData } from "@/api/rank";
 export default {
   name: "Login",
@@ -43,22 +43,22 @@ export default {
   }),
   computed: {
     stepTitle() {
-      return this.step > 2 ? `登录成功，${this.timer} 秒后自动返回首页` : "正在登录，请耐心等待...";
+      return this.step > 2 ? this.$t("login.loginSuccess", [this.timer]) : this.$t("login.logging");
     },
     step1text() {
-      return this.step > 1 ? `验证登录信息成功` : "正在验证登录信息...";
+      return this.step > 1 ? this.$t("login.validateSucc") : this.$t("login.validating");
     },
     step2text() {
       let text = "";
       switch (this.step) {
         case 1:
-          text = "初始化用户数据";
+          text = this.$t("login.initData");
           break;
         case 2:
-          text = "正在初始化用户数据...";
+          text = this.$t("login.initing");
           break;
         case 3:
-          text = "初始化用户数据成功";
+          text = this.$t("login.initSucc");
           break;
       }
       return text;
@@ -77,23 +77,6 @@ export default {
               this.loginSuccess();
             }
           });
-        } else if (response.code === -555) {
-          this.validate();
-        }
-      });
-    },
-    validate() {
-      this.query.replace("(?<=openid.mode=).+?(?=\\&)", "check_authentication").Trim("?");
-      validateSteam(this.query).then(response => {
-        if (response.includes("is_valid:true")) {
-          this.step = 2;
-          initUserData().then(res => {
-            if (res.code === 666) {
-              this.loginSuccess();
-            }
-          });
-        } else {
-          this.$toast.error("登录失败");
         }
       });
     },

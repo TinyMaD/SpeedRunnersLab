@@ -1,5 +1,29 @@
 [
     {
+        "title": "Internationalization",
+        "version": "v2.7.0",
+        "date": "2024-03-10",
+        "list": [
+            {
+                "text": "Optimize the rank page code",
+                "type": "architecture"
+            },
+            {
+                "text": "Project internationalization（support English）, Add a button to select the language in the upper right",
+                "type": "feature"
+            },
+            {
+                "text": "Automatically match the corresponding language according to the browser language setting on the first visit",
+                "type": "feature"
+            },
+            {
+                "text": "Adjust the footer content",
+                "type": "beautify"
+            }
+        ],
+        "type": "important"
+    },
+    {
         "title": "Change Log",
         "version": "v2.6.0",
         "date": "2024-02-26",

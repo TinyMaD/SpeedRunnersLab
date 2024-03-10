@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,8 @@ using SpeedRunners.Middleware;
 using SpeedRunners.Model;
 using SpeedRunners.Service;
 using SpeedRunners.Utils;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using System.Net.Http;
 
@@ -52,10 +55,8 @@ namespace SpeedRunners
             {
                 options.AllowSynchronousIO = true;
             });
-            //services.Configure<IISServerOptions>(options =>
-            //{
-            //    options.AllowSynchronousIO = true;
-            //});
+            // 本地化
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
             // 设置代理
             HttpHelper.SetProxy();
         }
@@ -68,14 +69,13 @@ namespace SpeedRunners
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseHttpsRedirection();
-            //app.UseHsts();
-
             app.UseRouting();
 
             app.UseCors("default");
 
             app.UseSRLabTokenAuth();
+
+            app.UseHeaderRequestLocalization();
 
             app.UseEndpoints(endpoints =>
             {

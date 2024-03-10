@@ -44,7 +44,7 @@ namespace SpeedRunners.BLL
             catch (Exception)
             {
                 // 超时登录失败
-                return MResponse.Fail("登录超时", -555);
+                return MResponse.Fail(Localizer["login_timeout"], -555);
             }
             if (result.ToLower().Contains("is_valid:true"))
             {
@@ -64,7 +64,7 @@ namespace SpeedRunners.BLL
                 response.Token = newToken;
                 return response;
             }
-            return MResponse.Fail("登录失败");
+            return MResponse.Fail(Localizer["login_fail"]);
         }
 
         public MAccessToken GetUserByToken(string token)
@@ -100,15 +100,15 @@ namespace SpeedRunners.BLL
                 MUser deleteUser = DAL.GetUserByTokenID(tokenID);
                 if (deleteUser == null)
                 {
-                    return MResponse.Fail("此设备已退出登录");
+                    return MResponse.Fail(Localizer["logout_already"]);
                 }
                 if (deleteUser.PlatformID != CurrentUser.PlatformID)
                 {
-                    return MResponse.Fail("权限错误，操作失败");
+                    return MResponse.Fail(Localizer["permission_error"]);
                 }
                 if (deleteUser.LoginDate > CurrentUser.LoginDate)
                 {
-                    return MResponse.Fail("目标设备权限较高，请重新登录后再试", -403);
+                    return MResponse.Fail(Localizer["low_permission"], -401);
                 }
                 DAL.DeleteAccessToken(deleteUser);
                 return MResponse.Success();
