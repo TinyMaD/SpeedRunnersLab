@@ -5,11 +5,11 @@
         "date": "2024-03-10",
         "list": [
             {
-                "text": "Optimize the rank page code",
+                "text": "Optimized the rank page code",
                 "type": "architecture"
             },
             {
-                "text": "Project internationalization（support English）, Add a button to select the language in the upper right",
+                "text": "Project internationalization（support English）, Added a button to select the language in the upper right",
                 "type": "feature"
             },
             {
@@ -17,7 +17,7 @@
                 "type": "feature"
             },
             {
-                "text": "Adjust the footer content",
+                "text": "Adjusted the footer content",
                 "type": "beautify"
             }
         ],
@@ -29,15 +29,15 @@
         "date": "2024-02-26",
         "list": [
             {
-                "text": "Mount frontend static files to optimize deploy speed",
+                "text": "Mounted frontend static files to optimize deploy speed",
                 "type": "architecture"
             },
             {
-                "text": "Add change log feature",
+                "text": "Added change log feature",
                 "type": "feature"
             },
             {
-                "text": "Fix disconnection when system occurred exception",
+                "text": "Fixed disconnection when system occurred exception issue",
                 "type": "fix"
             }
         ],
@@ -49,15 +49,15 @@
         "date": "2024-02-24",
         "list": [
             {
-                "text": "Add sponsors list of Afdian",
+                "text": "Added sponsors list",
                 "type": "feature"
             },
             {
-                "text": "Optimize interface error message",
+                "text": "Optimized interface error message",
                 "type": "other"
             },
             {
-                "text": "Fix exception when click 'Your Stars'",
+                "text": "Fixed exception when click 'Your Stars' issue",
                 "type": "fix"
             }
         ],
@@ -69,19 +69,19 @@
         "date": "2024-01-12",
         "list": [
             {
-                "text": "Switch to Docker deployment after server compromise",
+                "text": "Switched to Docker deployment after server compromise",
                 "type": "architecture"
             },
             {
-                "text": "Replace SqlServer with MySQL due to Docker compatibility issues",
+                "text": "Replaced SqlServer with MySQL due to Docker compatibility issues",
                 "type": "architecture"
             },
             {
-                "text": "Merge task scheduler code",
+                "text": "Merged task scheduler code",
                 "type": "architecture"
             },
             {
-                "text": "Fix bugs after architecture adjustments",
+                "text": "Fixed issues after architecture adjustments",
                 "type": "fix"
             }
         ],
@@ -93,7 +93,7 @@
         "date": "2023-08-12",
         "list": [
             {
-                "text": "Fix MOD pagination query bug",
+                "text": "Fixed MOD pagination query issue",
                 "type": "fix"
             },
             {
@@ -101,7 +101,7 @@
                 "type": "milestone"
             },
             {
-                "text": "Add custom bonus distribution rules",
+                "text": "Added custom bonus distribution rules",
                 "type": "feature"
             },
             {
@@ -117,27 +117,27 @@
         "date": "2021-08-20",
         "list": [
             {
-                "text": "Optimize SEO indexing",
+                "text": "Optimized SEO indexing",
                 "type": "architecture"
             },
             {
-                "text": "Add tournament and related features",
+                "text": "Added tournament and related features",
                 "type": "feature"
             },
             {
-                "text": "Introduce odometer scrolling number component in frontend",
+                "text": "Introduced odometer scrolling number component in frontend",
                 "type": "architecture"
             },
             {
-                "text": "Change rank score statistics interval to two weeks",
+                "text": "Changed rank score statistics interval to two weeks",
                 "type": "other"
             },
             {
-                "text": "Start the SXL match and improve tournament rules",
+                "text": "Start the SXL match and improved tournament rules",
                 "type": "milestone"
             },
             {
-                "text": "Add sponsors of SXL",
+                "text": "Added sponsors of SXL",
                 "type": "feature"
             }
         ],
@@ -149,27 +149,27 @@
         "date": "2021-08-01",
         "list": [
             {
-                "text": "Integrate with Qiniu Cloud for MOD upload, download, and website acceleration",
+                "text": "Integrated with Qiniu Cloud for MOD uploading, downloading, and website acceleration",
                 "type": "architecture"
             },
             {
-                "text": "Add MOD upload and download feature",
+                "text": "Added MOD uploading and downloading feature",
                 "type": "feature"
             },
             {
-                "text": "Introduce ImgCropper for cover image",
+                "text": "Introduced ImgCropper for cover image",
                 "type": "feature"
             },
             {
-                "text": "Add search MOD feature",
+                "text": "Added searching MOD feature",
                 "type": "feature"
             },
             {
-                "text": "Add your stars about the MOD feature",
+                "text": "Added your stars about the MOD feature",
                 "type": "feature"
             },
             {
-                "text": "Adjust MOD page and ImgCropper component styles",
+                "text": "Adjusted MOD page and ImgCropper component styles",
                 "type": "beautify"
             }
         ],
@@ -181,11 +181,11 @@
         "date": "2021-03-12",
         "list": [
             {
-                "text": "Optimize login validation and fix frequent disconnection issues",
+                "text": "Optimized logining validation and fixed frequent disconnection issues",
                 "type": "fix"
             },
             {
-                "text": "Register speedrunners.cn and replace tmdsr.cn",
+                "text": "Registered speedrunners.cn and replaced tmdsr.cn",
                 "type": "milestone"
             }
         ],
@@ -197,15 +197,15 @@
         "date": "2020-09-09",
         "list": [
             {
-                "text": "Add homepage statistics charts",
+                "text": "Added homepage statistics charts",
                 "type": "feature"
             },
             {
-                "text": "Replace global message component",
+                "text": "Replaced global message component",
                 "type": "architecture"
             },
             {
-                "text": "Adjust styles",
+                "text": "Adjusted styles",
                 "type": "beautify"
             }
         ],
@@ -217,15 +217,15 @@
         "date": "2020-08-31",
         "list": [
             {
-                "text": "Separate frontend and backend development using mature scaffolding tools",
+                "text": "Separated frontend and backend development using mature scaffolding tools",
                 "type": "architecture"
             },
             {
-                "text": "Introduce Vuetify frontend component library",
+                "text": "Introduced Vuetify frontend component library",
                 "type": "beautify"
             },
             {
-                "text": "Add feature about query player's stats of SR",
+                "text": "Added feature about query player's stats of SR",
                 "type": "feature"
             }
         ],
@@ -237,7 +237,7 @@
         "date": "2020-04-06",
         "list": [
             {
-                "text": "Optimize mobile chart styles",
+                "text": "Optimized mobile chart styles",
                 "type": "beautify"
             }
         ],
@@ -249,7 +249,7 @@
         "date": "2020-04-01",
         "list": [
             {
-                "text": "Add feature that publish notification in admin panel when new user login",
+                "text": "Added feature that publish notification in admin panel when new user login",
                 "type": "feature"
             }
         ],
@@ -261,11 +261,11 @@
         "date": "2020-03-30",
         "list": [
             {
-                "text": "Add charts about rank score and playtime",
+                "text": "Added charts about rank score and playtime",
                 "type": "feature"
             },
             {
-                "text": "Add global online player count",
+                "text": "Added global online player count",
                 "type": "feature"
             }
         ],
