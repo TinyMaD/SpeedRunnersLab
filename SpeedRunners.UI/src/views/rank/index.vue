@@ -6,10 +6,10 @@
           <th id="thf" width="10%" />
           <th id="online" width="13%" style="text-align:center;color:#81A636" />
           <th width="33%">{{ $t('rank.personaName') }}</th>
-          <th width="25%">{{ $t('rank.tier') }}</th>
-          <th v-if="pc < 1640" id="thl" width="19%">{{ $t('rank.score') }}</th>
-          <th v-else width="13%">{{ $t('rank.score') }}</th>
-          <th v-if="pc > 1640" id="thl" width="6%" />
+          <th width="27%">{{ $t('rank.tier') }}</th>
+          <th v-if="!pc" id="thl" width="17%">{{ $t('rank.score') }}</th>
+          <th v-else width="12%">{{ $t('rank.score') }}</th>
+          <th v-if="pc" id="thl" width="5%" />
         </tr>
         <tbody id="tbody">
           <tr v-for="(player, index) in response.data" :key="index" :class="index % 2 === 0 ? 'odd' : 'even'">
@@ -24,25 +24,26 @@
             </td>
             <td style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">{{ player.personaName }}</td>
             <td>
-              <div class="levelAll">
-                <div class="levelDiv left">
+              <div :class="pc?'levelAll-pc':'levelAll'">
+                <div :class="pc?'levelDiv-pc left':'levelDiv left'">
                   <img class="level" src="img/LeagueBadgesMedium.png" :style="getLevelStyle(player.rankLevel)">
                 </div>
-                <div class="right levelName">{{ getLevelName(player.rankLevel) }}</div>
+                <div :class="pc?'levelName-pc left':'levelName left'">{{ getLevelName(player.rankLevel) }}</div>
               </div>
             </td>
-            <td>{{ player.rankScore }}{{ scoreIncrease(player) }}</td>
-            <td v-if="pc > 1640">{{ scoreIncrease(player) }}</td>
+            <td>{{ player.rankScore }}
+              <div v-if="!pc" style="color:#00FF00">{{ scoreIncrease(player) }}</div></td>
+            <td v-if="pc" style="text-align:left;color:#00FF00">{{ scoreIncrease(player) }}</td>
           </tr>
         </tbody>
         <tr id="tfoot" class="even">
-          <td v-if="pc < 1640" id="tfootf" />
-          <td v-if="pc < 1640" />
-          <td v-if="pc < 1640" id="tfootl" colspan="3">{{ $t('rank.updateInfo') }}</td>
-          <td v-if="pc > 1640" id="tfootf" />
-          <td v-if="pc > 1640" />
-          <td v-if="pc > 1640" />
-          <td v-if="pc > 1640" id="tfootl" colspan="3">{{ $t('rank.updateInfo') }}</td>
+          <td v-if="!pc" id="tfootf" />
+          <td v-if="!pc" />
+          <td v-if="!pc" id="tfootl" colspan="3">{{ $t('rank.updateInfo') }}</td>
+          <td v-if="pc" id="tfootf" />
+          <td v-if="pc" />
+          <td v-if="pc" />
+          <td v-if="pc" id="tfootl" colspan="3">{{ $t('rank.updateInfo') }}</td>
         </tr>
       </table>
     </v-row>
@@ -57,14 +58,20 @@ export default {
 
   data() {
     return {
-      response: {},
-      pc: 0,
-      imgSize: 150,
-      leveMarginTop: 6
+      response: {}
     };
   },
 
   computed: {
+    pc() {
+      return $(window).width() > 1640;
+    },
+    imgSize() {
+      return $(window).width() < 451 ? 120 : 150;
+    },
+    leveMarginTop() {
+      return $(window).width() < 451 ? 11 : 6;
+    },
     scoreIncrease() {
       return player => {
         const increaseScore = player.rankScore - player.oldRankScore;
@@ -77,11 +84,6 @@ export default {
   },
 
   mounted() {
-    this.pc = $(window).width();
-    if (this.pc < 451) {
-      this.imgSize = 120;
-      this.leveMarginTop = 11;
-    }
     getRankList().then(res => {
       this.response = res;
     });
@@ -142,15 +144,22 @@ export default {
           return "";
       }
     }
+  },
+  metaInfo() {
+    return {
+      meta: [
+        {
+          vmid: "keywords",
+          name: "keywords",
+          content: "SpeedRunners排行榜,SpeedRunners天梯,Rank,league," + this.$baseKeywords
+        }
+      ]
+    };
   }
 };
 </script>
 
 <style>
-#addedDiv {
-  width: 25%;
-}
-
 .rowImg {
   height: 40px;
   width: 40px;
@@ -162,52 +171,12 @@ export default {
   background-color: rgb(23, 26, 33);
 }
 
-#title {
-  background-color: rgb(23, 26, 33);
-  width: 100%;
-  max-width: 940px;
-  height: 105px;
-  margin: 0 auto;
-}
-
-#bg {
-  width: 100%;
-  margin-top: 300px;
-}
-
-#srname {
-  height: 150px;
-  margin-top: -30px;
-  margin-left: -20px;
-  margin-bottom: -50px;
-}
-
-#titlec {
-  height: 40px;
-}
-
-#ttdiv {
-  margin: 60px 0 0 -30px;
-}
-
 .left {
   float: left;
 }
 
 .right {
   float: right;
-}
-
-#loginL {
-  height: 66px;
-  width: 109px;
-  cursor: pointer;
-}
-
-#tishi {
-  color: rgb(189, 187, 185);
-  font-size: 10px;
-  margin: 10px 0 5px 0;
 }
 
 #foot {
@@ -229,15 +198,6 @@ export default {
   width: 50%;
 }
 
-#rankDiv {
-  margin-top: 300px;
-  width: 99.5%;
-  max-width: 940px;
-  margin: 0 auto;
-  border: 1px solid rgb(52, 52, 52);
-  border-radius: 10px;
-}
-
 .table {
   color: rgb(198, 212, 223);
   border-collapse: collapse;
@@ -249,18 +209,6 @@ export default {
   text-align: center;
   vertical-align: middle;
   table-layout: fixed;
-}
-
-.tableS {
-  color: rgb(198, 212, 223);
-  border-collapse: collapse;
-  border-spacing: 0;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  text-align: center;
-  vertical-align: middle;
-  font-size: 30%;
 }
 
 td {
@@ -294,21 +242,47 @@ th {
 
 .levelAll {
   height: 60px;
-  width: 120px;
+  width: 108px;
+  margin: 0 auto;
+}
+
+.levelAll-pc {
+  height: 60px;
+  width: 135px;
   margin: 0 auto;
 }
 
 .levelDiv {
-  width: 60px;
+  width: 40px;
+  height: 60px;
+  position: relative;
+  text-align: left;
+}
+
+.levelDiv-pc {
+  width: 55px;
   height: 60px;
   position: relative;
   text-align: left;
 }
 
 .levelName {
-  width: 60px;
+  width: 68px;
   height: 41px;
   padding-top: 19px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: left;
+}
+.levelName-pc {
+  width: 80px;
+  height: 41px;
+  padding-top: 19px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  text-align: left;
 }
 
 #tfoot {
