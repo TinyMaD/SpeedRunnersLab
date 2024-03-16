@@ -19,9 +19,10 @@
       class="text-body-1 pa-1 my-1"
       v-text="content"
     />
-    <a href="https://afdian.net/a/tinymad" target="_blank">
-      <img width="200" style="border-radius:5px" src="https://pic1.afdiancdn.com/static/img/welcome/button-sponsorme.jpg">
+    <a class="afd-btn" href="https://afdian.net/a/tinymad" target="_blank">
+      <img width="192" style="border-radius:5px" src="https://pic1.afdiancdn.com/static/img/welcome/button-sponsorme.jpg">
     </a>
+    <a class="paypal-btn" href="https://www.paypal.me/tinymad" target="_blank"><img style="border-radius:5px" src="https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png"></a>
   </div>
 </template>
 
@@ -71,5 +72,36 @@ export default {
     margin: 0 !important;
     border-bottom: 2px solid #e4c269;
     letter-spacing: 0 !important;
+  }
+
+  .afd-btn{
+    margin-left: 3px;
+    margin-right: 4px;
+    box-shadow: 0px 5px 10px rgba(#946ce6, 40%);
+    :hover{
+      box-shadow:0px 15px 25px -5px rgba(#946ce6, 40%);
+      transform: scale(1.03);
+      transition: all 0.3s;
+    }
+    :active{
+      box-shadow:0px 4px 8px rgba(#946ce6, 30%);
+      transform: scale(0.98);
+      transition: all 0.3s;
+    }
+  }
+
+  .paypal-btn{
+    margin-left: 3px;
+    box-shadow: 0px 5px 10px rgba(#1976d2, 40%);
+    :hover{
+      box-shadow:0px 15px 25px -5px rgba(#1976d2, 40%);
+      transform: scale(1.03);
+      transition: all 0.3s;
+    }
+    :active{
+      box-shadow:0px 4px 8px rgba(#1976d2, 30%);
+      transform: scale(0.98);
+      transition: all 0.3s;
+    }
   }
 </style>
