@@ -158,6 +158,24 @@
             <v-btn
               class="mx-4"
               icon
+              v-bind="attrs"
+              @click="copyEmail"
+              v-on="on"
+            >
+              <svg-icon
+                class-name="text-caption"
+                icon-class="mdi-email"
+              />
+            </v-btn>
+          </template>
+          <span>{{ $t('layout.email') }}</span>
+        </v-tooltip>
+
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="mx-4"
+              icon
               href="https://www.cnblogs.com/tinymad"
               target="_blank"
               v-bind="attrs"
@@ -233,6 +251,10 @@ export default {
     }
   },
   methods: {
+    copyEmail() {
+      navigator.clipboard.writeText("supremelang@qq.com");
+      this.$toast.success(this.$t("layout.copyEmail"));
+    },
     changeLanguege(num) {
       var lang = num ? "en" : "zh";
       this.$i18n.locale = lang;
