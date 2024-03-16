@@ -20,4 +20,8 @@ namespace SpeedRunners.Model.Asset
         public int StarCount { get; set; }
         public bool Star { get; set; } = false;
     }
+    public class MModOut : MMod
+    {
+        public bool IsNew => UploadDate > DateTime.Now.Date.AddMonths(-1);
+    }
 }

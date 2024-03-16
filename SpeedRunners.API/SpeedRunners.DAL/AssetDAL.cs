@@ -4,6 +4,7 @@ using SpeedRunners.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using static Dapper.SqlMapper;
 
@@ -12,7 +13,7 @@ namespace SpeedRunners.DAL
     public class AssetDAL : DALBase
     {
         public AssetDAL(DbHelper db) : base(db) { }
-        public MPageResult<MMod> GetModList(MModPageParam param, string currentUserID)
+        public MPageResult<MModOut> GetModList(MModPageParam param, string currentUserID)
         {
             StringBuilder where = new StringBuilder()
                 .WhereIf(true, $" AND `Tag` = ?{nameof(param.Tag)} ")
@@ -27,41 +28,38 @@ namespace SpeedRunners.DAL
                 {
                     if (!starModIDs?.Any() ?? true)
                     {
-                        return new MPageResult<MMod>
+                        // There's No data on the current user
+                        return new MPageResult<MModOut>
                         {
                             Total = 0,
-                            List = new List<MMod>()
+                            List = new List<MModOut>()
                         };
                     }
                     string starModIDsStr = string.Join(',', starModIDs);
                     where.Append($" AND `ID` IN ({starModIDsStr}) ");
                 }
             }
+
             GridReader reader = Db.QueryMultiple($@"SELECT COUNT(ID) FROM `Mod` WHERE 1 = 1 {where};
 SELECT *
- FROM `Mod`
-WHERE 1 = 1 {where} 
-ORDER BY ID DESC
+FROM (
+  SELECT *,  3 * IFNULL(`StarCount`, 0) + IFNULL(`Download`, 0) + 999999999 AS rowid
+  FROM `Mod`
+  WHERE `UploadDate` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) {where}
+  UNION ALL
+  SELECT *, 3 * IFNULL(`StarCount`, 0) + IFNULL(`Download`, 0) AS rowid
+  FROM `Mod`
+  WHERE `UploadDate` < DATE_SUB(CURDATE(), INTERVAL 1 MONTH) {where}
+) AS subquery
+ORDER BY rowid DESC, UploadDate DESC
 LIMIT ?{nameof(param.Offset)}, ?{nameof(param.PageSize)}; ", param);
-            var result = new MPageResult<MMod>
+            var result = new MPageResult<MModOut>
             {
                 Total = reader.ReadFirst<int>(),
-                List = reader.Read<MMod>()
+                List = reader.Read<MModOut>()
             };
-            var modIDs = result.List.Select(x => x.ID);
-            var starCountList = Db.Query<(int, int)>($@"
-SELECT ModID, COUNT(ModID)
-FROM ModStar 
-WHERE ModID IN ?{nameof(modIDs)}
-GROUP BY ModID"
-, new { modIDs });
             foreach (var item in result.List)
             {
-                var (modID, starCount) = starCountList.FirstOrDefault(x => x.Item1 == item.ID);
-                if (modID != 0)
-                {
-                    item.StarCount = starCount;
-                }
                 if (!string.IsNullOrWhiteSpace(currentUserID))
                 {
                     if (starModIDs.Any(x => x == item.ID))
@@ -80,7 +78,7 @@ GROUP BY ModID"
             if (exist) return;
 
             param.UploadDate = DateTime.Now;
-            Db.Insert("Mod", param, new[] { nameof(param.ID), nameof(param.Star), nameof(param.StarCount) });
+            Db.Insert("Mod", param, new[] { nameof(param.ID), nameof(param.Star) });
         }
 
         public void UpdateLikeNum(int modID, int like, int dislike)
@@ -108,13 +106,15 @@ GROUP BY ModID"
 
         public void AddModStar(int modID, string platformID)
         {
-            string sql = $@"INSERT INTO ModStar(ModID, PlatformID) VALUES (?{nameof(modID)}, ?{nameof(platformID)})";
+            string sql = $@"INSERT INTO `ModStar`(ModID, PlatformID) VALUES (?{nameof(modID)}, ?{nameof(platformID)});
+UPDATE `Mod` SET StarCount = IFNULL(StarCount, 0) + 1 WHERE `ID` = ?{nameof(modID)}";
             Db.Execute(sql, new { modID, platformID });
         }
 
         public void DeleteModStar(int modStarID, string currentUserID)
         {
-            string sql = $@"DELETE FROM ModStar WHERE `ModID` = {modStarID} AND PlatformID = {currentUserID}";
+            string sql = $@"DELETE FROM `ModStar` WHERE `ModID` = {modStarID} AND PlatformID = {currentUserID};
+UPDATE `Mod` SET StarCount = IFNULL(StarCount, 0) - 1 WHERE `ID` = {modStarID}";
             Db.Execute(sql);
         }
     }

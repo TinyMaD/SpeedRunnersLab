@@ -10,9 +10,9 @@
   "index": {
     "online": "Online",
     "sponsorContent": [
-      "The operation of this website requires renting servers, domain names, etc., which is also the largest expense. After the server and domain name expire, the website will be shut down.",
-      "This site was run by me personally before, but one person's power is always limited. A server with the minimum configuration will cost about 700 yuan a year.",
-      "If this site has brought you a little help and touch, you can click the link button below to sponsor this site and let me continue to serve you (afdian's sponsorship record will be displayed in real time above, and the income and expenditure details can be found in afdian News)"
+      "The operation of this website requires renting servers, domain names, etc., which is the largest expense (A server with the minimum configuration will cost about 100 dollars one year).",
+      "This website has been run by myself, I hope SR's ecosystem is getting better, and there is still a lot of Todo about this website.",
+      "If you want to support this website, you can click the link button below to sponsor me (Afdian's sponsorship will be displayed in real time above, and Paypal's will be displayed within 24 hours)"
     ],
     "sponsorTitle": "Thanks to {0} sponsors",
     "addedChartTitle": "Added score past 2 weeks",
@@ -22,7 +22,9 @@
   "layout": {
     "login": "Login",
     "logout": "Logout",
-    "logoutSucc": "Logout successful"
+    "logoutSucc": "Logout successful",
+    "email": "Click to copy email address",
+    "copyEmail": "Copied to clipboard"
   },
   "routes": {
     "home": "Home",
@@ -44,8 +46,6 @@
     "other": "Others",
     "uploadingTitle": "Uploading, please wait patiently...{0} %",
     "loadTitle": "Upload MOD resources",
-    "star": "Starred successful",
-    "unstar": "Unstar",
     "uploadCover": "Click to upload cover",
     "uploadFile": "Click to upload file",
     "loadSucc": "Upload successful",
@@ -56,7 +56,12 @@
     "mustImg": "The file must be image",
     "uploadFilePlz": "Please upload file",
     "bigFileWarn": "File size cannot exceed 20 MB",
-    "invalidWarn": "Invalid SteamID or vanity URL, please select the player you want to query"
+    "invalidWarn": "Invalid SteamID or vanity URL, please select the player you want to query",
+    "download": "Download",
+    "starSucc": "Starred successful",
+    "unstarSucc": "Unstar",
+    "star": "Starred",
+    "unStar": "Star"
   },
   "common": {
     "search": "Search",

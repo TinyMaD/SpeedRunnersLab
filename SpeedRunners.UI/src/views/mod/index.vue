@@ -76,6 +76,12 @@
                   height="160px"
                 >
                   <v-card-title
+                    v-if="mod.isNew"
+                    class="pb-6 mb-16 pl-2"
+                  >
+                    <v-icon color="indigo darken-3" size="36px" style="background-color: white;height: 21px;width: 27px;">mdi-new-box</v-icon>
+                  </v-card-title>
+                  <v-card-title
                     class="text-caption"
                     style="color:rgba(255,255,255,0.8)"
                   >
@@ -95,23 +101,38 @@
                 </v-img>
 
                 <v-card-actions>
-                  <v-btn
-                    text
-                    x-small
-                    @click.stop="download(mod.title, mod.fileUrl)"
-                  >
-                    <v-icon>mdi-download</v-icon>
-                    {{ mod.download }}
-                  </v-btn>
-                  <v-btn
-                    text
-                    x-small
-                    :color="mod.star ? 'orange' : 'white'"
-                    @click.stop="doStar(mod)"
-                  >
-                    <v-icon>{{ starIcon(mod.star) }}</v-icon>
-                    {{ mod.starCount }}
-                  </v-btn>
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        text
+                        x-small
+                        v-bind="attrs"
+                        @click.stop="download(mod.title, mod.fileUrl)"
+                        v-on="on"
+                      ><v-icon>mdi-download</v-icon>
+                        {{ mod.download }}
+                      </v-btn>
+                    </template>
+                    <span>{{ $t('mod.download') }}</span>
+                  </v-tooltip>
+
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        v-bind="attrs"
+                        text
+                        x-small
+                        :color="mod.star ? 'orange' : 'white'"
+                        v-on="on"
+                        @click.stop="doStar(mod)"
+                      >
+                        <v-icon>{{ starIcon(mod.star) }}</v-icon>
+                        {{ mod.starCount }}
+                      </v-btn>
+                    </template>
+                    <span>{{ starTooltip(mod.star) }}</span>
+                  </v-tooltip>
+
                   <v-spacer />
                   <div class="text-caption">
                     {{ fileSize(mod.size) }}
@@ -218,6 +239,9 @@ export default {
     });
   },
   methods: {
+    starTooltip(star) {
+      return star ? this.$t("mod.star") : this.$t("mod.unStar");
+    },
     changeList() {
       this.searchParam.pageNo = 1;
       this.getList();
@@ -250,7 +274,7 @@ export default {
         return;
       }
       operateModStar(mod.id, !mod.star).then(res => {
-        this.$toast.success(mod.star ? this.$t("mod.unstar") : this.$t("mod.star"));
+        this.$toast.success(mod.star ? this.$t("mod.unstarSucc") : this.$t("mod.starSucc"));
         this.getList();
       });
     },

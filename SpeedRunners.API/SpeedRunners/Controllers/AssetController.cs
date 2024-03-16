@@ -23,7 +23,7 @@ namespace SpeedRunners.Controllers
 
         [Persona]
         [HttpPost]
-        public MPageResult<MMod> GetModList([FromBody] MModPageParam param) => BLL.GetModList(param);
+        public MPageResult<MModOut> GetModList([FromBody] MModPageParam param) => BLL.GetModList(param);
 
         [User]
         [HttpPost]

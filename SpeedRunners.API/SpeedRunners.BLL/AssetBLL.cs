@@ -46,14 +46,14 @@ namespace SpeedRunners.BLL
             return privateUrl;
         }
 
-        public MPageResult<MMod> GetModList(MModPageParam param)
+        public MPageResult<MModOut> GetModList(MModPageParam param)
         {
-            MPageResult<MMod> result = new MPageResult<MMod>();
+            MPageResult<MModOut> result = new MPageResult<MModOut>();
             BeginDb(DAL =>
             {
                 string currentUserID = CurrentUser?.PlatformID ?? string.Empty;
                 result = DAL.GetModList(param, currentUserID);
-                foreach (MMod item in result.List)
+                foreach (MModOut item in result.List)
                 {
                     item.ImgUrl = "https://cdn-img.speedrunners.cn/" + item.ImgUrl;
                 }
