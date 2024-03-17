@@ -17,7 +17,7 @@
       v-for="(content,i) in sponsorContent"
       :key="i"
       class="text-body-1 pa-1 my-1"
-      v-text="content"
+      v-html="content"
     />
     <a class="afd-btn" href="https://afdian.net/a/tinymad" target="_blank">
       <img width="192" style="border-radius:5px" src="https://pic1.afdiancdn.com/static/img/welcome/button-sponsorme.jpg">

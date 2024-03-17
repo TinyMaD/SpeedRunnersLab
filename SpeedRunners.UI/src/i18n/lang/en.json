@@ -11,7 +11,7 @@
     "online": "Online",
     "sponsorContent": [
       "The operation of this website requires renting servers, domain names, etc., which is the largest expense (A server with the minimum configuration will cost about 100 dollars one year).",
-      "This website has been run by myself, I hope SR's ecosystem is getting better, and there is still a lot of Todo about this website.",
+      "This website has been running by myself, I hope SR's ecosystem is getting better, and there is still a lot of <a href='https://github.com/users/TinyMaD/projects/1/views/1' target='_blank'>Todo</a> about this website.",
       "If you want to support this website, you can click the link button below to sponsor me (Afdian's sponsorship will be displayed in real time above, and Paypal's will be displayed within 24 hours)"
     ],
     "sponsorTitle": "Thanks to {0} sponsors",
