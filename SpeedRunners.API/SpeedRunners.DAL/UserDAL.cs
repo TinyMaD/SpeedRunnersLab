@@ -1,4 +1,5 @@
-﻿using SpeedRunners.Model;
+﻿using Newtonsoft.Json.Linq;
+using SpeedRunners.Model;
 using SpeedRunners.Model.User;
 using SpeedRunners.Utils;
 using System;
@@ -8,6 +9,40 @@ namespace SpeedRunners.DAL
     public class UserDAL : DALBase
     {
         public UserDAL(DbHelper db) : base(db) { }
+
+        public MPrivacySettings GetPrivacySettings(string platformID)
+        {
+            return Db.QueryFirstOrDefault<MPrivacySettings>(
+                $@"SELECT
+                     a.PlatformID,
+                     a.State,
+                     a.RankType,
+                     IFNULL(b.RequestRankData, 1) RequestRankData,
+                     IFNULL(b.ShowAddScore, 1) ShowAddScore,
+                     IFNULL(b.ShowWeekPlayTime, 1) ShowWeekPlayTime
+                    FROM
+                    	RankInfo a
+                    LEFT JOIN
+                    	PrivacySettings b
+                    ON a.PlatformID = b.PlatformID
+                    WHERE a.PlatformID = ?{nameof(platformID)}", new { platformID });
+        }
+
+        public void SetStateOrRankType(string platformID, string colName, int value)
+        {
+            Db.Execute($"UPDATE RankInfo SET {colName} = ?{nameof(value)} WHERE PlatformID = ?{nameof(platformID)}", new { platformID, value });
+        }
+
+        public void SetPrivacySettings(string platformID, string colName, int value)
+        {
+            string sql = "";
+            if (colName.Equals("RequestRankData", StringComparison.OrdinalIgnoreCase))
+            {
+                sql = $@", ShowAddScore = ?{nameof(value)} ";
+                SetStateOrRankType(platformID, "RankType", value == 1 ? 1 : 2);
+            }
+            Db.Execute($"UPDATE PrivacySettings SET {colName} = ?{nameof(value)} {sql} WHERE PlatformID = ?{nameof(platformID)}", new { platformID, value });
+        }
 
         public MAccessToken GetUserByToken(string token)
         {

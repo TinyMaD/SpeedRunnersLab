@@ -157,7 +157,7 @@ namespace SpeedRunners.BLL
             {
                 bool hasSR = (await _steamBLL.GetOwnedGames(CurrentUser.PlatformID))?.OwnedGames?.Any(x => x.AppId == 207140) ?? false;
                 if (!hasSR) return MResponse.Fail("此账号尚未拥有SpeedRunners游戏");
-                srRankInfo.RankType = 2;
+                srRankInfo.RankType = 0;
             }
             else
             {

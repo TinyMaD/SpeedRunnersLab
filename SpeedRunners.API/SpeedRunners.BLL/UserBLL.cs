@@ -23,6 +23,30 @@ namespace SpeedRunners.BLL
             _logger = logger;
         }
 
+        public MPrivacySettings GetPrivacySettings()
+        {
+            return BeginDb(DAL =>
+            {
+                MPrivacySettings settings = DAL.GetPrivacySettings(CurrentUser.PlatformID);
+                return settings;
+            });
+        }
+
+        public void SetStateOrRankType(string colName, int value) {
+            BeginDb(DAL =>
+            {
+                DAL.SetStateOrRankType(CurrentUser.PlatformID, colName, value);
+            });
+        }
+
+        public void SetPrivacySettings(string colName, int value)
+        {
+            BeginDb(DAL =>
+            {
+                DAL.SetPrivacySettings(CurrentUser.PlatformID, colName, value);
+            });
+        }
+
         /// <summary>
         /// 获取用户信息
         /// </summary>

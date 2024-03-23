@@ -272,15 +272,27 @@ namespace SpeedRunners.Scheduler
             {
                 playerInfo.ForEach(x => x.ModifyTime = DateTime.Now);
 
-                string setSql = $" ,PersonaName=?{nameof(PlayersModel.Personaname)} ";
+                string setSql = $" ,PersonaName = ?{nameof(PlayersModel.Personaname)} ";
                 if (STOP_UPDATE.Equals("true"))
                 {
-                    setSql = $@" ,PersonaName = (case Participate
-                                        when 0 then ?{nameof(PlayersModel.Personaname)} 
-                                        else PersonaName
-                                        end) ";
+                    setSql = $@" ,PersonaName = (CASE Participate
+                                        WHEN 0 THEN ?{nameof(PlayersModel.Personaname)} 
+                                        ELSE PersonaName
+                                        END) ";
                 }
-                string sql = $" update RankInfo set AvatarS=?{nameof(PlayersModel.Avatar)},AvatarM=?{nameof(PlayersModel.Avatarmedium)},AvatarL=?{nameof(PlayersModel.Avatarfull)},State=?{nameof(PlayersModel.Personastate)},GameID=?{nameof(PlayersModel.Gameid)},ModifyTime=?{nameof(PlayersModel.ModifyTime)} {setSql} where PlatformID=?{nameof(PlayersModel.Steamid)}; ";
+                string sql = $@" UPDATE RankInfo SET AvatarS = ?{nameof(PlayersModel.Avatar)}, 
+                                                AvatarM = ?{nameof(PlayersModel.Avatarmedium)}, 
+                                                AvatarL = ?{nameof(PlayersModel.Avatarfull)}, 
+                                                State = (CASE State WHEN -1 
+                                                    THEN -1
+                                                    ELSE ?{nameof(PlayersModel.Personastate)} 
+                                                    END),
+                                                GameID = (CASE State WHEN -1 
+                                                    THEN ''
+                                                    ELSE ?{nameof(PlayersModel.Gameid)} 
+                                                    END),
+                                                ModifyTime = ?{nameof(PlayersModel.ModifyTime)} {setSql} 
+                                WHERE PlatformID = ?{nameof(PlayersModel.Steamid)}; ";
                 using (IDbConnection conn = DbHelper.GetConnection())
                 {
                     rows = conn.Execute(sql, playerInfo);
