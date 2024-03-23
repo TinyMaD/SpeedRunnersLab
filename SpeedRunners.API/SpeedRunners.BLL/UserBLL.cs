@@ -53,7 +53,7 @@ namespace SpeedRunners.BLL
         /// <returns></returns>
         public MRankInfo GetInfo()
         {
-            return _rankBLL.GetRankList(new[] { CurrentUser.PlatformID }).FirstOrDefault();
+            return _rankBLL.GetAllRankList(new[] { CurrentUser.PlatformID }).FirstOrDefault();
         }
 
         public async Task<MResponse> Login(string query, string browser)

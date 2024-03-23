@@ -25,11 +25,19 @@ namespace SpeedRunners.BLL
         /// </summary>
         /// <param name="steamIDs"></param>
         /// <returns></returns>
-        public List<MRankInfo> GetRankList(IEnumerable<string> steamIDs = null)
+        public List<MRankInfo> GetRankList()
         {
             return BeginDb(DAL =>
             {
-                return DAL.GetRankList(steamIDs);
+                return DAL.GetRankList();
+            });
+        }
+
+        public List<MRankInfo> GetAllRankList(IEnumerable<string> steamIDs = null)
+        {
+            return BeginDb(DAL =>
+            {
+                return DAL.GetAllRankList(steamIDs);
             });
         }
 
@@ -37,7 +45,7 @@ namespace SpeedRunners.BLL
         {
             return BeginDb(DAL =>
             {
-                var list = DAL.GetRankList(null, false, 1);
+                var list = DAL.GetAllRankList().Where(x => x.Participate == 1);
                 return list.Select(x => new MParticipateList
                 {
                     PlatformID = x.PlatformID,
@@ -59,7 +67,7 @@ namespace SpeedRunners.BLL
         {
             return BeginDb(DAL =>
             {
-                return DAL.GetRankList(playSROnly: true);
+                return DAL.GetPlaySRList();
             });
         }
 

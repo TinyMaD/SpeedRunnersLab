@@ -163,7 +163,7 @@ namespace SpeedRunners.Scheduler
             using (IDbConnection conn = DbHelper.GetConnection())
             {
                 _log.Log($"开始更新【参照天梯分】信息({DateTime.Now})");
-                conn.Execute("update RankInfo set OldRankScore=RankScore where RankType<>0");
+                conn.Execute("UPDATE RankInfo SET OldRankScore = RankScore WHERE RankType <> 0");
                 _log.Log($"成功更新【参照天梯分】信息({DateTime.Now})");
                 _log.Log(" ");
             }
@@ -173,8 +173,11 @@ namespace SpeedRunners.Scheduler
         {
             using (IDbConnection conn = DbHelper.GetConnection())
             {
-                IEnumerable<RankInfoModel> ranks = conn.Query<RankInfoModel>("SELECT * FROM RankInfo WHERE RankType<>0");
-                List<RankInfoModel> newInfoList = await RankInfoListAsync(ranks.Select(x => x.RankID));
+                IEnumerable<string> rankID = conn.Query<string>($@"SELECT info.RankID 
+                                                                    FROM RankInfo info
+                                                                    LEFT JOIN PrivacySettings ps ON ps.PlatformID = info.PlatformID
+                                                                    WHERE RankType <> 0 AND (ISNULL(ps.RequestRankData) OR ps.RequestRankData = 1) ");
+                List<RankInfoModel> newInfoList = await RankInfoListAsync(rankID);
                 StringBuilder sql = new StringBuilder();
                 foreach (RankInfoModel item in newInfoList)
                 {
@@ -187,7 +190,7 @@ namespace SpeedRunners.Scheduler
                     return;
                 }
                 _log.Log(" ");
-                _log.Log($"成功更新【{rows}/{ranks.Count()}】个【SR】信息({DateTime.Now})");
+                _log.Log($"成功更新【{rows}/{rankID.Count()}】个【SR】信息({DateTime.Now})");
             }
         }
 

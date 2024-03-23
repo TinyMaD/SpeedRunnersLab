@@ -3,8 +3,8 @@
     "SpeedRunners.Scheduler": {
       "commandName": "Project"
     },
-    "Docker": {
-      "commandName": "Docker"
-    }
+    //"Docker": {
+    //  "commandName": "Docker"
+    //}
   }
 }

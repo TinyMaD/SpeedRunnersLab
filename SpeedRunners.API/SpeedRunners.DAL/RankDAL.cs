@@ -13,43 +13,74 @@ namespace SpeedRunners.DAL
         public RankDAL(DbHelper db) : base(db) { }
 
         #region RankInfo
-        public List<MRankInfo> GetRankList(IEnumerable<string> steamIDs = null, bool playSROnly = false, int participate = 0)
+
+        public List<MRankInfo> GetAllRankList(IEnumerable<string> steamIDs = null)
         {
             StringBuilder where = new StringBuilder();
             if (steamIDs?.Any() ?? false)
             {
                 where.Append($" AND PlatformID IN ?{nameof(steamIDs)} ");
             }
-            if (playSROnly)
-            {
-                where.Append(" AND GameID = 207140 ");
-            }
-            if (participate != 0)
-            {
-                where.Append($" AND participate = {participate} ");
-            }
-            return Db.Query<MRankInfo>($"select * from RankInfo where RankType = 1 {where} order by RankScore desc", new { steamIDs }).ToList();
+            return Db.Query<MRankInfo>($"SELECT * FROM RankInfo WHERE 1 = 1 {where} ORDER BY RankScore DESC", new { steamIDs }).ToList();
+        }
+
+        public List<MRankInfo> GetRankList()
+        {
+            var allList = GetAllRankList();
+
+            return allList.Where(x => x.RankType == 1).ToList();
+        }
+
+        public List<MRankInfo> GetPlaySRList()
+        {
+            var allList = GetAllRankList();
+
+            return allList.Where(x => x.GameID == "207140").ToList();
         }
 
         public List<MRankInfo> GetAddedChart()
         {
             int dayOfRange = 14;
-            return Db.Query<MRankInfo>($@"select a.PlatformID, b.PersonaName, b.RankScore - a.minScore RankScore, b.AvatarS from 
-(
-    select PlatformID, min(RankScore) minScore from
-    (
-        select PlatformID, RankScore from RankLog where Date >= DATE_SUB(CURDATE(), interval {dayOfRange - 1} day)
-        union
-        select c.PlatformID, d.RankScore from(select PlatformID, max(Date) Date from RankLog where Date < DATE_SUB(CURDATE(), interval {dayOfRange - 1} day) group by PlatformID)c
-        left join RankLog d on c.PlatformID = d.PlatformID and c.Date = d.date
-    )e group by PlatformID
-)a left join RankInfo b on a.PlatformID = b.PlatformID
-where b.RankScore - a.minScore > 0 order by RankScore desc; ").ToList();
+            return Db.Query<MRankInfo>($@"SELECT a.PlatformID,
+                                                b.PersonaName,
+                                                b.RankScore - a.minScore RankScore,
+                                                b.AvatarS
+                                                FROM (
+                                                    SELECT PlatformID, MIN(RankScore) minScore 
+                                                    FROM (
+                                                        SELECT PlatformID,
+                                                                RankScore 
+                                                        FROM RankLog
+                                                        WHERE Date >= DATE_SUB(CURDATE(), interval {dayOfRange - 1} day)
+
+                                                        UNION
+
+                                                        SELECT c.PlatformID,
+                                                                d.RankScore
+                                                        FROM (
+                                                                SELECT PlatformID,
+                                                                        MAX(Date) Date
+                                                                FROM RankLog
+                                                                WHERE Date < DATE_SUB(CURDATE(), interval {dayOfRange - 1} day)
+                                                                GROUP BY PlatformID) c
+                                                        LEFT JOIN RankLog d ON c.PlatformID = d.PlatformID AND c.Date = d.date
+                                                    ) e 
+                                                    GROUP BY PlatformID
+                                                ) a 
+                                                LEFT JOIN RankInfo b ON a.PlatformID = b.PlatformID
+                                                LEFT JOIN PrivacySettings ps ON ps.PlatformID = a.PlatformID
+                                                WHERE b.RankScore - a.minScore > 0 
+                                                        AND (ISNULL(ps.ShowAddScore) OR ps.ShowAddScore = 1)
+                                                ORDER BY RankScore DESC; ").ToList();
         }
 
         public List<MRankInfo> GetHourChart()
         {
-            return Db.Query<MRankInfo>(@"select PlatformID, PersonaName, WeekPlayTime, AvatarS from RankInfo where WeekPlayTime > 0 order by WeekPlayTime desc").ToList();
+            return Db.Query<MRankInfo>($@"SELECT info.PlatformID, info.PersonaName, info.WeekPlayTime, info.AvatarS 
+                                            FROM RankInfo info
+                                            LEFT JOIN PrivacySettings ps ON ps.PlatformID = info.PlatformID
+                                            WHERE info.WeekPlayTime > 0 AND (ISNULL(ps.ShowWeekPlayTime) OR ps.ShowWeekPlayTime = 1)
+                                            ORDER BY info.WeekPlayTime DESC").ToList();
         }
 
         public bool ExistRankInfo(string steamID)
