@@ -45,7 +45,7 @@ namespace SpeedRunners.BLL
         {
             return BeginDb(DAL =>
             {
-                var list = DAL.GetAllRankList().Where(x => x.Participate == 1);
+                var list = DAL.GetParticipateList();
                 return list.Select(x => new MParticipateList
                 {
                     PlatformID = x.PlatformID,

@@ -24,6 +24,11 @@ namespace SpeedRunners.DAL
             return Db.Query<MRankInfo>($"SELECT * FROM RankInfo WHERE 1 = 1 {where} ORDER BY RankScore DESC", new { steamIDs }).ToList();
         }
 
+        public List<MRankInfo> GetParticipateList()
+        {
+            return Db.Query<MRankInfo>($"SELECT * FROM RankInfo WHERE Participate = 1 ORDER BY RankScore DESC").ToList();
+        }
+
         public List<MRankInfo> GetRankList()
         {
             var allList = GetAllRankList();
@@ -33,9 +38,7 @@ namespace SpeedRunners.DAL
 
         public List<MRankInfo> GetPlaySRList()
         {
-            var allList = GetAllRankList();
-
-            return allList.Where(x => x.GameID == "207140").ToList();
+            return Db.Query<MRankInfo>($"SELECT * FROM RankInfo WHERE GameID = '207140' ORDER BY RankScore DESC").ToList();
         }
 
         public List<MRankInfo> GetAddedChart()
