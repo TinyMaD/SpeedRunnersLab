@@ -21,23 +21,23 @@ namespace SpeedRunners.Controllers
 
         [User]
         [HttpPost]
-        public void SetState([FromBody] int value) => BLL.SetStateOrRankType("State", value);
+        public void SetState([FromBody] dynamic obj) => BLL.SetStateOrRankType("State", (int)obj.value.Value);
 
         [User]
         [HttpPost]
-        public void SetRankType([FromBody] int value) => BLL.SetStateOrRankType("RankType", value);
+        public void SetRankType([FromBody] dynamic obj) => BLL.SetStateOrRankType("RankType", (int)obj.value.Value);
 
         [User]
         [HttpPost]
-        public void SetShowWeekPlayTime([FromBody] int value) => BLL.SetPrivacySettings("ShowWeekPlayTime", value);
+        public void SetShowWeekPlayTime([FromBody] dynamic obj) => BLL.SetPrivacySettings("ShowWeekPlayTime", (int)obj.value.Value);
 
         [User]
         [HttpPost]
-        public void SetRequestRankData([FromBody] int value) => BLL.SetPrivacySettings("RequestRankData", value);
+        public void SetRequestRankData([FromBody] dynamic obj) => BLL.SetPrivacySettings("RequestRankData", (int)obj.value.Value);
 
         [User]
         [HttpPost]
-        public void SetShowAddScore([FromBody] int value) => BLL.SetPrivacySettings("ShowAddScore", value);
+        public void SetShowAddScore([FromBody] dynamic obj) => BLL.SetPrivacySettings("ShowAddScore", (int)obj.value.Value);
 
         [HttpPost]
         public async Task<MResponse> Login([FromBody] dynamic data)

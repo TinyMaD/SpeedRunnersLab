@@ -28,3 +28,50 @@ export function logoutLocal() {
     method: "get"
   });
 }
+
+export function getPrivacySettings() {
+  return request({
+    url: "/user/GetPrivacySettings",
+    method: "get"
+  });
+}
+
+export function setState(value) {
+  return request({
+    url: "/user/SetState",
+    method: "post",
+    data: { value }
+  });
+}
+
+export function setRankType(value) {
+  return request({
+    url: "/user/setRankType",
+    method: "post",
+    data: { value }
+  });
+}
+
+export function setShowWeekPlayTime(value) {
+  return request({
+    url: "/user/setShowWeekPlayTime",
+    method: "post",
+    data: { value }
+  });
+}
+
+export function setRequestRankData(value) {
+  return request({
+    url: "/user/setRequestRankData",
+    method: "post",
+    data: { value }
+  });
+}
+
+export function setShowAddScore(value) {
+  return request({
+    url: "/user/setShowAddScore",
+    method: "post",
+    data: { value }
+  });
+}

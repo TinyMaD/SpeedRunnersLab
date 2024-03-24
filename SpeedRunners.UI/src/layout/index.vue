@@ -82,6 +82,16 @@
               <v-list-item-title> {{ $t(`routes.${route.meta.title}`) }}</v-list-item-title>
             </v-list-item-content>
           </v-list-item>
+
+          <v-list-item v-if="name" @click="() => { privacyVisible = true }">
+            <v-list-item-icon>
+              <svg-icon icon-class="mdi-toggle-switch-outline" />
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> {{ $t('routes.privacy') }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
         </v-list-item-group>
       </v-list>
       <template v-if="avatar!==''" v-slot:append>
@@ -92,6 +102,8 @@
         </div>
       </template>
     </v-navigation-drawer>
+
+    <PrivacySettings v-if="name" :visible.sync="privacyVisible" />
 
     <v-main dark>
       <AppMain />
@@ -221,6 +233,7 @@
 
 <script>
 import { AppMain } from "./components";
+import PrivacySettings from "@/views/other/privacySettings";
 import { goLoginURL } from "@/utils/auth";
 import { mapGetters } from "vuex";
 import getPageTitle from "@/utils/get-page-title";
@@ -228,14 +241,16 @@ import getPageTitle from "@/utils/get-page-title";
 export default {
   name: "Layout",
   components: {
-    AppMain
+    AppMain,
+    PrivacySettings
   },
   data: () => ({
     drawer: null,
     drawerRight: false,
     right: false,
     left: false,
-    fab: false
+    fab: false,
+    privacyVisible: false
   }),
   computed: {
     ...mapGetters([

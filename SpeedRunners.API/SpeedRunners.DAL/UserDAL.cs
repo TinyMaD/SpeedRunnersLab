@@ -12,6 +12,11 @@ namespace SpeedRunners.DAL
 
         public MPrivacySettings GetPrivacySettings(string platformID)
         {
+            var exist = Db.ExecuteScalar<int>($"SELECT 1 FROM PrivacySettings WHERE PlatformID = ?{nameof(platformID)}", new { platformID }) > 0;
+            if (!exist) {
+                Db.Execute($@"INSERT INTO PrivacySettings (PlatformID) VALUES (?{nameof(platformID)}) ", new { platformID });
+            }
+
             return Db.QueryFirstOrDefault<MPrivacySettings>(
                 $@"SELECT
                      a.PlatformID,

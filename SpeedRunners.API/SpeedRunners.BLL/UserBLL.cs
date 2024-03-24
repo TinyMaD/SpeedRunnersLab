@@ -32,7 +32,8 @@ namespace SpeedRunners.BLL
             });
         }
 
-        public void SetStateOrRankType(string colName, int value) {
+        public void SetStateOrRankType(string colName, int value)
+        {
             BeginDb(DAL =>
             {
                 DAL.SetStateOrRankType(CurrentUser.PlatformID, colName, value);

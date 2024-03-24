@@ -15,7 +15,7 @@
       "If you want to support this website, you can click the link button below to sponsor me (Afdian's sponsorship will be displayed in real time above, and Paypal's will be displayed within 24 hours)"
     ],
     "sponsorTitle": "Thanks to {0} sponsors",
-    "addedChartTitle": "Added score past 2 weeks",
+    "addedChartTitle": "Increased score past 2 weeks",
     "hourChartTile": "Playtime past 2 weeks",
     "hourChartUnit": "hrs"
   },
@@ -33,7 +33,8 @@
     "mod": "MOD",
     "searchplayer": "Stats",
     "plaza": "Discover",
-    "log": "Change Log"
+    "log": "Change Log",
+    "privacy": "Privacy Settings"
   },
   "mod": {
     "upload": "Upload",
@@ -72,7 +73,8 @@
     "title": "Title",
     "submit": "Submit",
     "cancel": "Cancel",
-    "notice": "Notice"
+    "notice": "Notice",
+    "success": "Successful"
   },
   "rank": {
     "personaName": "Name",
@@ -189,5 +191,17 @@
     "initData": "Initialize user data",
     "initing": "Initializing user data...",
     "initSucc": "Initialize user data successfully"
+  },
+  "privacy": {
+    "publishState": "Public Steam State",
+    "publishStateDetail": "Everyone can see your Steam state and if you are playing SR",
+    "publishPlaytime": "Publish the recent playtime of SR",
+    "publishPlaytimeDetail": "Displayed in \"Playtime past 2 weeks\" on the homepage",
+    "allowGetRankScore": "Allow the system to obtain your rank score of SR",
+    "allowGetRankScoreDetail": "It also includes the following elements witch you can control individually :",
+    "publishAddScore": "Publish increased score of SR",
+    "publishAddScoreDetail": "Displayed in \"Increased score past 2 weeks\" on the homepage ",
+    "publishTotalScore": "Publish total rank score of SR",
+    "publishTotalScoreDetail": "Displayed in the list of rank page"
   }
 }

@@ -33,7 +33,8 @@
     "mod": "MOD",
     "searchplayer": "资 料",
     "plaza": "广 场",
-    "log": "开发日志"
+    "log": "开发日志",
+    "privacy": "隐私设置"
   },
   "mod": {
     "upload": "上 传",
@@ -72,7 +73,8 @@
     "title": "标 题",
     "submit": "提 交",
     "cancel": "取 消",
-    "notice": "提 示"
+    "notice": "提 示",
+    "success": "成功"
   },
   "rank": {
     "personaName": "昵 称",
@@ -189,5 +191,17 @@
     "initData": "初始化用户数据",
     "initing": "正在初始化用户数据...",
     "initSucc": "初始化用户数据成功"
+  },
+  "privacy": {
+    "publishState": "公开Steam状态",
+    "publishStateDetail": "所有人能看到你的Steam状态，以及是否正在玩SR",
+    "publishPlaytime": "公开SR最近游戏时长",
+    "publishPlaytimeDetail": "展示在首页“最近两周游戏时长”中",
+    "allowGetRankScore": "允许系统获取我的SR天梯分数据",
+    "allowGetRankScoreDetail": "它还包括以下你可以分别管理的选项：",
+    "publishAddScore": "公开SR新增天梯分",
+    "publishAddScoreDetail": "展示在首页“最近两周新增天梯分”中",
+    "publishTotalScore": "公开SR总天梯分",
+    "publishTotalScoreDetail": "展示在SR总分排行榜中"
   }
 }
