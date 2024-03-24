@@ -1,4 +1,40 @@
 [
+     {
+        "title": "Privacy Settings",
+        "version": "v2.8.0",
+        "date": "2024-03-24",
+        "list": [
+            {
+                "text": "Mod list adjusted to order by number of downloads",
+                "type": "other"
+            },
+            {
+                "text": "Added email on footer",
+                "type": "other"
+            },
+            {
+                "text": "Added Todo link in sponsor content",
+                "type": "other"
+            },
+            {
+                "text": "Added user's privacy settings",
+                "type": "feature"
+            },
+            {
+                "text": "Mods uploaded in the past month are marked NEW character",
+                "type": "feature"
+            },
+            {
+                "text": "Fixed the displaying bug of the rank list",
+                "type": "fix"
+            },
+            {
+                "text": "Fixed occurring exception when uploading mods",
+                "type": "fix"
+            }
+        ],
+        "type": "important"
+    },
     {
         "title": "Internationalization",
         "version": "v2.7.0",
@@ -37,7 +73,7 @@
                 "type": "feature"
             },
             {
-                "text": "Fixed disconnection when system occurred exception issue",
+                "text": "Fixed disconnection issue when system occurs exception",
                 "type": "fix"
             }
         ],
@@ -57,7 +93,7 @@
                 "type": "other"
             },
             {
-                "text": "Fixed exception when click 'Your Stars' issue",
+                "text": "Fixed occurring exception when click 'Your Stars'",
                 "type": "fix"
             }
         ],
@@ -81,7 +117,7 @@
                 "type": "architecture"
             },
             {
-                "text": "Fixed issues after architecture adjustments",
+                "text": "Fixed bugs after architecture adjustments",
                 "type": "fix"
             }
         ],
@@ -93,7 +129,7 @@
         "date": "2023-08-12",
         "list": [
             {
-                "text": "Fixed MOD pagination query issue",
+                "text": "Fixed querying mods issue",
                 "type": "fix"
             },
             {

@@ -1,5 +1,41 @@
 [
     {
+        "title": "隐私设置",
+        "version": "v2.8.0",
+        "date": "2024-03-24",
+        "list": [
+            {
+                "text": "MOD列表调整为按下载、收藏量排序",
+                "type": "other"
+            },
+            {
+                "text": "页脚添加邮箱地址",
+                "type": "other"
+            },
+            {
+                "text": "赞助者内容增加待办事项链接",
+                "type": "other"
+            },
+            {
+                "text": "添加用户隐私权限设置",
+                "type": "feature"
+            },
+            {
+                "text": "最近一个月上传的MOD增加NEW标记",
+                "type": "feature"
+            },
+            {
+                "text": "修复天梯排行榜显示BUG",
+                "type": "fix"
+            },
+            {
+                "text": "修复上传MOD时报错的BUG",
+                "type": "fix"
+            }
+        ],
+        "type": "important"
+    },
+    {
         "title": "国际化",
         "version": "v2.7.0",
         "date": "2024-03-10",
