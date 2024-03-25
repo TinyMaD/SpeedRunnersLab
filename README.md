@@ -1,4 +1,4 @@
 # SpeedRunnersLab
-> 这是一个极简的以SpeedRunners游戏为主题的站点。主要运用的框架及组件库： Vuetify + vue-admin-template + ASP.NET Core + Steam标识登录
+> The main framework and tech stacks： Vuetify + vue-admin-template + ASP.NET Core + Steam open API
 
-[线上地址](https://www.speedrunners.cn)
+This website is about a videogame called SpeedRunners. Here you can browse the game dynamics, data, popular events, and other information of SpeedRunners experts, and also provide many interesting MODs.
