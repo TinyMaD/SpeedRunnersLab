@@ -83,7 +83,7 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-list-item v-if="name" @click="() => { privacyVisible = true }">
+          <v-list-item v-if="name && rankType != 0" @click="() => { privacyVisible = true }">
             <v-list-item-icon>
               <svg-icon icon-class="mdi-toggle-switch-outline" />
             </v-list-item-icon>
@@ -103,7 +103,7 @@
       </template>
     </v-navigation-drawer>
 
-    <PrivacySettings v-if="name" :visible.sync="privacyVisible" />
+    <PrivacySettings v-if="name && rankType != 0" :visible.sync="privacyVisible" />
 
     <v-main dark>
       <AppMain />
@@ -256,6 +256,7 @@ export default {
     ...mapGetters([
       "name",
       "avatar",
+      "rankType",
       "permission_routes"
     ]),
     navBars() {
