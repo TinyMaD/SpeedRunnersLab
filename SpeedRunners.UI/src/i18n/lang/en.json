@@ -197,7 +197,7 @@
     "publishStateDetail": "Everyone can see your Steam state and if you are playing SR",
     "publishPlaytime": "Publish the recent playtime of SR",
     "publishPlaytimeDetail": "Displayed in \"Playtime past 2 weeks\" on the homepage",
-    "allowGetRankScore": "Allow the system to obtain your rank score of SR",
+    "allowGetRankScore": "Allow this website to request your rank score of SR",
     "allowGetRankScoreDetail": "It also includes the following elements witch you can control individually :",
     "publishAddScore": "Publish increased score of SR",
     "publishAddScoreDetail": "Displayed in \"Increased score past 2 weeks\" on the homepage ",

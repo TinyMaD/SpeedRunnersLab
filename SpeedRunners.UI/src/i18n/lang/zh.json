@@ -197,7 +197,7 @@
     "publishStateDetail": "所有人能看到你的Steam状态，以及是否正在玩SR",
     "publishPlaytime": "公开SR最近游戏时长",
     "publishPlaytimeDetail": "展示在首页“最近两周游戏时长”中",
-    "allowGetRankScore": "允许系统获取我的SR天梯分数据",
+    "allowGetRankScore": "允许此网站获取我的SR天梯分数据",
     "allowGetRankScoreDetail": "它还包括以下你可以分别管理的选项：",
     "publishAddScore": "公开SR新增天梯分",
     "publishAddScoreDetail": "展示在首页“最近两周新增天梯分”中",

@@ -72,6 +72,7 @@
               v-model="settings.showAddScore"
               :false-value="0"
               :true-value="1"
+              :disabled="disabledRequestRankData"
               color="primary"
               @change="changeShowAddScore"
             />
@@ -85,6 +86,7 @@
           <v-list-item-action>
             <v-switch
               v-model="settings.rankType"
+              :disabled="disabledRequestRankData"
               :false-value="2"
               :true-value="1"
               color="primary"
@@ -118,6 +120,9 @@ export default {
   computed: {
     computedSettings() {
       return { ...this.settings };
+    },
+    disabledRequestRankData() {
+      return this.settings.requestRankData === 0;
     }
   },
   watch: {
