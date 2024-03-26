@@ -101,7 +101,7 @@
   },
   "match": {
     "prizePool": "当前总奖金",
-    "schedule": "赛程",
+    "schedule": "赛程[已完结]",
     "participant": "报名玩家",
     "points": "资 质",
     "reward": "参赛奖励",
