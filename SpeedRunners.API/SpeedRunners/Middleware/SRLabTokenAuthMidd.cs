@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -18,10 +19,13 @@ namespace SpeedRunners.Middleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<GlobalExceptionsFilter> _logger;
-        public SRLabTokenAuthMidd(RequestDelegate next, ILogger<GlobalExceptionsFilter> logger)
+        private readonly IStringLocalizer<SRLabTokenAuthMidd> _localizer;
+
+        public SRLabTokenAuthMidd(RequestDelegate next, IStringLocalizer<SRLabTokenAuthMidd> localizer,ILogger<GlobalExceptionsFilter> logger)
         {
             _next = next;
             _logger = logger;
+            _localizer = localizer;
         }
 
         public async Task Invoke(HttpContext context)
@@ -37,7 +41,7 @@ namespace SpeedRunners.Middleware
                 case AuthResult.AuthFail:
                     // 未登录，不能访问目标接口
                     context.Request.ContentType = "application/json;charset=utf-8";
-                    await context.Response.WriteAsync(JsonConvert.SerializeObject(MResponse.Fail("未登录"), new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
+                    await context.Response.WriteAsync(JsonConvert.SerializeObject(MResponse.Fail(_localizer["not_login"]), new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
                     break;
             }
         }
