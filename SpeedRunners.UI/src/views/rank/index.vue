@@ -1,7 +1,14 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <table class="table" :style="{color:$vuetify.theme.dark? 'rgb(198, 212, 223)':'#333'}">
+      <div v-if="!response.data">
+        <v-skeleton-loader
+          type="table-thead,table-tbody,table-tbody,table-tbody"
+          style="width: 940px;"
+          class="mx-auto"
+        />
+      </div>
+      <table v-else class="table" :style="{color:$vuetify.theme.dark? 'rgb(198, 212, 223)':'#333'}">
         <tr id="tableHead" :class="$vuetify.theme.dark?'even-dark':'even'">
           <th id="thf" width="10%" />
           <th id="online" width="13%" style="text-align:center;color:#81A636" />
