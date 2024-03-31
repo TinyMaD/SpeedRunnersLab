@@ -11,6 +11,18 @@
         />
       </v-toolbar-title>
       <VSpacer />
+      <!-- <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            depressed
+            v-bind="attrs"
+            @click="changeTheme()"
+            v-on="on"
+          ><v-icon>mdi-brightness-4</v-icon>
+          </v-btn>
+        </template>
+        <span>浅色主题</span>
+      </v-tooltip> -->
       <v-menu
         offset-y
         transition="slide-y-transition"
@@ -19,7 +31,7 @@
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             v-bind="attrs"
-            elevation="0"
+            depressed
             v-on="on"
           >
             <v-icon>mdi-translate</v-icon>
@@ -265,6 +277,9 @@ export default {
     }
   },
   methods: {
+    changeTheme() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+    },
     copyEmail() {
       navigator.clipboard.writeText("supremelang@qq.com");
       this.$toast.success(this.$t("layout.copyEmail"));
