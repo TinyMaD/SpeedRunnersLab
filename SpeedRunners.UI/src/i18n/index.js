@@ -6,7 +6,6 @@ import en from "@/i18n/lang/en.json";
 Vue.use(VueI18n);
 
 const navLang = (navigator.language || navigator.userLanguage || navigator.browserLanguage).toLowerCase();
-console.log("浏览器语言", navLang);
 var localLang = navLang || false;
 if (localStorage.getItem("lang") != null) {
   localLang = localStorage.getItem("lang");

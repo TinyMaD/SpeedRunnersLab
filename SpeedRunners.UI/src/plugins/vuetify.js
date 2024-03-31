@@ -3,6 +3,10 @@ import Vuetify, { VSnackbar, VBtn, VIcon } from "vuetify/lib";
 import VuetifyToast from "vuetify-toast-snackbar-ng";
 import zhHans from "vuetify/lib/locale/zh-Hans";
 
+var themeDark = localStorage.getItem("themeDark") !== "false";
+if (themeDark === null) {
+  themeDark = true;
+}
 Vue.use(Vuetify, {
   components: {
     VSnackbar,
@@ -25,5 +29,5 @@ export default new Vuetify({
   icons: {
     iconfont: "mdi"
   },
-  theme: { dark: true }
+  theme: { dark: themeDark }
 });

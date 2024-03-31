@@ -278,7 +278,9 @@ export default {
   },
   methods: {
     changeTheme() {
-      this.$vuetify.theme.dark = !this.$vuetify.theme.dark;
+      var dark = this.$vuetify.theme.dark;
+      this.$vuetify.theme.dark = !dark;
+      localStorage.setItem("themeDark", !dark);
     },
     copyEmail() {
       navigator.clipboard.writeText("supremelang@qq.com");
