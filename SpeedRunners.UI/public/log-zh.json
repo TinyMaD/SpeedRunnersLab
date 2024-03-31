@@ -1,5 +1,33 @@
 [
     {
+        "title": "MOD删除功能",
+        "version": "v2.9.0",
+        "date": "2024-03-31",
+        "list": [
+            {
+                "text": "不允许获取天梯分时禁用对应两个设置开关",
+                "type": "other"
+            },
+            {
+                "text": "添加天梯分页面加载动画",
+                "type": "other"
+            },
+            {
+                "text": "添加MOD删除功能，用户能删除自己上传的MOD",
+                "type": "feature"
+            },
+            {
+                "text": "添加切换明暗主题功能",
+                "type": "feature"
+            },
+            {
+                "text": "合并在线玩家、两周新增天梯分卡片",
+                "type": "beautify"
+            }
+        ],
+        "type": "important"
+    },
+    {
         "title": "隐私设置",
         "version": "v2.8.0",
         "date": "2024-03-24",

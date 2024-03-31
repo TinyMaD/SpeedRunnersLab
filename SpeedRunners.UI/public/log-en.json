@@ -1,5 +1,33 @@
 [
-     {
+    {
+        "title": "Add Feature Deleting Mod",
+        "version": "v2.9.0",
+        "date": "2024-03-31",
+        "list": [
+            {
+                "text": "When unallowing to request rank score, disable the corresponding two switches",
+                "type": "other"
+            },
+            {
+                "text": "Added loading animation to the rankpage",
+                "type": "other"
+            },
+            {
+                "text": "Added feature deleting Mod, users can delete mods that are uploaded by themselves",
+                "type": "feature"
+            },
+            {
+                "text": "Add Dark/Light theme button",
+                "type": "feature"
+            },
+            {
+                "text": "Putting 'Online' 'Increase Score Past Two Weeks' together",
+                "type": "beautify"
+            }
+        ],
+        "type": "important"
+    },
+    {
         "title": "Privacy Settings",
         "version": "v2.8.0",
         "date": "2024-03-24",
