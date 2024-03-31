@@ -21,7 +21,7 @@
           ><v-icon>mdi-brightness-4</v-icon>
           </v-btn>
         </template>
-        <span>浅色主题</span>
+        <span>{{ $t('layout.theme') }}</span>
       </v-tooltip>
       <v-menu
         offset-y

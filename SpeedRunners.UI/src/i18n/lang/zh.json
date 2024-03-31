@@ -24,7 +24,8 @@
     "logout": "登 出",
     "logoutSucc": "登出成功",
     "email": "点击复制邮箱地址",
-    "copyEmail": "已复制到剪贴板"
+    "copyEmail": "已复制到剪贴板",
+    "theme": "切换主题"
   },
   "routes": {
     "home": "首 页",

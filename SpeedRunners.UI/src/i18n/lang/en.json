@@ -24,7 +24,8 @@
     "logout": "Logout",
     "logoutSucc": "Logout successful",
     "email": "Click to copy email address",
-    "copyEmail": "Copied to clipboard"
+    "copyEmail": "Copied to clipboard",
+    "theme": "Dark/Light"
   },
   "routes": {
     "home": "Home",

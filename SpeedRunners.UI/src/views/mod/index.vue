@@ -10,18 +10,6 @@
               </v-btn>
             </v-list-item>
             <v-divider />
-            <!-- <v-list-group>
-              <template v-slot:activator>
-                <v-list-item-title>人 物</v-list-item-title>
-              </template>
-              <v-list-item
-                v-for="(character, i) in characters"
-                :key="i"
-                link
-              >
-                <v-list-item-title class="text-center body-2" v-text="character" />
-              </v-list-item>
-            </v-list-group> -->
             <v-list-item-group v-model="searchParam.tag" mandatory>
               <v-list-item
                 v-for="(menu, i) in otherModMenu"
