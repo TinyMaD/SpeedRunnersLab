@@ -7,8 +7,8 @@
             <v-row>
               <v-col cols="12" class="py-0">
                 <v-card class="mb-2 pa-2">
-                  <div style="color:#81A636">{{ $t("index.online") }}</div>
-                  <Odometer :value="onlineCount" class="text-h4" color="#81A636" />
+                  <div style="color:#03a245">{{ $t("index.online") }}</div>
+                  <Odometer :value="onlineCount" class="text-h4" color="#03a245" />
                   <v-divider />
                   <v-avatar v-for="player in playSRlist" :key="player.platformID" class="ma-1">
                     <v-tooltip top>
@@ -22,10 +22,6 @@
                       <span>{{ player.personaName }}</span>
                     </v-tooltip>
                   </v-avatar>
-                </v-card>
-              </v-col>
-              <v-col cols="12" class="py-0">
-                <v-card class="mb-2 pa-2">
                   <AddedChart />
                 </v-card>
               </v-col>

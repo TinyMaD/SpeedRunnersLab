@@ -5,7 +5,7 @@
         <v-row style="padding:20px">
           <v-img
             src="img/sxlbg.jpg"
-            gradient="to bottom, rgba(30,30,30,0), rgba(30,30,30,1)"
+            :gradient="$vuetify.theme.dark?'to bottom, rgba(30,30,30,0), rgba(30,30,30,1)':'to bottom, rgba(255,255,255,0), rgba(255,255,255,1)'"
           >
             <v-row class="d-flex justify-center">
               <div><v-img
@@ -120,7 +120,7 @@
             <v-tooltip right>
               <template v-slot:activator="{ on, attrs }">
                 <svg-icon
-                  style="background-color:rgb(6,180,253);border-radius:50%"
+                  style="color:white;background-color:rgb(6,180,253);border-radius:50%"
                   v-bind="attrs"
                   class="text-h5"
                   icon-class="zfb"

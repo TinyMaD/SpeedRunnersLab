@@ -49,6 +49,10 @@ export default {
     }
   },
   watch: {
+    "$vuetify.theme.dark"(dark) {
+      var titleColor = dark ? "#fff" : "#333";
+      this.chart.setOption({ title: { textStyle: { color: titleColor }}});
+    },
     "$i18n.locale"(newValue) {
       var titleText = this.$t("index.hourChartTile");
       var unit = this.$t("index.hourChartUnit");
@@ -90,6 +94,7 @@ export default {
   methods: {
     initChart() {
       var that = this;
+      var titleColor = that.$vuetify.theme.dark ? "#fff" : "#333";
       this.chart = echarts.init(this.$el);
       this.chart.setOption({
         title: {
@@ -97,7 +102,7 @@ export default {
           left: "center",
           top: 15,
           textStyle: {
-            color: "#fff",
+            color: titleColor,
             fontWeight: 400
           }
         },

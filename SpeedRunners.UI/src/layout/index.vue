@@ -1,5 +1,5 @@
 <template>
-  <div id="ap">
+  <v-app>
     <v-app-bar app hide-on-scroll fade-img-on-scroll dense>
       <v-app-bar-nav-icon @click.stop="drawerRight = !drawerRight" />
       <v-toolbar-title>
@@ -11,7 +11,7 @@
         />
       </v-toolbar-title>
       <VSpacer />
-      <!-- <v-tooltip bottom>
+      <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
             depressed
@@ -22,7 +22,7 @@
           </v-btn>
         </template>
         <span>浅色主题</span>
-      </v-tooltip> -->
+      </v-tooltip>
       <v-menu
         offset-y
         transition="slide-y-transition"
@@ -214,12 +214,12 @@
         </v-tooltip>
         <span class="caption">
           <br>Made with
-          <v-icon color="red" size="14">mdi-heart</v-icon>&nbsp;for <a class="link" href="https://store.steampowered.com/app/207140/SpeedRunners" target="_blank">SpeedRunners</a><br>
+          <v-icon color="red" size="14">mdi-heart</v-icon>&nbsp;for <a :class="$vuetify.theme.dark?'link-dark':'link'" href="https://store.steampowered.com/app/207140/SpeedRunners" target="_blank">SpeedRunners</a><br>
         </span>
         <span class="caption">
           &copy;2018-{{ new Date().getFullYear() }} TinyMaD
           <br>
-          <a style="color: white;" href="http://beian.miit.gov.cn" target="_blank">蜀ICP备18005857号-2</a><br>
+          <a :style="{color:$vuetify.theme.dark?'white':'#333'}" href="http://beian.miit.gov.cn" target="_blank">蜀ICP备18005857号-2</a><br>
         </span>
       </v-col>
     </v-footer>
@@ -238,7 +238,7 @@
         <v-icon>mdi-chevron-up</v-icon>
       </v-btn>
     </v-scale-transition>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -318,15 +318,19 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/styles/variables.scss";
-#ap {
-  background: url('../assets/bg.jpg') no-repeat center center fixed !important;
-  background-size: cover;
-}
 .link {
-  color: white;
+  color: #333;
   text-decoration: none;
 }
 .link:hover {
+  color: #333;
+  text-decoration: underline;
+}
+.link-dark {
+  color: white;
+  text-decoration: none;
+}
+.link-dark:hover {
   color: white;
   text-decoration: underline;
 }

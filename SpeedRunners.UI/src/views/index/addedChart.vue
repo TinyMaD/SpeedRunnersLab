@@ -49,6 +49,10 @@ export default {
     }
   },
   watch: {
+    "$vuetify.theme.dark"(dark) {
+      var titleColor = dark ? "#fff" : "#333";
+      this.chart.setOption({ title: { textStyle: { color: titleColor }}});
+    },
     "$i18n.locale"(newValue) {
       var titleText = this.$t("index.addedChartTitle");
       this.chart.setOption({ title: { text: titleText }});
@@ -80,16 +84,21 @@ export default {
   },
   methods: {
     initChart() {
-      var that = this;
       this.chart = echarts.init(this.$el);
-      this.chart.setOption({
+      this.chart.setOption(this.getOption());
+    },
+    getOption() {
+      var that = this;
+      var titleColor = that.$vuetify.theme.dark ? "#fff" : "#333";
+      return {
+        backgroundColor: "",
         title: {
           text: that.$t("index.addedChartTitle"),
           left: "center",
           top: 15,
           textStyle: {
-            color: "#fff",
-            fontWeight: 400
+            fontWeight: 400,
+            color: titleColor
           }
         },
         grid: {
@@ -132,7 +141,7 @@ export default {
             }
           }
         ]
-      });
+      };
     }
   }
 };

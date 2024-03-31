@@ -36,7 +36,7 @@
         <div
           fluid
           class="pa-2"
-          style="background-color:rgb(66,66,66);width:1370px"
+          :style="{backgroundColor:$vuetify.theme.dark?'rgb(66,66,66)':'rgb(240,240,240)',width:'1370px'}"
         >
           <v-row no-gutters>
             <v-col fluid>
@@ -72,7 +72,7 @@
                 <v-img
                   :src="mod.imgUrl"
                   class="mod-img white--text align-end"
-                  gradient="to bottom, rgba(0,0,0,0), rgba(0,0,0,.5)"
+                  :gradient="$vuetify.theme.dark?'to bottom, rgba(0,0,0,0), rgba(0,0,0,.5)':'to bottom, rgba(255,255,255,0), rgba(255,255,255,.5)'"
                   height="160px"
                 >
                   <v-card-title
@@ -83,7 +83,7 @@
                   </v-card-title>
                   <v-card-title
                     class="text-caption"
-                    style="color:rgba(255,255,255,0.8)"
+                    :style="{color:$vuetify.theme.dark?'rgba(255,255,255,0.8)':'rgba(0,0,0,0.8)'}"
                   >
                     {{ mod.title }}
                   </v-card-title>
@@ -122,7 +122,7 @@
                         v-bind="attrs"
                         text
                         x-small
-                        :color="mod.star ? 'orange' : 'white'"
+                        :color="mod.star ? 'orange' : $vuetify.theme.dark?'white':'#333'"
                         v-on="on"
                         @click.stop="doStar(mod)"
                       >
@@ -139,7 +139,7 @@
                         <v-btn
                           text
                           x-small
-                          :color="hover?'red':'white'"
+                          :color="hover?'red':$vuetify.theme.dark?'white':'#333'"
                           v-bind="attrs"
                           @click.stop="openDialog(mod.id)"
                           v-on="on"
@@ -216,22 +216,6 @@ export default {
     ModInfo
   },
   data: () => ({
-    characters: [
-      "Speedrunner",
-      "Unic",
-      "Cosmonaut",
-      "Comrade",
-      "Hothead",
-      "Moonraker",
-      "Buckshot",
-      "Gil",
-      "Falcon",
-      "Neko",
-      "Scout",
-      "SkullDuggery",
-      "Salem"
-    ],
-    transparent: "rgba(255, 255, 255, 0)",
     switchValue: false,
     searchParam: {
       onlyStar: false,

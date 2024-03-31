@@ -1,8 +1,8 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <table class="table">
-        <tr id="tableHead" class="even">
+      <table class="table" :style="{color:$vuetify.theme.dark? 'rgb(198, 212, 223)':'#333'}">
+        <tr id="tableHead" :class="$vuetify.theme.dark?'even-dark':'even'">
           <th id="thf" width="10%" />
           <th id="online" width="13%" style="text-align:center;color:#81A636" />
           <th width="33%">{{ $t('rank.personaName') }}</th>
@@ -12,7 +12,7 @@
           <th v-if="pc" id="thl" width="5%" />
         </tr>
         <tbody id="tbody">
-          <tr v-for="(player, index) in response.data" :key="index" :class="index % 2 === 0 ? 'odd' : 'even'">
+          <tr v-for="(player, index) in response.data" :key="index" :class="$vuetify.theme.dark?(index % 2 === 0 ? 'odd-dark' : 'even-dark'): (index % 2 === 0 ? 'odd' : 'even')">
             <td v-if="index < 3"><img class="rowImg" :src="`img/${index + 1}.png`"></td>
             <td v-else>{{ index+1 }} </td>
             <td class="avator">
@@ -26,17 +26,17 @@
             <td>
               <div :class="pc?'levelAll-pc':'levelAll'">
                 <div :class="pc?'levelDiv-pc left':'levelDiv left'">
-                  <img class="level" src="img/LeagueBadgesMedium.png" :style="getLevelStyle(player.rankLevel)">
+                  <img :class="$vuetify.theme.dark?'level-dark':'level'" src="img/LeagueBadgesMedium.png" :style="getLevelStyle(player.rankLevel)">
                 </div>
                 <div :class="pc?'levelName-pc left':'levelName left'">{{ getLevelName(player.rankLevel) }}</div>
               </div>
             </td>
             <td>{{ player.rankScore }}
-              <div v-if="!pc" style="color:#00FF00">{{ scoreIncrease(player) }}</div></td>
-            <td v-if="pc" style="text-align:left;color:#00FF00">{{ scoreIncrease(player) }}</td>
+              <div v-if="!pc" style="color:#00C853">{{ scoreIncrease(player) }}</div></td>
+            <td v-if="pc" style="text-align:left;color:#00C853">{{ scoreIncrease(player) }}</td>
           </tr>
         </tbody>
-        <tr id="tfoot" class="even">
+        <tr id="tfoot" :class="$vuetify.theme.dark?'even-dark':'even'" :style="{color:$vuetify.theme.dark? 'rgb(189, 187, 185)':'#333'}">
           <td v-if="!pc" id="tfootf" />
           <td v-if="!pc" />
           <td v-if="!pc" id="tfootl" colspan="3">{{ $t('rank.updateInfo') }}</td>
@@ -165,28 +165,12 @@ export default {
   width: 40px;
 }
 
-#head {
-  width: 100%;
-  height: 105px;
-  background-color: rgb(23, 26, 33);
-}
-
 .left {
   float: left;
 }
 
 .right {
   float: right;
-}
-
-#foot {
-  color: rgb(189, 187, 185);
-  font-size: 10px;
-}
-
-.foot {
-  width: 100%;
-  text-align: center;
 }
 
 #logdiv {
@@ -199,7 +183,6 @@ export default {
 }
 
 .table {
-  color: rgb(198, 212, 223);
   border-collapse: collapse;
   border-spacing: 0;
   margin: 0;
@@ -236,8 +219,12 @@ th {
   height: 50px;
 }
 
+.level-dark {
+  position: absolute;
+}
 .level {
   position: absolute;
+  filter: brightness(25%);
 }
 
 .levelAll {
@@ -288,7 +275,6 @@ th {
 #tfoot {
   text-align: right;
   height: 30px;
-  color: rgb(189, 187, 185);
   font-size: 10px;
 }
 
@@ -300,11 +286,18 @@ th {
   border-radius: 0 0 10px 0;
   padding-right: 10px;
 }
-.even {
+.even-dark {
   background-color: #262626;
 }
 
-.odd {
+.odd-dark {
   background-color: #3E3E3E;
+}
+.even {
+  background-color: #ffffff;
+}
+
+.odd {
+  background-color: #e0e0e0;
 }
 </style>
