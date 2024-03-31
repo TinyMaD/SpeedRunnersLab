@@ -4,7 +4,6 @@
     temporary
     stateless
     width="500px"
-    dark
     right
     absolute
     @input="onChange"

@@ -1,7 +1,6 @@
 <template>
   <v-dialog
     v-model="visible"
-    dark
     width="550"
     @click:outside="closeDialog()"
   >
@@ -9,7 +8,6 @@
       <v-toolbar
         class="pl-4"
         color="primary"
-        dark
       >{{ $t('routes.privacy') }}</v-toolbar>
       <v-list
         three-line

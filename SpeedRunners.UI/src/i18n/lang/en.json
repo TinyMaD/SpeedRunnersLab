@@ -62,7 +62,10 @@
     "starSucc": "Starred successful",
     "unstarSucc": "Unstar",
     "star": "Starred",
-    "unStar": "Star"
+    "unStar": "Star",
+    "deleteSucc": "Deleted MOD successfully",
+    "deleteWarn": "Delete This Mod ?\t",
+    "deleteInfo": "Once you delete a mod, there is no going back. Please be certain."
   },
   "common": {
     "search": "Search",
@@ -74,7 +77,9 @@
     "submit": "Submit",
     "cancel": "Cancel",
     "notice": "Notice",
-    "success": "Successful"
+    "success": "Successful",
+    "delete": "Delete",
+    "confirm": "Confirm"
   },
   "rank": {
     "personaName": "Name",
@@ -193,7 +198,7 @@
     "initSucc": "Initialize user data successfully"
   },
   "privacy": {
-    "publishState": "Public Steam State",
+    "publishState": "Publish Steam State",
     "publishStateDetail": "Everyone can see your Steam state and if you are playing SR",
     "publishPlaytime": "Publish the recent playtime of SR",
     "publishPlaytimeDetail": "Displayed in \"Playtime past 2 weeks\" on the homepage",

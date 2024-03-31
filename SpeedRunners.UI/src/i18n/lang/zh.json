@@ -62,7 +62,10 @@
     "starSucc": "收藏成功",
     "unstarSucc": "已取消收藏",
     "star": "取消收藏",
-    "unStar": "收藏"
+    "unStar": "收藏",
+    "deleteSucc": "删除MOD成功",
+    "deleteWarn": "确定要删除这个Mod ?",
+    "deleteInfo": "删除后无法恢复，请谨慎操作。"
   },
   "common": {
     "search": "搜 索",
@@ -74,7 +77,9 @@
     "submit": "提 交",
     "cancel": "取 消",
     "notice": "提 示",
-    "success": "成功"
+    "success": "成功",
+    "delete": "删除",
+    "confirm": "确 定"
   },
   "rank": {
     "personaName": "昵 称",

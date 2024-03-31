@@ -1,6 +1,6 @@
 <template>
   <div id="ap">
-    <v-app-bar app dark hide-on-scroll fade-img-on-scroll dense>
+    <v-app-bar app hide-on-scroll fade-img-on-scroll dense>
       <v-app-bar-nav-icon @click.stop="drawerRight = !drawerRight" />
       <v-toolbar-title>
         <v-img
@@ -15,7 +15,6 @@
         offset-y
         transition="slide-y-transition"
         open-on-hover
-        dark
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -53,7 +52,7 @@
       </template>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawerRight" dark app clipped temporary>
+    <v-navigation-drawer v-model="drawerRight" app clipped temporary>
       <v-list>
         <v-list-item v-if="avatar!==''">
           <v-list-item-avatar>
@@ -105,11 +104,11 @@
 
     <PrivacySettings v-if="name && rankType != 0" :visible.sync="privacyVisible" />
 
-    <v-main dark>
+    <v-main>
       <AppMain />
     </v-main>
 
-    <v-footer dark class="body-2">
+    <v-footer class="body-2">
       <v-col class="text-center" cols="12">
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
@@ -218,7 +217,6 @@
         v-show="fab"
         v-scroll="onScroll"
         fab
-        dark
         fixed
         bottom
         right

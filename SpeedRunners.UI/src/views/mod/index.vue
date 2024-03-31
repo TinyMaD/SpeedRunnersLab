@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row justify="center">
-      <v-card width="1500px" min-height="800px" class="d-flex flex-row" dark>
+      <v-card width="1500px" min-height="800px" class="d-flex flex-row">
         <div>
           <v-list width="130px">
             <v-list-item>
@@ -133,7 +133,25 @@
                     <span>{{ starTooltip(mod.star) }}</span>
                   </v-tooltip>
 
+                  <v-tooltip v-if="mod.authorID === steamId" bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-hover v-slot="{ hover }">
+                        <v-btn
+                          text
+                          x-small
+                          :color="hover?'red':'white'"
+                          v-bind="attrs"
+                          @click.stop="openDialog(mod.id)"
+                          v-on="on"
+                        ><v-icon>mdi-delete-outline</v-icon>
+                        </v-btn>
+                      </v-hover>
+                    </template>
+                    <span>{{ $t('common.delete') }}</span>
+                  </v-tooltip>
+
                   <v-spacer />
+
                   <div class="text-caption">
                     {{ fileSize(mod.size) }}
                   </div>
@@ -154,13 +172,43 @@
         </div>
       </v-card>
     </v-row>
+    <v-dialog
+      v-model="dialog"
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="text-h5">
+          {{ $t('mod.deleteWarn') }}
+        </v-card-title>
+        <v-card-text>{{ $t('mod.deleteInfo') }}</v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-hover v-slot="{ hover }">
+            <v-btn
+              :loading="deleteLoading"
+              color="red"
+              :text="!hover"
+              @click="deleteMod"
+            >
+              {{ $t('common.confirm') }}
+            </v-btn>
+          </v-hover>
+          <v-btn
+            text
+            @click="dialog = false"
+          >
+            {{ $t('common.cancel') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <ModInfo :visible.sync="drawer" @success="getList" />
   </v-container>
 </template>
 <script>
 import { mapGetters } from "vuex";
 import ModInfo from "./modInfo";
-import { getDownloadUrl, getModList, operateModStar } from "@/api/asset";
+import { getDownloadUrl, getModList, operateModStar, deleteMod } from "@/api/asset";
 
 export default {
   name: "Mod",
@@ -196,10 +244,13 @@ export default {
       list: [],
       total: 0
     },
-    drawer: false
+    drawer: false,
+    dialog: false,
+    deleteLoading: false,
+    deleteID: 0
   }),
   computed: {
-    ...mapGetters(["name"]),
+    ...mapGetters(["name", "steamId"]),
     isZh() {
       return this.$i18n.locale === "zh";
     },
@@ -249,6 +300,22 @@ export default {
     getList() {
       getModList(this.searchParam).then(res => {
         this.data = res.data;
+      });
+    },
+    openDialog(modId) {
+      this.deleteID = modId;
+      this.dialog = true;
+    },
+    deleteMod() {
+      this.deleteLoading = true;
+      var modID = this.deleteID;
+      deleteMod({ modID }).then(res => {
+        this.deleteLoading = false;
+        this.dialog = false;
+        if (res.code === 666) {
+          this.$toast.success(this.$t("mod.deleteSucc"));
+          this.getList();
+        }
       });
     },
     changeSwitch() {

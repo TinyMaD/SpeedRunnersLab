@@ -42,15 +42,15 @@
             </template>
             <span>{{ $t('components.cropper.crop') }}</span>
           </v-tooltip>
-          <v-icon color="blue" dark @click="rotate('r');">mdi-rotate-right</v-icon>
-          <v-icon color="blue" dark @click="rotate('l');">mdi-rotate-left</v-icon>
-          <v-icon color="blue" dark @click="flip(true);">mdi-flip-vertical</v-icon>
-          <v-icon color="blue" dark @click="flip(false);">mdi-flip-horizontal</v-icon>
+          <v-icon color="blue" @click="rotate('r');">mdi-rotate-right</v-icon>
+          <v-icon color="blue" @click="rotate('l');">mdi-rotate-left</v-icon>
+          <v-icon color="blue" @click="flip(true);">mdi-flip-vertical</v-icon>
+          <v-icon color="blue" @click="flip(false);">mdi-flip-horizontal</v-icon>
 
           <v-spacer />
 
           <v-btn
-            color="blue darken-1"
+            color="blue"
             text
             @click="dialog = false"
           >{{ $t('common.cancel') }}</v-btn>

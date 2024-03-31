@@ -27,7 +27,7 @@ namespace SpeedRunners.DAL
         public List<MRankInfo> GetParticipateList()
         {
             return Db.Query<MRankInfo>($"SELECT * FROM RankInfo WHERE Participate = 1 ORDER BY RankScore DESC").ToList();
-        }
+        } 
 
         public List<MRankInfo> GetRankList()
         {

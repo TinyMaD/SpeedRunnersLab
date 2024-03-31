@@ -27,6 +27,13 @@ export function addMod(param) {
     data: param
   });
 }
+export function deleteMod(param) {
+  return request({
+    url: `/asset/deleteMod`,
+    method: "post",
+    data: param
+  });
+}
 export function operateModStar(modID, star) {
   return request({
     url: `/asset/operateModStar/${modID}/${star}`,

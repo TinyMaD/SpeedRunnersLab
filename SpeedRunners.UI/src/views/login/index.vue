@@ -1,7 +1,6 @@
 <template>
   <v-container fluid>
     <v-dialog
-      dark
       value="true"
       persistent
       width="500"

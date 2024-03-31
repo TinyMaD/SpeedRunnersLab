@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row justify="center">
-      <v-card width="1500px" min-height="800px" dark tile>
+      <v-card width="1500px" min-height="800px" tile>
         <v-row style="padding:20px">
           <v-img
             src="img/sxlbg.jpg"
@@ -179,7 +179,7 @@
       :persistent="participate === 0"
       width="500"
     >
-      <v-card dark>
+      <v-card>
         <v-card-title class="text-h5">
           {{ $t('common.notice') }}
         </v-card-title>

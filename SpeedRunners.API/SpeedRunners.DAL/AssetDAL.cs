@@ -71,6 +71,11 @@ LIMIT ?{nameof(param.Offset)}, ?{nameof(param.PageSize)}; ", param);
             return result;
         }
 
+        public MMod GetMod(int modID)
+        {
+            return Db.QueryFirstOrDefault<MMod>($"SELECT * FROM `Mod` WHERE `ID` = ?{nameof(modID)}", new { modID });
+        }
+
         public void AddMod(MMod param)
         {
             string sql = $@"SELECT 1 FROM `Mod` WHERE imgUrl = ?{nameof(param.ImgUrl)}";
@@ -115,6 +120,13 @@ UPDATE `Mod` SET StarCount = IFNULL(StarCount, 0) + 1 WHERE `ID` = ?{nameof(modI
         {
             string sql = $@"DELETE FROM `ModStar` WHERE `ModID` = {modStarID} AND PlatformID = {currentUserID};
 UPDATE `Mod` SET StarCount = IFNULL(StarCount, 0) - 1 WHERE `ID` = {modStarID}";
+            Db.Execute(sql);
+        }
+
+        public void DeleteMod(int modID)
+        {
+            string sql = $@"DELETE FROM `ModStar` WHERE `ModID` = {modID};
+DELETE FROM `Mod` WHERE `ID` = {modID}";
             Db.Execute(sql);
         }
     }

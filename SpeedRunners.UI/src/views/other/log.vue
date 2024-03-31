@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row justify="center">
-      <v-card width="940px" min-height="800px" style="padding:10px" dark>
+      <v-card width="940px" min-height="800px" style="padding:10px">
         <VTimeline class="timeline" dense>
           <VSlideYTransition group>
             <VTimelineItem
@@ -17,7 +17,7 @@
                   style="position: absolute; top: -10px"
                   class="mr-2"
                   small
-                  dark
+
                   :color="getColor(eachPost.type)"
                 >
                   {{ eachPost.title }}</VChip>

@@ -21,6 +21,10 @@ namespace SpeedRunners.Controllers
         [HttpPost]
         public string GetDownloadUrl([FromBody] dynamic data) => BLL.CreateDownloadUrl(data.fileName.Value);
 
+        [User]
+        [HttpPost]
+        public Task<MResponse> DeleteMod([FromBody] MDeleteMod data) => BLL.DeleteMod(data);
+
         [Persona]
         [HttpPost]
         public MPageResult<MModOut> GetModList([FromBody] MModPageParam param) => BLL.GetModList(param);

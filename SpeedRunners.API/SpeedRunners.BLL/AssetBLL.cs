@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
+using Qiniu.Http;
 using Qiniu.Storage;
 using Qiniu.Util;
 using SpeedRunners.DAL;
@@ -7,7 +7,6 @@ using SpeedRunners.Model;
 using SpeedRunners.Model.Asset;
 using SpeedRunners.Utils;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -35,6 +34,7 @@ namespace SpeedRunners.BLL
             string fileToken = Auth.CreateUploadToken(mac, modPolicy.ToJsonString());
             return new[] { imgToken, fileToken };
         }
+
         public string CreateDownloadUrl(string key, string domain = "https://cdn-mod.speedrunners.cn")
         {
             Mac mac = new Mac(_accessKey, _secretKey);
@@ -85,6 +85,52 @@ namespace SpeedRunners.BLL
             });
         }
 
+        /// <summary>
+        /// 删除Mod
+        /// </summary>
+        public async Task<MResponse> DeleteMod(MDeleteMod param)
+        {
+            MMod mod = new MMod();
+            BeginDb(DAL =>
+            {
+                mod = DAL.GetMod(param.ModID);
+
+                if (mod == null || mod.AuthorID != CurrentUser.PlatformID)
+                {
+                    return;
+                }
+                DAL.DeleteMod(param.ModID);
+            });
+            if (mod == null || mod.AuthorID != CurrentUser.PlatformID)
+            {
+                return MResponse.Success();
+            }
+            MResponse res = await DeleteFile("sr-img", mod.ImgUrl);
+            if (res.Code != 666)
+            {
+                return res;
+            }
+            res = await DeleteFile("sr-mod", mod.FileUrl);
+            return res;
+        }
+
+        /// <summary>
+        /// 删除资源
+        /// </summary>
+        /// <param name="bucket">空间名</param>
+        /// <param name="key">文件名</param>
+        private async Task<MResponse> DeleteFile(string bucket, string key)
+        {
+            Mac mac = new Mac(_accessKey, _secretKey);
+            BucketManager manager = new BucketManager(mac, new Config { Zone = Zone.ZoneCnSouth });
+            HttpResult deleteRet = await manager.Delete(bucket, key);
+            if (deleteRet.Code != (int)HttpCode.OK)
+            {
+                return MResponse.Fail(deleteRet.ToString());
+            }
+            return MResponse.Success();
+        }
+
         public async Task<MResponse> GetAfdianSponsorAsync()
         {
             string parameters = "{\"per_page\":100,\"page\":1}";
@@ -110,7 +156,7 @@ namespace SpeedRunners.BLL
 
             if (!response.IsSuccessStatusCode)
             {
-                return MResponse.Fail("afdian接口请求失败");
+                return MResponse.Fail("Request Afdian's interface failed");
             }
             string responseContent = await response.Content.ReadAsStringAsync();
 
