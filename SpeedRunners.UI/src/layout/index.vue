@@ -165,6 +165,22 @@
             <v-btn
               class="mx-4"
               icon
+              href="https://www.youtube.com/channel/UCNQo9EH7ccEECXC__QokBBA"
+              target="_blank"
+              v-bind="attrs"
+              v-on="on"
+            >
+              <v-icon size="30px">mdi-youtube</v-icon>
+            </v-btn>
+          </template>
+          <span>YouTube</span>
+        </v-tooltip>
+
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="mx-4"
+              icon
               href="https://steamcommunity.com/id/tinymad"
               target="_blank"
               v-bind="attrs"
