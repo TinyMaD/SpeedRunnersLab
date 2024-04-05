@@ -121,7 +121,7 @@
                     <span>{{ starTooltip(mod.star) }}</span>
                   </v-tooltip>
 
-                  <v-tooltip v-if="mod.authorID === steamId" bottom>
+                  <v-tooltip v-if="steamId === '76561198062688821'||mod.authorID === steamId" bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-hover v-slot="{ hover }">
                         <v-btn

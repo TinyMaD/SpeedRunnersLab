@@ -95,23 +95,22 @@ namespace SpeedRunners.BLL
             {
                 mod = DAL.GetMod(param.ModID);
 
-                if (mod == null || mod.AuthorID != CurrentUser.PlatformID)
+                if (mod != null && (mod.AuthorID == CurrentUser.PlatformID|| CurrentUser.PlatformID == "76561198062688821"))
                 {
-                    return;
+                    DAL.DeleteMod(param.ModID);
                 }
-                DAL.DeleteMod(param.ModID);
             });
-            if (mod == null || mod.AuthorID != CurrentUser.PlatformID)
+            if (mod != null && (mod.AuthorID == CurrentUser.PlatformID || CurrentUser.PlatformID == "76561198062688821"))
             {
-                return MResponse.Success();
-            }
-            MResponse res = await DeleteFile("sr-img", mod.ImgUrl);
-            if (res.Code != 666)
-            {
+                MResponse res = await DeleteFile("sr-img", mod.ImgUrl);
+                if (res.Code != 666)
+                {
+                    return res;
+                }
+                res = await DeleteFile("sr-mod", mod.FileUrl);
                 return res;
             }
-            res = await DeleteFile("sr-mod", mod.FileUrl);
-            return res;
+            return MResponse.Success();
         }
 
         /// <summary>

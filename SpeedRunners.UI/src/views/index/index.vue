@@ -6,7 +6,7 @@
           <v-col cols="12" md="6" class="py-0 pr-md-1">
             <v-row>
               <v-col cols="12" class="py-0">
-                <v-card class="mb-2 pa-2">
+                <v-card class="mb-2 pa-2 rounded-0">
                   <div style="color:#03a245">{{ $t("index.online") }}</div>
                   <Odometer :value="onlineCount" class="text-h4" color="#03a245" />
                   <v-divider />
@@ -26,7 +26,7 @@
                 </v-card>
               </v-col>
               <v-col cols="12" class="py-0">
-                <v-card class="mb-2 pa-2">
+                <v-card class="mb-2 pa-2 rounded-0">
                   <Sponsor />
                 </v-card>
               </v-col>
@@ -35,7 +35,7 @@
           <v-col cols="12" md="6" class="py-0 pl-md-1">
             <v-row>
               <v-col class="py-0">
-                <v-card class="mb-2 pa-2">
+                <v-card class="mb-2 pa-2 rounded-0">
                   <HourChart />
                 </v-card>
               </v-col>
