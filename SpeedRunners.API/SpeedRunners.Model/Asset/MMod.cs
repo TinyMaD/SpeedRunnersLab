@@ -22,6 +22,6 @@ namespace SpeedRunners.Model.Asset
     }
     public class MModOut : MMod
     {
-        public bool IsNew => UploadDate > DateTime.Now.Date.AddMonths(-1);
+        public bool IsNew => UploadDate >= DateTime.Now.Date.AddMonths(-1);
     }
 }
