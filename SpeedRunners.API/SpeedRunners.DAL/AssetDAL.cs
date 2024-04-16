@@ -43,11 +43,11 @@ namespace SpeedRunners.DAL
             GridReader reader = Db.QueryMultiple($@"SELECT COUNT(ID) FROM `Mod` WHERE 1 = 1 {where};
 SELECT *
 FROM (
-  SELECT *,  3 * IFNULL(`StarCount`, 0) + IFNULL(`Download`, 0) + 999999999 AS rowid
+  SELECT *, 1 AS IsNew, 3 * IFNULL(`StarCount`, 0) + IFNULL(`Download`, 0) + 999999999 AS rowid
   FROM `Mod`
   WHERE `UploadDate` >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH) {where}
   UNION ALL
-  SELECT *, 3 * IFNULL(`StarCount`, 0) + IFNULL(`Download`, 0) AS rowid
+  SELECT *, 0 AS IsNew, 3 * IFNULL(`StarCount`, 0) + IFNULL(`Download`, 0) AS rowid
   FROM `Mod`
   WHERE `UploadDate` < DATE_SUB(CURDATE(), INTERVAL 1 MONTH) {where}
 ) AS subquery
