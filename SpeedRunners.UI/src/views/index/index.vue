@@ -23,6 +23,13 @@
                     </v-tooltip>
                   </v-avatar>
                   <AddedChart />
+                  <p class="text-center mt-2">
+                    <a
+                      :href="videoUrl"
+                      target="_blank"
+                      class="text-decoration-underline"
+                    >{{ $t('index.videoTitle') }}</a>
+                  </p>
                 </v-card>
               </v-col>
               <v-col cols="12" class="py-0">
@@ -65,6 +72,11 @@ export default {
     onlineCount: 0,
     playSRlist: []
   }),
+  computed: {
+    videoUrl() {
+      return this.$i18n.locale === "zh" ? "https://www.bilibili.com/video/BV1f84y1R7mb" : "https://www.youtube.com/watch?v=uuJsCLUzhSs";
+    }
+  },
   mounted() {
     getOnlineCount().then(response => {
       this.onlineCount = response.data;

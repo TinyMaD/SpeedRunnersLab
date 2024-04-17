@@ -17,7 +17,8 @@
     "sponsorTitle": "感谢 {0} 名赞助者",
     "addedChartTitle": "两周新增天梯分",
     "hourChartTile": "两周游戏时间",
-    "hourChartUnit": "小时"
+    "hourChartUnit": "小时",
+    "videoTitle": "2023年度冲分视频"
   },
   "layout": {
     "login": "登 录",
