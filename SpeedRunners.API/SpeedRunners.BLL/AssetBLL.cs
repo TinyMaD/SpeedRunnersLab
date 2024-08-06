@@ -150,7 +150,7 @@ namespace SpeedRunners.BLL
 
             HttpContent content = new StringContent(jsonString, Encoding.UTF8, "application/json");
 
-            string url = "https://afdian.net/api/open/query-sponsor";
+            string url = "https://afdian.com/api/open/query-sponsor";
             HttpResponseMessage response = await httpClient.PostAsync(url, content);
 
             if (!response.IsSuccessStatusCode)
