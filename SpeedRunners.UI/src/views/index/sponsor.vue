@@ -19,7 +19,7 @@
       class="text-body-1 pa-1 my-1"
       v-html="content"
     />
-    <a class="afd-btn" href="https://afdian.net/a/tinymad" target="_blank">
+    <a class="afd-btn" href="https://afdian.com/a/tinymad" target="_blank">
       <img width="150" style="border-radius:5px" src="https://pic1.afdiancdn.com/static/img/welcome/button-sponsorme.jpg">
     </a>
     <a class="paypal-btn" href="https://www.paypal.me/tinymad" target="_blank">
