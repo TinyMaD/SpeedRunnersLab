@@ -14,7 +14,7 @@
               <v-list-item
                 v-for="(menu, i) in otherModMenu"
                 :key="i"
-                @click="changeList"
+                @click="changeTag"
               >
                 <v-list-item-title>{{ menu }}</v-list-item-title>
               </v-list-item>
@@ -35,8 +35,8 @@
                 :hint=" $t('common.keywords') "
                 append-icon="mdi-magnify"
                 clearable
-                @click:append="changeList"
-                @keyup.enter.native="changeList"
+                @click:append="keywordsQuery"
+                @keyup.enter.native="keywordsQuery"
               />
             </v-col>
             <div style="width:180px;margin-left:20px">
@@ -265,7 +265,12 @@ export default {
     starTooltip(star) {
       return star ? this.$t("mod.star") : this.$t("mod.unStar");
     },
-    changeList() {
+    changeTag() {
+      this.searchParam.keywords = "";
+      this.searchParam.pageNo = 1;
+      this.getList();
+    },
+    keywordsQuery() {
       this.searchParam.pageNo = 1;
       this.getList();
     },
