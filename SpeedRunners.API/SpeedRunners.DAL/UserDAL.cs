@@ -20,7 +20,8 @@ namespace SpeedRunners.DAL
             return Db.QueryFirstOrDefault<MPrivacySettings>(
                 $@"SELECT
                      a.PlatformID,
-                     a.State,
+                     CASE WHEN a.State = -1 THEN -1
+                        ELSE 0 END AS State,
                      a.RankType,
                      IFNULL(b.RequestRankData, 1) RequestRankData,
                      IFNULL(b.ShowAddScore, 1) ShowAddScore,
