@@ -74,7 +74,7 @@ export default {
   }),
   computed: {
     videoUrl() {
-      return this.$i18n.locale === "zh" ? "https://www.bilibili.com/video/BV1f84y1R7mb" : "https://www.youtube.com/watch?v=uuJsCLUzhSs";
+      return this.$i18n.locale === "zh" ? "https://www.bilibili.com/video/BV1qU2WYHExA" : "https://www.youtube.com/watch?v=0NVrv-DirnY";
     }
   },
   mounted() {
