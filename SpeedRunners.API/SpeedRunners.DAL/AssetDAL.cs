@@ -51,7 +51,7 @@ FROM (
   FROM `Mod`
   WHERE `UploadDate` < DATE_SUB(CURDATE(), INTERVAL 1 MONTH) {where}
 ) AS subquery
-ORDER BY rowid DESC, UploadDate DESC
+ORDER BY rowid DESC, UploadDate DESC, ID DESC
 LIMIT ?{nameof(param.Offset)}, ?{nameof(param.PageSize)}; ", param);
             var result = new MPageResult<MModOut>
             {
