@@ -1,5 +1,29 @@
 [
     {
+        "title": "Downloading progress",
+        "version": "v2.9.1",
+        "date": "2024-12-29",
+        "list": [
+            {
+                "text": "Added downloading progress bar",
+                "type": "feature"
+            },
+            {
+                "text": "Fixed chart issue when mutiple players have the same name",
+                "type": "fix"
+            },
+            {
+                "text": "Fixed the bug of getting mod list",
+                "type": "fix"
+            },
+            {
+                "text": "When changing tags, clear keywords of the search",
+                "type": "other"
+            }
+        ],
+        "type": "unimportant"
+    },
+    {
         "title": "Deleting Mod",
         "version": "v2.9.0",
         "date": "2024-03-31",
@@ -297,24 +321,12 @@
     },
     {
         "title": "Mobile Chart Adjustment",
-        "version": "v1.2.1",
+        "version": "v1.2.0",
         "date": "2020-04-06",
         "list": [
             {
                 "text": "Optimized mobile chart styles",
                 "type": "beautify"
-            }
-        ],
-        "type": "unimportant"
-    },
-    {
-        "title": "Publish notification",
-        "version": "v1.2.0",
-        "date": "2020-04-01",
-        "list": [
-            {
-                "text": "Added feature that publish notification in admin panel when new user login",
-                "type": "feature"
             }
         ],
         "type": "unimportant"

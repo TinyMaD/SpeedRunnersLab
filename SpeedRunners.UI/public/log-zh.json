@@ -1,5 +1,29 @@
 [
     {
+        "title": "下载进度条",
+        "version": "v2.9.1",
+        "date": "2024-12-29",
+        "list": [
+            {
+                "text": "添加下载MOD进度条",
+                "type": "feature"
+            },
+            {
+                "text": "修复存在多个同名玩家时统计图显示问题",
+                "type": "fix"
+            },
+            {
+                "text": "修复MOD分页查询BUG",
+                "type": "fix"
+            },
+            {
+                "text": "切换标签时，清除搜索栏关键字",
+                "type": "other"
+            }
+        ],
+        "type": "unimportant"
+    },
+    {
         "title": "MOD删除功能",
         "version": "v2.9.0",
         "date": "2024-03-31",
