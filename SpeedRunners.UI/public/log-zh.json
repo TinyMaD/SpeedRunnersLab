@@ -321,24 +321,12 @@
     },
     {
         "title": "手机端图表调整",
-        "version": "v1.2.1",
+        "version": "v1.2.0",
         "date": "2020-04-06",
         "list": [
             {
                 "text": "优化手机端统计图表样式",
                 "type": "beautify"
-            }
-        ],
-        "type": "unimportant"
-    },
-    {
-        "title": "新用户登录提示",
-        "version": "v1.2.0",
-        "date": "2020-04-01",
-        "list": [
-            {
-                "text": "管理后台添加新用户登录提示消息",
-                "type": "feature"
             }
         ],
         "type": "unimportant"
