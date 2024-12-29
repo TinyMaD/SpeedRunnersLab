@@ -80,14 +80,14 @@
                       <v-btn
                         icon
                         class="download-btn"
-                        @click.stop="download(mod.title, mod.fileUrl)"
+                        @click.stop="download(mod)"
                       >
                         <v-icon>mdi-download</v-icon>
                       </v-btn>
                     </v-overlay>
                   </v-fade-transition>
                 </v-img>
-
+                <v-progress-linear v-show="mod.progress && mod.progress > 0" v-model="mod.progress" />
                 <v-card-actions>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -95,7 +95,7 @@
                         text
                         x-small
                         v-bind="attrs"
-                        @click.stop="download(mod.title, mod.fileUrl)"
+                        @click.stop="download(mod)"
                         v-on="on"
                       ><v-icon>mdi-download</v-icon>
                         {{ mod.download }}
@@ -322,13 +322,24 @@ export default {
         this.getList();
       });
     },
-    download(title, fileUrl) {
+    download(mod) {
+      var title = mod.title;
+      var fileUrl = mod.fileUrl;
+      var that = this;
+      var index = that.data.list.findIndex(x => x.id === mod.id);
       title = `${title}.${fileUrl.split(".").pop()}`;
       getDownloadUrl(fileUrl).then(response => {
         var x = new XMLHttpRequest();
         x.open("GET", response.data, true);
         x.responseType = "blob";
+        x.onprogress = function(event) {
+          if (event.lengthComputable) {
+            const percentComplete = (event.loaded / event.total) * 100;
+            that.$set(that.data.list, index, { ...that.data.list[index], progress: percentComplete });
+          }
+        };
         x.onload = function(e) {
+          that.$set(that.data.list, index, { ...that.data.list[index], progress: 0 });
           var url = window.URL.createObjectURL(x.response);
           var a = document.createElement("a");
           a.href = url;
