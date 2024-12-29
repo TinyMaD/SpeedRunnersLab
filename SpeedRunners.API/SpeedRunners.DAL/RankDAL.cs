@@ -27,7 +27,7 @@ namespace SpeedRunners.DAL
         public List<MRankInfo> GetParticipateList()
         {
             return Db.Query<MRankInfo>($"SELECT * FROM RankInfo WHERE Participate = 1 ORDER BY RankScore DESC").ToList();
-        } 
+        }
 
         public List<MRankInfo> GetRankList()
         {
@@ -44,7 +44,7 @@ namespace SpeedRunners.DAL
         public List<MRankInfo> GetAddedChart()
         {
             int dayOfRange = 14;
-            return Db.Query<MRankInfo>($@"SELECT a.PlatformID,
+            var list = Db.Query<MRankInfo>($@"SELECT a.PlatformID,
                                                 b.PersonaName,
                                                 b.RankScore - a.minScore RankScore,
                                                 b.AvatarS
@@ -75,15 +75,47 @@ namespace SpeedRunners.DAL
                                                 WHERE b.RankScore - a.minScore > 0 
                                                         AND (ISNULL(ps.ShowAddScore) OR ps.ShowAddScore = 1)
                                                 ORDER BY RankScore DESC; ").ToList();
+
+            HandleSameName(list);
+            return list;
         }
 
         public List<MRankInfo> GetHourChart()
         {
-            return Db.Query<MRankInfo>($@"SELECT info.PlatformID, info.PersonaName, info.WeekPlayTime, info.AvatarS 
+            var list = Db.Query<MRankInfo>($@"SELECT info.PlatformID, info.PersonaName, info.WeekPlayTime, info.AvatarS 
                                             FROM RankInfo info
                                             LEFT JOIN PrivacySettings ps ON ps.PlatformID = info.PlatformID
                                             WHERE info.WeekPlayTime > 0 AND (ISNULL(ps.ShowWeekPlayTime) OR ps.ShowWeekPlayTime = 1)
                                             ORDER BY info.WeekPlayTime DESC").ToList();
+            HandleSameName(list);
+            return list;
+        }
+
+        private static void HandleSameName(List<MRankInfo> list)
+        {
+            var nameList = new List<MRankInfo>();
+
+            foreach (var item in list)
+            {
+                var exist = nameList.FirstOrDefault(x => x.PersonaName == item.PersonaName);
+                if (exist == null)
+                {
+                    nameList.Add(new MRankInfo { PersonaName = item.PersonaName, RankCount = 0 });
+                }
+                else
+                {
+                    exist.RankCount++;
+                }
+            }
+            foreach (var item in list)
+            {
+                var exist = nameList.FirstOrDefault(x => x.PersonaName == item.PersonaName);
+                for (var i = 0; i < exist.RankCount; i++)
+                {
+                    item.PersonaName += " ";
+                }
+                exist.RankCount--;
+            }
         }
 
         public bool ExistRankInfo(string steamID)
