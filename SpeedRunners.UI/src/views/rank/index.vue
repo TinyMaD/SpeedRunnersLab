@@ -59,7 +59,6 @@
 
 <script>
 import { getRankList } from "@/api/rank";
-import $ from "jquery";
 export default {
   name: "Rank",
 
@@ -71,13 +70,13 @@ export default {
 
   computed: {
     pc() {
-      return $(window).width() > 1640;
+      return window.innerWidth > 1640;
     },
     imgSize() {
-      return $(window).width() < 451 ? 120 : 150;
+      return window.innerWidth < 451 ? 120 : 150;
     },
     leveMarginTop() {
-      return $(window).width() < 451 ? 11 : 6;
+      return window.innerWidth < 451 ? 11 : 6;
     },
     scoreIncrease() {
       return player => {
