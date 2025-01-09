@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Threading;
+﻿using System.Text;
 
 namespace SpeedRunners.Scheduler
 {
@@ -10,11 +8,12 @@ namespace SpeedRunners.Scheduler
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            new Task().Execute();
+            Task task = new Task();
+            task.Execute();
 
             while (true)
             {
-                Thread.Sleep(TimeSpan.FromSeconds(5));
+                task.UpdateSteamState().Wait();
             }
         }
     }

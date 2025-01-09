@@ -9,6 +9,7 @@ using System.Data;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SpeedRunners.Scheduler
@@ -21,9 +22,7 @@ namespace SpeedRunners.Scheduler
         private static readonly string RUN_UPDATESTEAMINFO = ConfigurationManager.AppSettings["RunUpdateSteamInfo"];
         private static readonly string ApiKey = ConfigurationManager.AppSettings["ApiKey"];
         private static readonly LogHelper _log = LogHelper.GetCurrentClassLogHelper();
-        private static readonly StringBuilder _sb = new StringBuilder();
-        private int _apiReqCount = 0;
-        private bool _isUpdateSteamRunning = false; // 添加标志
+        private string _lastID;
         public async void Execute()
         {
             try
@@ -38,20 +37,6 @@ namespace SpeedRunners.Scheduler
                     UpdateScore();
                 }).ToRunNow().AndEvery(10)
                     .Minutes();
-
-                if (RUN_UPDATESTEAMINFO == "true")
-                {
-                    timer.ScheduleEx(_log, async delegate
-                    {
-                        if (!_isUpdateSteamRunning) // 正在执行直接跳过
-                        {
-                            _isUpdateSteamRunning = true;
-                            await UpdateSteamInfo();
-                            _isUpdateSteamRunning = false;
-                        }
-                    }).ToRunNow().AndEvery(int.Parse(MINUTES_NUM))
-                        .Minutes();
-                }
 
                 _ = timer.ScheduleEx(_log, delegate
                 {
@@ -83,14 +68,13 @@ namespace SpeedRunners.Scheduler
         {
             using (IDbConnection conn = DbHelper.GetConnection())
             {
-                _log.Log($"添加【天梯分日志】({DateTime.Now})");
                 int rows = conn.Execute($@"
                 INSERT INTO RankLog(PlatformID, RankScore)
                 SELECT  PlatformID,
                         RankScore
                 FROM RankInfo
                 WHERE RankScore > 0 AND RankScore <> OldRankScore");
-                _log.Log($"成功添加{rows}条【天梯分日志】({DateTime.Now})");
+                Console.WriteLine($"成功添加{rows}条【天梯分日志】({DateTime.Now})");
             }
         }
 
@@ -101,7 +85,7 @@ namespace SpeedRunners.Scheduler
                 List<string> idList = new List<string>();
                 using (IDbConnection conn = DbHelper.GetConnection())
                 {
-                    _log.Log($"更新【两周游戏时间】({DateTime.Now})");
+                    Console.WriteLine($"更新【两周游戏时间】({DateTime.Now})");
                     idList = conn.Query<string>("select PlatformID from RankInfo where RankType<>0").ToList();
                 }
                 List<RankInfoModel> rankParamList = new List<RankInfoModel>();
@@ -155,17 +139,15 @@ namespace SpeedRunners.Scheduler
                 {
                     conn.Execute($"update RankInfo set WeekPlayTime=?{nameof(RankInfoModel.WeekPlayTime)}, PlayTime=?{nameof(RankInfoModel.PlayTime)} where PlatformID=?{nameof(RankInfoModel.PlatformID)}", rankParamList);
                 }
-                _log.Log($"【两周游戏时间】更新结束({DateTime.Now})");
+                Console.WriteLine($"【两周游戏时间】更新结束({DateTime.Now})");
             }
         }
         private void UpdateOldScore()
         {
             using (IDbConnection conn = DbHelper.GetConnection())
             {
-                _log.Log($"开始更新【参照天梯分】信息({DateTime.Now})");
                 conn.Execute("UPDATE RankInfo SET OldRankScore = RankScore WHERE RankType <> 0");
-                _log.Log($"成功更新【参照天梯分】信息({DateTime.Now})");
-                _log.Log(" ");
+                Console.WriteLine($"成功更新【每日天梯分】信息({DateTime.Now})");
             }
         }
 
@@ -184,13 +166,7 @@ namespace SpeedRunners.Scheduler
                     sql.AppendLine($" update RankInfo set RankScore={item.RankScore},RankCount={item.RankCount},RankLevel={item.RankLevel} where RankID={item.RankID}; ");
                 }
                 int rows = conn.Execute(sql.ToString());
-                if (rows != newInfoList.Count)
-                {
-                    _log.Log($"【{newInfoList.Count - rows}】个玩家SR信息更新失败({DateTime.Now})");
-                    return;
-                }
-                _log.Log(" ");
-                _log.Log($"成功更新【{rows}/{rankID.Count()}】个【SR】信息({DateTime.Now})");
+                Console.WriteLine($"成功更新【{rows}/{rankID.Count()}】个【SR】信息({DateTime.Now})");
             }
         }
 
@@ -246,29 +222,37 @@ namespace SpeedRunners.Scheduler
             }
         }
 
-        private async System.Threading.Tasks.Task UpdateSteamInfo()
+        public async System.Threading.Tasks.Task UpdateSteamState()
         {
-            List<string> steamIDs = new List<string>();
+            List<string> platformIDs = new List<string>();
             using (IDbConnection connection = DbHelper.GetConnection())
             {
-                steamIDs = connection.Query<string>("select PlatformID from RankInfo where RankType<>?type", new
-                {
-                    type = 0
-                }).ToList();
-            }
-            List<string> PlatformIDs = new List<string>();
-            foreach (string steamID in steamIDs)
-            {
-                PlatformIDs.Add(steamID);
+                platformIDs = connection.Query<string>("select PlatformID from RankInfo ORDER BY PlatformID").ToList();
             }
 
-            _sb.Clear();
-            _apiReqCount = 0;
+            int count = platformIDs.Count / (int.Parse(MINUTES_NUM) * 60 / 30);
+
+            platformIDs.AddRange(platformIDs);// platformIDs x2;
+
+            var cursor = platformIDs.FindIndex(x => x == _lastID);
+
+            var paramList = platformIDs.GetRange(cursor + 1, count);
+
+            _lastID = paramList.LastOrDefault();
+
+            await UpdateSteamInfo(paramList);
+
+            Thread.Sleep(30 * 1000);
+        }
+
+        private async System.Threading.Tasks.Task UpdateSteamInfo(List<string> platformIDs)
+        {
+            if (RUN_UPDATESTEAMINFO == "false") return;
+
             List<PlayersModel> playerInfo = null;
-            Console.WriteLine($"开始请求steam数据......");
             using (HttpClient httpClient = HttpRequestBase.CreateHttpClient())
             {
-                playerInfo = await BatchRequest(httpClient, PlatformIDs, 100);
+                playerInfo = await BatchRequest(httpClient, platformIDs, 100);
             }
             int rows = 0;
             if (playerInfo.Any())
@@ -300,33 +284,25 @@ namespace SpeedRunners.Scheduler
                 {
                     rows = conn.Execute(sql, playerInfo);
                 }
-                if (rows != playerInfo.Count)
-                {
-                    string msg = $"【{playerInfo.Count - rows}】个Steam信息数据库更新失败({DateTime.Now})";
-                    _log.Log(msg);
-                    return;
-                }
             }
-            string msg1 = $"成功更新【{rows}/{PlatformIDs.Count}】个Steam信息({DateTime.Now})";
+            string msg1 = $"成功更新【{rows}/{platformIDs.Count}】个Steam信息({DateTime.Now})";
             Console.WriteLine(msg1);
-            _log.Log(msg1);
         }
 
         private async Task<List<PlayersModel>> BatchRequest<T>(HttpClient httpClient, List<T> PlatformIDs, int count)
         {
-            PlatformIDs = PlatformIDs ?? new List<T>();
+            PlatformIDs ??= new List<T>();
             List<T> errIDs = new List<T>();
             IEnumerable<List<T>> listGroup = PlatformIDs.Select((v, i) => new { i = i / count, v }).GroupBy(n => n.i).Select(g => g.Select(v => v.v).ToList());
             List<PlayersModel> playersInfo = new List<PlayersModel>();
             int index = 0;
             foreach (List<T> group in listGroup)
             {
-                _apiReqCount++;
                 string steamids = string.Join(",", group);
                 string url = "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key=" + ApiKey + "&steamids=" + steamids;
                 string result = await httpClient.HttpGetAsync(url);
 
-                await System.Threading.Tasks.Task.Delay(TimeSpan.FromSeconds(int.Parse(SECOND_NUM))); // 延迟5秒
+                //await System.Threading.Tasks.Task.Delay(TimeSpan.FromSeconds(int.Parse(SECOND_NUM))); // 延迟5秒
                 if (result == null)
                 {
                     errIDs.AddRange(group);
@@ -345,15 +321,6 @@ namespace SpeedRunners.Scheduler
                 playersInfo.AddRange(playersList);
                 index += playersList.Count;
             }
-            _sb.Append($"{count}-{index}、");
-            //if (errIDs.Any() && count > 1)
-            //{
-            //    bool odd = count % 2 == 1;
-            //    count = odd ? count - 1 : count;// 奇数就-1
-
-            //    var errPlayers = await BatchRequest(httpClient, errIDs, count / 2);
-            //    playersInfo.AddRange(errPlayers);
-            //}
             return playersInfo;
         }
     }
