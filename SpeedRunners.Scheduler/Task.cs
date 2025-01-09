@@ -285,8 +285,11 @@ namespace SpeedRunners.Scheduler
                     rows = conn.Execute(sql, playerInfo);
                 }
             }
-            string msg1 = $"成功更新【{rows}/{platformIDs.Count}】个Steam信息({DateTime.Now})";
-            Console.WriteLine(msg1);
+            if (rows != platformIDs.Count)
+            {
+                string msg1 = $"更新【{rows}/{platformIDs.Count}】个Steam信息({DateTime.Now})";
+                Console.WriteLine(msg1);
+            }
         }
 
         private async Task<List<PlayersModel>> BatchRequest<T>(HttpClient httpClient, List<T> PlatformIDs, int count)
