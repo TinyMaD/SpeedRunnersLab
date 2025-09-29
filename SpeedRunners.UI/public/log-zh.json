@@ -33,7 +33,7 @@
                 "type": "other"
             },
             {
-                "text": "添加天梯分页面加载动画",
+                "text": "天梯分界面添加加载动画",
                 "type": "other"
             },
             {
@@ -346,7 +346,7 @@
             }
         ],
         "type": "important",
-        "img":"img/v110.png"
+        "img": "img/v110.png"
     },
     {
         "title": "项目启动",
@@ -359,6 +359,6 @@
             }
         ],
         "type": "holyshit",
-        "img":"img/v100.jpg"
+        "img": "img/v100.jpg"
     }
 ]

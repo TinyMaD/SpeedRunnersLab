@@ -1,35 +1,35 @@
 [
     {
-        "title": "Downloading progress",
+        "title": "Download Progress Bar",
         "version": "v2.9.1",
         "date": "2024-12-29",
         "list": [
             {
-                "text": "Added downloading progress bar",
+                "text": "Added download progress bar for MODs",
                 "type": "feature"
             },
             {
-                "text": "Fixed chart issue when mutiple players have the same name",
+                "text": "Fixed chart display issue when multiple players share the same name",
                 "type": "fix"
             },
             {
-                "text": "Fixed the bug of getting mod list",
+                "text": "Resolved pagination query bug in MOD list",
                 "type": "fix"
             },
             {
-                "text": "When changing tags, clear keywords of the search",
+                "text": "Search keywords are now cleared when switching tags",
                 "type": "other"
             }
         ],
         "type": "unimportant"
     },
     {
-        "title": "Deleting Mod",
+        "title": "MOD Deletion Feature",
         "version": "v2.9.0",
         "date": "2024-03-31",
         "list": [
             {
-                "text": "When unallowing to request rank score, disable the corresponding two switches",
+                "text": "Disable the corresponding two setting switches when requesting rank score is not allowed",
                 "type": "other"
             },
             {
@@ -37,15 +37,15 @@
                 "type": "other"
             },
             {
-                "text": "Added feature deleting Mod, users can delete mods that are uploaded by themselves",
+                "text": "Added MOD deletion feature - users can delete their uploaded MODs",
                 "type": "feature"
             },
             {
-                "text": "Added Dark/Light theme button",
+                "text": "Added Dark/Light theme switch",
                 "type": "feature"
             },
             {
-                "text": "Put 'Online' 'Increase Score Past Two Weeks' together",
+                "text": "Merged 'Online' and 'Increase Score Past Two Weeks' cards",
                 "type": "beautify"
             }
         ],
@@ -57,31 +57,31 @@
         "date": "2024-03-24",
         "list": [
             {
-                "text": "Mod list adjusted to order by number of downloads",
+                "text": "Adjusted MOD list sorting by downloads and favorites count",
                 "type": "other"
             },
             {
-                "text": "Added email on footer",
+                "text": "Added email to footer",
                 "type": "other"
             },
             {
-                "text": "Added Todo link in sponsor content",
+                "text": "Added Todo link to sponsor content",
                 "type": "other"
             },
             {
-                "text": "Added user's privacy settings",
+                "text": "Added user privacy settings",
                 "type": "feature"
             },
             {
-                "text": "Mods uploaded in the past month are marked NEW character",
+                "text": "Added NEW tag for MODs uploaded within the last month",
                 "type": "feature"
             },
             {
-                "text": "Fixed the displaying bug of the rank list",
+                "text": "Fixed display bug of the rank list",
                 "type": "fix"
             },
             {
-                "text": "Fixed occurring exception when uploading mods",
+                "text": "Fixed occurring exception when uploading MODs",
                 "type": "fix"
             }
         ],
@@ -97,15 +97,15 @@
                 "type": "architecture"
             },
             {
-                "text": "Project internationalization（support English）, Added a button to select the language in the upper right",
+                "text": "Project internationalization（English support）, added language selection button in the upper right",
                 "type": "feature"
             },
             {
-                "text": "Automatically match the corresponding language according to the browser language setting on the first visit",
+                "text": "First visit automatically matches the corresponding language according to the browser language settings",
                 "type": "feature"
             },
             {
-                "text": "Adjusted the footer content",
+                "text": "Adjusted footer content",
                 "type": "beautify"
             }
         ],
@@ -117,7 +117,7 @@
         "date": "2024-02-26",
         "list": [
             {
-                "text": "Mounted frontend static files to optimize deploy speed",
+                "text": "Mounted frontend static files for optimizing deployment speed",
                 "type": "architecture"
             },
             {
@@ -132,20 +132,20 @@
         "type": "important"
     },
     {
-        "title": "Sponsors List",
+        "title": "Sponsor List",
         "version": "v2.5.0",
         "date": "2024-02-24",
         "list": [
             {
-                "text": "Added sponsors list",
+                "text": "Added sponsor list",
                 "type": "feature"
             },
             {
-                "text": "Optimized interface error message",
+                "text": "Optimized API error message content",
                 "type": "other"
             },
             {
-                "text": "Fixed occurring exception when click 'Your Stars'",
+                "text": "Fixed occurring exception when clicking 'Your Stars'",
                 "type": "fix"
             }
         ],
@@ -157,7 +157,7 @@
         "date": "2024-01-12",
         "list": [
             {
-                "text": "Switched to Docker deployment after server compromise",
+                "text": "Switched to Docker deployment after server was hacked",
                 "type": "architecture"
             },
             {
@@ -169,7 +169,7 @@
                 "type": "architecture"
             },
             {
-                "text": "Fixed bugs after architecture adjustments",
+                "text": "Fixed bugs after architectural adjustments",
                 "type": "fix"
             }
         ],
@@ -181,19 +181,19 @@
         "date": "2023-08-12",
         "list": [
             {
-                "text": "Fixed querying mods issue",
+                "text": "Fixed MOD pagination query bug",
                 "type": "fix"
             },
             {
-                "text": "Start the second SXL match",
+                "text": "The second SXL is officially underway",
                 "type": "milestone"
             },
             {
-                "text": "Added custom bonus distribution rules",
+                "text": "Added customized bonus distribution rules",
                 "type": "feature"
             },
             {
-                "text": "Force refresh browser after detecting new version",
+                "text": "Force browser refresh when new version is detected",
                 "type": "other"
             }
         ],
@@ -217,15 +217,15 @@
                 "type": "architecture"
             },
             {
-                "text": "Changed rank score statistics interval to two weeks",
+                "text": "Changed rank score statistics period to two weeks",
                 "type": "other"
             },
             {
-                "text": "Start the SXL match and improved tournament rules",
+                "text": "Create the SXL match and improved tournament rules",
                 "type": "milestone"
             },
             {
-                "text": "Added sponsors of SXL",
+                "text": "Added sponsor list of SXL",
                 "type": "feature"
             }
         ],
@@ -237,19 +237,19 @@
         "date": "2021-08-01",
         "list": [
             {
-                "text": "Integrated with Qiniu Cloud for MOD uploading, downloading, and website acceleration",
+                "text": "Integrated with Qiniu Cloud for MOD upload/download management and website acceleration",
                 "type": "architecture"
             },
             {
-                "text": "Added MOD uploading and downloading feature",
+                "text": "Added MOD upload/download feature",
                 "type": "feature"
             },
             {
-                "text": "Introduced ImgCropper for cover image",
+                "text": "Introduced ImgCropper for cover image cropping",
                 "type": "feature"
             },
             {
-                "text": "Added searching MOD feature",
+                "text": "Added MOD search feature",
                 "type": "feature"
             },
             {
@@ -269,7 +269,7 @@
         "date": "2021-03-12",
         "list": [
             {
-                "text": "Optimized logining validation and fixed frequent disconnection issues",
+                "text": "Optimized login validation and fixed frequent disconnection issues",
                 "type": "fix"
             },
             {
@@ -305,7 +305,7 @@
         "date": "2020-08-31",
         "list": [
             {
-                "text": "Separated frontend and backend development using mature scaffolding tools",
+                "text": "Separated frontend and backend, and using mature scaffolding tools for development",
                 "type": "architecture"
             },
             {
@@ -320,7 +320,7 @@
         "type": "holyshit"
     },
     {
-        "title": "Mobile Chart Adjustment",
+        "title": "Mobile Chart Adjustments",
         "version": "v1.2.0",
         "date": "2020-04-06",
         "list": [
@@ -332,12 +332,12 @@
         "type": "unimportant"
     },
     {
-        "title": "Introduce Charting",
+        "title": "Introduce Charts",
         "version": "v1.1.0",
         "date": "2020-03-30",
         "list": [
             {
-                "text": "Added charts about rank score and playtime",
+                "text": "Added rank score and playtime charts",
                 "type": "feature"
             },
             {
@@ -349,12 +349,12 @@
         "img": "img/v110.png"
     },
     {
-        "title": "Project Start",
+        "title": "Project Launch",
         "version": "v1.0.0",
         "date": "2018-03-10",
         "list": [
             {
-                "text": "First version of the code, rough but meaningful",
+                "text": "First version code - rough but meaningful",
                 "type": "milestone"
             }
         ],
