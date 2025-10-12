@@ -25,7 +25,7 @@
                   <AddedChart />
                   <p class="text-center mt-2">
                     <a
-                      :href="videoUrl"
+                      :href="$t('index.videoUrl')"
                       target="_blank"
                       class="text-decoration-underline"
                     >{{ $t('index.videoTitle') }}</a>
@@ -72,11 +72,6 @@ export default {
     onlineCount: 0,
     playSRlist: []
   }),
-  computed: {
-    videoUrl() {
-      return this.$i18n.locale === "zh" ? "https://www.bilibili.com/video/BV1qU2WYHExA" : "https://www.youtube.com/watch?v=0NVrv-DirnY";
-    }
-  },
   mounted() {
     getOnlineCount().then(response => {
       this.onlineCount = response.data;
