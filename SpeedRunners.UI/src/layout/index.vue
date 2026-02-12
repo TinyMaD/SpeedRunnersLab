@@ -11,6 +11,90 @@
         />
       </v-toolbar-title>
       <VSpacer />
+
+      <!-- 消息通知按钮 -->
+      <v-menu
+        v-if="avatar !== ''"
+        ref="notificationMenu"
+        offset-y
+        transition="slide-y-transition"
+        :close-on-content-click="false"
+      >
+        <template v-slot:activator="{ on: menuOn, attrs: menuAttrs }">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on: tooltipOn, attrs: tooltipAttrs }">
+              <v-btn
+                depressed
+                v-bind="{...menuAttrs, ...tooltipAttrs}"
+                v-on="{...menuOn, ...tooltipOn}"
+              >
+                <v-badge
+                  :content="displayTotalCount"
+                  :value="unreadCount.totalCount > 0"
+                  color="error"
+                  overlap
+                >
+                  <v-icon>mdi-bell-outline</v-icon>
+                </v-badge>
+              </v-btn>
+            </template>
+            <span>{{ $t('layout.notification') }}</span>
+          </v-tooltip>
+        </template>
+
+        <v-list nav dense style="min-width: 200px;">
+          <v-list-item @click="handleNotificationClick(1)">
+            <v-list-item-icon>
+              <v-icon color="primary">mdi-message-reply-outline</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ $t('layout.replyMe') }}
+                <v-chip
+                  v-if="unreadCount.replyCount > 0"
+                  x-small
+                  color="error"
+                  text-color="white"
+                  class="ml-2"
+                >
+                  {{ displayReplyCount }}
+                </v-chip>
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-list-item @click="handleNotificationClick(2)">
+            <v-list-item-icon>
+              <v-icon color="pink">mdi-heart-outline</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ $t('layout.likeMe') }}
+                <v-chip
+                  v-if="unreadCount.likeCount > 0"
+                  x-small
+                  color="error"
+                  text-color="white"
+                  class="ml-2"
+                >
+                  {{ displayLikeCount }}
+                </v-chip>
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
+          <v-divider class="my-2" />
+
+          <v-list-item @click="handleViewAll">
+            <v-list-item-content>
+              <v-list-item-title class="text-center primary--text">
+                {{ $t('layout.viewAll') }}
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+
       <v-tooltip bottom>
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -115,6 +199,9 @@
     </v-navigation-drawer>
 
     <PrivacySettings v-if="name && rankType != 0" :visible.sync="privacyVisible" />
+
+    <!-- 消息通知抽屉 -->
+    <NotificationDrawer v-model="showNotificationDrawer" />
 
     <v-main>
       <AppMain />
@@ -260,15 +347,17 @@
 <script>
 import { AppMain } from "./components";
 import PrivacySettings from "@/views/other/privacySettings";
+import NotificationDrawer from "@/components/NotificationDrawer";
 import { goLoginURL } from "@/utils/auth";
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import getPageTitle from "@/utils/get-page-title";
 
 export default {
   name: "Layout",
   components: {
     AppMain,
-    PrivacySettings
+    PrivacySettings,
+    NotificationDrawer
   },
   data: () => ({
     drawer: null,
@@ -276,7 +365,8 @@ export default {
     right: false,
     left: false,
     fab: false,
-    privacyVisible: false
+    privacyVisible: false,
+    showNotificationDrawer: false
   }),
   computed: {
     ...mapGetters([
@@ -285,6 +375,19 @@ export default {
       "rankType",
       "permission_routes"
     ]),
+    ...mapState("notification", ["unreadCount"]),
+    displayTotalCount() {
+      const count = this.unreadCount.totalCount || 0;
+      return count > 99 ? '99+' : count;
+    },
+    displayReplyCount() {
+      const count = this.unreadCount.replyCount || 0;
+      return count > 99 ? '99+' : count;
+    },
+    displayLikeCount() {
+      const count = this.unreadCount.likeCount || 0;
+      return count > 99 ? '99+' : count;
+    },
     navBars() {
       return this.permission_routes.find(route => route.path === "/").children.filter(x => x.hidden !== true);
     },
@@ -292,11 +395,39 @@ export default {
       return this.permission_routes.find(route => route.path === "/").children.filter(x => x.hidden === true && x.meta);
     }
   },
+  mounted() {
+    // 如果已登录，启动消息轮询
+    if (this.avatar !== "") {
+      this.$store.dispatch("notification/startPolling");
+    }
+  },
+  beforeDestroy() {
+    // 停止消息轮询
+    this.$store.dispatch("notification/stopPolling");
+  },
   methods: {
     changeTheme() {
       var dark = this.$vuetify.theme.dark;
       this.$vuetify.theme.dark = !dark;
       localStorage.setItem("themeDark", !dark);
+    },
+    handleNotificationClick(type) {
+      // 关闭下拉菜单
+      if (this.$refs.notificationMenu) {
+        this.$refs.notificationMenu.isActive = false;
+      }
+      // 标记该类型消息为已读
+      this.$store.dispatch("notification/markAsRead", { type });
+      // 打开消息抽屉并切换到对应类型
+      this.showNotificationDrawer = true;
+    },
+    handleViewAll() {
+      // 关闭下拉菜单
+      if (this.$refs.notificationMenu) {
+        this.$refs.notificationMenu.isActive = false;
+      }
+      // 打开消息抽屉
+      this.showNotificationDrawer = true;
     },
     copyEmail() {
       navigator.clipboard.writeText("supremelang@qq.com");

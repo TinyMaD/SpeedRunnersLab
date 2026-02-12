@@ -27,7 +27,12 @@
     "logoutSucc": "Logout successful",
     "email": "Click to copy email address",
     "copyEmail": "Copied to clipboard",
-    "theme": "Dark/Light"
+    "theme": "Dark/Light",
+    "notification": "Notifications",
+    "replyMe": "Replies",
+    "likeMe": "Likes",
+    "noNotifications": "No notifications",
+    "viewAll": "View all"
   },
   "routes": {
     "home": "Home",
@@ -86,7 +91,8 @@
     "notice": "Notice",
     "success": "Successful",
     "delete": "Delete",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "markAllRead": "Mark all as read"
   },
   "rank": {
     "personaName": "Name",

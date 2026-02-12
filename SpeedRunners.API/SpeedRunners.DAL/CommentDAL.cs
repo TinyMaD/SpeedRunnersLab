@@ -116,9 +116,9 @@ namespace SpeedRunners.DAL
         }
 
         /// <summary>
-        /// 切换点赞状态，返回操作后的点赞数
+        /// 切换点赞状态，返回操作后的点赞数，并通过 out 参数返回是否是点赞操作
         /// </summary>
-        public int ToggleLike(int commentID, string platformID)
+        public int ToggleLike(int commentID, string platformID, out bool isLiked)
         {
             var existing = Db.QueryFirstOrDefault<MCommentLike>(
                 $"SELECT * FROM `CommentLike` WHERE CommentID = ?{nameof(commentID)} AND PlatformID = ?{nameof(platformID)}",
@@ -126,15 +126,19 @@ namespace SpeedRunners.DAL
 
             if (existing != null)
             {
+                // 取消点赞
                 Db.Execute(
                     $"DELETE FROM `CommentLike` WHERE CommentID = ?{nameof(commentID)} AND PlatformID = ?{nameof(platformID)}",
                     new { commentID, platformID });
+                isLiked = false;
             }
             else
             {
+                // 点赞
                 Db.Execute(
                     $"INSERT INTO `CommentLike` (CommentID, PlatformID) VALUES (?{nameof(commentID)}, ?{nameof(platformID)})",
                     new { commentID, platformID });
+                isLiked = true;
             }
 
             return Db.QueryFirst<int>(

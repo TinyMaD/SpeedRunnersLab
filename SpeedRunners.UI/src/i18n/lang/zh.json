@@ -27,7 +27,12 @@
     "logoutSucc": "登出成功",
     "email": "点击复制邮箱地址",
     "copyEmail": "已复制到剪贴板",
-    "theme": "切换主题"
+    "theme": "切换主题",
+    "notification": "消息",
+    "replyMe": "回复我",
+    "likeMe": "收到的点赞",
+    "noNotifications": "暂无消息",
+    "viewAll": "查看全部"
   },
   "routes": {
     "home": "首 页",
@@ -86,7 +91,8 @@
     "notice": "提 示",
     "success": "成功",
     "delete": "删除",
-    "confirm": "确 定"
+    "confirm": "确定",
+    "markAllRead": "全部已读"
   },
   "rank": {
     "personaName": "昵 称",

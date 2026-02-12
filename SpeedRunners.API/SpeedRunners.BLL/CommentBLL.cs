@@ -3,11 +3,21 @@ using SpeedRunners.Model;
 using SpeedRunners.Model.Comment;
 using SpeedRunners.Utils;
 using System;
+using System.Linq;
 
 namespace SpeedRunners.BLL
 {
     public class CommentBLL : BLLHelper<CommentDAL>
     {
+        private readonly NotificationBLL _notificationBLL;
+        private readonly RankBLL _rankBLL;
+
+        public CommentBLL(NotificationBLL notificationBLL, RankBLL rankBLL)
+        {
+            _notificationBLL = notificationBLL;
+            _rankBLL = rankBLL;
+        }
+
         /// <summary>
         /// 获取评论列表
         /// </summary>
@@ -39,6 +49,7 @@ namespace SpeedRunners.BLL
                 throw new Exception(Localizer["comment_length_error"] ?? "评论内容不能为空且不能超过2000字");
             }
 
+            int newCommentID = 0;
             BeginDb(DAL =>
             {
                 MComment comment = new MComment
@@ -50,8 +61,44 @@ namespace SpeedRunners.BLL
                     Content = param.Content.Trim(),
                     CreateTime = DateTime.Now
                 };
-                DAL.AddComment(comment);
+                newCommentID = DAL.AddComment(comment);
             });
+
+            // 发送回复通知
+            if (!string.IsNullOrEmpty(param.ReplyToPlatformID))
+            {
+                SendReplyNotification(param.ReplyToPlatformID, param.PagePath, newCommentID, param.Content);
+            }
+            else if (param.ParentID.HasValue)
+            {
+                // 如果是回复顶级评论，通知顶级评论作者
+                var parentComment = BeginDb(DAL => DAL.GetComment(param.ParentID.Value));
+                if (parentComment != null && parentComment.PlatformID != CurrentUser.PlatformID)
+                {
+                    SendReplyNotification(parentComment.PlatformID, param.PagePath, newCommentID, param.Content);
+                }
+            }
+        }
+
+        private void SendReplyNotification(string receiverPlatformID, string pagePath, int commentID, string content)
+        {
+            if (receiverPlatformID == CurrentUser.PlatformID) return;
+
+            // 获取发送者信息
+            var senderInfo = _rankBLL.GetAllRankList(new[] { CurrentUser.PlatformID }).FirstOrDefault();
+            string senderName = senderInfo?.PersonaName ?? CurrentUser.PlatformID;
+            string senderAvatar = senderInfo?.AvatarS;
+
+            _notificationBLL.AddReplyNotification(
+                receiverPlatformID,
+                CurrentUser.PlatformID,
+                senderName,
+                senderAvatar,
+                commentID,
+                "page",
+                pagePath,
+                content
+            );
         }
 
         /// <summary>
@@ -89,11 +136,45 @@ namespace SpeedRunners.BLL
         public int ToggleLike(int commentID)
         {
             int likeCount = 0;
+            bool isLiked = false;
+            MComment comment = null;
+
             BeginDb(DAL =>
             {
-                likeCount = DAL.ToggleLike(commentID, CurrentUser.PlatformID);
+                // 先获取评论信息
+                comment = DAL.GetComment(commentID);
+                if (comment == null) return;
+
+                // 执行点赞/取消点赞
+                likeCount = DAL.ToggleLike(commentID, CurrentUser.PlatformID, out isLiked);
             });
+
+            // 发送点赞通知（只有点赞时才发送，取消点赞不发送）
+            if (isLiked && comment != null && comment.PlatformID != CurrentUser.PlatformID)
+            {
+                SendLikeNotification(comment, commentID);
+            }
+
             return likeCount;
+        }
+
+        private void SendLikeNotification(MComment comment, int commentID)
+        {
+            // 获取发送者信息
+            var senderInfo = _rankBLL.GetAllRankList(new[] { CurrentUser.PlatformID }).FirstOrDefault();
+            string senderName = senderInfo?.PersonaName ?? CurrentUser.PlatformID;
+            string senderAvatar = senderInfo?.AvatarS;
+
+            _notificationBLL.AddLikeNotification(
+                comment.PlatformID,
+                CurrentUser.PlatformID,
+                senderName,
+                senderAvatar,
+                commentID,
+                "page",
+                comment.PagePath,
+                comment.Content
+            );
         }
     }
 }

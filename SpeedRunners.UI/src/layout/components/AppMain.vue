@@ -33,7 +33,7 @@ export default {
       return this.$vuetify.theme.dark ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.5)";
     },
     showComments() {
-      if (!!getToken()) return true;
+      if (getToken()) return true;
       console.log(this.isInChinaResult !== null);
       console.log(!this.isInChinaResult);
       console.log(this.isInChinaResult !== null && !this.isInChinaResult);
