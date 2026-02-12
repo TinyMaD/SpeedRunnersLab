@@ -25,21 +25,37 @@ export function goLoginURL() {
 export function isInChina() {
   return new Promise(resolve => {
     // 调用一个支持跨域请求的facebook接口
-    var url = "//graph.facebook.com/feed?callback=h";
-    var xhr = new XMLHttpRequest();
-    // 此接口响应迅速，1S足矣
-    xhr.timeout = 1000;
+    const url = "https://graph.facebook.com/feed?callback=h";
+    const xhr = new XMLHttpRequest();
+    // 设置超时时间为2秒,提高稳定性
+    xhr.timeout = 2000;
+    
     xhr.open("GET", url);
+    
+    // 请求成功处理
     xhr.onload = () => {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        // 获取到响应状态表示用户没有被墙
-        return resolve(false);
-      }
+      // 成功获取响应表示用户没有被墙
+      resolve(false);
     };
-    xhr.ontimeout = (e) => {
+    
+    // 请求超时处理
+    xhr.ontimeout = () => {
       // 请求超时表示用户在墙内
-      return resolve(true);
+      resolve(true);
     };
+    
+    // 请求错误处理(网络错误、CORS错误等)
+    xhr.onerror = () => {
+      // 请求失败也认为用户在墙内
+      resolve(true);
+    };
+    
+    // 请求中止处理
+    xhr.onabort = () => {
+      // 请求中止也认为用户在墙内
+      resolve(true);
+    };
+    
     xhr.send();
   });
 }

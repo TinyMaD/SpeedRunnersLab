@@ -189,6 +189,29 @@
       "额外奖金由赞助者自定义发放规则，不参与算法计算"
     ]
   },
+  "comment": {
+    "title": "评论",
+    "placeholder": "写下你的评论...",
+    "replyPlaceholder": "回复 {0}...",
+    "submit": "发 表",
+    "reply": "回复",
+    "delete": "删除",
+    "deleteConfirm": "确定要删除这条评论吗？",
+    "deleteInfo": "删除后无法恢复",
+    "noComments": "暂无评论，快来抢沙发吧",
+    "loginToComment": "登录后即可发表评论",
+    "viewReplies": "查看 {0} 条回复",
+    "hideReplies": "收起回复",
+    "loadMore": "加载更多",
+    "like": "赞",
+    "time": {
+      "justNow": "刚刚",
+      "minutesAgo": "{0} 分钟前",
+      "hoursAgo": "{0} 小时前",
+      "daysAgo": "{0} 天前",
+      "yearsAgo": "{0} 年前"
+    }
+  },
   "components": {
     "cropper": {
       "title": "封面尽量直观展现MOD样式",

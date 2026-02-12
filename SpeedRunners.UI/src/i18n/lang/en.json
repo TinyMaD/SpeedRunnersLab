@@ -189,6 +189,29 @@
       "Additional bonuses are distributed according to custom rules set by sponsors and are not included in the algorithm calculation"
     ]
   },
+  "comment": {
+    "title": "Comments",
+    "placeholder": "Write a comment...",
+    "replyPlaceholder": "Reply to {0}...",
+    "submit": "Post",
+    "reply": "Reply",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this comment?",
+    "deleteInfo": "This action cannot be undone",
+    "noComments": "No comments yet. Be the first one!",
+    "loginToComment": "Log in to post a comment",
+    "viewReplies": "View {0} replies",
+    "hideReplies": "Hide replies",
+    "loadMore": "Load more",
+    "like": "Like",
+    "time": {
+      "justNow": "just now",
+      "minutesAgo": "{0} minutes ago",
+      "hoursAgo": "{0} hours ago",
+      "daysAgo": "{0} days ago",
+      "yearsAgo": "{0} years ago"
+    }
+  },
   "components": {
     "cropper": {
       "title": "The cover should show more details of the MOD",
