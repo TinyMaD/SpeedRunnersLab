@@ -32,12 +32,13 @@ export default {
     backgroundColor() {
       return this.$vuetify.theme.dark ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.5)";
     },
-    showComments() {
+   showComments() {
+      // 已登录用户始终显示评论区
       if (getToken()) return true;
-      console.log(this.isInChinaResult !== null);
-      console.log(!this.isInChinaResult);
-      console.log(this.isInChinaResult !== null && !this.isInChinaResult);
-      return this.isInChinaResult !== null && !this.isInChinaResult;
+      
+      // 未登录用户：只有确认不在中国时才显示
+      const isAbroad = this.isInChinaResult === false;
+      return isAbroad;
     }
   },
   async created() {
@@ -86,7 +87,6 @@ export default {
 .comment-section-side {
   flex: 0 0 380px;
   max-width: 380px;
-  margin: 0 !important;
   padding: 0 !important;
 }
 

@@ -59,6 +59,10 @@ module.exports = {
     config.plugins.delete("preload"); // TODO: need test
     config.plugins.delete("prefetch"); // TODO: need test
 
+    // 添加文件名哈希，解决 CDN 缓存问题
+    config.output.filename('static/js/[name].[contenthash:8].js').end();
+    config.output.chunkFilename('static/js/[name].[contenthash:8].js').end();
+
     // set svg-sprite-loader
     config.module
       .rule("svg")

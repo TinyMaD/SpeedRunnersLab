@@ -10,6 +10,9 @@ const version = require("@/utils/version");
 
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
+// 版本检测状态标记
+let isVersionChecking = false;
+
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start();
@@ -62,8 +65,39 @@ router.beforeEach(async(to, from, next) => {
 router.afterEach(async() => {
   // finish progress bar
   NProgress.done();
-  // 如果不想每个路由都检查是否有新版本，只需要在特定的页面才需要检查版本，可以在这里做白名单判断
-  // 兼容版本，如果是新版本则进行刷新并缓存
-  const versionInfo = await version.getPro();
-  console.log("versionInfo", versionInfo);
+
+  // 异步检测版本更新（不阻塞页面渲染）
+  if (!isVersionChecking) {
+    isVersionChecking = true;
+    try {
+      const versionInfo = await version.getPro();
+      if (versionInfo.new) {
+        console.log("[App] 检测到新版本，即将自动刷新...");
+      }
+    } catch (error) {
+      // 静默处理错误，不影响用户体验
+      console.log("[App] 版本检测失败，将在下次路由切换时重试");
+    } finally {
+      isVersionChecking = false;
+    }
+  }
+});
+
+// 页面可见性变化时检测版本（用户从其他标签页返回时）
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible" && !isVersionChecking) {
+    isVersionChecking = true;
+    version.getPro()
+      .then(versionInfo => {
+        if (versionInfo.new) {
+          console.log("[App] 页面重新可见，检测到新版本");
+        }
+      })
+      .catch(() => {
+        // 静默处理
+      })
+      .finally(() => {
+        isVersionChecking = false;
+      });
+  }
 });
