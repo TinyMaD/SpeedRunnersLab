@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row justify="center">
-      <v-card width="940px" min-height="800px" style="padding:10px">
+      <v-card width="940px" min-height="800px" style="padding:10px" tile>
         <v-text-field
           v-model="keyWords"
           :loading="loading"

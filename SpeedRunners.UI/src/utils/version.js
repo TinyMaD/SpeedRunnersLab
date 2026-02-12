@@ -1,8 +1,4 @@
-// 使用细节：
-// 1、导入方式：在 src 文件夹中使用可以 const version = require('@/utils/version') 这样引入使用，在根目录也就是 src 之外的文件夹则只能 const version = require('./src/utils/version') 这样引入使用
-
-// 引入文件管理模块（基于 node 环境，如果为原生前端开发，则注释掉 fs 相关的代码即可，直接手动创建一个文件使用 get 方法获取即可，注意统一存储内容格式看 create 方法注释）
-const fs = require("fs");
+// 浏览器端版本检测工具（纯前端，不依赖 Node.js 模块）
 
 // 本地版本号缓存 key
 const storageKey = "currentVersion";
@@ -10,20 +6,6 @@ const storageKey = "currentVersion";
 const firstVisitKey = "app_first_visit";
 // 更新延迟时间（毫秒）
 const UPDATE_DELAY = 3000;
-
-/**
- * 创建版本文件
- * @param {string} path - 文件路径（默认：public/verify.json）
- * @param {number} version - 版本号（默认：当前时间戳）
- * @param {function} result - 回调函数
- */
-function create(path = "public/verify.json", version = new Date().getTime(), result) {
-  fs.writeFile(path, JSON.stringify({ version }), err => {
-    if (result) {
-      result({ isOK: !err, error: err });
-    }
-  });
-}
 
 /**
  * 获取版本号（升级版）
@@ -199,9 +181,8 @@ function checkUpdate() {
   return getPro("verify.json", true).then(res => res.new);
 }
 
-// 导出
-module.exports = {
-  create,
+// 导出对象
+const versionAPI = {
   get,
   getPro,
   save,
@@ -209,3 +190,6 @@ module.exports = {
   reload,
   checkUpdate
 };
+
+export default versionAPI;
+export { get, getPro, save, isNewAvailable, reload, checkUpdate };

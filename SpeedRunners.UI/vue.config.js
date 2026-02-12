@@ -3,8 +3,8 @@ const path = require("path");
 const defaultSettings = require("./src/settings.js");
 const NyanProgressPlugin = require("nyan-progress-webpack-plugin");
 // 前端发布后浏览器缓存问题解决
-const version = require("./src/utils/version");
-version.create();
+const { create: createVersionFile } = require("./build/version-create");
+createVersionFile();
 
 function resolve(dir) {
   return path.join(__dirname, dir);
@@ -59,9 +59,11 @@ module.exports = {
     config.plugins.delete("preload"); // TODO: need test
     config.plugins.delete("prefetch"); // TODO: need test
 
-    // 添加文件名哈希，解决 CDN 缓存问题
-    config.output.filename('static/js/[name].[contenthash:8].js').end();
-    config.output.chunkFilename('static/js/[name].[contenthash:8].js').end();
+    // 仅在生产环境添加文件名哈希，解决 CDN 缓存问题
+    config.when(process.env.NODE_ENV !== "development", config => {
+      config.output.filename('static/js/[name].[contenthash:8].js').end();
+      config.output.chunkFilename('static/js/[name].[contenthash:8].js').end();
+    });
 
     // set svg-sprite-loader
     config.module

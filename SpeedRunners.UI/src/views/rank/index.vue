@@ -205,15 +205,15 @@ td {
 }
 
 th {
-  height: 40px;
+  height: 56px;
 }
 
 #thf {
-  border-radius: 10px 0 0 0;
+  border-radius: 0;
 }
 
 #thl {
-  border-radius: 0 10px 0 0;
+  border-radius: 0;
 }
 
 .avator {
@@ -285,11 +285,11 @@ th {
 }
 
 #tfootf {
-  border-radius: 0 0 0 10px;
+  border-radius: 0;
 }
 
 #tfootl {
-  border-radius: 0 0 10px 0;
+  border-radius: 0;
   padding-right: 10px;
 }
 .even-dark {

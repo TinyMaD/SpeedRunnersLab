@@ -1,5 +1,15 @@
 <template>
-  <div :class="className" :style="{height:totalHeight,width:width}" />
+  <div>
+    <div v-if="!chart" class="px-4">
+      <v-skeleton-loader
+        v-for="i in 5"
+        :key="i"
+        type="list-item"
+        class="mx-auto"
+      />
+    </div>
+    <div ref="chart" :class="className" :style="{height:totalHeight,width:width}" />
+  </div>
 </template>
 
 <script>
@@ -84,7 +94,7 @@ export default {
   },
   methods: {
     initChart() {
-      this.chart = echarts.init(this.$el);
+      this.chart = echarts.init(this.$refs.chart);
       this.chart.setOption(this.getOption());
     },
     getOption() {

@@ -181,7 +181,7 @@ export default {
 <style scoped>
 .comment-section {
   max-width: 900px;
-  margin: 0 auto;
+  margin: 0;
   padding: 0 16px 24px;
 }
 

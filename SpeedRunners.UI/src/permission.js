@@ -6,7 +6,7 @@ import NProgress from "nprogress"; // progress bar
 import "nprogress/nprogress.css"; // progress bar style
 import { getToken, isInChina } from "@/utils/auth"; // get token from cookie
 import getPageTitle from "@/utils/get-page-title";
-const version = require("@/utils/version");
+import version from "@/utils/version";
 
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
