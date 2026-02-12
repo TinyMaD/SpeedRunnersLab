@@ -68,7 +68,11 @@
     "unStar": "Star",
     "deleteSucc": "Deleted MOD successfully",
     "deleteWarn": "Delete This Mod ?\t",
-    "deleteInfo": "Once you delete a mod, there is no going back. Please be certain."
+    "deleteInfo": "Once you delete a mod, there is no going back. Please be certain.",
+    "share": "Share",
+    "shareSucc": "Share link copied to clipboard",
+    "backToList": "Back to full list",
+    "modNotFound": "Mod not found"
   },
   "common": {
     "search": "Search",

@@ -61,6 +61,35 @@ namespace SpeedRunners.BLL
             return result;
         }
 
+        public MModOut GetMod(int modID)
+        {
+            MModOut result = null;
+            BeginDb(DAL =>
+            {
+                MMod mod = DAL.GetMod(modID);
+                if (mod != null)
+                {
+                    result = new MModOut
+                    {
+                        ID = mod.ID,
+                        Tag = mod.Tag,
+                        Title = mod.Title,
+                        ImgUrl = "https://cdn-img.speedrunners.cn/" + mod.ImgUrl,
+                        FileUrl = mod.FileUrl,
+                        AuthorID = mod.AuthorID,
+                        Like = mod.Like,
+                        Dislike = mod.Dislike,
+                        Download = mod.Download,
+                        Size = mod.Size,
+                        UploadDate = mod.UploadDate,
+                        StarCount = mod.StarCount,
+                        IsNew = mod.UploadDate >= DateTime.Now.AddMonths(-1)
+                    };
+                }
+            });
+            return result;
+        }
+
         public void AddMod(MMod param)
         {
             param.AuthorID = CurrentUser.PlatformID;

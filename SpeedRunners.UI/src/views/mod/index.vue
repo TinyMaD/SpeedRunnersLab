@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row justify="center">
       <v-card width="1500px" min-height="800px" class="d-flex flex-row">
-        <div>
+        <div v-if="!isShareMode">
           <v-list width="130px">
             <v-list-item>
               <v-btn block color="primary" :small="isZh ? false : true" @click="clickUpload">
@@ -24,9 +24,9 @@
         <div
           fluid
           class="pa-2"
-          :style="{backgroundColor:$vuetify.theme.dark?'rgb(66,66,66)':'rgb(240,240,240)',width:'1370px'}"
+          :style="{backgroundColor:$vuetify.theme.dark?'rgb(66,66,66)':'rgb(240,240,240)',width:isShareMode?'100%':'1370px'}"
         >
-          <v-row no-gutters>
+          <v-row v-if="!isShareMode" no-gutters>
             <v-col fluid>
               <v-text-field
                 v-model="searchParam.keywords"
@@ -47,6 +47,11 @@
                 @change="changeSwitch"
               />
             </div>
+          </v-row>
+          <v-row v-if="isShareMode" no-gutters class="ma-2">
+            <v-btn color="primary" small @click="backToList">
+              <v-icon left>mdi-arrow-left</v-icon>{{ $t('mod.backToList') }}
+            </v-btn>
           </v-row>
           <template>
             <v-hover v-for="mod in data.list" :key="mod.id" v-slot="{ hover }">
@@ -121,6 +126,20 @@
                     <span>{{ starTooltip(mod.star) }}</span>
                   </v-tooltip>
 
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        text
+                        x-small
+                        v-bind="attrs"
+                        @click.stop="share(mod)"
+                        v-on="on"
+                      ><v-icon>mdi-share-variant</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>{{ $t('mod.share') }}</span>
+                  </v-tooltip>
+
                   <v-tooltip v-if="steamId === '76561198062688821'||mod.authorID === steamId" bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-hover v-slot="{ hover }">
@@ -149,7 +168,7 @@
           </template>
           <div class="text-center">
             <v-pagination
-              v-show="pageCount > 1"
+              v-show="!isShareMode && pageCount > 1"
               v-model="searchParam.pageNo"
               circle
               :length="pageCount"
@@ -196,7 +215,7 @@
 <script>
 import { mapGetters } from "vuex";
 import ModInfo from "./modInfo";
-import { getDownloadUrl, getModList, operateModStar, deleteMod } from "@/api/asset";
+import { getDownloadUrl, getModList, getMod, operateModStar, deleteMod } from "@/api/asset";
 
 export default {
   name: "Mod",
@@ -205,6 +224,7 @@ export default {
   },
   data: () => ({
     switchValue: false,
+    isShareMode: false,
     searchParam: {
       onlyStar: false,
       tag: 0,
@@ -256,12 +276,42 @@ export default {
       };
     }
   },
+  watch: {
+    "$route.query.id": function() {
+      this.initPage();
+    }
+  },
   mounted() {
     this.$nextTick(function() {
-      this.getList();
+      this.initPage();
     });
   },
   methods: {
+    initPage() {
+      const shareId = this.$route.query.id;
+      if (shareId) {
+        this.isShareMode = true;
+        getMod(shareId).then(res => {
+          if (res.data) {
+            this.data = { list: [res.data], total: 1 };
+          } else {
+            this.data = { list: [], total: 0 };
+            this.$toast.error(this.$t("mod.modNotFound"));
+          }
+        });
+      } else {
+        this.isShareMode = false;
+        this.getList();
+      }
+    },
+    backToList() {
+      this.$router.push("/mod");
+    },
+    share(mod) {
+      const url = `${window.location.origin}/mod?id=${mod.id}`;
+      navigator.clipboard.writeText(url);
+      this.$toast.success(this.$t("mod.shareSucc"));
+    },
     starTooltip(star) {
       return star ? this.$t("mod.star") : this.$t("mod.unStar");
     },

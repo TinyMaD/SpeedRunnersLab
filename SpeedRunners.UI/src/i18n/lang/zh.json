@@ -68,7 +68,11 @@
     "unStar": "收藏",
     "deleteSucc": "删除MOD成功",
     "deleteWarn": "确定要删除这个Mod ?",
-    "deleteInfo": "删除后无法恢复，请谨慎操作。"
+    "deleteInfo": "删除后无法恢复，请谨慎操作。",
+    "share": "分享",
+    "shareSucc": "分享链接已复制到剪贴板",
+    "backToList": "返回完整列表",
+    "modNotFound": "未找到该MOD"
   },
   "common": {
     "search": "搜 索",

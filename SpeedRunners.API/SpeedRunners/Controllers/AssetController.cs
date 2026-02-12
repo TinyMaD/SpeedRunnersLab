@@ -29,6 +29,10 @@ namespace SpeedRunners.Controllers
         [HttpPost]
         public MPageResult<MModOut> GetModList([FromBody] MModPageParam param) => BLL.GetModList(param);
 
+        [Persona]
+        [HttpGet("{modID}")]
+        public MModOut GetMod(int modID) => BLL.GetMod(modID);
+
         [User]
         [HttpPost]
         public void AddMod([FromBody] MMod param) => BLL.AddMod(param);

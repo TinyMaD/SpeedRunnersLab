@@ -13,6 +13,12 @@ export function getDownloadUrl(fileName) {
     data: { fileName }
   });
 }
+export function getMod(modID) {
+  return request({
+    url: `/asset/getMod/${modID}`,
+    method: "get"
+  });
+}
 export function getModList(param) {
   return request({
     url: `/asset/getModList`,
