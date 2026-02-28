@@ -23,13 +23,13 @@
             <td v-if="index < 3"><img class="rowImg" :src="`img/${index + 1}.png`"></td>
             <td v-else>{{ index+1 }} </td>
             <td class="avator">
-              <div class="avatorImg" :style="getAvatorStyle(player)">
+              <div class="avatorImg clickable" :style="getAvatorStyle(player)" @click="goToProfile(player)">
                 <div v-if="isPlayingSR(player)" class="right">
                   <img class="srIndex" style="height:20px;margin:27px -15px 0 0" src="img/srstate.png">
                 </div>
               </div>
             </td>
-            <td style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">{{ player.personaName }}</td>
+            <td class="clickable player-name-cell" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;" @click="goToProfile(player)">{{ player.personaName }}</td>
             <td>
               <div :class="pc?'levelAll-pc':'levelAll'">
                 <div :class="pc?'levelDiv-pc left':'levelDiv left'">
@@ -148,6 +148,11 @@ export default {
           return "KOS";
         default:
           return "";
+      }
+    },
+    goToProfile(player) {
+      if (player.platformID) {
+        this.$router.push(`/profile/${player.platformID}`);
       }
     }
   },
@@ -305,5 +310,19 @@ th {
 
 .odd {
   background-color: #e0e0e0;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clickable:hover {
+  opacity: 0.8;
+}
+
+.player-name-cell:hover {
+  text-decoration: underline;
+  color: #4FC3F7;
 }
 </style>
