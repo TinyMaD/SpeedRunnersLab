@@ -16,7 +16,7 @@ namespace SpeedRunners.Controllers
         [HttpPost]
         public MPageResult<MNotification> GetList([FromBody] MNotificationQueryParam param)
         {
-            return BLL.GetList(BLL.CurrentUser.PlatformID, param);
+            return BLL.GetList(param);
         }
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace SpeedRunners.Controllers
                 return new MUnreadCount { ReplyCount = 0, LikeCount = 0, TotalCount = 0 };
             }
 
-            return BLL.GetUnreadCount(BLL.CurrentUser.PlatformID);
+            return BLL.GetUnreadCount();
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace SpeedRunners.Controllers
         [HttpPost]
         public void MarkAsRead([FromBody] MMarkReadParam param)
         {
-            BLL.MarkAsRead(BLL.CurrentUser.PlatformID, param);
+            BLL.MarkAsRead(param);
         }
     }
 }

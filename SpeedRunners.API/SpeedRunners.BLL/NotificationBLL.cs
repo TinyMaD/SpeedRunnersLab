@@ -12,25 +12,25 @@ namespace SpeedRunners.BLL
         /// <summary>
         /// 获取消息列表
         /// </summary>
-        public MPageResult<MNotification> GetList(string receiverID, MNotificationQueryParam param)
+        public MPageResult<MNotification> GetList(MNotificationQueryParam param)
         {
-            return BeginDb(DAL => DAL.GetList(receiverID, param));
+            return BeginDb(DAL => DAL.GetList(CurrentUser.PlatformID, param));
         }
 
         /// <summary>
         /// 获取未读消息数量
         /// </summary>
-        public MUnreadCount GetUnreadCount(string receiverID)
+        public MUnreadCount GetUnreadCount()
         {
-            return BeginDb(DAL => DAL.GetUnreadCount(receiverID));
+            return BeginDb(DAL => DAL.GetUnreadCount(CurrentUser.PlatformID));
         }
 
         /// <summary>
         /// 标记消息为已读
         /// </summary>
-        public void MarkAsRead(string receiverID, MMarkReadParam param)
+        public void MarkAsRead( MMarkReadParam param)
         {
-            BeginDb(DAL => DAL.MarkAsRead(receiverID, param));
+            BeginDb(DAL => DAL.MarkAsRead(CurrentUser.PlatformID, param));
         }
 
         /// <summary>
