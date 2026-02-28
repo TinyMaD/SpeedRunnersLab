@@ -150,7 +150,7 @@
 
     <v-navigation-drawer v-model="drawerRight" app clipped temporary>
       <v-list>
-        <v-list-item v-if="avatar!==''">
+        <v-list-item v-if="avatar!==''" class="profile-link" @click="goToMyProfile">
           <v-list-item-avatar>
             <v-img :src="avatar" />
           </v-list-item-avatar>
@@ -158,7 +158,13 @@
             <v-list-item-title>
               {{ name }}
             </v-list-item-title>
+            <v-list-item-subtitle class="profile-hint">
+              {{ $t('routes.profile') }}
+            </v-list-item-subtitle>
           </v-list-item-content>
+          <v-list-item-icon>
+            <v-icon small>mdi-chevron-right</v-icon>
+          </v-list-item-icon>
         </v-list-item>
         <v-list-item v-else>
           <v-btn block light @click="goToSteamLogin()">
@@ -370,6 +376,7 @@ export default {
   }),
   computed: {
     ...mapGetters([
+      "steamId",
       "name",
       "avatar",
       "rankType",
@@ -460,6 +467,12 @@ export default {
         offset: 0,
         easing: "easeOutCubic"
       });
+    },
+    goToMyProfile() {
+      if (this.steamId) {
+        this.drawerRight = false;
+        this.$router.push(`/profile/${this.steamId}`);
+      }
     }
   }
 };
@@ -482,5 +495,16 @@ export default {
 .link-dark:hover {
   color: white;
   text-decoration: underline;
+}
+.profile-link {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.profile-link:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+.profile-hint {
+  font-size: 11px;
+  opacity: 0.7;
 }
 </style>

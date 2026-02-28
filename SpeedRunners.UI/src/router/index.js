@@ -75,6 +75,12 @@ export const constantRoutes = [
         component: () => import("@/views/other/log"),
         meta: { title: "log", icon: "mdi-list-box" },
         hidden: true
+      },
+      {
+        path: "/profile/:steamId",
+        component: () => import("@/views/profile/index"),
+        meta: { title: "profile", icon: "mdi-account" },
+        hidden: true
       }
     ]
   }

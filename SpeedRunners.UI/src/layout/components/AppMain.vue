@@ -70,7 +70,8 @@ export default {
 
 /* 主体内容区域 */
 .main-content {
-  flex: 0 1 auto;
+  flex: 1 1 auto;
+  min-width: 0;
   max-width: 100%;
 }
 
