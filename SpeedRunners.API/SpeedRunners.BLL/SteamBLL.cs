@@ -106,6 +106,63 @@ namespace SpeedRunners.BLL
         }
 
         /// <summary>
+        /// 获取玩家成就
+        /// </summary>
+        /// <param name="steamID"></param>
+        /// <returns></returns>
+        public async Task<List<MSteamAchievement>> GetPlayerAchievements(string steamID)
+        {
+            string httpUrl = $"{BaseUrl}/ISteamUserStats/GetPlayerAchievements/v1/?key={ApiKey}&steamid={steamID}&appid={AppId}";
+            string response;
+            try
+            {
+                response = await HttpHelper.HttpGet(httpUrl);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+            if (string.IsNullOrWhiteSpace(response))
+            {
+                return null;
+            }
+            try
+            {
+                JObject obj = JObject.Parse(response);
+                var playerstats = obj["playerstats"];
+                if (playerstats?["success"]?.ToString() != "True")
+                {
+                    return null;
+                }
+                var achievements = playerstats["achievements"];
+                if (achievements == null)
+                {
+                    return null;
+                }
+                var result = new List<MSteamAchievement>();
+                foreach (var ach in achievements)
+                {
+                    var steamAch = new MSteamAchievement
+                    {
+                        ApiName = ach["apiname"]?.ToString(),
+                        Achieved = (int)(ach["achieved"] ?? 0)
+                    };
+                    var unlockTime = ach["unlocktime"];
+                    if (unlockTime != null && (long)unlockTime > 0)
+                    {
+                        steamAch.UnlockTime = DateTimeOffset.FromUnixTimeSeconds((long)unlockTime).DateTime;
+                    }
+                    result.Add(steamAch);
+                }
+                return result;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// 查询游戏信息
         /// </summary>
         /// <param name="keyWords"></param>
