@@ -42,7 +42,8 @@
     "searchplayer": "Stats",
     "plaza": "Discover",
     "log": "Change Log",
-    "privacy": "Privacy Settings"
+    "privacy": "Privacy Settings",
+    "profile": "Profile"
   },
   "mod": {
     "upload": "Upload",
@@ -244,5 +245,38 @@
     "publishAddScoreDetail": "Displayed in \"Increased score past 2 weeks\" on the homepage ",
     "publishTotalScore": "Publish total rank score of SR",
     "publishTotalScoreDetail": "Displayed in the list of rank page"
+  },
+  "profile": {
+    "comments": "Comments",
+    "commentsComingSoon": "Comments feature coming soon",
+    "scoreHeatmap": "Score Activity",
+    "totalAdded": "Annual Total",
+    "less": "Less",
+    "more": "More",
+    "mon": "Mon",
+    "wed": "Wed",
+    "fri": "Fri",
+    "scoreUnit": "pts",
+    "points": "pts",
+    "recentScore": "Past 2 Weeks",
+    "achievements": "Achievements",
+    "noAchievements": "No achievement data",
+    "gameStats": "Game Stats",
+    "gameActivity": "Game Activity",
+    "noActivity": "No activity data",
+    "offline": "Offline",
+    "online": "Online",
+    "playingSR": "Playing SpeedRunners",
+    "notFound": "Player Not Found",
+    "notFoundDesc": "Player does not exist or profile is private",
+    "rankUpTo": "Ranked up to",
+    "unlocked": "Unlocked",
+    "activity": {
+      "scoreChange": "Score Change",
+      "rankUp": "Rank Up",
+      "achievement": "Achievement",
+      "gameSession": "Game Session",
+      "other": "Other"
+    }
   }
 }

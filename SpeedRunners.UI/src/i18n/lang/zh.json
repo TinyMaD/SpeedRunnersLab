@@ -42,7 +42,8 @@
     "searchplayer": "资 料",
     "plaza": "广 场",
     "log": "开发日志",
-    "privacy": "隐私设置"
+    "privacy": "隐私设置",
+    "profile": "个人主页"
   },
   "mod": {
     "upload": "上 传",
@@ -244,5 +245,38 @@
     "publishAddScoreDetail": "展示在首页“最近两周新增天梯分”中",
     "publishTotalScore": "公开SR总天梯分",
     "publishTotalScoreDetail": "展示在SR总分排行榜中"
+  },
+  "profile": {
+    "comments": "评论区",
+    "commentsComingSoon": "评论功能即将上线",
+    "scoreHeatmap": "天梯分变化",
+    "totalAdded": "年度累计",
+    "less": "少",
+    "more": "多",
+    "mon": "一",
+    "wed": "三",
+    "fri": "五",
+    "scoreUnit": "分",
+    "points": "分",
+    "recentScore": "近两周新增",
+    "achievements": "成就",
+    "noAchievements": "暂无成就数据",
+    "gameStats": "游戏统计",
+    "gameActivity": "游戏动态",
+    "noActivity": "暂无动态数据",
+    "offline": "离线",
+    "online": "在线",
+    "playingSR": "正在玩 SpeedRunners",
+    "notFound": "未找到该玩家",
+    "notFoundDesc": "玩家不存在或资料未公开",
+    "rankUpTo": "晋级至",
+    "unlocked": "解锁成就",
+    "activity": {
+      "scoreChange": "天梯分变化",
+      "rankUp": "段位晋级",
+      "achievement": "成就解锁",
+      "gameSession": "游戏时长",
+      "other": "其他"
+    }
   }
 }
