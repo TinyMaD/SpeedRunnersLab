@@ -161,8 +161,8 @@ export default {
     getCellClass(score) {
       if (score <= 0) return 'level-0';
       if (score < 50) return 'level-1';
-      if (score < 150) return 'level-2';
-      if (score < 300) return 'level-3';
+      if (score < 500) return 'level-2';
+      if (score < 1000) return 'level-3';
       return 'level-4';
     },
     
