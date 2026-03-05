@@ -1,0 +1,301 @@
+{
+  "404": {
+    "error": "Webmasterul a spus că nu poți intra pe această pagină...",
+    "check": "Te rog verifică dacă URL-ul introdus este corect, sau apasă butonul de mai jos pentru a reveni la pagina principală.",
+    "back": "Înapoi la pagina principală"
+  },
+  "500": {
+    "msg": "Ups! Eroare de server"
+  },
+  "index": {
+    "online": "Online",
+    "sponsorContent": [
+      "Funcționarea acestui site necesită închirierea de servere, domenii etc., ceea ce reprezintă cea mai mare cheltuială (un server cu configurație minimă va costa aproximativ 100 de dolari pe an).",
+      "Acest site a fost menținut de mine, sper că ecosistemul SR se îmbunătățește, și încă mai este mult <a href='https://github.com/users/TinyMaD/projects/1/views/1' target='_blank'>Todo</a> despre acest site.",
+      "Dacă dorești să susții acest site, poți apăsa butonul de mai jos pentru a mă sponsoriza (sponsorizările Afdian vor fi afișate în timp real mai sus, iar cele Paypal în 24 de ore)"
+    ],
+    "sponsorTitle": "Mulțumim celor {0} sponsori",
+    "addedChartTitle": "Puncte crescute în ultimele două săptămâni",
+    "hourChartTile": "Timp de joc în ultimele două săptămâni",
+    "hourChartUnit": "h",
+    "videoTitle": "Video statistici zilnice 2025",
+    "videoUrl": "https://www.youtube.com/watch?v=E1nDvPAuY1Y"
+  },
+  "layout": {
+    "login": "Autentificare",
+    "logout": "Deconectare",
+    "logoutSucc": "Deconectare reușită",
+    "email": "Apasă pentru a copia adresa de email",
+    "copyEmail": "Copiat în clipboard",
+    "theme": "Întunecat/Luminos",
+    "notification": "Notificări",
+    "replyMe": "Răspunsuri",
+    "likeMe": "Aprecieri",
+    "noNotifications": "Fără notificări",
+    "viewAll": "Vezi tot"
+  },
+  "routes": {
+    "home": "Acasă",
+    "match": "Meciuri",
+    "rank": "Clasament",
+    "mod": "MOD",
+    "searchplayer": "Statistici",
+    "plaza": "Descoperă",
+    "log": "Jurnal modificări",
+    "privacy": "Setări confidențialitate",
+    "profile": "Profil"
+  },
+  "mod": {
+    "upload": "Încarcă",
+    "yourStar": "Favoritele tale",
+    "trail": "Trasee",
+    "character": "Personaje",
+    "item": "Obiecte",
+    "sound": "Sunete",
+    "bg": "Fundaluri",
+    "other": "Altele",
+    "uploadingTitle": "Se încarcă, te rog așteaptă...{0} %",
+    "loadTitle": "Încarcă resurse MOD",
+    "uploadCover": "Apasă pentru a încărca coperta",
+    "uploadFile": "Apasă pentru a încărca fișierul",
+    "loadSucc": "Încărcat cu succes",
+    "inputTitle": "Te rog introdu un titlu",
+    "lengthWarn": "Numărul de caractere nu poate fi mai mare de 17",
+    "loadCoverPlz": "Te rog încarcă coperta",
+    "bigImgWarn": "Dimensiunea imaginii nu poate depăși 5 MB",
+    "mustImg": "Fișierul trebuie să fie o imagine",
+    "uploadFilePlz": "Te rog încarcă fișierul",
+    "bigFileWarn": "Dimensiunea fișierului nu poate depăși 20 MB",
+    "invalidWarn": "SteamID sau vanity URL invalid, te rog selectează jucătorul pe care vrei să îl cauți",
+    "download": "Descarcă",
+    "starSucc": "Adăugat la favorite",
+    "unstarSucc": "Eliminat de la favorite",
+    "star": "Favorit",
+    "unStar": "Adaugă la favorite",
+    "deleteSucc": "MOD șters cu succes",
+    "deleteWarn": "Ștergi acest Mod?",
+    "deleteInfo": "Odată ce ștergi un mod, nu mai există cale de întoarcere. Te rog fii sigur.",
+    "share": "Partajează",
+    "shareSucc": "Link-ul de partajare copiat în clipboard",
+    "backToList": "Înapoi la lista completă",
+    "modNotFound": "Mod negăsit"
+  },
+  "common": {
+    "search": "Caută",
+    "keywords": "Te rog introdu un cuvânt cheie",
+    "loginPlz": "Te rog autentifică-te mai întâi",
+    "type": "Tip",
+    "selectType": "Te rog selectează tipul",
+    "title": "Titlu",
+    "submit": "Trimite",
+    "cancel": "Anulează",
+    "notice": "Notificare",
+    "success": "Succes",
+    "delete": "Șterge",
+    "confirm": "Confirmă",
+    "markAllRead": "Marchează tot ca citit"
+  },
+  "rank": {
+    "personaName": "Nume",
+    "tier": "Ligă",
+    "score": "Puncte clasament",
+    "updateInfo": "*Frecvența actualizării datelor: la fiecare 10 minute",
+    "diamond": "Diamant",
+    "platinum": "Platină",
+    "gold": "Aur",
+    "silver": "Argint",
+    "bronze": "Bronz",
+    "expert": "Expert",
+    "advanced": "Avansat",
+    "beginner": "Începător",
+    "entry": "Intrare",
+    "playTime": "Timp total de joc",
+    "past2weeks": "Timp de joc ultimele 2 săptămâni"
+  },
+  "stats": {
+    "enterSteamID": "Te rog introdu SteamID, vanity URL sau nume",
+    "content": "Caută statisticile SpeedRunners ale utilizatorului Steam, viteza de căutare: SteamID (stabil) > Vanity URL (stabil) > nume (instabil)",
+    "showMore": "{0} rezultate rămase — Apasă pentru a arăta mai multe —",
+    "noResult": "Nu s-au găsit rezultate relevante. Jucătorul poate nu a setat confidențialitatea profilului Steam ca public."
+  },
+  "match": {
+    "prizePool": "Fondul total de premii",
+    "schedule": "Program[Arhivat]",
+    "participant": "Participant",
+    "points": "Puncte",
+    "reward": "Recompensă",
+    "badgeContent": "Primii 10 jucători vor primi insignă de realizare (afișată doar pe acest site):",
+    "support": "Suport",
+    "sponsor": "Sponsor",
+    "amount": "Sumă",
+    "sponsorship": "Metodă sponsorizare (scanează codul QR de mai jos):",
+    "contactMe": "Pentru alte metode de sponsorizare, te rog contactează-mă (email) {0}",
+    "time": "Ora meciului",
+    "groupStage": "Faza grupelor",
+    "finalStage": "Faza finală",
+    "sponsorContent": [
+      "Mulțumim tuturor sponsorilor, indiferent de sumă, datorită susținerii voastre acest eveniment poate avea loc",
+      "Premiile acestui turneu sunt complet sponsorizate, iar 100% din fondurile sponsorizate intră în fondul total de premii",
+      "Pentru a asigura că sponsorizarea este deschisă și transparentă, te rog să notezi ID-ul tău (unic, recunoscut de tine) când sponsorizezi. Fără notă va fi înregistrat ca anonim. Voi menține lista sponsorilor în 24 de ore",
+      "Lista sponsorilor:"
+    ],
+    "matchContent": [
+      {
+        "title": "Calificare",
+        "content": [
+          "Jucătorii fără barieră de comunicare în chineză și cu latență de rețea mică către arbitri se pot înscrie",
+          "Primii 12 jucători din clasamentul 'Puncte' se vor califica pentru competiție",
+          "'Puncte' = 'Puncte clasament' + 'Puncte timp de joc'",
+          "'Puncte clasament': Punctele totale obținute în meciurile de clasament",
+          "'Puncte timp de joc' = 'Timp de joc efectiv' X 10. Notă: Timpul de joc se referă la SpeedRunners, în ore. Te rog să setezi setările de confidențialitate Steam ca publice",
+          "'Timp de joc efectiv' = Timp total de joc - timp de joc ultimele două săptămâni. Notă: Dacă 'Timp de joc efectiv' depășește 1000 de ore, va fi calculat ca 1000 de ore",
+          "Exemplu: Tom are 10000 puncte clasament, joacă SpeedRunners de 1200 de ore, și a jucat 300 de ore în ultimele două săptămâni. Punctele lui sunt calculate ca 10000 + (1200 - 300) X 10 = 19000",
+          "Primii 4 jucători din clasamentul 'Puncte' asigură direct 4 locuri în grupa câștigătorilor din 8",
+          "Ceilalți 8 jucători din clasamentul 'Puncte' intră în faza grupelor"
+        ]
+      },
+      {
+        "title": "Faza grupelor",
+        "content": [
+          "Format: Fiecare cu fiecare 1v1 (fiecare jucător va concura cu ceilalți 7 jucători)",
+          "Număr de meciuri: 3",
+          "Hărți: Hărți oficiale aleatorii și hărți workshop",
+          "B/P: Fără interzicere de hărți, apasă direct butonul hartă oficială aleatorie și hartă workshop aleatorie",
+          "Scor: Puncte și victorii (după punctare, jucătorii cu același punctaj vor fi clasați după numărul de victorii)",
+          "Primii 4 din faza grupelor intră în grupa câștigătorilor",
+          "Ultimii 4 din faza grupelor intră în grupa pierzătorilor"
+        ]
+      },
+      {
+        "title": "Faza finală",
+        "content": [
+          "Format: Dublă eliminare, puternici contra puternici",
+          "Număr de meciuri: Semifinala grupei câștigătorilor, finala grupei pierzătorilor, marea finală (bo15), alte meciuri (bo11)",
+          "Hărți: De determinat",
+          "B/P: De determinat",
+          "Meciuri de încălzire: Înainte de semifinala grupei câștigătorilor, finala grupei pierzătorilor și marea finală, se vor juca două meciuri de încălzire"
+        ]
+      },
+      {
+        "title": "Alte informații",
+        "content": [
+          "Te rog să te alături grupului QQ de competiții SpeedRunners: 743740882",
+          "În dezvoltare, rămâi la curent...",
+          "※Dreptul final de interpretare aparține acestui site"
+        ]
+      }
+    ],
+    "prize": "Premiu (variază cu fondul total de premii)",
+    "additional": "Bonus suplimentar",
+    "standings": "Nr. {0}",
+    "algorithm": [
+      "Algoritm bonus:",
+      "Pentru fiecare creștere de rang, bonusul se dublează, cu o diferență maximă de 500 yuani",
+      "Valoarea calculată este rotunjită în jos, iar suma sumelor abandonate se adaugă la bonusul pentru cel mai mic rang",
+      "Dintre participanții fără bonus fix pe rang, există șansa de a câștiga 50 yuani",
+      "Bonusurile suplimentare sunt distribuite conform regulilor personalizate stabilite de sponsori"
+    ]
+  },
+  "comment": {
+    "title": "Comentarii",
+    "placeholder": "Scrie un comentariu...",
+    "replyPlaceholder": "Răspunde către {0}...",
+    "submit": "Postează",
+    "reply": "Răspunde",
+    "delete": "Șterge",
+    "deleteConfirm": "Ești sigur că vrei să ștergi acest comentariu?",
+    "deleteInfo": "Această acțiune nu poate fi anulată",
+    "noComments": "Încă fără comentarii. Fii primul!",
+    "loginToComment": "Autentifică-te pentru a posta un comentariu",
+    "viewReplies": "Vezi {0} răspunsuri",
+    "hideReplies": "Ascunde răspunsurile",
+    "loadMore": "Încarcă mai multe",
+    "like": "Apreciază",
+    "time": {
+      "justNow": "chiar acum",
+      "minutesAgo": "acum {0} minute",
+      "hoursAgo": "acum {0} ore",
+      "daysAgo": "acum {0} zile",
+      "yearsAgo": "acum {0} ani"
+    }
+  },
+  "components": {
+    "cropper": {
+      "title": "Coperta ar trebui să arate mai multe detalii ale MODului",
+      "crop": "Decupează"
+    }
+  },
+  "login": {
+    "loginSuccess": "Autentificare reușită, revenire automată la pagina principală în {0} secunde",
+    "logging": "Se autentifică, te rog așteaptă...",
+    "validating": "Se verifică informațiile de autentificare...",
+    "validateSucc": "Informațiile de autentificare verificate cu succes",
+    "initData": "Inițializează datele utilizatorului",
+    "initing": "Se inițializează datele utilizatorului...",
+    "initSucc": "Datele utilizatorului inițializate cu succes"
+  },
+  "privacy": {
+    "publishState": "Publică starea Steam",
+    "publishStateDetail": "Toată lumea poate vedea starea ta Steam și dacă joci SR",
+    "publishPlaytime": "Publică timpul recent de joc SR",
+    "publishPlaytimeDetail": "Afișat în 'Timp de joc ultimele 2 săptămâni' pe pagina principală",
+    "allowGetRankScore": "Permite acestui site să solicite punctele tale de clasament SR",
+    "allowGetRankScoreDetail": "Include și următoarele elemente pe care le poți gestiona individual:",
+    "publishAddScore": "Publică creșterea punctelor SR",
+    "publishAddScoreDetail": "Afișat în 'Puncte crescute în ultimele 2 săptămâni' pe pagina principală",
+    "publishTotalScore": "Publică punctele totale de clasament SR",
+    "publishTotalScoreDetail": "Afișat în lista de pe pagina clasament"
+  },
+  "profile": {
+    "comments": "Comentarii",
+    "commentsComingSoon": "Funcția de comentarii în curând",
+    "scoreHeatmap": "Activitate puncte",
+    "totalAdded": "Total anual",
+    "less": "Mai puțin",
+    "more": "Mai mult",
+    "mon": "Lun",
+    "wed": "Mie",
+    "fri": "Vin",
+    "scoreUnit": "pct",
+    "points": "pct",
+    "recentScore": "Ultimele 2 săptămâni",
+    "achievements": "Realizări",
+    "noAchievements": "Fără date de realizări",
+    "gameStats": "Statistici joc",
+    "gameActivity": "Activitate joc",
+    "noActivity": "Fără date de activitate",
+    "offline": "Offline",
+    "online": "Online",
+    "playingSR": "Joacă SpeedRunners",
+    "notFound": "Jucător negăsit",
+    "notFoundDesc": "Jucătorul nu există sau profilul este privat",
+    "rankUpTo": "Promovat la",
+    "unlocked": "Deblocat",
+    "unlockTime": "Deblocat {0} {1}, {2}",
+    "pageTitle": "{0} - Profil SpeedRunners",
+    "pageTitleDefault": "Profil jucător",
+    "pageKeywords": "jucător SpeedRunners,{0},profil,date joc",
+    "months": [
+      "Ian",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mai",
+      "Iun",
+      "Iul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ],
+    "heatmapDate": "{0} {1}, {2}",
+    "activity": {
+      "scoreChange": "Schimbare puncte",
+      "rankUp": "Urcare în clasament",
+      "achievement": "Realizare",
+      "gameSession": "Sesiune de joc",
+      "other": "Altele"
+    }
+  }
+}

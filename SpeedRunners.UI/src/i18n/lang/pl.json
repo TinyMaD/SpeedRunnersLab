@@ -1,0 +1,281 @@
+{
+  "404": {
+    "error": "Webmaster powiedział, że nie możesz wejść na tę stronę...",
+    "check": "Proszę sprawdzić, czy wprowadzony URL jest poprawny, lub kliknąć przycisk poniżej, aby wrócić do strony głównej.",
+    "back": "Wróć do strony głównej"
+  },
+  "500": {
+    "msg": "Ups! Błąd serwera"
+  },
+  "index": {
+    "online": "Online",
+    "sponsorContent": [
+      "Działanie tej strony wymaga wynajmu serwerów, domen itp.",
+      "Ta strona jest utrzymywana przeze mnie.",
+      "Jeśli chcesz wesprzeć tę stronę, możesz mnie sponsorować."
+    ],
+    "sponsorTitle": "Podziękowania dla {0} sponsorów",
+    "addedChartTitle": "Zwiększone punkty w ostatnich dwóch tygodniach",
+    "hourChartTile": "Czas gry w ostatnich dwóch tygodniach",
+    "hourChartUnit": "godz",
+    "videoTitle": "Wideo codziennych statystyk 2025",
+    "videoUrl": "https://www.youtube.com/watch?v=E1nDvPAuY1Y"
+  },
+  "layout": {
+    "login": "Zaloguj się",
+    "logout": "Wyloguj się",
+    "logoutSucc": "Pomyślnie wylogowano",
+    "email": "Kliknij, aby skopiować adres email",
+    "copyEmail": "Skopiowano do schowka",
+    "theme": "Ciemny/Jasny",
+    "notification": "Powiadomienia",
+    "replyMe": "Odpowiedzi",
+    "likeMe": "Polubienia",
+    "noNotifications": "Brak powiadomień",
+    "viewAll": "Zobacz wszystko"
+  },
+  "routes": {
+    "home": "Strona główna",
+    "match": "Mecze",
+    "rank": "Ranking",
+    "mod": "MOD",
+    "searchplayer": "Statystyki",
+    "plaza": "Odkryj",
+    "log": "Dziennik zmian",
+    "privacy": "Ustawienia prywatności",
+    "profile": "Profil"
+  },
+  "mod": {
+    "upload": "Prześlij",
+    "yourStar": "Twoje ulubione",
+    "trail": "Ścieżki",
+    "character": "Postacie",
+    "item": "Przedmioty",
+    "sound": "Dźwięki",
+    "bg": "Tła",
+    "other": "Inne",
+    "uploadingTitle": "Przesyłanie, proszę czekać...{0} %",
+    "loadTitle": "Prześlij zasoby MOD",
+    "uploadCover": "Kliknij, aby przesłać okładkę",
+    "uploadFile": "Kliknij, aby przesłać plik",
+    "loadSucc": "Pomyślnie przesłano",
+    "inputTitle": "Proszę wprowadzić tytuł",
+    "lengthWarn": "Liczba znaków nie może przekraczać 17",
+    "loadCoverPlz": "Proszę przesłać okładkę",
+    "bigImgWarn": "Rozmiar obrazu nie może przekraczać 5 MB",
+    "mustImg": "Plik musi być obrazem",
+    "uploadFilePlz": "Proszę przesłać plik",
+    "bigFileWarn": "Rozmiar pliku nie może przekraczać 20 MB",
+    "invalidWarn": "Nieprawidłowy SteamID lub vanity URL",
+    "download": "Pobierz",
+    "starSucc": "Dodano do ulubionych",
+    "unstarSucc": "Usunięto z ulubionych",
+    "star": "Ulubione",
+    "unStar": "Dodaj do ulubionych",
+    "deleteSucc": "MOD pomyślnie usunięty",
+    "deleteWarn": "Usunąć ten Mod?",
+    "deleteInfo": "Po usunięciu moda nie ma powrotu.",
+    "share": "Udostępnij",
+    "shareSucc": "Link udostępniania skopiowany do schowka",
+    "backToList": "Wróć do pełnej listy",
+    "modNotFound": "Mod nie znaleziony"
+  },
+  "common": {
+    "search": "Szukaj",
+    "keywords": "Proszę wprowadzić słowo kluczowe",
+    "loginPlz": "Proszę najpierw się zalogować",
+    "type": "Typ",
+    "selectType": "Proszę wybrać typ",
+    "title": "Tytuł",
+    "submit": "Prześlij",
+    "cancel": "Anuluj",
+    "notice": "Powiadomienie",
+    "success": "Sukces",
+    "delete": "Usuń",
+    "confirm": "Potwierdź",
+    "markAllRead": "Oznacz wszystko jako przeczytane"
+  },
+  "rank": {
+    "personaName": "Nazwa",
+    "tier": "Liga",
+    "score": "Punkty rankingowe",
+    "updateInfo": "*Częstotliwość aktualizacji danych: co 10 minut",
+    "diamond": "Diament",
+    "platinum": "Platyna",
+    "gold": "Złoto",
+    "silver": "Srebro",
+    "bronze": "Brąz",
+    "expert": "Ekspert",
+    "advanced": "Zaawansowany",
+    "beginner": "Początkujący",
+    "entry": "Wejście",
+    "playTime": "Całkowity czas gry",
+    "past2weeks": "Czas gry w ostatnich 2 tygodniach"
+  },
+  "stats": {
+    "enterSteamID": "Proszę wprowadzić SteamID, vanity URL lub nazwę",
+    "content": "Wyszukaj statystyki SpeedRunners użytkownika Steam",
+    "showMore": "{0} wyników pozostało — Kliknij, aby pokazać więcej —",
+    "noResult": "Nie znaleziono odpowiednich wyników."
+  },
+  "match": {
+    "prizePool": "Całkowita pula nagród",
+    "schedule": "Harmonogram[Zarchiwizowany]",
+    "participant": "Uczestnik",
+    "points": "Punkty",
+    "reward": "Nagroda",
+    "badgeContent": "Top 10 graczy otrzyma odznakę osiągnięcia:",
+    "support": "Wsparcie",
+    "sponsor": "Sponsor",
+    "amount": "Kwota",
+    "sponsorship": "Metoda sponsoringu:",
+    "contactMe": "W przypadku innych metod sponsoringu skontaktuj się ze mną {0}",
+    "time": "Czas meczu",
+    "groupStage": "Faza grupowa",
+    "finalStage": "Faza finałowa",
+    "sponsorContent": [
+      "Dziękujemy wszystkim sponsorom!",
+      "Nagrody są w pełni sponsorowane.",
+      "Lista sponsorów:"
+    ],
+    "matchContent": [
+      {
+        "title": "Kwalifikacja",
+        "content": [
+          "Gracze mogą się zarejestrować",
+          "Top 12 kwalifikuje się"
+        ]
+      },
+      {
+        "title": "Faza grupowa",
+        "content": [
+          "Round-robin 1v1",
+          "Liczba meczów: 3"
+        ]
+      },
+      {
+        "title": "Faza finałowa",
+        "content": [
+          "Podwójna eliminacja",
+          "Wielki finał bo15"
+        ]
+      },
+      {
+        "title": "Inne informacje",
+        "content": [
+          "Grupa QQ: 743740882",
+          "W rozwoju"
+        ]
+      }
+    ],
+    "prize": "Nagroda",
+    "additional": "Dodatkowy bonus",
+    "standings": "Nr {0}",
+    "algorithm": [
+      "Algorytm bonusu:",
+      "Przy każdym wzroście rangi bonus się podwaja"
+    ]
+  },
+  "comment": {
+    "title": "Komentarze",
+    "placeholder": "Napisz komentarz...",
+    "replyPlaceholder": "Odpowiedz {0}...",
+    "submit": "Opublikuj",
+    "reply": "Odpowiedz",
+    "delete": "Usuń",
+    "deleteConfirm": "Czy na pewno chcesz usunąć ten komentarz?",
+    "deleteInfo": "Tej akcji nie można cofnąć",
+    "noComments": "Brak komentarzy. Bądź pierwszy!",
+    "loginToComment": "Zaloguj się, aby skomentować",
+    "viewReplies": "Zobacz {0} odpowiedzi",
+    "hideReplies": "Ukryj odpowiedzi",
+    "loadMore": "Załaduj więcej",
+    "like": "Lubię to",
+    "time": {
+      "justNow": "właśnie teraz",
+      "minutesAgo": "{0} minut temu",
+      "hoursAgo": "{0} godzin temu",
+      "daysAgo": "{0} dni temu",
+      "yearsAgo": "{0} lat temu"
+    }
+  },
+  "components": {
+    "cropper": {
+      "title": "Okładka powinna pokazywać więcej szczegółów MOD",
+      "crop": "Przytnij"
+    }
+  },
+  "login": {
+    "loginSuccess": "Logowanie pomyślne, automatyczny powrót za {0} sekund",
+    "logging": "Logowanie...",
+    "validating": "Weryfikacja...",
+    "validateSucc": "Weryfikacja pomyślna",
+    "initData": "Inicjalizacja danych użytkownika",
+    "initing": "Inicjalizacja...",
+    "initSucc": "Inicjalizacja pomyślna"
+  },
+  "privacy": {
+    "publishState": "Publikuj status Steam",
+    "publishStateDetail": "Wszyscy mogą widzieć Twój status Steam",
+    "publishPlaytime": "Publikuj niedawny czas gry SR",
+    "publishPlaytimeDetail": "Wyświetlane na stronie głównej",
+    "allowGetRankScore": "Pozwól tej witrynie żądać Twoich punktów rankingowych SR",
+    "allowGetRankScoreDetail": "Zawiera:",
+    "publishAddScore": "Publikuj wzrost punktów SR",
+    "publishAddScoreDetail": "Wyświetlane na stronie głównej",
+    "publishTotalScore": "Publikuj łączne punkty rankingowe SR",
+    "publishTotalScoreDetail": "Wyświetlane na liście rankingowej"
+  },
+  "profile": {
+    "comments": "Komentarze",
+    "commentsComingSoon": "Funkcja komentarzy wkrótce",
+    "scoreHeatmap": "Aktywność punktów",
+    "totalAdded": "Suma roczna",
+    "less": "Mniej",
+    "more": "Więcej",
+    "mon": "Pon",
+    "wed": "Śr",
+    "fri": "Pt",
+    "scoreUnit": "pkt",
+    "points": "pkt",
+    "recentScore": "Ostatnie 2 tygodnie",
+    "achievements": "Osiągnięcia",
+    "noAchievements": "Brak danych osiągnięć",
+    "gameStats": "Statystyki gry",
+    "gameActivity": "Aktywność gry",
+    "noActivity": "Brak danych aktywności",
+    "offline": "Offline",
+    "online": "Online",
+    "playingSR": "Gra SpeedRunners",
+    "notFound": "Gracz nie znaleziony",
+    "notFoundDesc": "Gracz nie istnieje lub profil jest prywatny",
+    "rankUpTo": "Awansowany do",
+    "unlocked": "Odblokowane",
+    "unlockTime": "Odblokowane {0} {1}, {2}",
+    "pageTitle": "{0} - Profil SpeedRunners",
+    "pageTitleDefault": "Profil gracza",
+    "pageKeywords": "gracz SpeedRunners,{0},profil,dane gry",
+    "months": [
+      "Sty",
+      "Lut",
+      "Mar",
+      "Kwi",
+      "Maj",
+      "Cze",
+      "Lip",
+      "Sie",
+      "Wrz",
+      "Paź",
+      "Lis",
+      "Gru"
+    ],
+    "heatmapDate": "{0} {1}, {2}",
+    "activity": {
+      "scoreChange": "Zmiana punktów",
+      "rankUp": "Awans w rankingu",
+      "achievement": "Osiągnięcie",
+      "gameSession": "Sesja gry",
+      "other": "Inne"
+    }
+  }
+}

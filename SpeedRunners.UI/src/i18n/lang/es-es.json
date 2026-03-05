@@ -1,0 +1,301 @@
+{
+  "404": {
+    "error": "El webmaster dijo que no puedes entrar en esta página...",
+    "check": "Por favor, comprueba que la URL que has introducido es correcta, o haz clic en el botón de abajo para volver a la página de inicio.",
+    "back": "Volver al inicio"
+  },
+  "500": {
+    "msg": "¡Ups! Error del servidor"
+  },
+  "index": {
+    "online": "En línea",
+    "sponsorContent": [
+      "El funcionamiento de este sitio web requiere el alquiler de servidores, dominios, etc., que es el mayor gasto (un servidor con configuración mínima costará unos 100 dólares al año).",
+      "Este sitio web ha sido mantenido por mí, espero que el ecosistema de SR mejore, y todavía hay mucho <a href='https://github.com/users/TinyMaD/projects/1/views/1' target='_blank'>Todo</a> sobre este sitio.",
+      "Si quieres apoyar este sitio web, puedes hacer clic en el botón de abajo para patrocinarme (los patrocinios de Afdian se mostrarán en tiempo real arriba, y los de Paypal se mostrarán en 24 horas)"
+    ],
+    "sponsorTitle": "Gracias a los {0} patrocinadores",
+    "addedChartTitle": "Puntos aumentados en las últimas dos semanas",
+    "hourChartTile": "Tiempo de juego en las últimas dos semanas",
+    "hourChartUnit": "h",
+    "videoTitle": "Video de estadísticas diarias de 2025",
+    "videoUrl": "https://www.youtube.com/watch?v=E1nDvPAuY1Y"
+  },
+  "layout": {
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "logoutSucc": "Sesión cerrada con éxito",
+    "email": "Haz clic para copiar la dirección de correo",
+    "copyEmail": "Copiado al portapapeles",
+    "theme": "Oscuro/Claro",
+    "notification": "Notificaciones",
+    "replyMe": "Respuestas",
+    "likeMe": "Me gusta",
+    "noNotifications": "Sin notificaciones",
+    "viewAll": "Ver todo"
+  },
+  "routes": {
+    "home": "Inicio",
+    "match": "Partidos",
+    "rank": "Clasificación",
+    "mod": "MOD",
+    "searchplayer": "Estadísticas",
+    "plaza": "Descubrir",
+    "log": "Registro de cambios",
+    "privacy": "Configuración de privacidad",
+    "profile": "Perfil"
+  },
+  "mod": {
+    "upload": "Subir",
+    "yourStar": "Tus favoritos",
+    "trail": "Pistas",
+    "character": "Personajes",
+    "item": "Objetos",
+    "sound": "Sonidos",
+    "bg": "Fondos",
+    "other": "Otros",
+    "uploadingTitle": "Subiendo, por favor espera...{0} %",
+    "loadTitle": "Subir recursos MOD",
+    "uploadCover": "Haz clic para subir la portada",
+    "uploadFile": "Haz clic para subir el archivo",
+    "loadSucc": "Subido con éxito",
+    "inputTitle": "Por favor, introduce un título",
+    "lengthWarn": "El número de caracteres no puede ser mayor de 17",
+    "loadCoverPlz": "Por favor, sube la portada",
+    "bigImgWarn": "El tamaño de la imagen no puede superar 5 MB",
+    "mustImg": "El archivo debe ser una imagen",
+    "uploadFilePlz": "Por favor, sube el archivo",
+    "bigFileWarn": "El tamaño del archivo no puede superar 20 MB",
+    "invalidWarn": "SteamID o vanity URL inválido, por favor selecciona el jugador que quieres buscar",
+    "download": "Descargar",
+    "starSucc": "Añadido a favoritos",
+    "unstarSucc": "Eliminado de favoritos",
+    "star": "Favorito",
+    "unStar": "Añadir a favoritos",
+    "deleteSucc": "MOD eliminado con éxito",
+    "deleteWarn": "¿Eliminar este Mod?",
+    "deleteInfo": "Una vez que eliminas un mod, no hay vuelta atrás. Por favor, asegúrate.",
+    "share": "Compartir",
+    "shareSucc": "Enlace compartido copiado al portapapeles",
+    "backToList": "Volver a la lista completa",
+    "modNotFound": "Mod no encontrado"
+  },
+  "common": {
+    "search": "Buscar",
+    "keywords": "Por favor, introduce una palabra clave",
+    "loginPlz": "Por favor, inicia sesión primero",
+    "type": "Tipo",
+    "selectType": "Por favor, selecciona el tipo",
+    "title": "Título",
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "notice": "Aviso",
+    "success": "Éxito",
+    "delete": "Eliminar",
+    "confirm": "Confirmar",
+    "markAllRead": "Marcar todo como leído"
+  },
+  "rank": {
+    "personaName": "Nombre",
+    "tier": "Liga",
+    "score": "Puntos de rango",
+    "updateInfo": "*Frecuencia de actualización de datos: cada 10 minutos",
+    "diamond": "Diamante",
+    "platinum": "Platino",
+    "gold": "Oro",
+    "silver": "Plata",
+    "bronze": "Bronce",
+    "expert": "Experto",
+    "advanced": "Avanzado",
+    "beginner": "Principiante",
+    "entry": "Entrada",
+    "playTime": "Tiempo total de juego",
+    "past2weeks": "Tiempo de juego de las últimas 2 semanas"
+  },
+  "stats": {
+    "enterSteamID": "Por favor, introduce SteamID, vanity URL o nombre",
+    "content": "Consultar estadísticas de SpeedRunners del usuario de Steam, velocidad de consulta: SteamID (estable) > Vanity URL (estable) > nombre (inestable)",
+    "showMore": "{0} resultados restantes — Haz clic para mostrar más —",
+    "noResult": "No se encontraron resultados relevantes. Es posible que el jugador no haya configurado la privacidad del perfil de Steam como pública."
+  },
+  "match": {
+    "prizePool": "Fondo de premios total",
+    "schedule": "Calendario[Archivado]",
+    "participant": "Participante",
+    "points": "Puntos",
+    "reward": "Recompensa",
+    "badgeContent": "Los 10 mejores jugadores recibirán una insignia de logro (solo se muestra en este sitio):",
+    "support": "Soporte",
+    "sponsor": "Patrocinador",
+    "amount": "Cantidad",
+    "sponsorship": "Método de patrocinio (escanea el código QR de abajo):",
+    "contactMe": "Para otros métodos de patrocinio, por favor contáctame (email) {0}",
+    "time": "Hora del partido",
+    "groupStage": "Fase de grupos",
+    "finalStage": "Fase final",
+    "sponsorContent": [
+      "Gracias a todos los patrocinadores, sin importar la cantidad, gracias a tu apoyo este evento puede celebrarse",
+      "Los premios de este torneo son completamente patrocinados, y el 100% de los fondos patrocinados entran en el fondo de premios total",
+      "Para garantizar que el patrocinio sea abierto y transparente, por favor indica tu ID (único, reconocible) al patrocinar. Sin nota se registrará como anónimo. Mantendré la lista de patrocinadores en 24 horas",
+      "Lista de patrocinadores:"
+    ],
+    "matchContent": [
+      {
+        "title": "Clasificación",
+        "content": [
+          "Jugadores sin barrera de comunicación en chino y con baja latencia de red hacia los árbitros pueden inscribirse",
+          "Los 12 mejores jugadores en el ranking de 'Puntos' se clasificarán para la competición",
+          "'Puntos' = 'Puntos de rango' + 'Puntos por tiempo de juego'",
+          "'Puntos de rango': Puntos totales obtenidos en partidas clasificatorias",
+          "'Puntos por tiempo de juego' = 'Tiempo de juego efectivo' X 10. Nota: El tiempo de juego se refiere a SpeedRunners, en horas. Configura tu privacidad de Steam como pública",
+          "'Tiempo de juego efectivo' = Tiempo total de juego - tiempo de juego de las últimas dos semanas. Nota: Si supera 1000 horas, se calculará como 1000 horas",
+          "Ejemplo: Tom tiene 10000 puntos de rango, juega SpeedRunners 1200 horas, y ha jugado 300 horas en las últimas dos semanas. Sus puntos son: 10000 + (1200 - 300) X 10 = 19000",
+          "Los 4 mejores jugadores en el ranking de 'Puntos' aseguran 4 plazas en el grupo de ganadores de 8",
+          "Los 8 jugadores restantes en el ranking de 'Puntos' entran en la fase de grupos"
+        ]
+      },
+      {
+        "title": "Fase de grupos",
+        "content": [
+          "Formato: Liga todos contra todos 1v1 (cada jugador competirá contra los otros 7)",
+          "Número de partidos: 3",
+          "Mapas: Mapas oficiales aleatorios y mapas del taller",
+          "B/P: Sin veto de mapas, haz clic en el botón de mapa oficial aleatorio y mapa del taller aleatorio",
+          "Puntuación: Puntos y victorias (después de puntuar, jugadores con los mismos puntos se ordenarán por número de victorias)",
+          "Los 4 mejores de la fase de grupos entran en el grupo de ganadores",
+          "Los 4 peores de la fase de grupos entran en el grupo de perdedores"
+        ]
+      },
+      {
+        "title": "Fase final",
+        "content": [
+          "Formato: Doble eliminación, fuertes contra fuertes",
+          "Número de partidos: Semifinales del grupo ganador, final del grupo perdedor, gran final (bo15), otros partidos (bo11)",
+          "Mapas: Por determinar",
+          "B/P: Por determinar",
+          "Partidos de calentamiento: Antes de las semifinales del grupo ganador, final del grupo perdedor y gran final, se jugarán dos partidos de calentamiento"
+        ]
+      },
+      {
+        "title": "Otra información",
+        "content": [
+          "Por favor, únete al grupo QQ de competición de SpeedRunners: 743740882",
+          "En desarrollo, mantente atento...",
+          "※El derecho de interpretación final pertenece a este sitio"
+        ]
+      }
+    ],
+    "prize": "Premio (varía con el fondo de premios total)",
+    "additional": "Bonificación adicional",
+    "standings": "Nº {0}",
+    "algorithm": [
+      "Algoritmo de bonificación:",
+      "Por cada aumento de rango, la bonificación se duplica, con una diferencia máxima de 500 yuanes",
+      "El valor calculado se redondea hacia abajo, y la suma de los importes descartados se añade a la bonificación del rango más bajo",
+      "Entre los participantes sin bonificación fija por rango, hay oportunidad de ganar 50 yuanes",
+      "Las bonificaciones adicionales se distribuyen según las reglas personalizadas de los patrocinadores"
+    ]
+  },
+  "comment": {
+    "title": "Comentarios",
+    "placeholder": "Escribe un comentario...",
+    "replyPlaceholder": "Responder a {0}...",
+    "submit": "Publicar",
+    "reply": "Responder",
+    "delete": "Eliminar",
+    "deleteConfirm": "¿Estás seguro de que quieres eliminar este comentario?",
+    "deleteInfo": "Esta acción no se puede deshacer",
+    "noComments": "Sin comentarios todavía. ¡Sé el primero!",
+    "loginToComment": "Inicia sesión para publicar un comentario",
+    "viewReplies": "Ver {0} respuestas",
+    "hideReplies": "Ocultar respuestas",
+    "loadMore": "Cargar más",
+    "like": "Me gusta",
+    "time": {
+      "justNow": "ahora mismo",
+      "minutesAgo": "hace {0} minutos",
+      "hoursAgo": "hace {0} horas",
+      "daysAgo": "hace {0} días",
+      "yearsAgo": "hace {0} años"
+    }
+  },
+  "components": {
+    "cropper": {
+      "title": "La portada debe mostrar más detalles del MOD",
+      "crop": "Recortar"
+    }
+  },
+  "login": {
+    "loginSuccess": "Inicio de sesión exitoso, retorno automático a la página de inicio en {0} segundos",
+    "logging": "Iniciando sesión, por favor espera...",
+    "validating": "Verificando información de inicio de sesión...",
+    "validateSucc": "Información de inicio de sesión verificada con éxito",
+    "initData": "Inicializar datos de usuario",
+    "initing": "Inicializando datos de usuario...",
+    "initSucc": "Datos de usuario inicializados con éxito"
+  },
+  "privacy": {
+    "publishState": "Publicar estado de Steam",
+    "publishStateDetail": "Todos pueden ver tu estado de Steam y si estás jugando SR",
+    "publishPlaytime": "Publicar el tiempo de juego reciente de SR",
+    "publishPlaytimeDetail": "Mostrado en 'Tiempo de juego de las últimas 2 semanas' en la página de inicio",
+    "allowGetRankScore": "Permitir a este sitio solicitar tus puntos de rango de SR",
+    "allowGetRankScoreDetail": "También incluye los siguientes elementos que puedes gestionar individualmente:",
+    "publishAddScore": "Publicar el aumento de puntos de SR",
+    "publishAddScoreDetail": "Mostrado en 'Puntos aumentados en las últimas 2 semanas' en la página de inicio",
+    "publishTotalScore": "Publicar el total de puntos de rango de SR",
+    "publishTotalScoreDetail": "Mostrado en la lista de la página de clasificación"
+  },
+  "profile": {
+    "comments": "Comentarios",
+    "commentsComingSoon": "Función de comentarios próximamente",
+    "scoreHeatmap": "Actividad de puntos",
+    "totalAdded": "Total anual",
+    "less": "Menos",
+    "more": "Más",
+    "mon": "Lun",
+    "wed": "Mié",
+    "fri": "Vie",
+    "scoreUnit": "pt",
+    "points": "pt",
+    "recentScore": "Últimas 2 semanas",
+    "achievements": "Logros",
+    "noAchievements": "Sin datos de logros",
+    "gameStats": "Estadísticas de juego",
+    "gameActivity": "Actividad de juego",
+    "noActivity": "Sin datos de actividad",
+    "offline": "Desconectado",
+    "online": "En línea",
+    "playingSR": "Jugando SpeedRunners",
+    "notFound": "Jugador no encontrado",
+    "notFoundDesc": "El jugador no existe o el perfil es privado",
+    "rankUpTo": "Ascendido a",
+    "unlocked": "Desbloqueado",
+    "unlockTime": "Desbloqueado el {0} {1}, {2}",
+    "pageTitle": "{0} - Perfil de SpeedRunners",
+    "pageTitleDefault": "Perfil del jugador",
+    "pageKeywords": "jugador de SpeedRunners,{0},perfil,datos de juego",
+    "months": [
+      "Ene",
+      "Feb",
+      "Mar",
+      "Abr",
+      "May",
+      "Jun",
+      "Jul",
+      "Ago",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dic"
+    ],
+    "heatmapDate": "{0} {1}, {2}",
+    "activity": {
+      "scoreChange": "Cambio de puntos",
+      "rankUp": "Subida de rango",
+      "achievement": "Logro",
+      "gameSession": "Sesión de juego",
+      "other": "Otro"
+    }
+  }
+}

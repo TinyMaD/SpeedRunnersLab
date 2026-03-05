@@ -1,0 +1,281 @@
+{
+  "404": {
+    "error": "Webmaster bu sayfaya giremeyeceğinizi söyledi...",
+    "check": "Lütfen girdiğiniz URL'nin doğru olup olmadığını kontrol edin veya aşağıdaki butona tıklayarak ana sayfaya dönün.",
+    "back": "Ana sayfaya dön"
+  },
+  "500": {
+    "msg": "Hop! Sunucu hatası"
+  },
+  "index": {
+    "online": "Çevrimiçi",
+    "sponsorContent": [
+      "Bu web sitesinin işletilmesi sunucu, alan adı vb. kiralama gerektirir.",
+      "Bu web sitesi benim tarafımdan yönetilmektedir.",
+      "Bu web sitesini desteklemek isterseniz beni sponsor olabilirsiniz."
+    ],
+    "sponsorTitle": "{0} sponsore teşekkürler",
+    "addedChartTitle": "Son iki haftada artan puanlar",
+    "hourChartTile": "Son iki hafta oyun süresi",
+    "hourChartUnit": "sa",
+    "videoTitle": "2025 günlük istatistik videosu",
+    "videoUrl": "https://www.youtube.com/watch?v=E1nDvPAuY1Y"
+  },
+  "layout": {
+    "login": "Giriş yap",
+    "logout": "Çıkış yap",
+    "logoutSucc": "Başarıyla çıkış yapıldı",
+    "email": "E-posta adresini kopyalamak için tıklayın",
+    "copyEmail": "Panoya kopyalandı",
+    "theme": "Karanlık/Aydınlık",
+    "notification": "Bildirimler",
+    "replyMe": "Yanıtlar",
+    "likeMe": "Beğeniler",
+    "noNotifications": "Bildirim yok",
+    "viewAll": "Tümünü gör"
+  },
+  "routes": {
+    "home": "Ana sayfa",
+    "match": "Maçlar",
+    "rank": "Sıralama",
+    "mod": "MOD",
+    "searchplayer": "İstatistikler",
+    "plaza": "Keşfet",
+    "log": "Değişiklik günlüğü",
+    "privacy": "Gizlilik ayarları",
+    "profile": "Profil"
+  },
+  "mod": {
+    "upload": "Yükle",
+    "yourStar": "Favorileriniz",
+    "trail": "İzler",
+    "character": "Karakterler",
+    "item": "Eşyalar",
+    "sound": "Sesler",
+    "bg": "Arka planlar",
+    "other": "Diğer",
+    "uploadingTitle": "Yükleniyor, lütfen bekleyin...{0} %",
+    "loadTitle": "MOD kaynaklarını yükle",
+    "uploadCover": "Kapak yüklemek için tıklayın",
+    "uploadFile": "Dosya yüklemek için tıklayın",
+    "loadSucc": "Başarıyla yüklendi",
+    "inputTitle": "Lütfen bir başlık girin",
+    "lengthWarn": "Karakter sayısı 17'den fazla olamaz",
+    "loadCoverPlz": "Lütfen kapak yükleyin",
+    "bigImgWarn": "Resim boyutu 5 MB'ı geçemez",
+    "mustImg": "Dosya bir resim olmalı",
+    "uploadFilePlz": "Lütfen dosya yükleyin",
+    "bigFileWarn": "Dosya boyutu 20 MB'ı geçemez",
+    "invalidWarn": "Geçersiz SteamID veya vanity URL",
+    "download": "İndir",
+    "starSucc": "Favorilere eklendi",
+    "unstarSucc": "Favorilerden çıkarıldı",
+    "star": "Favori",
+    "unStar": "Favorilere ekle",
+    "deleteSucc": "MOD başarıyla silindi",
+    "deleteWarn": "Bu Mod silinsin mi?",
+    "deleteInfo": "Bir modu sildikten sonra geri dönüş yoktur.",
+    "share": "Paylaş",
+    "shareSucc": "Paylaşım linki panoya kopyalandı",
+    "backToList": "Tam listeye dön",
+    "modNotFound": "Mod bulunamadı"
+  },
+  "common": {
+    "search": "Ara",
+    "keywords": "Lütfen bir anahtar kelime girin",
+    "loginPlz": "Lütfen önce giriş yapın",
+    "type": "Tür",
+    "selectType": "Lütfen türü seçin",
+    "title": "Başlık",
+    "submit": "Gönder",
+    "cancel": "İptal",
+    "notice": "Bildirim",
+    "success": "Başarılı",
+    "delete": "Sil",
+    "confirm": "Onayla",
+    "markAllRead": "Tümünü okundu olarak işaretle"
+  },
+  "rank": {
+    "personaName": "İsim",
+    "tier": "Lig",
+    "score": "Sıralama puanı",
+    "updateInfo": "*Veri güncelleme sıklığı: her 10 dakikada",
+    "diamond": "Elmas",
+    "platinum": "Platin",
+    "gold": "Altın",
+    "silver": "Gümüş",
+    "bronze": "Bronz",
+    "expert": "Uzman",
+    "advanced": "İleri",
+    "beginner": "Başlangıç",
+    "entry": "Giriş",
+    "playTime": "Toplam oyun süresi",
+    "past2weeks": "Son 2 hafta oyun süresi"
+  },
+  "stats": {
+    "enterSteamID": "Lütfen SteamID, vanity URL veya isim girin",
+    "content": "Steam kullanıcısının SpeedRunners istatistiklerini sorgula",
+    "showMore": "{0} sonuç kaldı — Daha fazla göstermek için tıklayın —",
+    "noResult": "İlgili sonuç bulunamadı."
+  },
+  "match": {
+    "prizePool": "Toplam ödül havuzu",
+    "schedule": "Program[Arşivlendi]",
+    "participant": "Katılımcı",
+    "points": "Puan",
+    "reward": "Ödül",
+    "badgeContent": "İlk 10 oyuncu başarı rozeti alacak:",
+    "support": "Destek",
+    "sponsor": "Sponsor",
+    "amount": "Miktar",
+    "sponsorship": "Sponsorluk yöntemi:",
+    "contactMe": "Diğer sponsorluk yöntemleri için benimle iletişime geçin {0}",
+    "time": "Maç zamanı",
+    "groupStage": "Grup aşaması",
+    "finalStage": "Final aşaması",
+    "sponsorContent": [
+      "Tüm sponsorlara teşekkürler!",
+      "Ödüller tamamen sponsorlar tarafından karşılanmaktadır.",
+      "Sponsor listesi:"
+    ],
+    "matchContent": [
+      {
+        "title": "Eleme",
+        "content": [
+          "Oyuncular kayıt olabilir",
+          "İlk 12 eleme geçer"
+        ]
+      },
+      {
+        "title": "Grup aşaması",
+        "content": [
+          "Round-robin 1v1",
+          "Maç sayısı: 3"
+        ]
+      },
+      {
+        "title": "Final aşaması",
+        "content": [
+          "Çift eleme",
+          "Büyük final bo15"
+        ]
+      },
+      {
+        "title": "Diğer bilgiler",
+        "content": [
+          "QQ grubu: 743740882",
+          "Geliştirme aşamasında"
+        ]
+      }
+    ],
+    "prize": "Ödül",
+    "additional": "Ekstra bonus",
+    "standings": "No. {0}",
+    "algorithm": [
+      "Bonus algoritması:",
+      "Her sıralama artışında bonus ikiye katlanır"
+    ]
+  },
+  "comment": {
+    "title": "Yorumlar",
+    "placeholder": "Bir yorum yazın...",
+    "replyPlaceholder": "{0} kişisine yanıt...",
+    "submit": "Gönder",
+    "reply": "Yanıtla",
+    "delete": "Sil",
+    "deleteConfirm": "Bu yorumu silmek istediğinizden emin misiniz?",
+    "deleteInfo": "Bu işlem geri alınamaz",
+    "noComments": "Henüz yorum yok. İlk siz olun!",
+    "loginToComment": "Yorum yapmak için giriş yapın",
+    "viewReplies": "{0} yanıtı gör",
+    "hideReplies": "Yanıtları gizle",
+    "loadMore": "Daha fazla yükle",
+    "like": "Beğen",
+    "time": {
+      "justNow": "az önce",
+      "minutesAgo": "{0} dakika önce",
+      "hoursAgo": "{0} saat önce",
+      "daysAgo": "{0} gün önce",
+      "yearsAgo": "{0} yıl önce"
+    }
+  },
+  "components": {
+    "cropper": {
+      "title": "Kapak MOD'un daha fazla detayını göstermeli",
+      "crop": "Kırp"
+    }
+  },
+  "login": {
+    "loginSuccess": "Giriş başarılı, {0} saniye içinde otomatik dönüş",
+    "logging": "Giriş yapılıyor...",
+    "validating": "Doğrulanıyor...",
+    "validateSucc": "Doğrulama başarılı",
+    "initData": "Kullanıcı verilerini başlat",
+    "initing": "Başlatılıyor...",
+    "initSucc": "Başlatma başarılı"
+  },
+  "privacy": {
+    "publishState": "Steam durumunu yayınla",
+    "publishStateDetail": "Herkes Steam durumunuzu görebilir",
+    "publishPlaytime": "Son SR oyun süresini yayınla",
+    "publishPlaytimeDetail": "Ana sayfada gösterilir",
+    "allowGetRankScore": "Bu sitenin SR sıralama puanlarımı istemesine izin ver",
+    "allowGetRankScoreDetail": "Şunları içerir:",
+    "publishAddScore": "SR puan artışını yayınla",
+    "publishAddScoreDetail": "Ana sayfada gösterilir",
+    "publishTotalScore": "Toplam SR sıralama puanını yayınla",
+    "publishTotalScoreDetail": "Sıralama listesinde gösterilir"
+  },
+  "profile": {
+    "comments": "Yorumlar",
+    "commentsComingSoon": "Yorum özelliği yakında",
+    "scoreHeatmap": "Puan aktivitesi",
+    "totalAdded": "Yıllık toplam",
+    "less": "Az",
+    "more": "Çok",
+    "mon": "Pzt",
+    "wed": "Çar",
+    "fri": "Cum",
+    "scoreUnit": "puan",
+    "points": "puan",
+    "recentScore": "Son 2 hafta",
+    "achievements": "Başarılar",
+    "noAchievements": "Başarı verisi yok",
+    "gameStats": "Oyun istatistikleri",
+    "gameActivity": "Oyun aktivitesi",
+    "noActivity": "Aktivite verisi yok",
+    "offline": "Çevrimdışı",
+    "online": "Çevrimiçi",
+    "playingSR": "SpeedRunners oynuyor",
+    "notFound": "Oyuncu bulunamadı",
+    "notFoundDesc": "Oyuncu mevcut değil veya profil gizli",
+    "rankUpTo": "Terfi etti",
+    "unlocked": "Açıldı",
+    "unlockTime": "{0} {1}, {2} tarihinde açıldı",
+    "pageTitle": "{0} - SpeedRunners Profili",
+    "pageTitleDefault": "Oyuncu profili",
+    "pageKeywords": "SpeedRunners oyuncu,{0},profil,oyun verileri",
+    "months": [
+      "Oca",
+      "Şub",
+      "Mar",
+      "Nis",
+      "May",
+      "Haz",
+      "Tem",
+      "Ağu",
+      "Eyl",
+      "Eki",
+      "Kas",
+      "Ara"
+    ],
+    "heatmapDate": "{0} {1}, {2}",
+    "activity": {
+      "scoreChange": "Puan değişimi",
+      "rankUp": "Sıralama yükselmesi",
+      "achievement": "Başarı",
+      "gameSession": "Oyun oturumu",
+      "other": "Diğer"
+    }
+  }
+}

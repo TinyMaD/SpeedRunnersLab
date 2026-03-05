@@ -1,0 +1,281 @@
+{
+  "404": {
+    "error": "A webmester azt mondta, hogy nem léphetsz be erre az oldalra...",
+    "check": "Kérlek ellenőrizd, hogy a megadott URL helyes-e, vagy kattints az alábbi gombra a főoldalra való visszatéréshez.",
+    "back": "Vissza a főoldalra"
+  },
+  "500": {
+    "msg": "Hoppá! Szerver hiba"
+  },
+  "index": {
+    "online": "Online",
+    "sponsorContent": [
+      "Ennek a weboldalnak a működtetése szerverek, domainek bérlését igényli stb., ami a legnagyobb kiadás.",
+      "Ezt a weboldalt én tartom fenn, remélem az SR ökoszisztéma javul.",
+      "Ha támogatni szeretnéd ezt a weboldalt, kattints az alábbi link gombra a szponzorálásomhoz."
+    ],
+    "sponsorTitle": "Köszönet a {0} szponzornak",
+    "addedChartTitle": "Növekedett pontok az elmúlt két hétben",
+    "hourChartTile": "Játékidő az elmúlt két hétben",
+    "hourChartUnit": "ó",
+    "videoTitle": "2025 napi statisztikák videó",
+    "videoUrl": "https://www.youtube.com/watch?v=E1nDvPAuY1Y"
+  },
+  "layout": {
+    "login": "Bejelentkezés",
+    "logout": "Kijelentkezés",
+    "logoutSucc": "Sikeres kijelentkezés",
+    "email": "Kattints az email cím másolásához",
+    "copyEmail": "Vágólapra másolva",
+    "theme": "Sötét/Világos",
+    "notification": "Értesítések",
+    "replyMe": "Válaszok",
+    "likeMe": "Kedvelések",
+    "noNotifications": "Nincs értesítés",
+    "viewAll": "Összes megtekintése"
+  },
+  "routes": {
+    "home": "Főoldal",
+    "match": "Mérkőzések",
+    "rank": "Ranglista",
+    "mod": "MOD",
+    "searchplayer": "Statisztikák",
+    "plaza": "Felfedezés",
+    "log": "Változásnapló",
+    "privacy": "Adatvédelmi beállítások",
+    "profile": "Profil"
+  },
+  "mod": {
+    "upload": "Feltöltés",
+    "yourStar": "Kedvenceid",
+    "trail": "Nyomvonalak",
+    "character": "Karakterek",
+    "item": "Tárgyak",
+    "sound": "Hangok",
+    "bg": "Hátterek",
+    "other": "Egyéb",
+    "uploadingTitle": "Feltöltés, kérlek várj...{0} %",
+    "loadTitle": "MOD erőforrások feltöltése",
+    "uploadCover": "Kattints a borító feltöltéséhez",
+    "uploadFile": "Kattints a fájl feltöltéséhez",
+    "loadSucc": "Sikeres feltöltés",
+    "inputTitle": "Kérlek adj meg egy címet",
+    "lengthWarn": "A karakterek száma nem lehet nagyobb 17-nél",
+    "loadCoverPlz": "Kérlek töltsd fel a borítót",
+    "bigImgWarn": "A kép mérete nem lehet nagyobb 5 MB-nál",
+    "mustImg": "A fájlnak képnek kell lennie",
+    "uploadFilePlz": "Kérlek töltsd fel a fájlt",
+    "bigFileWarn": "A fájl mérete nem lehet nagyobb 20 MB-nál",
+    "invalidWarn": "Érvénytelen SteamID vagy vanity URL",
+    "download": "Letöltés",
+    "starSucc": "Hozzáadva a kedvencekhez",
+    "unstarSucc": "Eltávolítva a kedvencekből",
+    "star": "Kedvenc",
+    "unStar": "Hozzáadás a kedvencekhez",
+    "deleteSucc": "MOD sikeresen törölve",
+    "deleteWarn": "Törlöd ezt a Modot?",
+    "deleteInfo": "Ha törölsz egy modot, nincs visszaút.",
+    "share": "Megosztás",
+    "shareSucc": "Megosztási link vágólapra másolva",
+    "backToList": "Vissza a teljes listához",
+    "modNotFound": "Mod nem található"
+  },
+  "common": {
+    "search": "Keresés",
+    "keywords": "Kérlek adj meg egy kulcsszót",
+    "loginPlz": "Kérlek először jelentkezz be",
+    "type": "Típus",
+    "selectType": "Kérlek válaszd ki a típust",
+    "title": "Cím",
+    "submit": "Küldés",
+    "cancel": "Mégse",
+    "notice": "Értesítés",
+    "success": "Siker",
+    "delete": "Törlés",
+    "confirm": "Megerősítés",
+    "markAllRead": "Összes megjelölése olvasottként"
+  },
+  "rank": {
+    "personaName": "Név",
+    "tier": "Liga",
+    "score": "Rangpontok",
+    "updateInfo": "*Adatfrissítés gyakorisága: 10 percenként",
+    "diamond": "Gyémánt",
+    "platinum": "Platina",
+    "gold": "Arany",
+    "silver": "Ezüst",
+    "bronze": "Bronz",
+    "expert": "Szakértő",
+    "advanced": "Haladó",
+    "beginner": "Kezdő",
+    "entry": "Belépő",
+    "playTime": "Teljes játékidő",
+    "past2weeks": "Játékidő az elmúlt 2 hétben"
+  },
+  "stats": {
+    "enterSteamID": "Kérlek add meg a SteamID-t, vanity URL-t vagy nevet",
+    "content": "Steam felhasználó SpeedRunners statisztikáinak lekérdezése",
+    "showMore": "{0} találat maradt — Kattints a továbbiak megjelenítéséhez —",
+    "noResult": "Nem találhatók releváns eredmények."
+  },
+  "match": {
+    "prizePool": "Teljes nyereményalap",
+    "schedule": "Menetrend[Archivált]",
+    "participant": "Résztvevő",
+    "points": "Pontok",
+    "reward": "Jutalom",
+    "badgeContent": "A top 10 játékos teljesítmény jelvényt kap:",
+    "support": "Támogatás",
+    "sponsor": "Szponzor",
+    "amount": "Összeg",
+    "sponsorship": "Szponzorálási mód:",
+    "contactMe": "Egyéb szponzorálási módokért kérlek lépj kapcsolatba velem {0}",
+    "time": "Mérkőzés ideje",
+    "groupStage": "Csoportkör",
+    "finalStage": "Döntő szakasz",
+    "sponsorContent": [
+      "Köszönet minden szponzornak!",
+      "A nyereményeket teljes egészében szponzorok finanszírozzák.",
+      "Szponzor lista:"
+    ],
+    "matchContent": [
+      {
+        "title": "Kvalifikáció",
+        "content": [
+          "Jelentkezés feltételei",
+          "A 'Pontok' ranglista első 12 játékosa kvalifikál"
+        ]
+      },
+      {
+        "title": "Csoportkör",
+        "content": [
+          "Körmérkőzéses 1v1",
+          "Meccsek száma: 3"
+        ]
+      },
+      {
+        "title": "Döntő szakasz",
+        "content": [
+          "Kettős kieséses",
+          "Nagydöntő bo15"
+        ]
+      },
+      {
+        "title": "Egyéb",
+        "content": [
+          "QQ csoport: 743740882",
+          "Fejlesztés alatt"
+        ]
+      }
+    ],
+    "prize": "Nyeremény",
+    "additional": "További bónusz",
+    "standings": "{0}. hely",
+    "algorithm": [
+      "Bónusz algoritmus:",
+      "Minden ranglépésnél a bónusz megduplázódik"
+    ]
+  },
+  "comment": {
+    "title": "Hozzászólások",
+    "placeholder": "Írj egy hozzászólást...",
+    "replyPlaceholder": "Válasz {0} számára...",
+    "submit": "Küldés",
+    "reply": "Válasz",
+    "delete": "Törlés",
+    "deleteConfirm": "Biztosan törölni szeretnéd ezt a hozzászólást?",
+    "deleteInfo": "Ez a művelet nem vonható vissza",
+    "noComments": "Még nincs hozzászólás. Légy az első!",
+    "loginToComment": "Jelentkezz be a hozzászóláshoz",
+    "viewReplies": "{0} válasz megtekintése",
+    "hideReplies": "Válaszok elrejtése",
+    "loadMore": "Továbbiak betöltése",
+    "like": "Kedvelés",
+    "time": {
+      "justNow": "épp most",
+      "minutesAgo": "{0} perce",
+      "hoursAgo": "{0} órája",
+      "daysAgo": "{0} napja",
+      "yearsAgo": "{0} éve"
+    }
+  },
+  "components": {
+    "cropper": {
+      "title": "A borítónak több MOD részletet kell mutatnia",
+      "crop": "Vágás"
+    }
+  },
+  "login": {
+    "loginSuccess": "Sikeres bejelentkezés, automatikus visszatérés {0} másodperc múlva",
+    "logging": "Bejelentkezés...",
+    "validating": "Adatok ellenőrzése...",
+    "validateSucc": "Sikeres ellenőrzés",
+    "initData": "Adatok inicializálása",
+    "initing": "Inicializálás...",
+    "initSucc": "Sikeres inicializálás"
+  },
+  "privacy": {
+    "publishState": "Steam állapot közzététele",
+    "publishStateDetail": "Mindenki láthatja a Steam állapotodat",
+    "publishPlaytime": "SR játékidő közzététele",
+    "publishPlaytimeDetail": "Megjelenik a főoldalon",
+    "allowGetRankScore": "SR rangpontok lekérésének engedélyezése",
+    "allowGetRankScoreDetail": "Tartalmazza:",
+    "publishAddScore": "SR pontnövekedés közzététele",
+    "publishAddScoreDetail": "Megjelenik a főoldalon",
+    "publishTotalScore": "SR összes rangpont közzététele",
+    "publishTotalScoreDetail": "Megjelenik a ranglistán"
+  },
+  "profile": {
+    "comments": "Hozzászólások",
+    "commentsComingSoon": "Hozzászólás funkció hamarosan",
+    "scoreHeatmap": "Pont aktivitás",
+    "totalAdded": "Éves összesen",
+    "less": "Kevesebb",
+    "more": "Több",
+    "mon": "Hé",
+    "wed": "Sze",
+    "fri": "Pé",
+    "scoreUnit": "pont",
+    "points": "pont",
+    "recentScore": "Elmúlt 2 hét",
+    "achievements": "Teljesítmények",
+    "noAchievements": "Nincs teljesítmény adat",
+    "gameStats": "Játék statisztikák",
+    "gameActivity": "Játék aktivitás",
+    "noActivity": "Nincs aktivitás adat",
+    "offline": "Offline",
+    "online": "Online",
+    "playingSR": "SpeedRunners-t játszik",
+    "notFound": "Játékos nem található",
+    "notFoundDesc": "A játékos nem létezik vagy privát profil",
+    "rankUpTo": "Előléptetve",
+    "unlocked": "Feloldva",
+    "unlockTime": "Feloldva {0} {1}, {2}",
+    "pageTitle": "{0} - SpeedRunners Profil",
+    "pageTitleDefault": "Játékos profil",
+    "pageKeywords": "SpeedRunners játékos,{0},profil,játék adatok",
+    "months": [
+      "Jan",
+      "Feb",
+      "Már",
+      "Ápr",
+      "Máj",
+      "Jún",
+      "Júl",
+      "Aug",
+      "Szep",
+      "Okt",
+      "Nov",
+      "Dec"
+    ],
+    "heatmapDate": "{0} {1}, {2}",
+    "activity": {
+      "scoreChange": "Pont változás",
+      "rankUp": "Rang lépés",
+      "achievement": "Teljesítmény",
+      "gameSession": "Játék menet",
+      "other": "Egyéb"
+    }
+  }
+}

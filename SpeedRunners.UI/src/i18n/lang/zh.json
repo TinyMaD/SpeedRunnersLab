@@ -271,6 +271,12 @@
     "notFoundDesc": "玩家不存在或资料未公开",
     "rankUpTo": "晋级至",
     "unlocked": "解锁成就",
+    "unlockTime": "{0}年{1}月{2}日解锁",
+    "pageTitle": "{0} - SpeedRunners 个人主页",
+    "pageTitleDefault": "玩家主页",
+    "pageKeywords": "SpeedRunners玩家,{0},个人主页,游戏数据",
+    "months": ["1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月"],
+    "heatmapDate": "{0}年{1}月{2}日",
     "activity": {
       "scoreChange": "天梯分变化",
       "rankUp": "段位晋级",

@@ -271,6 +271,12 @@
     "notFoundDesc": "Player does not exist or profile is private",
     "rankUpTo": "Ranked up to",
     "unlocked": "Unlocked",
+    "unlockTime": "Unlocked {0} {1}, {2}",
+    "pageTitle": "{0} - SpeedRunners Profile",
+    "pageTitleDefault": "Player Profile",
+    "pageKeywords": "SpeedRunners player,{0},profile,game data",
+    "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    "heatmapDate": "{0} {1}, {2}",
     "activity": {
       "scoreChange": "Score Change",
       "rankUp": "Rank Up",

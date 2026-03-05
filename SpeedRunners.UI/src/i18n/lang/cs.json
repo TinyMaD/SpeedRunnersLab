@@ -1,0 +1,301 @@
+{
+  "404": {
+    "error": "Webmaster řekl, že na tuto stránku nemůžete vstoupit...",
+    "check": "Zkontrolujte prosím, zda je zadaná URL správná, nebo klikněte na tlačítko níže pro návrat na domovskou stránku.",
+    "back": "Zpět na domovskou stránku"
+  },
+  "500": {
+    "msg": "Ups! Chyba serveru"
+  },
+  "index": {
+    "online": "Online",
+    "sponsorContent": [
+      "Provoz tohoto webu vyžaduje pronájem serverů, domén atd., což je největší výdaj (server s minimální konfigurací bude stát asi 100 dolarů ročně).",
+      "Tento web provozuji já, doufám, že ekosystém SR se zlepší, a na tomto webu je stále hodně <a href='https://github.com/users/TinyMaD/projects/1/views/1' target='_blank'>Todo</a>.",
+      "Pokud chcete tento web podpořit, můžete kliknout na tlačítko níže a sponzorovat mě (sponzorství Afdian se zobrazí v reálném čase nahoře, Paypal do 24 hodin)"
+    ],
+    "sponsorTitle": "Děkujeme {0} sponzorům",
+    "addedChartTitle": "Zvýšené body za poslední dva týdny",
+    "hourChartTile": "Čas hraní za poslední dva týdny",
+    "hourChartUnit": "h",
+    "videoTitle": "Video denních statistik 2025",
+    "videoUrl": "https://www.youtube.com/watch?v=E1nDvPAuY1Y"
+  },
+  "layout": {
+    "login": "Přihlásit se",
+    "logout": "Odhlásit se",
+    "logoutSucc": "Úspěšně odhlášeno",
+    "email": "Klikněte pro zkopírování e-mailové adresy",
+    "copyEmail": "Zkopírováno do schránky",
+    "theme": "Tmavé/Světlé",
+    "notification": "Oznámení",
+    "replyMe": "Odpovědi",
+    "likeMe": "To se mi líbí",
+    "noNotifications": "Žádná oznámení",
+    "viewAll": "Zobrazit vše"
+  },
+  "routes": {
+    "home": "Domů",
+    "match": "Zápasy",
+    "rank": "Žebříček",
+    "mod": "MOD",
+    "searchplayer": "Statistiky",
+    "plaza": "Objevit",
+    "log": "Seznam změn",
+    "privacy": "Nastavení soukromí",
+    "profile": "Profil"
+  },
+  "mod": {
+    "upload": "Nahrát",
+    "yourStar": "Vaše oblíbené",
+    "trail": "Stopy",
+    "character": "Postavy",
+    "item": "Předměty",
+    "sound": "Zvuky",
+    "bg": "Pozadí",
+    "other": "Ostatní",
+    "uploadingTitle": "Nahrávání, prosím čekejte...{0} %",
+    "loadTitle": "Nahrát MOD zdroje",
+    "uploadCover": "Klikněte pro nahrání obálky",
+    "uploadFile": "Klikněte pro nahrání souboru",
+    "loadSucc": "Úspěšně nahráno",
+    "inputTitle": "Zadejte název",
+    "lengthWarn": "Počet znaků nemůže být větší než 17",
+    "loadCoverPlz": "Nahrajte obálku",
+    "bigImgWarn": "Velikost obrázku nemůže přesáhnout 5 MB",
+    "mustImg": "Soubor musí být obrázek",
+    "uploadFilePlz": "Nahrajte soubor",
+    "bigFileWarn": "Velikost souboru nemůže přesáhnout 20 MB",
+    "invalidWarn": "Neplatné SteamID nebo vanity URL, vyberte hráče, kterého chcete vyhledat",
+    "download": "Stáhnout",
+    "starSucc": "Přidáno do oblíbených",
+    "unstarSucc": "Odebráno z oblíbených",
+    "star": "Oblíbené",
+    "unStar": "Přidat do oblíbených",
+    "deleteSucc": "MOD úspěšně smazán",
+    "deleteWarn": "Smazat tento Mod?",
+    "deleteInfo": "Jakmile smažete mod, není cesty zpět. Prosím, buďte si jistí.",
+    "share": "Sdílet",
+    "shareSucc": "Odkaz ke sdílení zkopírován do schránky",
+    "backToList": "Zpět na úplný seznam",
+    "modNotFound": "Mod nenalezen"
+  },
+  "common": {
+    "search": "Hledat",
+    "keywords": "Zadejte klíčové slovo",
+    "loginPlz": "Nejprve se přihlaste",
+    "type": "Typ",
+    "selectType": "Vyberte typ",
+    "title": "Název",
+    "submit": "Odeslat",
+    "cancel": "Zrušit",
+    "notice": "Oznámení",
+    "success": "Úspěch",
+    "delete": "Smazat",
+    "confirm": "Potvrdit",
+    "markAllRead": "Označit vše jako přečtené"
+  },
+  "rank": {
+    "personaName": "Jméno",
+    "tier": "Liga",
+    "score": "Žebříčkové body",
+    "updateInfo": "*Frekvence aktualizace dat: každých 10 minut",
+    "diamond": "Diamant",
+    "platinum": "Platina",
+    "gold": "Zlato",
+    "silver": "Stříbro",
+    "bronze": "Bronz",
+    "expert": "Expert",
+    "advanced": "Pokročilý",
+    "beginner": "Začátečník",
+    "entry": "Vstup",
+    "playTime": "Celkový čas hraní",
+    "past2weeks": "Čas hraní za poslední 2 týdny"
+  },
+  "stats": {
+    "enterSteamID": "Zadejte SteamID, vanity URL nebo jméno",
+    "content": "Vyhledat statistiky SpeedRunners uživatele Steam, rychlost vyhledávání: SteamID (stabilní) > Vanity URL (stabilní) > jméno (nestabilní)",
+    "showMore": "{0} výsledků zbývá — Klikněte pro zobrazení více —",
+    "noResult": "Nebyly nalezeny žádné relevantní výsledky. Hráč možná nenastavil soukromí profilu Steam na veřejné."
+  },
+  "match": {
+    "prizePool": "Celkový fond odměn",
+    "schedule": "Rozvrh[Archivováno]",
+    "participant": "Účastník",
+    "points": "Body",
+    "reward": "Odměna",
+    "badgeContent": "10 nejlepších hráčů obdrží odznaky úspěchu (zobrazuje se pouze na tomto webu):",
+    "support": "Podpora",
+    "sponsor": "Sponzor",
+    "amount": "Částka",
+    "sponsorship": "Způsob sponzorství (naskenujte QR kód níže):",
+    "contactMe": "Pro jiné způsoby sponzorství mě kontaktujte (email) {0}",
+    "time": "Čas zápasu",
+    "groupStage": "Skupinová fáze",
+    "finalStage": "Finálová fáze",
+    "sponsorContent": [
+      "Děkujeme všem sponzorům, bez ohledu na částku, díky vaší podpoře se tato akce může konat",
+      "Odměny v tomto turnaji jsou plně sponzorovány a 100% prostředků jde do celkového fondu odměn",
+      "Pro zajištění otevřenosti a transparentnosti sponzorství uveďte při sponzorování své ID (jedinečné). Bez poznámky bude zaznamenáno jako anonymní. Seznam sponzorů aktualizuji do 24 hodin",
+      "Seznam sponzorů:"
+    ],
+    "matchContent": [
+      {
+        "title": "Kvalifikace",
+        "content": [
+          "Hráči bez bariéry v čínské komunikaci a s nízkou latencí sítě k rozhodčím se mohou registrovat",
+          "12 nejlepších hráčů v žebříčku 'Body' se kvalifikuje do soutěže",
+          "'Body' = 'Žebříčkové body' + 'Body za čas hraní'",
+          "'Žebříčkové body': Celkové body získané v žebříčkových zápasech",
+          "'Body za čas hraní' = 'Efektivní čas hraní' X 10. Poznámka: Čas hraní se vztahuje na SpeedRunners, v hodinách. Nastavte soukromí Steam na veřejné",
+          "'Efektivní čas hraní' = Celkový čas hraní - čas hraní za poslední dva týdny. Poznámka: Pokud překročí 1000 hodin, počítá se jako 1000 hodin",
+          "Příklad: Tom má 10000 žebříčkových bodů, hraje SpeedRunners 1200 hodin a hrál 300 hodin za poslední dva týdny. Jeho body jsou: 10000 + (1200 - 300) X 10 = 19000",
+          "4 nejlepší hráči v žebříčku 'Body' si zajišťují 4 místa ve skupině vítězů z 8",
+          "Zbývajících 8 hráčů v žebříčku 'Body' postupuje do skupinové fáze"
+        ]
+      },
+      {
+        "title": "Skupinová fáze",
+        "content": [
+          "Formát: Každý s každým 1v1 (každý hráč hraje proti ostatním 7 hráčům)",
+          "Počet zápasů: 3",
+          "Mapy: Náhodné oficiální mapy a workshop mapy",
+          "B/P: Žádný ban map, klikněte na tlačítko náhodná oficiální mapa a náhodná workshop mapa",
+          "Bodování: Body a vítězství (po bodování jsou hráči se stejnými body seřazeni podle počtu vítězství)",
+          "4 nejlepší ve skupinové fázi postupují do skupiny vítězů",
+          "4 nejhorší ve skupinové fázi postupují do skupiny poražených"
+        ]
+      },
+      {
+        "title": "Finálová fáze",
+        "content": [
+          "Formát: Dvojitá eliminace, silní proti silným",
+          "Počet zápasů: Semifinále skupiny vítězů, finále skupiny poražených, velké finále (bo15), ostatní zápasy (bo11)",
+          "Mapy: Bude určeno",
+          "B/P: Bude určeno",
+          "Rozehřívací zápasy: Před semifinále skupiny vítězů, finále skupiny poražených a velkým finále se hrají dva rozehřívací zápasy"
+        ]
+      },
+      {
+        "title": "Další informace",
+        "content": [
+          "Připojte se ke skupině SpeedRunners soutěží QQ: 743740882",
+          "Ve vývoji, zůstaňte naladěni...",
+          "※Právo konečné interpretace patří tomuto webu"
+        ]
+      }
+    ],
+    "prize": "Odměna (liší se podle celkového fondu odměn)",
+    "additional": "Další bonus",
+    "standings": "Č. {0}",
+    "algorithm": [
+      "Algoritmus bonusu:",
+      "Pro každé zvýšení žebříčku se bonus zdvojnásobuje, s maximálním rozdílem 500 jüanů",
+      "Vypočítaná hodnota je zaokrouhlena dolů a součet zahozených částek se přičítá k bonusu za nejnižší žebříček",
+      "Mezi účastníky bez fixního bonusu za žebříček je šance vyhrát 50 jüanů",
+      "Další bonusy jsou rozdělovány podle vlastních pravidel sponzorů"
+    ]
+  },
+  "comment": {
+    "title": "Komentáře",
+    "placeholder": "Napište komentář...",
+    "replyPlaceholder": "Odpovědět {0}...",
+    "submit": "Zveřejnit",
+    "reply": "Odpovědět",
+    "delete": "Smazat",
+    "deleteConfirm": "Opravdu chcete smazat tento komentář?",
+    "deleteInfo": "Tuto akci nelze vrátit zpět",
+    "noComments": "Zatím žádné komentáře. Buďte první!",
+    "loginToComment": "Přihlaste se pro napsání komentáře",
+    "viewReplies": "Zobrazit {0} odpovědí",
+    "hideReplies": "Skrýt odpovědi",
+    "loadMore": "Načíst více",
+    "like": "To se mi líbí",
+    "time": {
+      "justNow": "právě teď",
+      "minutesAgo": "před {0} minutami",
+      "hoursAgo": "před {0} hodinami",
+      "daysAgo": "před {0} dny",
+      "yearsAgo": "před {0} lety"
+    }
+  },
+  "components": {
+    "cropper": {
+      "title": "Obálka by měla ukazovat více detailů MODu",
+      "crop": "Oříznout"
+    }
+  },
+  "login": {
+    "loginSuccess": "Přihlášení úspěšné, automatický návrat na domovskou stránku za {0} sekund",
+    "logging": "Přihlašování, prosím čekejte...",
+    "validating": "Ověřování přihlašovacích údajů...",
+    "validateSucc": "Přihlašovací údaje úspěšně ověřeny",
+    "initData": "Inicializovat uživatelská data",
+    "initing": "Inicializace uživatelských dat...",
+    "initSucc": "Uživatelská data úspěšně inicializována"
+  },
+  "privacy": {
+    "publishState": "Zveřejnit stav Steam",
+    "publishStateDetail": "Všichni mohou vidět váš stav Steam a zda hrajete SR",
+    "publishPlaytime": "Zveřejnit nedávný čas hraní SR",
+    "publishPlaytimeDetail": "Zobrazeno v 'Čas hraní za poslední 2 týdny' na domovské stránce",
+    "allowGetRankScore": "Povolit tomuto webu vyžadovat vaše žebříčkové body SR",
+    "allowGetRankScoreDetail": "Zahrnuje také následující položky, které můžete spravovat individuálně:",
+    "publishAddScore": "Zveřejnit zvýšení bodů SR",
+    "publishAddScoreDetail": "Zobrazeno v 'Zvýšené body za poslední 2 týdny' na domovské stránce",
+    "publishTotalScore": "Zveřejnit celkové žebříčkové body SR",
+    "publishTotalScoreDetail": "Zobrazeno v seznamu na stránce žebříčku"
+  },
+  "profile": {
+    "comments": "Komentáře",
+    "commentsComingSoon": "Funkce komentářů již brzy",
+    "scoreHeatmap": "Aktivita bodů",
+    "totalAdded": "Roční celkem",
+    "less": "Méně",
+    "more": "Více",
+    "mon": "Po",
+    "wed": "St",
+    "fri": "Pá",
+    "scoreUnit": "bod",
+    "points": "bod",
+    "recentScore": "Poslední 2 týdny",
+    "achievements": "Úspěchy",
+    "noAchievements": "Žádná data o úspěších",
+    "gameStats": "Herní statistiky",
+    "gameActivity": "Herní aktivita",
+    "noActivity": "Žádná data o aktivitě",
+    "offline": "Offline",
+    "online": "Online",
+    "playingSR": "Hraje SpeedRunners",
+    "notFound": "Hráč nenalezen",
+    "notFoundDesc": "Hráč neexistuje nebo profil je soukromý",
+    "rankUpTo": "Povýšen na",
+    "unlocked": "Odemčeno",
+    "unlockTime": "Odemčeno {0} {1}, {2}",
+    "pageTitle": "{0} - SpeedRunners Profil",
+    "pageTitleDefault": "Profil hráče",
+    "pageKeywords": "SpeedRunners hráč,{0},profil,herní data",
+    "months": [
+      "Led",
+      "Úno",
+      "Bře",
+      "Dub",
+      "Kvě",
+      "Čvn",
+      "Čvc",
+      "Srp",
+      "Zář",
+      "Říj",
+      "Lis",
+      "Pro"
+    ],
+    "heatmapDate": "{0} {1}, {2}",
+    "activity": {
+      "scoreChange": "Změna bodů",
+      "rankUp": "Postup v žebříčku",
+      "achievement": "Úspěch",
+      "gameSession": "Herní relace",
+      "other": "Jiné"
+    }
+  }
+}

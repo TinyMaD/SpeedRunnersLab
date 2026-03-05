@@ -1,0 +1,301 @@
+{
+  "404": {
+    "error": "De webmaster zei dat je deze pagina niet kunt betreden...",
+    "check": "Controleer of de URL die je hebt ingevoerd correct is, of klik op de onderstaande knop om terug te keren naar de startpagina.",
+    "back": "Terug naar startpagina"
+  },
+  "500": {
+    "msg": "Oeps! Serverfout"
+  },
+  "index": {
+    "online": "Online",
+    "sponsorContent": [
+      "Het draaien van deze website vereist het huren van servers, domeinen, etc., wat de grootste uitgave is (een server met minimale configuratie kost ongeveer 100 dollar per jaar).",
+      "Deze website wordt door mij onderhouden, ik hoop dat het SR-ecosysteem beter wordt, en er is nog veel <a href='https://github.com/users/TinyMaD/projects/1/views/1' target='_blank'>Todo</a> over deze website.",
+      "Als je deze website wilt steunen, kun je op de onderstaande link-knop klikken om mij te sponsoren (Afdian-sponsoring wordt in realtime hierboven weergegeven, en Paypal binnen 24 uur)"
+    ],
+    "sponsorTitle": "Bedankt {0} sponsoren",
+    "addedChartTitle": "Toegenomen punten afgelopen twee weken",
+    "hourChartTile": "Speeltijd afgelopen twee weken",
+    "hourChartUnit": "u",
+    "videoTitle": "Video van dagelijkse statistieken 2025",
+    "videoUrl": "https://www.youtube.com/watch?v=E1nDvPAuY1Y"
+  },
+  "layout": {
+    "login": "Inloggen",
+    "logout": "Uitloggen",
+    "logoutSucc": "Succesvol uitgelogd",
+    "email": "Klik om e-mailadres te kopiëren",
+    "copyEmail": "Gekopieerd naar klembord",
+    "theme": "Donker/Licht",
+    "notification": "Meldingen",
+    "replyMe": "Reacties",
+    "likeMe": "Vind-ik-leuks",
+    "noNotifications": "Geen meldingen",
+    "viewAll": "Alles bekijken"
+  },
+  "routes": {
+    "home": "Startpagina",
+    "match": "Wedstrijden",
+    "rank": "Ranglijst",
+    "mod": "MOD",
+    "searchplayer": "Statistieken",
+    "plaza": "Ontdekken",
+    "log": "Wijzigingslog",
+    "privacy": "Privacy-instellingen",
+    "profile": "Profiel"
+  },
+  "mod": {
+    "upload": "Uploaden",
+    "yourStar": "Je favorieten",
+    "trail": "Trails",
+    "character": "Personages",
+    "item": "Items",
+    "sound": "Geluiden",
+    "bg": "Achtergronden",
+    "other": "Overig",
+    "uploadingTitle": "Uploaden, even geduld...{0} %",
+    "loadTitle": "MOD-bronnen uploaden",
+    "uploadCover": "Klik om cover te uploaden",
+    "uploadFile": "Klik om bestand te uploaden",
+    "loadSucc": "Succesvol geüpload",
+    "inputTitle": "Voer een titel in",
+    "lengthWarn": "Het aantal tekens mag niet groter zijn dan 17",
+    "loadCoverPlz": "Upload de cover",
+    "bigImgWarn": "De afbeeldingsgrootte mag niet groter zijn dan 5 MB",
+    "mustImg": "Het bestand moet een afbeelding zijn",
+    "uploadFilePlz": "Upload het bestand",
+    "bigFileWarn": "De bestandsgrootte mag niet groter zijn dan 20 MB",
+    "invalidWarn": "Ongeldig SteamID of vanity URL, selecteer de speler die je wilt zoeken",
+    "download": "Downloaden",
+    "starSucc": "Toegevoegd aan favorieten",
+    "unstarSucc": "Verwijderd uit favorieten",
+    "star": "Favoriet",
+    "unStar": "Toevoegen aan favorieten",
+    "deleteSucc": "MOD succesvol verwijderd",
+    "deleteWarn": "Deze Mod verwijderen?",
+    "deleteInfo": "Zodra je een mod verwijdert, is er geen weg terug. Wees zeker.",
+    "share": "Delen",
+    "shareSucc": "Deellink gekopieerd naar klembord",
+    "backToList": "Terug naar volledige lijst",
+    "modNotFound": "Mod niet gevonden"
+  },
+  "common": {
+    "search": "Zoeken",
+    "keywords": "Voer een trefwoord in",
+    "loginPlz": "Log eerst in",
+    "type": "Type",
+    "selectType": "Selecteer het type",
+    "title": "Titel",
+    "submit": "Verzenden",
+    "cancel": "Annuleren",
+    "notice": "Kennisgeving",
+    "success": "Succes",
+    "delete": "Verwijderen",
+    "confirm": "Bevestigen",
+    "markAllRead": "Alles markeren als gelezen"
+  },
+  "rank": {
+    "personaName": "Naam",
+    "tier": "Competitie",
+    "score": "Rangpunten",
+    "updateInfo": "*Frequentie van gegevensupdate: elke 10 minuten",
+    "diamond": "Diamant",
+    "platinum": "Platina",
+    "gold": "Goud",
+    "silver": "Zilver",
+    "bronze": "Brons",
+    "expert": "Expert",
+    "advanced": "Gevorderd",
+    "beginner": "Beginner",
+    "entry": "Instap",
+    "playTime": "Totale speeltijd",
+    "past2weeks": "Speeltijd afgelopen 2 weken"
+  },
+  "stats": {
+    "enterSteamID": "Voer SteamID, vanity URL of naam in",
+    "content": "SpeedRunners-statistieken van Steam-gebruiker opzoeken, zoeksnelheid: SteamID (stabiel) > Vanity URL (stabiel) > naam (instabiel)",
+    "showMore": "{0} resultaten over — Klik om meer te tonen —",
+    "noResult": "Geen relevante resultaten gevonden. De speler heeft zijn Steam-profielprivacy mogelijk niet op openbaar ingesteld."
+  },
+  "match": {
+    "prizePool": "Totale prijzenpot",
+    "schedule": "Schema[Gearchiveerd]",
+    "participant": "Deelnemer",
+    "points": "Punten",
+    "reward": "Beloning",
+    "badgeContent": "De top 10 spelers ontvangen een prestatiebadge (alleen weergegeven op deze site):",
+    "support": "Ondersteuning",
+    "sponsor": "Sponsor",
+    "amount": "Bedrag",
+    "sponsorship": "Sponsormethode (scan de QR-code hieronder):",
+    "contactMe": "Neem contact met me op voor andere sponsormethoden (e-mail) {0}",
+    "time": "Wedstrijdtijd",
+    "groupStage": "Groepsfase",
+    "finalStage": "Finale fase",
+    "sponsorContent": [
+      "Dank aan alle sponsoren, ongeacht het bedrag, dankzij jouw steun kan dit evenement plaatsvinden",
+      "De prijzen van dit toernooi worden volledig gesponsord, en 100% van de gesponsorde middelen gaat in de totale prijzenpot",
+      "Om te zorgen dat sponsoring open en transparant is, vermeld je ID (uniek, herkenbaar voor jou) bij het sponsoren. Zonder opmerking wordt het als anoniem geregistreerd. Ik onderhoud de sponsorlijst binnen 24 uur",
+      "Sponsorlijst:"
+    ],
+    "matchContent": [
+      {
+        "title": "Kwalificatie",
+        "content": [
+          "Spelers zonder communicatiebarrière in het Chinees en met lage netwerklatency naar scheidsrechters kunnen zich inschrijven",
+          "De top 12 spelers in de 'Punten'-ranking kwalificeren zich voor de competitie",
+          "'Punten' = 'Rangpunten' + 'Speeltijd-punten'",
+          "'Rangpunten': Totale punten behaald in ranked wedstrijden",
+          "'Speeltijd-punten' = 'Effectieve speeltijd' X 10. Let op: Speeltijd verwijst naar SpeedRunners, in uren. Stel je Steam-privacy in op openbaar",
+          "'Effectieve speeltijd' = Totale speeltijd - speeltijd afgelopen twee weken. Let op: Als 'Effectieve speeltijd' 1000 uur overschrijdt, wordt berekend als 1000 uur",
+          "Voorbeeld: Tom heeft 10000 rangpunten, speelt SpeedRunners 1200 uur, en heeft 300 uur gespeeld in de afgelopen twee weken. Zijn punten worden berekend als 10000 + (1200 - 300) X 10 = 19000",
+          "De top 4 spelers in de 'Punten'-ranking plaatsen zich direct voor 4 van de 8 plaatsen in de winnaarsgroep",
+          "De overige 8 spelers in de 'Punten'-ranking gaan naar de groepsfase"
+        ]
+      },
+      {
+        "title": "Groepsfase",
+        "content": [
+          "Formaat: Round-robin 1v1 (elke speler speelt tegen de andere 7 spelers)",
+          "Aantal wedstrijden: 3",
+          "Maps: Willekeurige officiële maps en workshop maps",
+          "B/P: Geen map bans, klik direct op de knop voor willekeurige officiële map en willekeurige workshop map",
+          "Scoren: Punten en overwinningen (na punten worden spelers met gelijke punten gerangschikt op aantal overwinningen)",
+          "De top 4 van de groepsfase gaat naar de winnaarsgroep",
+          "De onderste 4 van de groepsfase gaat naar de verliezersgroep"
+        ]
+      },
+      {
+        "title": "Finale fase",
+        "content": [
+          "Formaat: Dubbele eliminatie, sterk tegen sterk",
+          "Aantal wedstrijden: Halve finale winnaarsgroep, finale verliezersgroep, grande finale (bo15), andere wedstrijden (bo11)",
+          "Maps: Te bepalen",
+          "B/P: Te bepalen",
+          "Oefenwedstrijden: Voor de halve finale winnaarsgroep, finale verliezersgroep en grande finale worden twee oefenwedstrijden gespeeld"
+        ]
+      },
+      {
+        "title": "Overige informatie",
+        "content": [
+          "Word lid van de SpeedRunners competitie QQ-groep: 743740882",
+          "In ontwikkeling, blijf op de hoogte...",
+          "※Het eindelijke interpretatierecht behoort toe aan deze website"
+        ]
+      }
+    ],
+    "prize": "Prijs (varieert met totale prijzenpot)",
+    "additional": "Extra bonus",
+    "standings": "Nr. {0}",
+    "algorithm": [
+      "Bonus-algoritme:",
+      "Voor elke rangstijging verdubbelt de bonus, met een maximaal verschil van 500 yuan",
+      "De berekende waarde wordt naar beneden afgerond, en de som van de weggegooide bedragen wordt toegevoegd aan de bonus voor de laagste rang",
+      "Onder deelnemers zonder vaste rangbonus is er een kans om 50 yuan te winnen",
+      "Extra bonussen worden verdeeld volgens aangepaste regels van sponsoren"
+    ]
+  },
+  "comment": {
+    "title": "Reacties",
+    "placeholder": "Schrijf een reactie...",
+    "replyPlaceholder": "Reageer op {0}...",
+    "submit": "Plaatsen",
+    "reply": "Reageren",
+    "delete": "Verwijderen",
+    "deleteConfirm": "Weet je zeker dat je deze reactie wilt verwijderen?",
+    "deleteInfo": "Deze actie kan niet ongedaan worden gemaakt",
+    "noComments": "Nog geen reacties. Wees de eerste!",
+    "loginToComment": "Log in om een reactie te plaatsen",
+    "viewReplies": "{0} reacties bekijken",
+    "hideReplies": "Reacties verbergen",
+    "loadMore": "Meer laden",
+    "like": "Vind ik leuk",
+    "time": {
+      "justNow": "zojuist",
+      "minutesAgo": "{0} minuten geleden",
+      "hoursAgo": "{0} uur geleden",
+      "daysAgo": "{0} dagen geleden",
+      "yearsAgo": "{0} jaar geleden"
+    }
+  },
+  "components": {
+    "cropper": {
+      "title": "De cover moet meer details van de MOD tonen",
+      "crop": "Bijsnijden"
+    }
+  },
+  "login": {
+    "loginSuccess": "Inloggen geslaagd, automatische terugkeer naar startpagina over {0} seconden",
+    "logging": "Inloggen, even geduld...",
+    "validating": "Inloggegevens verifiëren...",
+    "validateSucc": "Inloggegevens succesvol geverifieerd",
+    "initData": "Gebruikersgegevens initialiseren",
+    "initing": "Gebruikersgegevens initialiseren...",
+    "initSucc": "Gebruikersgegevens succesvol geïnitialiseerd"
+  },
+  "privacy": {
+    "publishState": "Steam-status publiceren",
+    "publishStateDetail": "Iedereen kan je Steam-status zien en of je SR speelt",
+    "publishPlaytime": "Recente SR-speeltijd publiceren",
+    "publishPlaytimeDetail": "Weergegeven in 'Speeltijd afgelopen 2 weken' op de startpagina",
+    "allowGetRankScore": "Deze site toestaan je SR-rangpunten op te vragen",
+    "allowGetRankScoreDetail": "Het omvat ook de volgende elementen die je individueel kunt beheren:",
+    "publishAddScore": "SR-puntentoename publiceren",
+    "publishAddScoreDetail": "Weergegeven in 'Toegenomen punten afgelopen 2 weken' op de startpagina",
+    "publishTotalScore": "Totale SR-rangpunten publiceren",
+    "publishTotalScoreDetail": "Weergegeven in de lijst op de ranglijstpagina"
+  },
+  "profile": {
+    "comments": "Reacties",
+    "commentsComingSoon": "Reactiefunctie binnenkort beschikbaar",
+    "scoreHeatmap": "Puntenactiviteit",
+    "totalAdded": "Jaartotaal",
+    "less": "Minder",
+    "more": "Meer",
+    "mon": "Ma",
+    "wed": "Wo",
+    "fri": "Vr",
+    "scoreUnit": "pt",
+    "points": "pt",
+    "recentScore": "Afgelopen 2 weken",
+    "achievements": "Prestaties",
+    "noAchievements": "Geen prestatiegegevens",
+    "gameStats": "Spelstatistieken",
+    "gameActivity": "Spelactiviteit",
+    "noActivity": "Geen activiteitsgegevens",
+    "offline": "Offline",
+    "online": "Online",
+    "playingSR": "Speelt SpeedRunners",
+    "notFound": "Speler niet gevonden",
+    "notFoundDesc": "Speler bestaat niet of profiel is privé",
+    "rankUpTo": "Gepromoveerd naar",
+    "unlocked": "Ontgrendeld",
+    "unlockTime": "Ontgrendeld {0} {1}, {2}",
+    "pageTitle": "{0} - SpeedRunners Profiel",
+    "pageTitleDefault": "Spelerprofiel",
+    "pageKeywords": "SpeedRunners speler,{0},profiel,speldata",
+    "months": [
+      "Jan",
+      "Feb",
+      "Mrt",
+      "Apr",
+      "Mei",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Dec"
+    ],
+    "heatmapDate": "{0} {1}, {2}",
+    "activity": {
+      "scoreChange": "Puntenverandering",
+      "rankUp": "Rangstijging",
+      "achievement": "Prestatie",
+      "gameSession": "Spelsessie",
+      "other": "Overig"
+    }
+  }
+}

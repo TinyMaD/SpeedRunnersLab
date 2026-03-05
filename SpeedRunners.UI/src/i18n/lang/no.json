@@ -1,0 +1,281 @@
+{
+  "404": {
+    "error": "Webmasteren sa at du ikke kan gå inn på denne siden...",
+    "check": "Vennligst sjekk at URL-en du skrev inn er riktig, eller klikk på knappen nedenfor for å gå tilbake til forsiden.",
+    "back": "Tilbake til forsiden"
+  },
+  "500": {
+    "msg": "Ops! Serverfeil"
+  },
+  "index": {
+    "online": "Pålogget",
+    "sponsorContent": [
+      "Driften av dette nettstedet krever leie av servere, domener osv.",
+      "Dette nettstedet vedlikeholdes av meg.",
+      "Hvis du vil støtte dette nettstedet, kan du sponse meg."
+    ],
+    "sponsorTitle": "Takk til {0} sponsorer",
+    "addedChartTitle": "Økte poeng siste to uker",
+    "hourChartTile": "Spilletid siste to uker",
+    "hourChartUnit": "t",
+    "videoTitle": "Video av daglige statistikker 2025",
+    "videoUrl": "https://www.youtube.com/watch?v=E1nDvPAuY1Y"
+  },
+  "layout": {
+    "login": "Logg inn",
+    "logout": "Logg ut",
+    "logoutSucc": "Logget ut",
+    "email": "Klikk for å kopiere e-postadresse",
+    "copyEmail": "Kopiert til utklippstavlen",
+    "theme": "Mørk/Lys",
+    "notification": "Varsler",
+    "replyMe": "Svar",
+    "likeMe": "Liker",
+    "noNotifications": "Ingen varsler",
+    "viewAll": "Se alle"
+  },
+  "routes": {
+    "home": "Hjem",
+    "match": "Kamper",
+    "rank": "Rangering",
+    "mod": "MOD",
+    "searchplayer": "Statistikk",
+    "plaza": "Oppdag",
+    "log": "Endringslogg",
+    "privacy": "Personverninnstillinger",
+    "profile": "Profil"
+  },
+  "mod": {
+    "upload": "Last opp",
+    "yourStar": "Dine favoritter",
+    "trail": "Traseer",
+    "character": "Karakterer",
+    "item": "Gjenstander",
+    "sound": "Lyder",
+    "bg": "Bakgrunner",
+    "other": "Andre",
+    "uploadingTitle": "Laster opp, vennligst vent...{0} %",
+    "loadTitle": "Last opp MOD-ressurser",
+    "uploadCover": "Klikk for å laste opp cover",
+    "uploadFile": "Klikk for å laste opp fil",
+    "loadSucc": "Opplasting vellykket",
+    "inputTitle": "Vennligst skriv inn en tittel",
+    "lengthWarn": "Antall tegn kan ikke være større enn 17",
+    "loadCoverPlz": "Vennligst last opp cover",
+    "bigImgWarn": "Bildestørrelsen kan ikke overstige 5 MB",
+    "mustImg": "Filen må være et bilde",
+    "uploadFilePlz": "Vennligst last opp filen",
+    "bigFileWarn": "Filstørrelsen kan ikke overstige 20 MB",
+    "invalidWarn": "Ugyldig SteamID eller vanity URL",
+    "download": "Last ned",
+    "starSucc": "Lagt til i favoritter",
+    "unstarSucc": "Fjernet fra favoritter",
+    "star": "Favoritt",
+    "unStar": "Legg til i favoritter",
+    "deleteSucc": "MOD slettet",
+    "deleteWarn": "Slette denne Mod?",
+    "deleteInfo": "Når du sletter en mod er det ingen vei tilbake.",
+    "share": "Del",
+    "shareSucc": "Delingslink kopiert",
+    "backToList": "Tilbake til full liste",
+    "modNotFound": "Mod ikke funnet"
+  },
+  "common": {
+    "search": "Søk",
+    "keywords": "Vennligst skriv inn et nøkkelord",
+    "loginPlz": "Vennligst logg inn først",
+    "type": "Type",
+    "selectType": "Vennligst velg type",
+    "title": "Tittel",
+    "submit": "Send inn",
+    "cancel": "Avbryt",
+    "notice": "Varsel",
+    "success": "Vellykket",
+    "delete": "Slett",
+    "confirm": "Bekreft",
+    "markAllRead": "Marker alle som lest"
+  },
+  "rank": {
+    "personaName": "Navn",
+    "tier": "Liga",
+    "score": "Rangeringspoeng",
+    "updateInfo": "*Oppdateringsfrekvens: hvert 10. minutt",
+    "diamond": "Diamant",
+    "platinum": "Platina",
+    "gold": "Gull",
+    "silver": "Sølv",
+    "bronze": "Bronse",
+    "expert": "Ekspert",
+    "advanced": "Avansert",
+    "beginner": "Nybegynner",
+    "entry": "Inngang",
+    "playTime": "Total spilletid",
+    "past2weeks": "Spilletid siste 2 uker"
+  },
+  "stats": {
+    "enterSteamID": "Vennligst skriv inn SteamID, vanity URL eller navn",
+    "content": "Søk SpeedRunners-statistikk for Steam-bruker",
+    "showMore": "{0} resultater igjen — Klikk for å vise mer —",
+    "noResult": "Ingen relevante resultater funnet."
+  },
+  "match": {
+    "prizePool": "Total premiepott",
+    "schedule": "Program[Arkivert]",
+    "participant": "Deltaker",
+    "points": "Poeng",
+    "reward": "Belønning",
+    "badgeContent": "Topp 10 spillere får prestasjonmerke:",
+    "support": "Støtte",
+    "sponsor": "Sponsor",
+    "amount": "Beløp",
+    "sponsorship": "Sponeringsmetode:",
+    "contactMe": "For andre sponeringsmetoder kontakt meg {0}",
+    "time": "Kamp-tid",
+    "groupStage": "Gruppespill",
+    "finalStage": "Finale",
+    "sponsorContent": [
+      "Takk til alle sponsorer!",
+      "Premiene er fullt sponset.",
+      "Sponsorliste:"
+    ],
+    "matchContent": [
+      {
+        "title": "Kvalifisering",
+        "content": [
+          "Spillere kan registrere seg",
+          "Topp 12 kvalifiserer"
+        ]
+      },
+      {
+        "title": "Gruppespill",
+        "content": [
+          "Round-robin 1v1",
+          "Antall kamper: 3"
+        ]
+      },
+      {
+        "title": "Finale",
+        "content": [
+          "Dobbel eliminering",
+          "Storfinale bo15"
+        ]
+      },
+      {
+        "title": "Annen info",
+        "content": [
+          "QQ-gruppe: 743740882",
+          "Under utvikling"
+        ]
+      }
+    ],
+    "prize": "Premie",
+    "additional": "Ekstra bonus",
+    "standings": "Nr. {0}",
+    "algorithm": [
+      "Bonus-algoritme:",
+      "For hver rangeringsøkning dobler bonusen seg"
+    ]
+  },
+  "comment": {
+    "title": "Kommentarer",
+    "placeholder": "Skriv en kommentar...",
+    "replyPlaceholder": "Svar til {0}...",
+    "submit": "Publiser",
+    "reply": "Svar",
+    "delete": "Slett",
+    "deleteConfirm": "Er du sikker på at du vil slette denne kommentaren?",
+    "deleteInfo": "Denne handlingen kan ikke angres",
+    "noComments": "Ingen kommentarer ennå. Vær den første!",
+    "loginToComment": "Logg inn for å kommentere",
+    "viewReplies": "Se {0} svar",
+    "hideReplies": "Skjul svar",
+    "loadMore": "Last mer",
+    "like": "Liker",
+    "time": {
+      "justNow": "akkurat nå",
+      "minutesAgo": "{0} minutter siden",
+      "hoursAgo": "{0} timer siden",
+      "daysAgo": "{0} dager siden",
+      "yearsAgo": "{0} år siden"
+    }
+  },
+  "components": {
+    "cropper": {
+      "title": "Coveret bør vise flere MOD-detaljer",
+      "crop": "Beskjær"
+    }
+  },
+  "login": {
+    "loginSuccess": "Innlogging vellykket, automatisk retur om {0} sekunder",
+    "logging": "Logger inn...",
+    "validating": "Verifiserer...",
+    "validateSucc": "Verifisering vellykket",
+    "initData": "Initialiserer brukerdata",
+    "initing": "Initialiserer...",
+    "initSucc": "Initialisering vellykket"
+  },
+  "privacy": {
+    "publishState": "Publiser Steam-status",
+    "publishStateDetail": "Alle kan se din Steam-status",
+    "publishPlaytime": "Publiser nylig SR-spilletid",
+    "publishPlaytimeDetail": "Vises på forsiden",
+    "allowGetRankScore": "Tillat dette nettstedet å hente SR-rangeringspoeng",
+    "allowGetRankScoreDetail": "Inkluderer:",
+    "publishAddScore": "Publiser SR-poengøkning",
+    "publishAddScoreDetail": "Vises på forsiden",
+    "publishTotalScore": "Publiser totale SR-rangeringspoeng",
+    "publishTotalScoreDetail": "Vises i rangeringslisten"
+  },
+  "profile": {
+    "comments": "Kommentarer",
+    "commentsComingSoon": "Kommentarfunksjon kommer snart",
+    "scoreHeatmap": "Poengaktivitet",
+    "totalAdded": "Årlig total",
+    "less": "Mindre",
+    "more": "Mer",
+    "mon": "Ma",
+    "wed": "On",
+    "fri": "Fr",
+    "scoreUnit": "poeng",
+    "points": "poeng",
+    "recentScore": "Siste 2 uker",
+    "achievements": "Prestasjoner",
+    "noAchievements": "Ingen prestasjonsdata",
+    "gameStats": "Spillstatistikk",
+    "gameActivity": "Spillaktivitet",
+    "noActivity": "Ingen aktivitetsdata",
+    "offline": "Frakoblet",
+    "online": "Pålogget",
+    "playingSR": "Spiller SpeedRunners",
+    "notFound": "Spiller ikke funnet",
+    "notFoundDesc": "Spilleren eksisterer ikke eller profilen er privat",
+    "rankUpTo": "Forfremmet til",
+    "unlocked": "Låst opp",
+    "unlockTime": "Låst opp {0} {1}, {2}",
+    "pageTitle": "{0} - SpeedRunners Profil",
+    "pageTitleDefault": "Spillerprofil",
+    "pageKeywords": "SpeedRunners spiller,{0},profil,spilldata",
+    "months": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mai",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Des"
+    ],
+    "heatmapDate": "{0} {1}, {2}",
+    "activity": {
+      "scoreChange": "Poengendring",
+      "rankUp": "Rangeringsoppgradering",
+      "achievement": "Prestasjon",
+      "gameSession": "Spilløkt",
+      "other": "Annet"
+    }
+  }
+}

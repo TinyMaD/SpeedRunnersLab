@@ -1,0 +1,301 @@
+{
+  "404": {
+    "error": "웹마스터가 이 페이지에 들어갈 수 없다고 했습니다...",
+    "check": "입력한 URL이 올바른지 확인하거나 아래 버튼을 클릭하여 홈으로 돌아가세요.",
+    "back": "홈으로 돌아가기"
+  },
+  "500": {
+    "msg": "앗! 서버 오류"
+  },
+  "index": {
+    "online": "온라인",
+    "sponsorContent": [
+      "이 웹사이트 운영에는 서버, 도메인 등의 임대가 필요하며, 이것이 가장 큰 지출입니다 (최소 구성 서버도 연간 약 100달러입니다).",
+      "이 웹사이트는 제가 운영하고 있습니다. SR 생태계가 좋아지기를 바라며, 이 웹사이트에는 아직 많은 <a href='https://github.com/users/TinyMaD/projects/1/views/1' target='_blank'>Todo</a>가 있습니다.",
+      "이 웹사이트를 지원하고 싶다면 아래 링크 버튼을 클릭하여 후원할 수 있습니다 (Afdian 후원은 실시간으로 표시되고, Paypal은 24시간 이내에 표시됩니다)"
+    ],
+    "sponsorTitle": "{0}명의 후원자에게 감사",
+    "addedChartTitle": "지난 2주 증가 포인트",
+    "hourChartTile": "지난 2주 플레이 시간",
+    "hourChartUnit": "시간",
+    "videoTitle": "2025년 일일 통계 영상",
+    "videoUrl": "https://www.youtube.com/watch?v=E1nDvPAuY1Y"
+  },
+  "layout": {
+    "login": "로그인",
+    "logout": "로그아웃",
+    "logoutSucc": "로그아웃 성공",
+    "email": "클릭하여 이메일 주소 복사",
+    "copyEmail": "클립보드에 복사됨",
+    "theme": "다크/라이트",
+    "notification": "알림",
+    "replyMe": "답글",
+    "likeMe": "좋아요",
+    "noNotifications": "알림 없음",
+    "viewAll": "모두 보기"
+  },
+  "routes": {
+    "home": "홈",
+    "match": "경기",
+    "rank": "랭킹",
+    "mod": "MOD",
+    "searchplayer": "통계",
+    "plaza": "발견",
+    "log": "변경 로그",
+    "privacy": "개인정보 설정",
+    "profile": "프로필"
+  },
+  "mod": {
+    "upload": "업로드",
+    "yourStar": "즐겨찾기",
+    "trail": "트레일",
+    "character": "캐릭터",
+    "item": "아이템",
+    "sound": "사운드",
+    "bg": "배경",
+    "other": "기타",
+    "uploadingTitle": "업로드 중, 잠시만 기다려 주세요...{0} %",
+    "loadTitle": "MOD 리소스 업로드",
+    "uploadCover": "클릭하여 커버 업로드",
+    "uploadFile": "클릭하여 파일 업로드",
+    "loadSucc": "업로드 성공",
+    "inputTitle": "제목을 입력하세요",
+    "lengthWarn": "문자 수는 17자를 초과할 수 없습니다",
+    "loadCoverPlz": "커버를 업로드하세요",
+    "bigImgWarn": "이미지 크기는 5MB를 초과할 수 없습니다",
+    "mustImg": "파일은 이미지여야 합니다",
+    "uploadFilePlz": "파일을 업로드하세요",
+    "bigFileWarn": "파일 크기는 20MB를 초과할 수 없습니다",
+    "invalidWarn": "유효하지 않은 SteamID 또는 vanity URL입니다. 검색할 플레이어를 선택하세요",
+    "download": "다운로드",
+    "starSucc": "즐겨찾기 추가",
+    "unstarSucc": "즐겨찾기 제거",
+    "star": "즐겨찾기됨",
+    "unStar": "즐겨찾기",
+    "deleteSucc": "MOD 삭제 성공",
+    "deleteWarn": "이 Mod를 삭제하시겠습니까?",
+    "deleteInfo": "Mod를 삭제하면 되돌릴 수 없습니다. 확실하게 해주세요.",
+    "share": "공유",
+    "shareSucc": "공유 링크가 클립보드에 복사됨",
+    "backToList": "전체 목록으로 돌아가기",
+    "modNotFound": "Mod를 찾을 수 없음"
+  },
+  "common": {
+    "search": "검색",
+    "keywords": "키워드를 입력하세요",
+    "loginPlz": "먼저 로그인하세요",
+    "type": "유형",
+    "selectType": "유형을 선택하세요",
+    "title": "제목",
+    "submit": "제출",
+    "cancel": "취소",
+    "notice": "알림",
+    "success": "성공",
+    "delete": "삭제",
+    "confirm": "확인",
+    "markAllRead": "모두 읽음으로 표시"
+  },
+  "rank": {
+    "personaName": "이름",
+    "tier": "리그",
+    "score": "랭크 포인트",
+    "updateInfo": "*데이터 업데이트 빈도: 10분마다",
+    "diamond": "다이아몬드",
+    "platinum": "플래티넘",
+    "gold": "골드",
+    "silver": "실버",
+    "bronze": "브론즈",
+    "expert": "전문가",
+    "advanced": "고급",
+    "beginner": "초급",
+    "entry": "입문",
+    "playTime": "총 플레이 시간",
+    "past2weeks": "지난 2주 플레이 시간"
+  },
+  "stats": {
+    "enterSteamID": "SteamID, vanity URL 또는 이름을 입력하세요",
+    "content": "Steam 사용자의 SpeedRunners 통계 검색. 검색 속도: SteamID (안정) > Vanity URL (안정) > 이름 (불안정)",
+    "showMore": "{0}개 결과 남음 — 클릭하여 더 보기 —",
+    "noResult": "관련 결과를 찾을 수 없습니다. 플레이어가 Steam 프로필 개인정보를 공개로 설정하지 않았을 수 있습니다."
+  },
+  "match": {
+    "prizePool": "총 상금 풀",
+    "schedule": "일정[보관]",
+    "participant": "참가자",
+    "points": "포인트",
+    "reward": "보상",
+    "badgeContent": "상위 10명의 플레이어는 업적 배지를 받습니다 (이 사이트에서만 표시):",
+    "support": "지원",
+    "sponsor": "후원자",
+    "amount": "금액",
+    "sponsorship": "후원 방법 (아래 QR 코드 스캔):",
+    "contactMe": "다른 후원 방법은 연락해 주세요 (이메일) {0}",
+    "time": "경기 시간",
+    "groupStage": "그룹 스테이지",
+    "finalStage": "파이널 스테이지",
+    "sponsorContent": [
+      "모든 후원자에게 감사합니다. 금액에 상관없이 여러분의 지원 덕분에 이 행사가 열렸습니다",
+      "이 토너먼트의 상금은 전적으로 후원자가 후원하며, 후원 금액의 100%가 총 상금 풀에 들어갑니다",
+      "후원의 투명성을 보장하기 위해 후원 시 ID (고유하고 본인이 알 수 있는 것)를 기재해 주세요. 기재하지 않으면 익명으로 기록됩니다. 후원을 받은 후 24시간 이내에 후원자 목록을 업데이트합니다",
+      "후원자 목록:"
+    ],
+    "matchContent": [
+      {
+        "title": "예선",
+        "content": [
+          "중국어 의사소통이 가능하고 심판에게 네트워크 지연이 낮은 플레이어가 참가할 수 있습니다",
+          "'포인트' 랭킹 상위 12명이 참가 자격을 얻습니다",
+          "'포인트' = '랭크 포인트' + '플레이 시간 포인트'",
+          "'랭크 포인트': 랭크 경기에서 얻은 총 포인트",
+          "'플레이 시간 포인트' = '유효 플레이 시간' X 10. 참고: 플레이 시간은 SpeedRunners 게임 시간을 의미하며, 단위는 시간입니다. Steam 개인정보 설정을 공개로 하세요",
+          "'유효 플레이 시간' = 총 플레이 시간 - 지난 2주 플레이 시간. 참고: '유효 플레이 시간'이 1000시간을 초과하면 1000시간으로 계산됩니다",
+          "예: Tom은 랭크 포인트 10000점, SpeedRunners를 1200시간 플레이했고, 지난 2주 동안 300시간 플레이했습니다. 포인트는 10000 + (1200 - 300) X 10 = 19000",
+          "'포인트' 랭킹 상위 4명은 승자조 8자리 중 4자리를 확보합니다",
+          "'포인트' 랭킹 나머지 8명은 그룹 스테이지에 진출합니다"
+        ]
+      },
+      {
+        "title": "그룹 스테이지",
+        "content": [
+          "형식: 리그전 1v1 (각 플레이어는 다른 7명의 플레이어와 경기)",
+          "경기 수: 3",
+          "맵: 랜덤 공식 맵, 워크샵 맵",
+          "B/P: 맵 밴 없음, 공식 맵 선택 화면 오른쪽 하단의 랜덤 공식 맵과 랜덤 워크샵 맵 버튼 클릭",
+          "득점: 포인트와 승리 (포인트로 순위를 매긴 후, 같은 포인트의 플레이어는 승리 수로 순위)",
+          "그룹 스테이지 상위 4명이 승자조에 진출",
+          "그룹 스테이지 하위 4명이 패자조에 진출"
+        ]
+      },
+      {
+        "title": "파이널 스테이지",
+        "content": [
+          "형식: 더블 엘리미네이션, 강자 대 강자",
+          "경기 수: 승자조 준결승, 패자조 결승, 그랜드 파이널 (bo15), 기타 경기 (bo11)",
+          "맵: 추후 결정",
+          "B/P: 추후 결정",
+          "연습 경기: 승자조 준결승, 패자조 결승, 그랜드 파이널 전에 두 번의 연습 경기를 진행합니다"
+        ]
+      },
+      {
+        "title": "기타 정보",
+        "content": [
+          "SpeedRunners 경기 QQ 그룹에 참여하세요: 743740882",
+          "개발 중입니다. 계속 지켜봐 주세요...",
+          "※최종 해석권은 이 사이트에 있습니다"
+        ]
+      }
+    ],
+    "prize": "상금 (총 상금 풀에 따라 변동)",
+    "additional": "추가 보너스",
+    "standings": "{0}위",
+    "algorithm": [
+      "보너스 알고리즘:",
+      "랭크가 올라갈 때마다 보너스가 두 배가 되며, 최대 차이는 500위안",
+      "계산값은 내림하고, 버려진 금액의 합은 최하위 랭크 보너스에 더합니다",
+      "고정 보너스가 없는 랭크의 참가자 중에서 50위안 추첨 기회가 있습니다",
+      "추가 보너스는 후원자가 설정한 맞춤 규칙에 따라 배포됩니다"
+    ]
+  },
+  "comment": {
+    "title": "댓글",
+    "placeholder": "댓글을 작성하세요...",
+    "replyPlaceholder": "{0}에게 답글...",
+    "submit": "게시",
+    "reply": "답글",
+    "delete": "삭제",
+    "deleteConfirm": "이 댓글을 삭제하시겠습니까?",
+    "deleteInfo": "이 작업은 취소할 수 없습니다",
+    "noComments": "아직 댓글이 없습니다. 첫 번째 댓글을 작성하세요!",
+    "loginToComment": "댓글을 작성하려면 로그인하세요",
+    "viewReplies": "{0}개 답글 보기",
+    "hideReplies": "답글 숨기기",
+    "loadMore": "더 불러오기",
+    "like": "좋아요",
+    "time": {
+      "justNow": "방금",
+      "minutesAgo": "{0}분 전",
+      "hoursAgo": "{0}시간 전",
+      "daysAgo": "{0}일 전",
+      "yearsAgo": "{0}년 전"
+    }
+  },
+  "components": {
+    "cropper": {
+      "title": "커버는 MOD의 세부 사항을 더 보여줘야 합니다",
+      "crop": "자르기"
+    }
+  },
+  "login": {
+    "loginSuccess": "로그인 성공, {0}초 후 자동으로 홈으로 돌아갑니다",
+    "logging": "로그인 중, 잠시만 기다려 주세요...",
+    "validating": "로그인 정보 확인 중...",
+    "validateSucc": "로그인 정보 확인 성공",
+    "initData": "사용자 데이터 초기화",
+    "initing": "사용자 데이터 초기화 중...",
+    "initSucc": "사용자 데이터 초기화 성공"
+  },
+  "privacy": {
+    "publishState": "Steam 상태 공개",
+    "publishStateDetail": "모든 사람이 Steam 상태와 SR을 플레이 중인지 볼 수 있습니다",
+    "publishPlaytime": "SR 최근 플레이 시간 공개",
+    "publishPlaytimeDetail": "홈의 '지난 2주 플레이 시간'에 표시",
+    "allowGetRankScore": "이 사이트가 내 SR 랭크 포인트 데이터를 요청하도록 허용",
+    "allowGetRankScoreDetail": "또한 개별적으로 관리할 수 있는 다음 항목도 포함됩니다:",
+    "publishAddScore": "SR 증가 포인트 공개",
+    "publishAddScoreDetail": "홈의 '지난 2주 증가 포인트'에 표시",
+    "publishTotalScore": "SR 총 랭크 포인트 공개",
+    "publishTotalScoreDetail": "랭킹 페이지 목록에 표시"
+  },
+  "profile": {
+    "comments": "댓글",
+    "commentsComingSoon": "댓글 기능 곧 출시",
+    "scoreHeatmap": "포인트 활동",
+    "totalAdded": "연간 합계",
+    "less": "적음",
+    "more": "많음",
+    "mon": "월",
+    "wed": "수",
+    "fri": "금",
+    "scoreUnit": "점",
+    "points": "점",
+    "recentScore": "지난 2주",
+    "achievements": "업적",
+    "noAchievements": "업적 데이터 없음",
+    "gameStats": "게임 통계",
+    "gameActivity": "게임 활동",
+    "noActivity": "활동 데이터 없음",
+    "offline": "오프라인",
+    "online": "온라인",
+    "playingSR": "SpeedRunners 플레이 중",
+    "notFound": "플레이어를 찾을 수 없음",
+    "notFoundDesc": "플레이어가 존재하지 않거나 프로필이 비공개입니다",
+    "rankUpTo": "승격",
+    "unlocked": "해제됨",
+    "unlockTime": "{0}년 {1}월 {2}일 해제",
+    "pageTitle": "{0} - SpeedRunners 프로필",
+    "pageTitleDefault": "플레이어 프로필",
+    "pageKeywords": "SpeedRunners 플레이어,{0},프로필,게임 데이터",
+    "months": [
+      "1월",
+      "2월",
+      "3월",
+      "4월",
+      "5월",
+      "6월",
+      "7월",
+      "8월",
+      "9월",
+      "10월",
+      "11월",
+      "12월"
+    ],
+    "heatmapDate": "{0}년 {1}월 {2}일",
+    "activity": {
+      "scoreChange": "포인트 변동",
+      "rankUp": "랭크 업",
+      "achievement": "업적",
+      "gameSession": "게임 세션",
+      "other": "기타"
+    }
+  }
+}
