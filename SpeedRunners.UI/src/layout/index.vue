@@ -370,17 +370,7 @@ export default {
     left: false,
     fab: false,
     privacyVisible: false,
-    showNotificationDrawer: false
-  }),
-  computed: {
-    ...mapGetters([
-      "steamId",
-      "name",
-      "avatar",
-      "rankType",
-      "permission_routes"
-    ]),
-    ...mapState("notification", ["unreadCount"]),
+    showNotificationDrawer: false,
     languages: [
       { code: "zh", label: "简体中文" },
       { code: "en", label: "English" },
@@ -401,7 +391,17 @@ export default {
       { code: "tr", label: "Türkçe" },
       { code: "uk", label: "Українська" },
       { code: "pl", label: "Polski" }
-    ],
+    ]
+  }),
+  computed: {
+    ...mapGetters([
+      "steamId",
+      "name",
+      "avatar",
+      "rankType",
+      "permission_routes"
+    ]),
+    ...mapState("notification", ["unreadCount"]),
     displayTotalCount() {
       const count = this.unreadCount.totalCount || 0;
       return count > 99 ? "99+" : count;
