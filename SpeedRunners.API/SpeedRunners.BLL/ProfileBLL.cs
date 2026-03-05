@@ -12,10 +12,12 @@ namespace SpeedRunners.BLL
     public class ProfileBLL : BLLHelper<ProfileDAL>
     {
         private readonly SteamBLL _steamBLL;
+        private readonly AchievementSchemaService _achievementSchemaService;
 
-        public ProfileBLL(SteamBLL steamBLL)
+        public ProfileBLL(SteamBLL steamBLL, AchievementSchemaService achievementSchemaService)
         {
             _steamBLL = steamBLL;
+            _achievementSchemaService = achievementSchemaService;
         }
 
         /// <summary>
@@ -112,8 +114,27 @@ namespace SpeedRunners.BLL
         /// </summary>
         public async Task<List<MAchievement>> GetAchievements(string steamId)
         {
-            // SpeedRunners成就定义
-            var achievementDefs = GetSpeedRunnersAchievements();
+            // 从缓存服务获取SpeedRunners游戏的成就定义
+            var achievementSchemas = await _achievementSchemaService.GetAchievementSchemaAsync();
+            
+            if (achievementSchemas == null || !achievementSchemas.Any())
+            {
+                return new List<MAchievement>();
+            }
+
+            // 转换为成就列表
+            var achievements = achievementSchemas.Select(schema => new MAchievement
+            {
+                ApiName = schema.ApiName,
+                Name = schema.DisplayName,
+                Description = schema.Hidden && string.IsNullOrEmpty(schema.Description) 
+                    ? Localizer["hiddenAchievement"] 
+                    : schema.Description,
+                IconUrl = schema.Icon,
+                IconGrayUrl = schema.IconGray,
+                Hidden = schema.Hidden,
+                Unlocked = false
+            }).ToList();
             
             try
             {
@@ -122,23 +143,28 @@ namespace SpeedRunners.BLL
                 
                 if (playerAchievements?.Any() == true)
                 {
-                    foreach (var def in achievementDefs)
+                    foreach (var ach in achievements)
                     {
-                        var playerAch = playerAchievements.FirstOrDefault(a => a.ApiName == def.ApiName);
+                        var playerAch = playerAchievements.FirstOrDefault(a => a.ApiName == ach.ApiName);
                         if (playerAch != null)
                         {
-                            def.Unlocked = playerAch.Achieved == 1;
-                            def.UnlockedAt = playerAch.UnlockTime;
+                            ach.Unlocked = playerAch.Achieved == 1;
+                            ach.UnlockedAt = playerAch.UnlockTime;
                         }
                     }
                 }
             }
             catch
             {
-                // Steam API调用失败时返回默认列表
+                // Steam API调用失败时返回成就列表（全部未解锁状态）
             }
 
-            return achievementDefs;
+            // 按解锁状态排序：已解锁的在前，已解锁按达成时间正序，未解锁按名称排序
+            return achievements
+                .OrderBy(a => a.Unlocked ? 0 : 1)
+                .ThenBy(a => a.UnlockedAt ?? DateTime.MaxValue)
+                .ThenBy(a => a.Name)
+                .ToList();
         }
 
         /// <summary>
@@ -149,28 +175,28 @@ namespace SpeedRunners.BLL
             var stats = new List<MGameStat>();
 
             // 段位
-            string rankName = GetRankName(playerInfo.RankLevel);
-            stats.Add(new MGameStat { Name = "段位", Value = rankName });
+            string rankName = GetRankName(playerInfo.RankLevel, localizer);
+            stats.Add(new MGameStat { Name = localizer["rank"], Value = rankName });
 
             // 天梯分
             if (playerInfo.RankScore.HasValue)
             {
-                stats.Add(new MGameStat { Name = "天梯分", Value = playerInfo.RankScore.Value.ToString("N0") });
+                stats.Add(new MGameStat { Name = localizer["score"], Value = playerInfo.RankScore.Value.ToString("N0") });
             }
 
             // 排位场次
             if (playerInfo.RankCount.HasValue)
             {
-                stats.Add(new MGameStat { Name = "排位场次", Value = playerInfo.RankCount.Value.ToString() });
+                stats.Add(new MGameStat { Name = localizer["rankCount"], Value = playerInfo.RankCount.Value.ToString() });
             }
 
             // 总游戏时长
             var totalHours = Math.Round((decimal)playerInfo.PlayTime / 60, 1);
-            stats.Add(new MGameStat { Name = "总游戏时长", Value = $"{totalHours} 小时" });
+            stats.Add(new MGameStat { Name = localizer["totalPlaytime"], Value = $"{totalHours} {localizer["hours"]}" });
 
             // 最近两周游戏时长
             var weekHours = Math.Round((decimal)playerInfo.WeekPlayTime / 60, 1);
-            stats.Add(new MGameStat { Name = "最近两周", Value = $"{weekHours} 小时" });
+            stats.Add(new MGameStat { Name = localizer["recentPlaytime"], Value = $"{weekHours} {localizer["hours"]}" });
 
             return stats;
         }
@@ -178,41 +204,21 @@ namespace SpeedRunners.BLL
         /// <summary>
         /// 获取段位名称
         /// </summary>
-        private string GetRankName(int rankLevel)
+        private string GetRankName(int rankLevel, Microsoft.Extensions.Localization.IStringLocalizer localizer)
         {
             return rankLevel switch
             {
-                0 => "新手",
-                1 => "入门",
-                2 => "进阶",
-                3 => "专家",
-                4 => "青铜",
-                5 => "白银",
-                6 => "黄金",
-                7 => "铂金",
-                8 => "钻石",
-                9 => "KOS",
-                _ => "未知"
-            };
-        }
-
-        /// <summary>
-        /// SpeedRunners游戏成就列表
-        /// </summary>
-        private List<MAchievement> GetSpeedRunnersAchievements()
-        {
-            return new List<MAchievement>
-            {
-                new MAchievement { Id = 1, ApiName = "FIRST_BLOOD", Name = "首胜", Description = "赢得第一场比赛", Icon = "mdi-trophy" },
-                new MAchievement { Id = 2, ApiName = "WIN_10", Name = "连胜达人", Description = "赢得10场比赛", Icon = "mdi-trophy-variant" },
-                new MAchievement { Id = 3, ApiName = "WIN_100", Name = "百胜将军", Description = "赢得100场比赛", Icon = "mdi-trophy-award" },
-                new MAchievement { Id = 4, ApiName = "RANKED_BRONZE", Name = "青铜之路", Description = "达到青铜段位", Icon = "mdi-medal" },
-                new MAchievement { Id = 5, ApiName = "RANKED_SILVER", Name = "白银荣耀", Description = "达到白银段位", Icon = "mdi-medal-outline" },
-                new MAchievement { Id = 6, ApiName = "RANKED_GOLD", Name = "黄金时代", Description = "达到黄金段位", Icon = "mdi-star" },
-                new MAchievement { Id = 7, ApiName = "RANKED_PLATINUM", Name = "铂金传说", Description = "达到铂金段位", Icon = "mdi-star-outline" },
-                new MAchievement { Id = 8, ApiName = "RANKED_DIAMOND", Name = "钻石之巅", Description = "达到钻石段位", Icon = "mdi-diamond-stone" },
-                new MAchievement { Id = 9, ApiName = "PLAY_100H", Name = "百小时老兵", Description = "游戏时长达到100小时", Icon = "mdi-clock" },
-                new MAchievement { Id = 10, ApiName = "PLAY_500H", Name = "资深玩家", Description = "游戏时长达到500小时", Icon = "mdi-clock-check" },
+                0 => localizer["rank_entry"],
+                1 => localizer["rank_beginner"],
+                2 => localizer["rank_advanced"],
+                3 => localizer["rank_expert"],
+                4 => localizer["rank_bronze"],
+                5 => localizer["rank_silver"],
+                6 => localizer["rank_gold"],
+                7 => localizer["rank_platinum"],
+                8 => localizer["rank_diamond"],
+                9 => localizer["rank_kos"],
+                _ => localizer["rank_unknown"]
             };
         }
     }

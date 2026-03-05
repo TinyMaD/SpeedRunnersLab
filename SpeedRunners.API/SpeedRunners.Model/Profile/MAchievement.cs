@@ -7,8 +7,6 @@ namespace SpeedRunners.Model.Profile
     /// </summary>
     public class MAchievement
     {
-        public int Id { get; set; }
-        
         /// <summary>
         /// 成就API名称
         /// </summary>
@@ -25,9 +23,14 @@ namespace SpeedRunners.Model.Profile
         public string Description { get; set; }
         
         /// <summary>
-        /// 图标名称
+        /// 已解锁成就图标URL
         /// </summary>
-        public string Icon { get; set; }
+        public string IconUrl { get; set; }
+        
+        /// <summary>
+        /// 未解锁成就图标URL（灰色版本）
+        /// </summary>
+        public string IconGrayUrl { get; set; }
         
         /// <summary>
         /// 是否已解锁
@@ -38,5 +41,10 @@ namespace SpeedRunners.Model.Profile
         /// 解锁时间
         /// </summary>
         public DateTime? UnlockedAt { get; set; }
+        
+        /// <summary>
+        /// 是否为隐藏成就
+        /// </summary>
+        public bool Hidden { get; set; }
     }
 }

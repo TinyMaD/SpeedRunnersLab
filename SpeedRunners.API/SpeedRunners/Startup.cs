@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SpeedRunners.BLL;
 using SpeedRunners.Filter;
 using SpeedRunners.Middleware;
 using SpeedRunners.Model;
@@ -32,32 +33,35 @@ namespace SpeedRunners
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // 处理跨域
+            // 锟斤拷锟斤拷锟斤拷锟斤拷
             services.AddCors(options =>
             {
                 options.AddPolicy("default",
                 builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             });
-            // 注册全局Configuration
+            // 注锟斤拷全锟斤拷Configuration
             services.AddSingleton(new AppSettings(Configuration));
             services.AddControllers(
                 options =>
                 {
-                    options.Filters.Add<GlobalExceptionsFilter>();// 全局异常捕获
-                    options.Filters.Add<ResponseFilter>();// 统一处理出参
+                    options.Filters.Add<GlobalExceptionsFilter>();// 全锟斤拷锟届常锟斤拷锟斤拷
+                    options.Filters.Add<ResponseFilter>();// 统一锟斤拷锟斤拷锟斤拷锟斤拷
                 })
                 .AddNewtonsoftJson();
-            // 批量注册BLL服务
+            // 锟斤拷锟斤拷注锟斤拷BLL锟斤拷锟斤拷
             services.AddAllBLL();
-            // 注册当前用户信息
+            // 娣诲姞鍐呭瓨缂撳瓨锛堢敤浜庢垚灏卞畾涔夌紦瀛橈級
+            services.AddMemoryCache();
+            // 娉ㄥ唽鎴愬氨瀹氫箟缂撳瓨鏈嶅姟
+            services.AddScoped<AchievementSchemaService>();
             services.AddScoped<MUser>();
             services.Configure<KestrelServerOptions>(options =>
             {
                 options.AllowSynchronousIO = true;
             });
-            // 本地化
+            // 锟斤拷锟截伙拷
             services.AddLocalization(options => options.ResourcesPath = "Resources");
-            // 设置代理
+            // 锟斤拷锟矫达拷锟斤拷
             HttpHelper.SetProxy();
         }
 
