@@ -142,9 +142,7 @@ export default {
     monthLabels() {
       const labels = [];
       const today = new Date();
-      const months = this.$i18n.locale === 'zh' 
-        ? ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
-        : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const months = this.$t('profile.months');
       
       // 获取过去12个月
       for (let i = 11; i >= 0; i--) {
@@ -178,11 +176,8 @@ export default {
     formatDate(dateStr) {
       if (!dateStr) return '';
       const date = new Date(dateStr);
-      if (this.$i18n.locale === 'zh') {
-        return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
-      }
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+      const monthName = this.$t('profile.months')[date.getMonth()];
+      return this.$t('profile.heatmapDate', [monthName, date.getDate(), date.getFullYear()]);
     }
   }
 };

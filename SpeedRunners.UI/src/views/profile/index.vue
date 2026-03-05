@@ -187,7 +187,7 @@
                 <div v-else class="achievements-grid">
                   <v-tooltip
                     v-for="achievement in achievements"
-                    :key="achievement.id"
+                    :key="achievement.apiName"
                     top
                     color="rgba(20,20,30,0.95)"
                   >
@@ -198,12 +198,12 @@
                         v-bind="attrs"
                         v-on="on"
                       >
-                        <v-icon
-                          :color="achievement.unlocked ? 'amber' : 'grey darken-1'"
-                          size="28"
+                        <img
+                          :src="achievement.unlocked ? achievement.iconUrl : achievement.iconGrayUrl"
+                          :alt="achievement.name"
+                          class="achievement-icon"
+                          @error="onImageError($event, achievement)"
                         >
-                          {{ achievement.icon || 'mdi-trophy-variant' }}
-                        </v-icon>
                       </div>
                     </template>
                     <div class="achievement-tooltip">
@@ -391,23 +391,37 @@ export default {
     formatUnlockTime: function(time) {
       if (!time) return "";
       var date = new Date(time);
-      if (this.$i18n.locale === "zh") {
-        return date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日解锁";
+      var monthName = this.$t("profile.months")[date.getMonth()];
+      return this.$t("profile.unlockTime", [monthName, date.getDate(), date.getFullYear()]);
+    },
+
+    onImageError: function(event, achievement) {
+      // 图片加载失败时显示备用图标
+      var target = event.target;
+      target.style.display = "none";
+      var parent = target.parentElement;
+      if (parent && !parent.querySelector(".fallback-icon")) {
+        var icon = document.createElement("i");
+        icon.className = "v-icon notranslate mdi mdi-trophy-variant fallback-icon";
+        icon.style.fontSize = "28px";
+        icon.style.color = achievement.unlocked ? "#ffc107" : "#757575";
+        parent.appendChild(icon);
       }
-      var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      return "Unlocked " + months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
     }
   },
 
   metaInfo: function() {
     var name = (this.profileData && this.profileData.personaName) || "";
+    var title = name
+      ? this.$t("profile.pageTitle", [name])
+      : this.$t("profile.pageTitleDefault");
     return {
-      title: name ? name + " - SpeedRunners Profile" : "Player Profile",
+      title: title,
       meta: [
         {
           vmid: "keywords",
           name: "keywords",
-          content: "SpeedRunners玩家," + name + ",个人主页,游戏数据"
+          content: this.$t("profile.pageKeywords", [name])
         }
       ]
     };
@@ -633,8 +647,8 @@ export default {
 /* ======================= */
 .achievements-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 6px;
 }
 
 .achievement-item {
@@ -643,10 +657,22 @@ export default {
   align-items: center;
   justify-content: center;
   background: rgba(255, 255, 255, 0.03);
-  border-radius: 8px;
+  border-radius: 4px;
   border: 1px solid rgba(255, 255, 255, 0.05);
   cursor: pointer;
   transition: all 0.25s ease;
+  padding: 2px;
+}
+
+.achievement-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 2px;
+}
+
+.fallback-icon {
+  opacity: 0.8;
 }
 
 .achievement-item:hover {
@@ -757,7 +783,7 @@ export default {
   }
 
   .achievements-grid {
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
   }
 
   .stat-number {
@@ -768,6 +794,10 @@ export default {
 @media (max-width: 600px) {
   .stat-divider {
     display: none;
+  }
+
+  .achievements-grid {
+    grid-template-columns: repeat(5, 1fr);
   }
 }
 </style>

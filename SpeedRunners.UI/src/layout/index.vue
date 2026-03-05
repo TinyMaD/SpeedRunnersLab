@@ -111,6 +111,7 @@
         offset-y
         transition="slide-y-transition"
         open-on-hover
+        max-height="400"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -124,18 +125,15 @@
 
         </template>
         <v-list nav dense>
-          <v-list-item-group @change="changeLanguege">
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>中文</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-              <v-list-item-content>
-                <v-list-item-title>English</v-list-item-title>
-              </v-list-item-content>
-            </v-list-item>
-          </v-list-item-group>
+          <v-list-item
+            v-for="lang in languages"
+            :key="lang.code"
+            @click="changeLanguage(lang.code)"
+          >
+            <v-list-item-content>
+              <v-list-item-title>{{ lang.label }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
         </v-list>
       </v-menu>
       <template v-slot:extension>
@@ -383,17 +381,38 @@ export default {
       "permission_routes"
     ]),
     ...mapState("notification", ["unreadCount"]),
+    languages: [
+      { code: "zh", label: "简体中文" },
+      { code: "en", label: "English" },
+      { code: "ru", label: "Русский" },
+      { code: "pt-br", label: "Português (Brasil)" },
+      { code: "ja", label: "日本語" },
+      { code: "ko", label: "한국어" },
+      { code: "fr", label: "Français" },
+      { code: "it", label: "Italiano" },
+      { code: "de", label: "Deutsch" },
+      { code: "es-es", label: "Español" },
+      { code: "cs", label: "Čeština" },
+      { code: "ro", label: "Română" },
+      { code: "nl", label: "Nederlands" },
+      { code: "hu", label: "Magyar" },
+      { code: "el", label: "Ελληνικά" },
+      { code: "no", label: "Norsk" },
+      { code: "tr", label: "Türkçe" },
+      { code: "uk", label: "Українська" },
+      { code: "pl", label: "Polski" }
+    ],
     displayTotalCount() {
       const count = this.unreadCount.totalCount || 0;
-      return count > 99 ? '99+' : count;
+      return count > 99 ? "99+" : count;
     },
     displayReplyCount() {
       const count = this.unreadCount.replyCount || 0;
-      return count > 99 ? '99+' : count;
+      return count > 99 ? "99+" : count;
     },
     displayLikeCount() {
       const count = this.unreadCount.likeCount || 0;
-      return count > 99 ? '99+' : count;
+      return count > 99 ? "99+" : count;
     },
     navBars() {
       return this.permission_routes.find(route => route.path === "/").children.filter(x => x.hidden !== true);
@@ -440,8 +459,7 @@ export default {
       navigator.clipboard.writeText("supremelang@qq.com");
       this.$toast.success(this.$t("layout.copyEmail"));
     },
-    changeLanguege(num) {
-      var lang = num ? "en" : "zh";
+    changeLanguage(lang) {
       this.$i18n.locale = lang;
       localStorage.setItem("lang", lang);
       document.title = getPageTitle(this.$i18n.t(`routes.${this.$route.meta.title}`));
@@ -480,6 +498,34 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/styles/variables.scss";
+
+// 语言选择下拉菜单滚动条样式优化
+.v-menu__content .v-list {
+  // Webkit浏览器滚动条样式
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 2px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    transition: background 0.2s ease;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  // Firefox滚动条样式
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
 .link {
   color: #333;
   text-decoration: none;
