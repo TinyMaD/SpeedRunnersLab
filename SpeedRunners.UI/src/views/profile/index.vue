@@ -8,21 +8,65 @@
       <!-- 加载骨架屏 -->
       <div v-if="loading" class="skeleton-wrapper">
         <v-row>
-          <v-col cols="12" md="3">
-            <v-skeleton-loader type="card, article" class="glass-card" />
+          <!-- 顶部融合卡片骨架屏 -->
+          <v-col cols="12" class="pt-0 pb-1 px-1">
+            <v-card flat tile class="glass-card">
+              <div class="hero-card">
+                <div class="hero-top">
+                  <v-skeleton-loader type="avatar" class="mr-4" />
+                  <div class="skeleton-info">
+                    <v-skeleton-loader type="heading" class="mb-2" />
+                    <v-skeleton-loader type="text" />
+                  </div>
+                </div>
+                <v-divider class="my-4" />
+                <div class="hero-stats">
+                  <v-skeleton-loader type="text" class="mx-4" />
+                  <v-skeleton-loader type="text" class="mx-4" />
+                  <v-skeleton-loader type="text" class="mx-4" />
+                </div>
+              </div>
+            </v-card>
           </v-col>
-          <v-col cols="12" md="9">
-            <v-skeleton-loader type="card-heading, image" class="glass-card" />
+          <v-col cols="12" md="6" class="pa-1">
+            <v-card flat tile class="glass-card">
+              <v-card-title class="glass-card-title">
+                <v-skeleton-loader type="text" width="120" />
+              </v-card-title>
+              <v-card-text class="pa-0">
+                <v-skeleton-loader type="list-item, list-item, list-item, list-item" />
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <v-col cols="12" md="6" class="pa-1">
+            <v-card flat tile class="glass-card">
+              <v-card-title class="glass-card-title">
+                <v-skeleton-loader type="text" width="100" />
+                <v-spacer />
+                <v-skeleton-loader type="text" width="40" />
+              </v-card-title>
+              <v-card-text>
+                <v-skeleton-loader type="text@5" />
+              </v-card-text>
+            </v-card>
+          </v-col>
+          <!-- 天梯热力图骨架屏 -->
+          <v-col cols="12" class="pa-1">
+            <v-card flat tile class="glass-card">
+              <v-card-text class="pa-3">
+                <v-skeleton-loader type="image" height="120" />
+              </v-card-text>
+            </v-card>
           </v-col>
         </v-row>
       </div>
 
       <!-- 主内容区 -->
       <template v-else-if="profileData">
-        <v-row class="content-row">
+        <v-row>
           <!-- 顶部融合卡片：玩家信息 + 核心数据 -->
-          <v-col cols="12" class="px-1">
-            <v-card flat tile class="glass-card mb-2">
+          <v-col cols="12" class="pt-0 pb-1 px-1">
+            <v-card flat tile class="glass-card">
               <div class="hero-card">
                 <!-- 上半部：头像 + 玩家信息 + Steam按钮 -->
                 <div class="hero-top">
@@ -30,9 +74,6 @@
                     <v-avatar size="72" class="profile-avatar">
                       <v-img :src="profileData.avatarL || profileData.avatarM" />
                     </v-avatar>
-                    <div v-if="isPlayingSR" class="playing-badge">
-                      <img src="img/srstate.png" alt="SR" class="sr-icon">
-                    </div>
                   </div>
                   <div class="hero-info">
                     <h2 class="player-name text-h5 font-weight-bold">
@@ -45,26 +86,19 @@
                         :text-color="getStatusChipTextColor"
                         class="mr-1"
                       >
-                        <span class="status-dot mr-1" :class="getOnlineClass" />
+                        <span :class="getOnlineClass" />
                         {{ getStatusText }}
                       </v-chip>
-                      <v-chip
-                        small
-                        :color="getLevelChipColor"
-                        text-color="white"
-                        class="level-chip mr-1"
-                      >
-                        <img 
-                          :src="'img/LeagueBadgesMedium.png'" 
-                          :style="getLevelIconStyle" 
-                          class="level-icon-small"
-                        >
-                        {{ getLevelName }}
-                      </v-chip>
-                      <span class="rank-score-inline text-caption">
-                        <v-icon small class="mr-1">mdi-trophy</v-icon>
-                        {{ profileData.rankScore || 0 }} {{ $t('profile.points') }}
-                      </span>
+                      <div class="level-badge mr-2">
+                        <div class="level-icon-wrapper">
+                          <img
+                            src="/img/LeagueBadgesMedium.png"
+                            :style="getLevelIconStyle"
+                            class="level-icon"
+                          >
+                        </div>
+                        <span class="level-text">{{ getLevelName }}</span>
+                      </div>
                     </div>
                   </div>
                   <v-spacer />
@@ -83,25 +117,24 @@
                 <div class="hero-stats">
                   <div class="hero-stat-item">
                     <div class="text-h4 font-weight-bold stat-number">
-                      {{ profileData.totalPlaytime || 0 }}
-                    </div>
-                    <div class="text-caption text--secondary">
-                      {{ $t('rank.playTime') }}
-                    </div>
-                  </div>
-                  <v-divider vertical class="stat-divider" />
-                  <div class="hero-stat-item">
-                    <div class="text-h4 font-weight-bold stat-number">
                       {{ profileData.past2WeeksPlaytime || 0 }}
                     </div>
                     <div class="text-caption text--secondary">
                       {{ $t('rank.past2weeks') }}
                     </div>
                   </div>
+                  <v-divider vertical class="stat-divider" /><div class="hero-stat-item">
+                    <div class="text-h4 font-weight-bold stat-number">
+                      {{ formatNumber(profileData.rankScore) }}
+                    </div>
+                    <div class="text-caption text--secondary">
+                      {{ $t('rank.score') }}
+                    </div>
+                  </div>
                   <v-divider vertical class="stat-divider" />
                   <div class="hero-stat-item">
                     <div class="text-h4 font-weight-bold stat-number highlight">
-                      +{{ profileData.past2WeeksScore || 0 }}
+                      +{{ formatNumber(profileData.past2WeeksScore || 0) }}
                     </div>
                     <div class="text-caption text--secondary">
                       {{ $t('profile.recentScore') }}
@@ -113,10 +146,10 @@
           </v-col>
 
           <!-- 左侧边栏 - 统计 + 成就 -->
-          <v-col cols="12" md="6" class="sidebar-col" order="1" order-md="1">
+          <v-col cols="12" md="6" class="pa-1" order="1" order-md="1">
 
             <!-- 游戏统计卡片 -->
-            <v-card flat tile class="glass-card mb-2">
+            <v-card flat tile class="glass-card">
               <v-card-title class="glass-card-title">
                 <v-icon left size="18">mdi-chart-bar</v-icon>
                 {{ $t('profile.gameStats') }}
@@ -137,8 +170,8 @@
           </v-col>
 
           <!-- 成就卡片 -->
-          <v-col cols="12" md="6" class="sidebar-col" order="2" order-md="2">
-            <v-card flat tile class="glass-card mb-2">
+          <v-col cols="12" md="6" class="pa-1" order="2" order-md="2">
+            <v-card flat tile class="glass-card">
               <v-card-title class="glass-card-title">
                 <v-icon left size="18">mdi-medal</v-icon>
                 {{ $t('profile.achievements') }}
@@ -152,20 +185,20 @@
                   {{ $t('profile.noAchievements') }}
                 </div>
                 <div v-else class="achievements-grid">
-                  <v-tooltip 
-                    v-for="achievement in achievements" 
+                  <v-tooltip
+                    v-for="achievement in achievements"
                     :key="achievement.id"
                     top
                     color="rgba(20,20,30,0.95)"
                   >
                     <template v-slot:activator="{ on, attrs }">
-                      <div 
-                        class="achievement-item" 
+                      <div
+                        class="achievement-item"
                         :class="{ 'unlocked': achievement.unlocked }"
                         v-bind="attrs"
                         v-on="on"
                       >
-                        <v-icon 
+                        <v-icon
                           :color="achievement.unlocked ? 'amber' : 'grey darken-1'"
                           size="28"
                         >
@@ -187,8 +220,8 @@
           </v-col>
 
           <!-- 天梯热力图（独占一行） -->
-          <v-col cols="12" class="px-1" order="3">
-            <v-card flat tile class="glass-card mb-2">
+          <v-col cols="12" class="pa-1" order="3">
+            <v-card flat tile class="glass-card">
               <v-card-text class="pa-0">
                 <ScoreHeatmap :data="dailyScoreData" />
               </v-card-text>
@@ -218,11 +251,11 @@ import { getProfileData, getDailyScoreHistory, getAchievements } from "@/api/pro
 
 export default {
   name: "Profile",
-  
+
   components: {
     ScoreHeatmap
   },
-  
+
   data() {
     return {
       loading: true,
@@ -231,82 +264,80 @@ export default {
       achievements: []
     };
   },
-  
+
   computed: {
     steamId() {
       return this.$route.params.steamId || this.$route.query.id;
     },
-    
+
     isPlayingSR() {
       return this.profileData && this.profileData.gameID === "207140";
     },
-    
+
     getOnlineClass() {
-      if (!this.profileData) return 'offline';
-      if (this.profileData.state === 0) return 'offline';
-      if (this.isPlayingSR) return 'playing';
-      return 'online';
+      if (!this.profileData) return "offline";
+      if (this.profileData.state === 0) return "offline";
+      if (this.isPlayingSR) return "playing";
+      return "online";
     },
-    
+
     getStatusText() {
-      if (!this.profileData) return this.$t('profile.offline');
-      if (this.profileData.state === 0) return this.$t('profile.offline');
-      if (this.isPlayingSR) return this.$t('profile.playingSR');
-      return this.$t('profile.online');
+      if (!this.profileData) return this.$t("profile.offline");
+      if (this.profileData.state === 0) return this.$t("profile.offline");
+      if (this.isPlayingSR) return this.$t("profile.playingSR");
+      return this.$t("profile.online");
     },
-    
+
     getStatusChipColor() {
-      if (!this.profileData || this.profileData.state === 0) return 'grey darken-2';
-      if (this.isPlayingSR) return 'light-green darken-1';
-      return 'green darken-1';
+      if (!this.profileData || this.profileData.state === 0) return "grey darken-2";
+      if (this.isPlayingSR) return "light-green darken-1";
+      return "green darken-1";
     },
-    
+
     getStatusChipTextColor() {
-      return 'white';
+      return "white";
     },
-    
+
     getLevelChipColor() {
       const level = (this.profileData && this.profileData.rankLevel) || 0;
-      const colors = ['grey', 'grey darken-1', 'blue-grey', 'blue-grey darken-1', 'brown', 'grey lighten-1', 'amber darken-2', 'blue-grey lighten-1', 'cyan darken-1', 'deep-purple'];
-      return colors[level] || 'grey';
+      const colors = ["grey", "grey darken-1", "blue-grey", "blue-grey darken-1", "brown", "grey lighten-1", "amber darken-2", "blue-grey lighten-1", "cyan darken-1", "deep-purple"];
+      return colors[level] || "grey";
     },
-    
+
     getLevelName() {
       const level = (this.profileData && this.profileData.rankLevel) || 0;
-      const names = ['entry', 'beginner', 'advanced', 'expert', 'bronze', 'silver', 'gold', 'platinum', 'diamond'];
-      if (level === 9) return 'KOS';
-      return this.$t('rank.' + names[level]);
+      const names = ["entry", "beginner", "advanced", "expert", "bronze", "silver", "gold", "platinum", "diamond"];
+      if (level === 9) return "KOS";
+      return this.$t("rank." + names[level]);
     },
-    
+
     getLevelIconStyle() {
       const level = (this.profileData && this.profileData.rankLevel) || 0;
-      const size = 20;
+      const size = 80;
       const height = (4 * size) / 3;
       const width = size;
-      
+
       const levelIncrement = width / 3;
       const levelMultiplier = level % 3;
       const levelOffset = Math.floor(level / 3);
-      
-      const t = (height / 4) * levelOffset;
-      const right = levelIncrement * (levelMultiplier + 1);
-      const bottom = (height / 4) * (levelOffset + 1);
+
+      const top = (height / 4) * levelOffset;
       const left = levelIncrement * levelMultiplier;
-      
-      return 'clip: rect(' + t + 'px ' + right + 'px ' + bottom + 'px ' + left + 'px); margin: ' + (-1 * t) + 'px 0 0 ' + (-1 * left) + 'px; width: ' + size + 'px; height: ' + height + 'px;';
+
+      return "top: " + (-1 * top) + "px; left: " + (-1 * left) + "px; width: " + size + "px; height: " + height + "px;";
     },
-    
+
     gameStats() {
       if (!this.profileData || !this.profileData.stats) return [];
       return this.profileData.stats.map(function(s) {
         return { name: s.name, value: s.value };
       });
     },
-    
+
     unlockedCount() {
-      return this.achievements.filter(function(a) { return a.unlocked; }).length;
+      return this.achievements.filter(function(a) { return a.unlocked }).length;
     },
-    
+
     rankProgress() {
       // 简单计算进度（可根据实际段位系统调整）
       var score = (this.profileData && this.profileData.rankScore) || 0;
@@ -319,7 +350,7 @@ export default {
       return ((score - current) / (next - current)) * 100;
     }
   },
-  
+
   watch: {
     steamId: {
       immediate: true,
@@ -330,48 +361,53 @@ export default {
       }
     }
   },
-  
+
   methods: {
+    formatNumber: function(num) {
+      if (num == null) return "0";
+      return num.toLocaleString();
+    },
+
     fetchProfileData: function() {
       var self = this;
       self.loading = true;
-      
+
       Promise.all([
-        getProfileData(self.steamId).catch(function() { return { data: null }; }),
-        getDailyScoreHistory(self.steamId).catch(function() { return { data: [] }; }),
-        getAchievements(self.steamId).catch(function() { return { data: [] }; })
+        getProfileData(self.steamId).catch(function() { return { data: null } }),
+        getDailyScoreHistory(self.steamId).catch(function() { return { data: [] } }),
+        getAchievements(self.steamId).catch(function() { return { data: [] } })
       ]).then(function(results) {
         self.profileData = results[0].data;
         self.dailyScoreData = results[1].data || [];
         self.achievements = results[2].data || [];
       }).catch(function(error) {
-        console.error('Failed to load profile:', error);
+        console.error("Failed to load profile:", error);
         self.profileData = null;
       }).finally(function() {
         self.loading = false;
       });
     },
-    
+
     formatUnlockTime: function(time) {
-      if (!time) return '';
+      if (!time) return "";
       var date = new Date(time);
-      if (this.$i18n.locale === 'zh') {
-        return date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日解锁';
+      if (this.$i18n.locale === "zh") {
+        return date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日解锁";
       }
-      var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      return 'Unlocked ' + months[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear();
+      var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      return "Unlocked " + months[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear();
     }
   },
-  
+
   metaInfo: function() {
-    var name = (this.profileData && this.profileData.personaName) || '';
+    var name = (this.profileData && this.profileData.personaName) || "";
     return {
-      title: name ? name + ' - SpeedRunners Profile' : 'Player Profile',
+      title: name ? name + " - SpeedRunners Profile" : "Player Profile",
       meta: [
         {
-          vmid: 'keywords',
-          name: 'keywords',
-          content: 'SpeedRunners玩家,' + name + ',个人主页,游戏数据'
+          vmid: "keywords",
+          name: "keywords",
+          content: "SpeedRunners玩家," + name + ",个人主页,游戏数据"
         }
       ]
     };
@@ -401,18 +437,9 @@ export default {
 .profile-container {
   position: relative;
   z-index: 1;
-  padding: 8px 16px;
+  /* padding: 8px 16px; */
   max-width: 880px;
   margin: 0 auto;
-}
-
-.content-row {
-  margin: 0;
-}
-
-.sidebar-col,
-.main-col {
-  padding: 0 4px;
 }
 
 /* ======================= */
@@ -488,12 +515,6 @@ export default {
   min-width: 0;
 }
 
-.rank-score-inline {
-  color: rgba(255, 255, 255, 0.6);
-  display: inline-flex;
-  align-items: center;
-}
-
 .hero-stats {
   display: flex;
   align-items: center;
@@ -523,21 +544,6 @@ export default {
   border-radius: 6px;
 }
 
-.playing-badge {
-  position: absolute;
-  bottom: -6px;
-  right: -6px;
-  background: rgba(30, 30, 40, 0.9);
-  border-radius: 4px;
-  padding: 2px 4px;
-  border: 1px solid rgba(139, 195, 74, 0.5);
-}
-
-.sr-icon {
-  height: 16px;
-  display: block;
-}
-
 .player-name {
   text-align: left;
   letter-spacing: 0.5px;
@@ -551,40 +557,34 @@ export default {
   gap: 6px;
 }
 
-.status-dot {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
+/* 段位徽章样式 - 参考 rank 页面实现 */
+.level-badge {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 11px;
+  padding: 0 8px 0 4px;
 }
 
-.status-dot.online {
-  background: #4caf50;
+.level-icon-wrapper {
+  width: 24px;
+  height: 24px;
+  position: relative;
+  overflow: hidden;
+  margin-right: 4px;
 }
 
-.status-dot.playing {
-  background: #8bc34a;
-  animation: dot-pulse 1.5s infinite;
+.level-icon {
+  position: absolute;
 }
 
-.status-dot.offline {
-  background: #9e9e9e;
-}
-
-@keyframes dot-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
-.level-chip {
+.level-text {
+  font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-}
-
-.level-icon-small {
-  position: relative;
-  margin-right: 4px;
+  white-space: nowrap;
 }
 
 .steam-btn {
@@ -710,11 +710,42 @@ export default {
 /* ======================= */
 /* 骨架屏适配毛玻璃 */
 /* ======================= */
+.skeleton-wrapper {
+  width: 100%;
+  max-width: 100%;
+}
+
+.skeleton-wrapper .row {
+  width: 100%;
+  margin: 0;
+}
+
+.skeleton-wrapper .v-card {
+  width: 100%;
+}
+
 .skeleton-wrapper .v-skeleton-loader {
-  background: rgba(18, 18, 28, 0.88) !important;
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 6px;
+  background: transparent !important;
+}
+
+.skeleton-wrapper .hero-card .v-skeleton-loader {
+  background: transparent !important;
+  border: none;
+  border-radius: 0;
+}
+
+.skeleton-wrapper .hero-stats {
+  display: flex;
+  justify-content: center;
+}
+
+.skeleton-wrapper .skeleton-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.skeleton-wrapper .skeleton-info .v-skeleton-loader {
+  max-width: 200px;
 }
 
 /* ======================= */
@@ -724,36 +755,19 @@ export default {
   .profile-container {
     padding: 16px;
   }
-  
-  .content-row {
-    margin: 0 -8px;
-  }
-  
-  .sidebar-col,
-  .main-col {
-    padding: 0 8px;
-  }
-  
+
   .achievements-grid {
     grid-template-columns: repeat(5, 1fr);
   }
-  
+
   .stat-number {
     font-size: 1.5rem !important;
   }
 }
 
 @media (max-width: 600px) {
-  .stats-overview .row {
-    flex-direction: column;
-  }
-  
   .stat-divider {
     display: none;
-  }
-  
-  .stat-col {
-    padding: 12px;
   }
 }
 </style>
