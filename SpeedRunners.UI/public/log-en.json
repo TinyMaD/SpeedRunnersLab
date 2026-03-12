@@ -1,5 +1,25 @@
 [
     {
+        "title": "Comment System and Profile",
+        "version": "v2.10.0",
+        "date": "2026-03-05",
+        "list": [
+            {
+                "text": "Added profile module to display detailed user information",
+                "type": "feature"
+            },
+            {
+                "text": "Added comment system for user interaction",
+                "type": "feature"
+            },
+            {
+                "text": "Extended internationalization support to 17 languages",
+                "type": "feature"
+            }
+        ],
+        "type": "holyshit"
+    },
+    {
         "title": "Download Progress Bar",
         "version": "v2.9.1",
         "date": "2024-12-29",
