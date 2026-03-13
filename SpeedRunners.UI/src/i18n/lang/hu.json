@@ -215,6 +215,8 @@
     "initSucc": "Sikeres inicializálás"
   },
   "privacy": {
+    "showProfile": "Profiloldal",
+    "showProfileDetail": "Engedélyezze más felhasználóknak a profiloldal elérését",
     "publishState": "Steam állapot közzététele",
     "publishStateDetail": "Mindenki láthatja a Steam állapotodat",
     "publishPlaytime": "SR játékidő közzététele",
@@ -227,6 +229,8 @@
     "publishTotalScoreDetail": "Megjelenik a ranglistán"
   },
   "profile": {
+    "privateProfile": "Privát Profil",
+    "privateProfileDesc": "Ez a felhasználó privátra állította a profilját",
     "comments": "Hozzászólások",
     "commentsComingSoon": "Hozzászólás funkció hamarosan",
     "scoreHeatmap": "Pont aktivitás",

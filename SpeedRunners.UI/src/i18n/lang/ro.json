@@ -235,6 +235,8 @@
     "initSucc": "Datele utilizatorului inițializate cu succes"
   },
   "privacy": {
+    "showProfile": "Pagină Profil",
+    "showProfileDetail": "Permite altor utilizatori să acceseze pagina ta de profil",
     "publishState": "Publică starea Steam",
     "publishStateDetail": "Toată lumea poate vedea starea ta Steam și dacă joci SR",
     "publishPlaytime": "Publică timpul recent de joc SR",
@@ -247,6 +249,8 @@
     "publishTotalScoreDetail": "Afișat în lista de pe pagina clasament"
   },
   "profile": {
+    "privateProfile": "Profil Privat",
+    "privateProfileDesc": "Acest utilizator și-a setat profilul ca privat",
     "comments": "Comentarii",
     "commentsComingSoon": "Funcția de comentarii în curând",
     "scoreHeatmap": "Activitate puncte",

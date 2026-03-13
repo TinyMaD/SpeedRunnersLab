@@ -215,6 +215,8 @@
     "initSucc": "Επιτυχής αρχικοποίηση"
   },
   "privacy": {
+    "showProfile": "Σελίδα Προφίλ",
+    "showProfileDetail": "Να επιτρέπεται σε άλλους χρήστες η πρόσβαση στη σελίδα προφίλ σας",
     "publishState": "Δημοσίευση κατάστασης Steam",
     "publishStateDetail": "Όλοι μπορούν να δουν την κατάσταση Steam σας",
     "publishPlaytime": "Δημοσίευση χρόνου παιχνιδιού SR",
@@ -227,6 +229,8 @@
     "publishTotalScoreDetail": "Εμφανίζεται στη λίστα κατάταξης"
   },
   "profile": {
+    "privateProfile": "Ιδιωτικό Προφίλ",
+    "privateProfileDesc": "Αυτός ο χρήστης έχει ορίσει το προφίλ του ως ιδιωτικό",
     "comments": "Σχόλια",
     "commentsComingSoon": "Η λειτουργία σχολίων έρχεται σύντομα",
     "scoreHeatmap": "Δραστηριότητα πόντων",

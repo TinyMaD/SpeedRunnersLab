@@ -235,6 +235,8 @@
     "initSucc": "Gebruikersgegevens succesvol geïnitialiseerd"
   },
   "privacy": {
+    "showProfile": "Profielpagina",
+    "showProfileDetail": "Andere gebruikers toestaan toegang tot je profielpagina",
     "publishState": "Steam-status publiceren",
     "publishStateDetail": "Iedereen kan je Steam-status zien en of je SR speelt",
     "publishPlaytime": "Recente SR-speeltijd publiceren",
@@ -247,6 +249,8 @@
     "publishTotalScoreDetail": "Weergegeven in de lijst op de ranglijstpagina"
   },
   "profile": {
+    "privateProfile": "Privé Profiel",
+    "privateProfileDesc": "Deze gebruiker heeft zijn profiel op privé ingesteld",
     "comments": "Reacties",
     "commentsComingSoon": "Reactiefunctie binnenkort beschikbaar",
     "scoreHeatmap": "Puntenactiviteit",

@@ -235,6 +235,8 @@
     "initSucc": "Dados do usuário inicializados com sucesso"
   },
   "privacy": {
+    "showProfile": "Página de Perfil",
+    "showProfileDetail": "Permitir que outros usuários acessem sua página de perfil",
     "publishState": "Publicar estado Steam",
     "publishStateDetail": "Todos podem ver seu estado Steam e se você está jogando SR",
     "publishPlaytime": "Publicar tempo de jogo recente de SR",
@@ -247,6 +249,8 @@
     "publishTotalScoreDetail": "Exibido na lista da página de ranking"
   },
   "profile": {
+    "privateProfile": "Perfil Privado",
+    "privateProfileDesc": "Este usuário definiu seu perfil como privado",
     "comments": "Comentários",
     "commentsComingSoon": "Recurso de comentários em breve",
     "scoreHeatmap": "Atividade de Pontos",

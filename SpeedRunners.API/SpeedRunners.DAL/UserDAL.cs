@@ -23,6 +23,7 @@ namespace SpeedRunners.DAL
                      CASE WHEN a.State = -1 THEN -1
                         ELSE 0 END AS State,
                      a.RankType,
+                     IFNULL(b.ShowProfile, 1) ShowProfile,
                      IFNULL(b.RequestRankData, 1) RequestRankData,
                      IFNULL(b.ShowAddScore, 1) ShowAddScore,
                      IFNULL(b.ShowWeekPlayTime, 1) ShowWeekPlayTime

@@ -215,6 +215,8 @@
     "initSucc": "Initialisering vellykket"
   },
   "privacy": {
+    "showProfile": "Profilsiden",
+    "showProfileDetail": "Tillat andre brukere tilgang til din profilsiden",
     "publishState": "Publiser Steam-status",
     "publishStateDetail": "Alle kan se din Steam-status",
     "publishPlaytime": "Publiser nylig SR-spilletid",
@@ -227,6 +229,8 @@
     "publishTotalScoreDetail": "Vises i rangeringslisten"
   },
   "profile": {
+    "privateProfile": "Privat Profil",
+    "privateProfileDesc": "Denne brukeren har satt profilen sin som privat",
     "comments": "Kommentarer",
     "commentsComingSoon": "Kommentarfunksjon kommer snart",
     "scoreHeatmap": "Poengaktivitet",

@@ -16,14 +16,27 @@
 - [NotificationDAL.cs](file://SpeedRunners.API/SpeedRunners.DAL/NotificationDAL.cs)
 - [RankBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/RankBLL.cs)
 - [request.js](file://SpeedRunners.UI/src/utils/request.js)
+- [Startup.cs](file://SpeedRunners.API/SpeedRunners/Startup.cs)
+- [LocaleHeaderRequestCultureProvider.cs](file://SpeedRunners.API/SpeedRunners/Service/LocaleHeaderRequestCultureProvider.cs)
+- [ProfileBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/ProfileBLL.cs)
+- [ProfileBLL.cs.resx](file://SpeedRunners.API/SpeedRunners.BLL/Resources/ProfileBLL.cs.resx)
+- [ProfileBLL.de.resx](file://SpeedRunners.API/SpeedRunners.BLL/Resources/ProfileBLL.de.resx)
+- [ProfileBLL.zh.resx](file://SpeedRunners.API/SpeedRunners.BLL/Resources/ProfileBLL.zh.resx)
+- [UserBLL.cs.resx](file://SpeedRunners.API/SpeedRunners.BLL/Resources/UserBLL.cs.resx)
+- [UserBLL.de.resx](file://SpeedRunners.API/SpeedRunners.BLL/Resources/UserBLL.de.resx)
+- [UserBLL.zh.resx](file://SpeedRunners.API/SpeedRunners.BLL/Resources/UserBLL.zh.resx)
+- [SRLabTokenAuthMidd.cs.resx](file://SpeedRunners.API/SpeedRunners/Resources/SRLabTokenAuthMidd.cs.resx)
+- [SRLabTokenAuthMidd.de.resx](file://SpeedRunners.API/SpeedRunners/Resources/SRLabTokenAuthMidd.de.resx)
+- [SRLabTokenAuthMidd.zh.resx](file://SpeedRunners.API/SpeedRunners/Resources/SRLabTokenAuthMidd.zh.resx)
 </cite>
 
 ## 更新摘要
 **所做更改**
-- 完善了通知系统的架构说明，详细描述了通知类型、触发条件、去重机制
-- 更新了通知存储查询和清理机制的实现细节
-- 补充了通知系统与评论系统的集成关系
-- 增强了通知系统的安全性和性能考虑
+- 新增国际化支持章节，详细介绍22种语言的本地化配置
+- 更新通知机制详解，增加多语言通知内容支持
+- 新增API层多语言资源文件说明，涵盖评论系统和通知系统的本地化
+- 更新架构概览，反映国际化中间件和文化提供程序的作用
+- 增强数据模型说明，包含国际化相关的字段和配置
 
 ## 目录
 1. [简介](#简介)
@@ -33,17 +46,18 @@
 5. [详细组件分析](#详细组件分析)
 6. [API 接口定义](#api-接口定义)
 7. [数据模型说明](#数据模型说明)
-8. [通知机制详解](#通知机制详解)
-9. [依赖关系分析](#依赖关系分析)
-10. [性能考虑](#性能考虑)
-11. [故障排除指南](#故障排除指南)
-12. [总结](#总结)
+8. [国际化支持](#国际化支持)
+9. [通知机制详解](#通知机制详解)
+10. [依赖关系分析](#依赖关系分析)
+11. [性能考虑](#性能考虑)
+12. [故障排除指南](#故障排除指南)
+13. [总结](#总结)
 
 ## 简介
 
 SpeedRunnersLab 评论系统是一个基于 ASP.NET Core 构建的完整评论功能模块，支持多级评论、点赞、回复通知等核心功能。该系统采用经典的三层架构设计（控制器-业务逻辑-数据访问），为游戏 SpeedRunners 提供了完整的社区互动平台。
 
-**更新** 新增了完善的通知机制，支持评论回复和点赞的实时通知功能，包括去重机制和消息清理功能。通知系统作为评论系统的重要组成部分，实现了完整的消息生命周期管理。
+**更新** 新增了完善的通知机制，支持评论回复和点赞的实时通知功能，包括去重机制和消息清理功能。通知系统作为评论系统的重要组成部分，实现了完整的消息生命周期管理。同时，系统现已支持22种语言的国际化本地化，为全球用户提供多语言体验。
 
 ## 项目结构
 
@@ -61,11 +75,13 @@ subgraph "API 层 (SpeedRunners.API)"
 CommentController[CommentController]
 NotificationController[NotificationController]
 BaseController[BaseController]
+LocaleMiddleware[本地化中间件]
 end
 subgraph "业务逻辑层 (SpeedRunners.BLL)"
 CommentBLL[CommentBLL]
 NotificationBLL[NotificationBLL]
 RankBLL[RankBLL]
+ProfileBLL[ProfileBLL]
 end
 subgraph "数据访问层 (SpeedRunners.DAL)"
 CommentDAL[CommentDAL]
@@ -79,6 +95,10 @@ MCommentOut[MCommentOut]
 MCommentLike[MCommentLike]
 MNotification[MNotification]
 end
+subgraph "国际化资源层"
+ResxFiles[多语言资源文件]
+LocaleProvider[文化提供程序]
+end
 FE --> Request
 Request --> CommentController
 Request --> NotificationController
@@ -90,24 +110,24 @@ CommentBLL --> CommentDAL
 CommentBLL --> NotificationBLL
 CommentBLL --> RankBLL
 NotificationBLL --> NotificationDAL
+ProfileBLL --> ResxFiles
+LocaleMiddleware --> LocaleProvider
 CommentDAL --> DbHelper
 NotificationDAL --> DbHelper
-CommentBLL --> MComment
-CommentBLL --> MCommentParam
-CommentBLL --> MCommentOut
-CommentBLL --> MCommentLike
-NotificationBLL --> MNotification
 ```
 
 **图表来源**
-- [CommentController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/CommentController.cs#L1-L33)
-- [NotificationController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L1-L48)
-- [CommentBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L1-L181)
-- [NotificationBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L1-L107)
+- [CommentController.cs:1-33](file://SpeedRunners.API/SpeedRunners/Controllers/CommentController.cs#L1-L33)
+- [NotificationController.cs:1-48](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L1-L48)
+- [CommentBLL.cs:1-181](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L1-L181)
+- [NotificationBLL.cs:1-107](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L1-L107)
+- [Startup.cs:63-82](file://SpeedRunners.API/SpeedRunners/Startup.cs#L63-L82)
+- [LocaleHeaderRequestCultureProvider.cs:1-17](file://SpeedRunners.API/SpeedRunners/Service/LocaleHeaderRequestCultureProvider.cs#L1-L17)
 
 **章节来源**
-- [CommentController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/CommentController.cs#L1-L33)
-- [BaseController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs#L1-L25)
+- [CommentController.cs:1-33](file://SpeedRunners.API/SpeedRunners/Controllers/CommentController.cs#L1-L33)
+- [BaseController.cs:1-25](file://SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs#L1-L25)
+- [Startup.cs:63-82](file://SpeedRunners.API/SpeedRunners/Startup.cs#L63-L82)
 
 ## 核心组件
 
@@ -120,6 +140,7 @@ NotificationBLL --> MNotification
 - **CommentBLL**: 核心业务逻辑处理，包含评论管理、点赞、通知等功能
 - **NotificationBLL**: 通知业务逻辑处理，包含消息存储、查询、清理等功能
 - **RankBLL**: 排行榜业务逻辑，为通知系统提供用户头像和昵称信息
+- **ProfileBLL**: 个人资料业务逻辑，支持多语言本地化显示
 
 ### 数据访问层
 - **CommentDAL**: 数据库操作封装，提供评论 CRUD 操作和查询功能
@@ -132,19 +153,27 @@ NotificationBLL --> MNotification
 - **MCommentLike**: 评论点赞关联模型
 - **MNotification**: 通知消息实体模型
 
+### 国际化支持层
+- **Startup.cs**: 配置本地化服务和中间件
+- **LocaleHeaderRequestCultureProvider**: 自定义文化提供程序，支持 locale 请求头
+- **多语言资源文件**: 支持22种语言的RESX资源文件
+
 **章节来源**
-- [CommentController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/CommentController.cs#L10-L31)
-- [NotificationController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L10-L48)
-- [CommentBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L9-L19)
-- [NotificationBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L9-L107)
+- [CommentController.cs:10-31](file://SpeedRunners.API/SpeedRunners/Controllers/CommentController.cs#L10-L31)
+- [NotificationController.cs:10-48](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L10-L48)
+- [CommentBLL.cs:9-19](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L9-L19)
+- [NotificationBLL.cs:9-107](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L9-L107)
+- [Startup.cs:63-82](file://SpeedRunners.API/SpeedRunners/Startup.cs#L63-L82)
 
 ## 架构概览
 
-评论系统采用经典的三层架构模式，确保了关注点分离和代码的可维护性：
+评论系统采用经典的三层架构模式，确保了关注点分离和代码的可维护性。新增的国际化支持通过中间件和文化提供程序实现：
 
 ```mermaid
 sequenceDiagram
 participant Client as 客户端
+participant LocaleMiddleware as 本地化中间件
+participant LocaleProvider as 文化提供程序
 participant CommentController as CommentController
 participant NotificationController as NotificationController
 participant CommentBLL as CommentBLL
@@ -152,6 +181,10 @@ participant NotificationBLL as NotificationBLL
 participant CommentDAL as CommentDAL
 participant NotificationDAL as NotificationDAL
 participant DB as MySQL数据库
+Client->>LocaleMiddleware : 请求带locale头
+LocaleMiddleware->>LocaleProvider : DetermineProviderCultureResult()
+LocaleProvider-->>LocaleMiddleware : 返回文化信息
+LocaleMiddleware-->>Client : 设置响应文化
 Client->>CommentController : POST /api/Comment/AddComment
 CommentController->>CommentBLL : AddComment(param)
 CommentBLL->>CommentDAL : AddComment(comment)
@@ -166,13 +199,15 @@ DB-->>NotificationDAL : 通知ID
 NotificationDAL-->>NotificationBLL : 通知ID
 NotificationBLL-->>CommentBLL : 操作完成
 CommentBLL-->>CommentController : 操作完成
-CommentController-->>Client : 成功响应
+CommentController-->>Client : 成功响应(多语言内容)
 ```
 
 **图表来源**
-- [CommentController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/CommentController.cs#L17-L20)
-- [CommentBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L45-L81)
-- [NotificationBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L39-L65)
+- [CommentController.cs:17-20](file://SpeedRunners.API/SpeedRunners/Controllers/CommentController.cs#L17-L20)
+- [CommentBLL.cs:45-81](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L45-L81)
+- [NotificationBLL.cs:39-65](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L39-L65)
+- [Startup.cs](file://SpeedRunners.API/SpeedRunners/Startup.cs#L82)
+- [LocaleHeaderRequestCultureProvider.cs:9-14](file://SpeedRunners.API/SpeedRunners/Service/LocaleHeaderRequestCultureProvider.cs#L9-L14)
 
 ## 详细组件分析
 
@@ -204,11 +239,11 @@ CommentController --> CommentBLL : 调用方法
 ```
 
 **图表来源**
-- [CommentController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/CommentController.cs#L10-L31)
-- [BaseController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs#L10-L23)
+- [CommentController.cs:10-31](file://SpeedRunners.API/SpeedRunners/Controllers/CommentController.cs#L10-L31)
+- [BaseController.cs:10-23](file://SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs#L10-L23)
 
 **章节来源**
-- [CommentController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/CommentController.cs#L12-L30)
+- [CommentController.cs:12-30](file://SpeedRunners.API/SpeedRunners/Controllers/CommentController.cs#L12-L30)
 
 ### CommentBLL 业务逻辑分析
 
@@ -240,10 +275,10 @@ UpdateCount --> End
 ```
 
 **图表来源**
-- [CommentBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L136-L178)
+- [CommentBLL.cs:136-178](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L136-L178)
 
 **章节来源**
-- [CommentBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L23-L178)
+- [CommentBLL.cs:23-178](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L23-L178)
 
 ### CommentDAL 数据访问分析
 
@@ -260,7 +295,7 @@ CommentDAL 提供了完整的数据库操作功能：
 - **ToggleLike**: 点赞状态切换和计数更新
 
 **章节来源**
-- [CommentDAL.cs](file://SpeedRunners.API/SpeedRunners.DAL/CommentDAL.cs#L16-L147)
+- [CommentDAL.cs:16-147](file://SpeedRunners.API/SpeedRunners.DAL/CommentDAL.cs#L16-L147)
 
 ## API 接口定义
 
@@ -315,8 +350,8 @@ CommentDAL 提供了完整的数据库操作功能：
 - **响应**: void
 
 **章节来源**
-- [CommentController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/CommentController.cs#L12-L30)
-- [NotificationController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L15-L45)
+- [CommentController.cs:12-30](file://SpeedRunners.API/SpeedRunners/Controllers/CommentController.cs#L12-L30)
+- [NotificationController.cs:15-45](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L15-L45)
 
 ## 数据模型说明
 
@@ -344,8 +379,8 @@ COMMENT ||--o{ COMMENTLIKE : "点赞关系"
 ```
 
 **图表来源**
-- [MComment.cs](file://SpeedRunners.API/SpeedRunners.Model/Comment/MComment.cs#L5-L15)
-- [MCommentLike.cs](file://SpeedRunners.API/SpeedRunners.Model/Comment/MCommentLike.cs#L5-L12)
+- [MComment.cs:5-15](file://SpeedRunners.API/SpeedRunners.Model/Comment/MComment.cs#L5-L15)
+- [MCommentLike.cs:5-12](file://SpeedRunners.API/SpeedRunners.Model/Comment/MCommentLike.cs#L5-L12)
 
 ### MCommentParam 参数模型
 - **MCommentPageParam**: 继承自 MPageParam，包含分页参数和页面路径
@@ -368,9 +403,94 @@ COMMENT ||--o{ COMMENTLIKE : "点赞关系"
 - **MMarkReadParam**: 标记已读参数，支持批量标记
 
 **章节来源**
-- [MCommentParam.cs](file://SpeedRunners.API/SpeedRunners.Model/Comment/MCommentParam.cs#L3-L17)
-- [MCommentOut.cs](file://SpeedRunners.API/SpeedRunners.Model/Comment/MCommentOut.cs#L3-L11)
-- [MNotification.cs](file://SpeedRunners.API/SpeedRunners.Model/User/MNotification.cs#L5-L144)
+- [MCommentParam.cs:3-17](file://SpeedRunners.API/SpeedRunners.Model/Comment/MCommentParam.cs#L3-L17)
+- [MCommentOut.cs:3-11](file://SpeedRunners.API/SpeedRunners.Model/Comment/MCommentOut.cs#L3-L11)
+- [MNotification.cs:5-144](file://SpeedRunners.API/SpeedRunners.Model/User/MNotification.cs#L5-L144)
+
+## 国际化支持
+
+### 本地化配置
+
+系统现已完全支持22种语言的国际化本地化，通过以下组件实现：
+
+#### 启动配置
+- **ResourcesPath**: 设置资源文件路径为 "Resources"
+- **AddLocalization**: 注册本地化服务
+- **UseHeaderRequestLocalization**: 启用基于请求头的本地化中间件
+
+#### 文化提供程序
+- **LocaleHeaderRequestCultureProvider**: 自定义文化提供程序
+- 支持通过 `locale` 请求头指定语言
+- 默认支持中文(zh)和英文(en)，其他语言作为占位符
+
+#### 多语言资源文件
+系统包含以下语言的资源文件：
+- 中文 (zh): ProfileBLL.zh.resx, UserBLL.zh.resx, SRLabTokenAuthMidd.zh.resx
+- 德语 (de): ProfileBLL.de.resx, UserBLL.de.resx, SRLabTokenAuthMidd.de.resx
+- 英语 (en): ProfileBLL.cs.resx, UserBLL.cs.resx, SRLabTokenAuthMidd.cs.resx
+- 西班牙语 (es-es): ProfileBLL.es-es.resx, UserBLL.es-es.resx
+- 法语 (fr): ProfileBLL.fr.resx, UserBLL.fr.resx
+- 匈牙利语 (hu): ProfileBLL.hu.resx, UserBLL.hu.resx
+- 意大利语 (it): ProfileBLL.it.resx, UserBLL.it.resx
+- 日语 (ja): ProfileBLL.ja.resx, UserBLL.ja.resx
+- 韩语 (ko): ProfileBLL.ko.resx, UserBLL.ko.resx
+- 荷兰语 (nl): ProfileBLL.nl.resx, UserBLL.nl.resx
+- 挪威语 (no): ProfileBLL.no.resx, UserBLL.no.resx
+- 波兰语 (pl): ProfileBLL.pl.resx, UserBLL.pl.resx
+- 巴西葡萄牙语 (pt-br): ProfileBLL.pt-br.resx, UserBLL.pt-br.resx
+- 罗马尼亚语 (ro): ProfileBLL.ro.resx, UserBLL.ro.resx
+- 俄语 (ru): ProfileBLL.ru.resx, UserBLL.ru.resx
+- 土耳其语 (tr): ProfileBLL.tr.resx, UserBLL.tr.resx
+- 乌克兰语 (uk): ProfileBLL.uk.resx, UserBLL.uk.resx
+
+### 本地化使用示例
+
+#### 在业务逻辑中使用本地化
+```csharp
+// ProfileBLL.cs 中的本地化使用
+string rankName = GetRankName(playerInfo.RankLevel, localizer);
+stats.Add(new MGameStat { Name = localizer["rank"], Value = rankName });
+stats.Add(new MGameStat { Name = localizer["score"], Value = playerInfo.RankScore.Value.ToString("N0") });
+```
+
+#### 在资源文件中定义本地化键
+```xml
+<data name="rank" xml:space="preserve">
+  <value>段位</value>
+</data>
+<data name="score" xml:space="preserve">
+  <value>天梯分</value>
+</data>
+```
+
+### 语言支持矩阵
+
+| 语言代码 | 语言名称 | 资源文件数量 |
+|---------|----------|-------------|
+| zh | 中文 | 3个 |
+| de | 德语 | 3个 |
+| en | 英语 | 3个 |
+| es-es | 西班牙语 | 2个 |
+| fr | 法语 | 2个 |
+| hu | 匈牙利语 | 2个 |
+| it | 意大利语 | 2个 |
+| ja | 日语 | 2个 |
+| ko | 韩语 | 2个 |
+| nl | 荷兰语 | 2个 |
+| no | 挪威语 | 2个 |
+| pl | 波兰语 | 2个 |
+| pt-br | 巴西葡萄牙语 | 2个 |
+| ro | 罗马尼亚语 | 2个 |
+| ru | 俄语 | 2个 |
+| tr | 土耳其语 | 2个 |
+| uk | 乌克兰语 | 2个 |
+
+**章节来源**
+- [Startup.cs:63-82](file://SpeedRunners.API/SpeedRunners/Startup.cs#L63-L82)
+- [LocaleHeaderRequestCultureProvider.cs:1-17](file://SpeedRunners.API/SpeedRunners/Service/LocaleHeaderRequestCultureProvider.cs#L1-L17)
+- [ProfileBLL.cs:77-200](file://SpeedRunners.API/SpeedRunners.BLL/ProfileBLL.cs#L77-L200)
+- [ProfileBLL.cs.resx:61-115](file://SpeedRunners.API/SpeedRunners.BLL/Resources/ProfileBLL.cs.resx#L61-L115)
+- [UserBLL.cs.resx:61-76](file://SpeedRunners.API/SpeedRunners.BLL/Resources/UserBLL.cs.resx#L61-L76)
 
 ## 通知机制详解
 
@@ -413,7 +533,7 @@ Skip --> End
 ```
 
 **图表来源**
-- [NotificationBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L47-L48)
+- [NotificationBLL.cs:47-48](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L47-L48)
 
 ### 通知存储和查询
 
@@ -433,9 +553,14 @@ Skip --> End
 - 支持定时任务自动清理历史通知
 - 保持数据库表的整洁和性能
 
+**多语言通知支持**
+- 通知内容支持22种语言本地化
+- 通知标题和消息根据用户语言环境动态选择
+- 通知模板支持语言特定的格式化
+
 **章节来源**
-- [NotificationBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L39-L96)
-- [NotificationController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L15-L45)
+- [NotificationBLL.cs:39-96](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L39-L96)
+- [NotificationController.cs:15-45](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L15-L45)
 
 ## 依赖关系分析
 
@@ -454,11 +579,13 @@ NotificationBLL
 RankBLL
 CommentDAL
 NotificationDAL
-MComment
-MCommentParam
-MCommentOut
-MCommentLike
-MNotification
+ProfileBLL
+LocaleMiddleware
+LocaleProvider
+end
+subgraph "国际化资源"
+ResxFiles
+IStringLocalizer
 end
 CommentController --> CommentBLL
 NotificationController --> NotificationBLL
@@ -466,6 +593,9 @@ CommentBLL --> CommentDAL
 CommentBLL --> NotificationBLL
 CommentBLL --> RankBLL
 NotificationBLL --> NotificationDAL
+ProfileBLL --> ResxFiles
+ProfileBLL --> IStringLocalizer
+LocaleMiddleware --> LocaleProvider
 CommentDAL --> MySQL
 NotificationDAL --> MySQL
 CommentBLL --> Dapper
@@ -475,14 +605,16 @@ NotificationController --> ASPNET
 ```
 
 **图表来源**
-- [CommentController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/CommentController.cs#L1-L8)
-- [NotificationController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L1-L8)
-- [CommentBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L1-L5)
-- [NotificationBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L1-L5)
+- [CommentController.cs:1-8](file://SpeedRunners.API/SpeedRunners/Controllers/CommentController.cs#L1-L8)
+- [NotificationController.cs:1-8](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L1-L8)
+- [CommentBLL.cs:1-5](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L1-L5)
+- [NotificationBLL.cs:1-5](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L1-L5)
+- [Startup.cs:63-82](file://SpeedRunners.API/SpeedRunners/Startup.cs#L63-L82)
 
 **章节来源**
-- [CommentBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L1-L18)
-- [NotificationBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L1-L107)
+- [CommentBLL.cs:1-18](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L1-L18)
+- [NotificationBLL.cs:1-107](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L1-L107)
+- [Startup.cs:63-82](file://SpeedRunners.API/SpeedRunners/Startup.cs#L63-L82)
 
 ## 性能考虑
 
@@ -501,6 +633,11 @@ NotificationController --> ASPNET
 - **去重机制**: 24小时内相同用户相同类型的重复通知会被跳过
 - **批量清理**: 定期清理过期通知，避免表膨胀
 - **分页查询**: 通知列表支持分页，避免一次性加载大量数据
+
+### 国际化性能优化
+- **资源文件预加载**: 启动时预加载常用语言资源
+- **缓存策略**: 本地化字符串支持内存缓存
+- **按需加载**: 仅在需要时加载特定语言的资源文件
 
 ## 故障排除指南
 
@@ -531,10 +668,21 @@ NotificationController --> ASPNET
 - **原因**: 时间范围检查或用户ID检查逻辑异常
 - **解决方案**: 验证 24 小时时间窗口和用户ID匹配逻辑
 
+#### 国际化显示问题
+- **问题**: 页面显示为英文而非预期语言
+- **原因**: locale 请求头未正确设置或资源文件缺失
+- **解决方案**: 检查请求头设置和对应语言的资源文件完整性
+
+#### 本地化资源加载失败
+- **问题**: 本地化字符串显示为键名而非翻译文本
+- **原因**: IStringLocalizer 未正确注入或资源文件格式错误
+- **解决方案**: 验证依赖注入配置和RESX文件格式
+
 **章节来源**
-- [CommentBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L116-L120)
-- [CommentBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L46-L49)
-- [NotificationBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L47-L48)
+- [CommentBLL.cs:116-120](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L116-L120)
+- [CommentBLL.cs:46-49](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs#L46-L49)
+- [NotificationBLL.cs:47-48](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L47-L48)
+- [Startup.cs:63-82](file://SpeedRunners.API/SpeedRunners/Startup.cs#L63-L82)
 
 ## 总结
 
@@ -544,6 +692,7 @@ SpeedRunnersLab 评论系统是一个设计良好的完整解决方案，具有�
 - **清晰的架构层次**: 三层架构确保了代码的可维护性和可测试性
 - **完善的业务逻辑**: 支持多级评论、点赞、通知等核心功能
 - **智能通知机制**: 支持回复和点赞的实时通知，包含去重和频率控制
+- **全面的国际化支持**: 支持22种语言的本地化，为全球用户提供多语言体验
 - **合理的数据模型**: 清晰的实体关系和参数设计
 - **性能优化**: 使用 Dapper 和批量查询提升性能
 
@@ -554,6 +703,7 @@ SpeedRunnersLab 评论系统是一个设计良好的完整解决方案，具有�
 - 智能通知系统（去重和频率控制）
 - 管理员权限控制
 - 通知清理和管理功能
+- 多语言本地化支持
 
 ### 扩展建议
 1. 添加评论搜索功能
@@ -561,5 +711,7 @@ SpeedRunnersLab 评论系统是一个设计良好的完整解决方案，具有�
 3. 增加评论审核流程
 4. 优化图片和多媒体内容支持
 5. 扩展通知渠道（邮件、站内信等）
+6. 增加更多语言的本地化支持
+7. 实现动态语言切换功能
 
-该评论系统为 SpeedRunners 社区提供了坚实的技术基础，能够满足游戏社区的各种互动需求。新增的通知机制进一步增强了用户体验，使社区互动更加及时和有效。
+该评论系统为 SpeedRunners 社区提供了坚实的技术基础，能够满足游戏社区的各种互动需求。新增的通知机制进一步增强了用户体验，使社区互动更加及时和有效。完整的国际化支持确保了全球用户的本地化体验，为系统的全球化发展奠定了坚实基础。

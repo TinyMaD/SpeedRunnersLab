@@ -235,6 +235,8 @@
     "initSucc": "ユーザーデータの初期化に成功"
   },
   "privacy": {
+    "showProfile": "プロフィールページ",
+    "showProfileDetail": "他のユーザーがあなたのプロフィールページにアクセスすることを許可",
     "publishState": "Steamステータスを公開",
     "publishStateDetail": "誰でもあなたのSteamステータスとSRをプレイ中かどうかが見られます",
     "publishPlaytime": "SRの最近のプレイ時間を公開",
@@ -247,6 +249,8 @@
     "publishTotalScoreDetail": "ランクページのリストに表示"
   },
   "profile": {
+    "privateProfile": "プライベートプロフィール",
+    "privateProfileDesc": "このユーザーはプロフィールを非公開に設定しています",
     "comments": "コメント",
     "commentsComingSoon": "コメント機能は近日公開",
     "scoreHeatmap": "ポイント活動",

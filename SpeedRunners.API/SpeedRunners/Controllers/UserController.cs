@@ -39,6 +39,10 @@ namespace SpeedRunners.Controllers
         [HttpPost]
         public void SetShowAddScore([FromBody] dynamic obj) => BLL.SetPrivacySettings("ShowAddScore", (int)obj.value.Value);
 
+        [User]
+        [HttpPost]
+        public void SetShowProfile([FromBody] dynamic obj) => BLL.SetPrivacySettings("ShowProfile", (int)obj.value.Value);
+
         [HttpPost]
         public async Task<MResponse> Login([FromBody] dynamic data)
         {

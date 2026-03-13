@@ -235,6 +235,8 @@
     "initSucc": "Данные пользователя успешно инициализированы"
   },
   "privacy": {
+    "showProfile": "Страница профиля",
+    "showProfileDetail": "Разрешить другим пользователям доступ к вашей странице профиля",
     "publishState": "Опубликовать статус Steam",
     "publishStateDetail": "Все могут видеть ваш статус Steam и играете ли вы в SR",
     "publishPlaytime": "Опубликовать последнее время игры SR",
@@ -247,6 +249,8 @@
     "publishTotalScoreDetail": "Отображается в списке на странице рейтинга"
   },
   "profile": {
+    "privateProfile": "Приватный профиль",
+    "privateProfileDesc": "Этот пользователь установил профиль как приватный",
     "comments": "Комментарии",
     "commentsComingSoon": "Функция комментариев скоро появится",
     "scoreHeatmap": "Активность очков",

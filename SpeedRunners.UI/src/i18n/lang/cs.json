@@ -235,6 +235,8 @@
     "initSucc": "Uživatelská data úspěšně inicializována"
   },
   "privacy": {
+    "showProfile": "Stránka Profilu",
+    "showProfileDetail": "Umožnit ostatním uživatelům přístup na vaši profilovou stránku",
     "publishState": "Zveřejnit stav Steam",
     "publishStateDetail": "Všichni mohou vidět váš stav Steam a zda hrajete SR",
     "publishPlaytime": "Zveřejnit nedávný čas hraní SR",
@@ -247,6 +249,8 @@
     "publishTotalScoreDetail": "Zobrazeno v seznamu na stránce žebříčku"
   },
   "profile": {
+    "privateProfile": "Soukromý Profil",
+    "privateProfileDesc": "Tento uživatel si nastavil profil jako soukromý",
     "comments": "Komentáře",
     "commentsComingSoon": "Funkce komentářů již brzy",
     "scoreHeatmap": "Aktivita bodů",

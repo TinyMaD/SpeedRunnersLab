@@ -215,6 +215,8 @@
     "initSucc": "Ініціалізація успішна"
   },
   "privacy": {
+    "showProfile": "Сторінка профілю",
+    "showProfileDetail": "Дозволити іншим користувачам доступ до вашої сторінки профілю",
     "publishState": "Публікувати статус Steam",
     "publishStateDetail": "Всі можуть бачити ваш статус Steam",
     "publishPlaytime": "Публікувати нещодавній час гри SR",
@@ -227,6 +229,8 @@
     "publishTotalScoreDetail": "Відображається у списку рейтингу"
   },
   "profile": {
+    "privateProfile": "Приватний профіль",
+    "privateProfileDesc": "Цей користувач встановив профіль як приватний",
     "comments": "Коментарі",
     "commentsComingSoon": "Функція коментарів скоро буде",
     "scoreHeatmap": "Активність очок",

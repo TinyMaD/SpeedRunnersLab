@@ -235,6 +235,8 @@
     "initSucc": "사용자 데이터 초기화 성공"
   },
   "privacy": {
+    "showProfile": "프로필 페이지",
+    "showProfileDetail": "다른 사용자가 프로필 페이지에 액세스하도록 허용",
     "publishState": "Steam 상태 공개",
     "publishStateDetail": "모든 사람이 Steam 상태와 SR을 플레이 중인지 볼 수 있습니다",
     "publishPlaytime": "SR 최근 플레이 시간 공개",
@@ -247,6 +249,8 @@
     "publishTotalScoreDetail": "랭킹 페이지 목록에 표시"
   },
   "profile": {
+    "privateProfile": "비공개 프로필",
+    "privateProfileDesc": "이 사용자는 프로필을 비공개로 설정했습니다",
     "comments": "댓글",
     "commentsComingSoon": "댓글 기능 곧 출시",
     "scoreHeatmap": "포인트 활동",

@@ -235,6 +235,8 @@
     "initSucc": "初始化用户数据成功"
   },
   "privacy": {
+    "showProfile": "个人主页",
+    "showProfileDetail": "开启后其他用户可以访问你的个人主页",
     "publishState": "公开Steam状态",
     "publishStateDetail": "所有人能看到你的Steam状态，以及是否正在玩SR",
     "publishPlaytime": "公开SR最近游戏时长",
@@ -247,6 +249,8 @@
     "publishTotalScoreDetail": "展示在SR总分排行榜中"
   },
   "profile": {
+    "privateProfile": "隐私主页",
+    "privateProfileDesc": "该用户已设置个人主页为私密状态",
     "comments": "评论区",
     "commentsComingSoon": "评论功能即将上线",
     "scoreHeatmap": "天梯分变化",

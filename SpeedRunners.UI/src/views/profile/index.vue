@@ -63,7 +63,20 @@
 
       <!-- 主内容区 -->
       <template v-else-if="profileData">
-        <v-row>
+        <!-- 隐私主页提示 -->
+        <v-card v-if="profileData.isPrivate" flat tile class="glass-card not-found-card">
+          <v-card-text class="text-center py-12">
+            <v-icon size="64" color="grey">mdi-lock</v-icon>
+            <h3 class="mt-4">{{ $t('profile.privateProfile') }}</h3>
+            <p class="mt-2 text--secondary">{{ $t('profile.privateProfileDesc') }}</p>
+            <v-btn color="primary" to="/" class="mt-4">
+              {{ $t('404.back') }}
+            </v-btn>
+          </v-card-text>
+        </v-card>
+
+        <!-- 正常内容 -->
+        <v-row v-else>
           <!-- 顶部融合卡片：玩家信息 + 核心数据 -->
           <v-col cols="12" class="pt-0 pb-1 px-1">
             <v-card flat tile class="glass-card">

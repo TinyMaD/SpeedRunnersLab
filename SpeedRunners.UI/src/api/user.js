@@ -75,3 +75,11 @@ export function setShowAddScore(value) {
     data: { value }
   });
 }
+
+export function setShowProfile(value) {
+  return request({
+    url: "/user/setShowProfile",
+    method: "post",
+    data: { value }
+  });
+}

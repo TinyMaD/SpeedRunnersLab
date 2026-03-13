@@ -12,7 +12,26 @@
       <v-list
         three-line
       >
+        <!-- 个人主页开关 -->
         <v-list-item class="mx-4 mt-1">
+          <v-list-item-content>
+            <v-list-item-title>{{ $t('privacy.showProfile') }}</v-list-item-title>
+            <v-list-item-subtitle>{{ $t('privacy.showProfileDetail') }}</v-list-item-subtitle>
+          </v-list-item-content>
+          <v-list-item-action>
+            <v-switch
+              v-model="settings.showProfile"
+              color="primary"
+              :false-value="0"
+              :true-value="1"
+              @change="changeShowProfile"
+            />
+          </v-list-item-action>
+        </v-list-item>
+
+        <v-divider />
+
+        <v-list-item class="mx-4" :disabled="disabledShowProfile">
           <v-list-item-content>
             <v-list-item-title>{{ $t('privacy.publishState') }}</v-list-item-title>
             <v-list-item-subtitle>{{ $t('privacy.publishStateDetail') }}</v-list-item-subtitle>
@@ -23,11 +42,12 @@
               color="primary"
               :false-value="-1"
               :true-value="0"
+              :disabled="disabledShowProfile"
               @change="changeState"
             />
           </v-list-item-action>
         </v-list-item>
-        <v-list-item class="mx-4">
+        <v-list-item class="mx-4" :disabled="disabledShowProfile">
           <v-list-item-content>
             <v-list-item-title>{{ $t('privacy.publishPlaytime') }}</v-list-item-title>
             <v-list-item-subtitle>{{ $t('privacy.publishPlaytimeDetail') }}</v-list-item-subtitle>
@@ -38,6 +58,7 @@
               :false-value="0"
               :true-value="1"
               color="primary"
+              :disabled="disabledShowProfile"
               @change="changeShowWeekPlayTime"
             />
           </v-list-item-action>
@@ -45,7 +66,7 @@
 
         <v-divider />
 
-        <v-list-item class="mx-4">
+        <v-list-item class="mx-4" :disabled="disabledShowProfile">
           <v-list-item-content>
             <v-list-item-title>{{ $t('privacy.allowGetRankScore') }}</v-list-item-title>
             <v-list-item-subtitle>{{ $t('privacy.allowGetRankScoreDetail') }}</v-list-item-subtitle>
@@ -56,11 +77,12 @@
               :false-value="0"
               :true-value="1"
               color="primary"
+              :disabled="disabledShowProfile"
               @change="changeRequestRankData"
             />
           </v-list-item-action>
         </v-list-item>
-        <v-list-item class="mr-4 ml-16">
+        <v-list-item class="mr-4 ml-16" :disabled="disabledRequestRankData">
           <v-list-item-content>
             <v-list-item-title>{{ $t('privacy.publishAddScore') }}</v-list-item-title>
             <v-list-item-subtitle>{{ $t('privacy.publishAddScoreDetail') }}</v-list-item-subtitle>
@@ -76,7 +98,7 @@
             />
           </v-list-item-action>
         </v-list-item>
-        <v-list-item class="mr-4 ml-16">
+        <v-list-item class="mr-4 ml-16" :disabled="disabledRequestRankData">
           <v-list-item-content>
             <v-list-item-title>{{ $t('privacy.publishTotalScore') }}</v-list-item-title>
             <v-list-item-subtitle>{{ $t('privacy.publishTotalScoreDetail') }}</v-list-item-subtitle>
@@ -97,7 +119,7 @@
   </v-dialog>
 </template>
 <script>
-import { getPrivacySettings, setRankType, setRequestRankData, setShowAddScore, setShowWeekPlayTime, setState } from "@/api/user";
+import { getPrivacySettings, setRankType, setRequestRankData, setShowAddScore, setShowWeekPlayTime, setState, setShowProfile } from "@/api/user";
 export default {
   props: {
     visible: {
@@ -112,15 +134,19 @@ export default {
       rankType: 2,
       requestRankData: 0,
       showAddScore: 0,
-      showWeekPlayTime: 0
+      showWeekPlayTime: 0,
+      showProfile: 1
     }
   }),
   computed: {
     computedSettings() {
       return { ...this.settings };
     },
+    disabledShowProfile() {
+      return this.settings.showProfile === 0;
+    },
     disabledRequestRankData() {
-      return this.settings.requestRankData === 0;
+      return this.settings.showProfile === 0 || this.settings.requestRankData === 0;
     }
   },
   watch: {
@@ -131,6 +157,11 @@ export default {
     }
   },
   methods: {
+    changeShowProfile(value) {
+      setShowProfile(value).then(response => {
+        this.$toast.success(this.$t("common.success"));
+      });
+    },
     changeState(value) {
       setState(value).then(response => {
         this.$toast.success(this.$t("common.success"));

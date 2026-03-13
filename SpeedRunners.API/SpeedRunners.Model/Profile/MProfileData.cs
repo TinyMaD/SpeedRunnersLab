@@ -53,6 +53,11 @@ namespace SpeedRunners.Model.Profile
         /// 游戏统计数据
         /// </summary>
         public List<MGameStat> Stats { get; set; }
+
+        /// <summary>
+        /// 是否为隐私主页（主页关闭时为true）
+        /// </summary>
+        public bool IsPrivate { get; set; }
     }
 
     /// <summary>

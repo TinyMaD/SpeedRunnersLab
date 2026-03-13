@@ -215,6 +215,8 @@
     "initSucc": "Başlatma başarılı"
   },
   "privacy": {
+    "showProfile": "Profil Sayfası",
+    "showProfileDetail": "Diğer kullanıcıların profil sayfanıza erişmesine izin ver",
     "publishState": "Steam durumunu yayınla",
     "publishStateDetail": "Herkes Steam durumunuzu görebilir",
     "publishPlaytime": "Son SR oyun süresini yayınla",
@@ -227,6 +229,8 @@
     "publishTotalScoreDetail": "Sıralama listesinde gösterilir"
   },
   "profile": {
+    "privateProfile": "Özel Profil",
+    "privateProfileDesc": "Bu kullanıcı profilini özel olarak ayarladı",
     "comments": "Yorumlar",
     "commentsComingSoon": "Yorum özelliği yakında",
     "scoreHeatmap": "Puan aktivitesi",

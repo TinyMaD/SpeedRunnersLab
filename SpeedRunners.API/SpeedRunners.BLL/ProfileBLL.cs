@@ -1,6 +1,7 @@
 using SpeedRunners.DAL;
 using SpeedRunners.Model.Profile;
 using SpeedRunners.Model.Rank;
+using SpeedRunners.Model.User;
 using SpeedRunners.Utils;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,9 @@ namespace SpeedRunners.BLL
         /// <summary>
         /// 获取个人主页数据
         /// </summary>
-        public async Task<MProfileData> GetProfileData(string steamId)
+        /// <param name="steamId">被访问用户的Steam ID</param>
+        /// <param name="visitorId">访问者的Steam ID（未登录时为null）</param>
+        public async Task<MProfileData> GetProfileData(string steamId, string visitorId = null)
         {
             // 从数据库获取基础信息
             MRankInfo playerInfo = BeginDb(DAL => DAL.GetPlayerInfo(steamId));
@@ -46,11 +49,12 @@ namespace SpeedRunners.BLL
                         State = (int)steamPlayer.UserStatus,
                         GameID = steamPlayer.PlayingGameId,
                         RankLevel = 0,
-                        RankScore = 0,
+                        RankScore = null,
                         TotalPlaytime = 0,
                         Past2WeeksPlaytime = 0,
                         Past2WeeksScore = 0,
-                        Stats = new List<MGameStat>()
+                        Stats = new List<MGameStat>(),
+                        IsPrivate = false
                     };
                 }
                 catch
@@ -59,22 +63,37 @@ namespace SpeedRunners.BLL
                 }
             }
 
-            // 检查隐私设置
-            bool isPublic = BeginDb(DAL => DAL.CheckPrivacy(steamId));
+            // 判断是否本人
+            bool isOwner = !string.IsNullOrEmpty(visitorId) && steamId == visitorId;
 
-            // 获取最近两周新增分数
-            decimal past2WeeksScore = 0;
-            if (isPublic)
+            // 获取隐私设置
+            MPrivacySettings privacySettings = BeginDb(DAL => DAL.GetPrivacySettings(steamId));
+
+            // 本人访问：返回完整数据
+            if (isOwner)
             {
-                past2WeeksScore = BeginDb(DAL => DAL.GetPast2WeeksScore(steamId));
+                return BuildFullProfileData(playerInfo, privacySettings);
             }
 
-            // 计算游戏时长（分钟转小时）
+            // 非本人访问：检查个人主页开关
+            if (privacySettings.ShowProfile == 0)
+            {
+                // 主页关闭：返回最小化数据
+                return BuildMinimalProfileData(playerInfo);
+            }
+
+            // 主页开启：根据隐私设置过滤数据
+            return BuildFilteredProfileData(playerInfo, privacySettings);
+        }
+
+        /// <summary>
+        /// 构建完整数据（本人访问）
+        /// </summary>
+        private MProfileData BuildFullProfileData(MRankInfo playerInfo, MPrivacySettings privacySettings)
+        {
+            decimal past2WeeksScore = BeginDb(DAL => DAL.GetPast2WeeksScore(playerInfo.PlatformID));
             decimal totalPlaytime = Math.Round((decimal)playerInfo.PlayTime / 60, 1);
             decimal past2WeeksPlaytime = Math.Round((decimal)playerInfo.WeekPlayTime / 60, 1);
-
-            // 构建游戏统计
-            var stats = BuildGameStats(playerInfo, Localizer);
 
             return new MProfileData
             {
@@ -86,22 +105,116 @@ namespace SpeedRunners.BLL
                 State = playerInfo.State,
                 GameID = playerInfo.GameID,
                 RankLevel = playerInfo.RankLevel,
-                RankScore = isPublic ? playerInfo.RankScore : null,
+                RankScore = playerInfo.RankScore,
                 TotalPlaytime = totalPlaytime,
                 Past2WeeksPlaytime = past2WeeksPlaytime,
                 Past2WeeksScore = past2WeeksScore,
-                Stats = stats
+                Stats = BuildGameStats(playerInfo, null), // 本人访问不过滤
+                IsPrivate = false
+            };
+        }
+
+        /// <summary>
+        /// 构建最小化数据（主页关闭）
+        /// </summary>
+        private MProfileData BuildMinimalProfileData(MRankInfo playerInfo)
+        {
+            return new MProfileData
+            {
+                PlatformID = playerInfo.PlatformID,
+                PersonaName = playerInfo.PersonaName,
+                AvatarS = playerInfo.AvatarS,
+                AvatarM = playerInfo.AvatarM,
+                AvatarL = playerInfo.AvatarL,
+                State = 0, // 隐藏在线状态
+                GameID = null, // 隐藏当前游戏
+                RankLevel = 0,
+                RankScore = null,
+                TotalPlaytime = 0,
+                Past2WeeksPlaytime = 0,
+                Past2WeeksScore = 0,
+                Stats = new List<MGameStat>(),
+                IsPrivate = true
+            };
+        }
+
+        /// <summary>
+        /// 构建过滤后的数据（根据隐私设置）
+        /// </summary>
+        private MProfileData BuildFilteredProfileData(MRankInfo playerInfo, MPrivacySettings privacySettings)
+        {
+            decimal totalPlaytime = Math.Round((decimal)playerInfo.PlayTime / 60, 1);
+            decimal past2WeeksPlaytime = 0;
+            decimal past2WeeksScore = 0;
+
+            // ShowWeekPlayTime 控制最近两周游戏时长
+            if (privacySettings.ShowWeekPlayTime == 1)
+            {
+                past2WeeksPlaytime = Math.Round((decimal)playerInfo.WeekPlayTime / 60, 1);
+            }
+
+            // ShowAddScore 控制最近两周新增天梯分
+            if (privacySettings.ShowAddScore == 1)
+            {
+                past2WeeksScore = BeginDb(DAL => DAL.GetPast2WeeksScore(playerInfo.PlatformID));
+            }
+
+            // State 控制在线状态和当前游戏
+            int state = playerInfo.State;
+            string gameId = playerInfo.GameID;
+            if (privacySettings.State == -1)
+            {
+                state = 0; // 显示为离线
+                gameId = null;
+            }
+
+            // RequestRankData 控制天梯分、段位、排位场次
+            decimal? rankScore = playerInfo.RankScore;
+            int rankLevel = playerInfo.RankLevel;
+            if (privacySettings.RequestRankData == 0)
+            {
+                rankScore = null;
+                rankLevel = 0;
+            }
+
+            return new MProfileData
+            {
+                PlatformID = playerInfo.PlatformID,
+                PersonaName = playerInfo.PersonaName,
+                AvatarS = playerInfo.AvatarS,
+                AvatarM = playerInfo.AvatarM,
+                AvatarL = playerInfo.AvatarL,
+                State = state,
+                GameID = gameId,
+                RankLevel = rankLevel,
+                RankScore = rankScore,
+                TotalPlaytime = totalPlaytime,
+                Past2WeeksPlaytime = past2WeeksPlaytime,
+                Past2WeeksScore = past2WeeksScore,
+                Stats = BuildGameStats(playerInfo, privacySettings),
+                IsPrivate = false
             };
         }
 
         /// <summary>
         /// 获取每日天梯分历史记录
         /// </summary>
-        public List<MDailyScore> GetDailyScoreHistory(string steamId)
+        public List<MDailyScore> GetDailyScoreHistory(string steamId, string visitorId = null)
         {
-            // 检查隐私设置
-            bool isPublic = BeginDb(DAL => DAL.CheckPrivacy(steamId));
-            if (!isPublic)
+            // 判断是否本人
+            bool isOwner = !string.IsNullOrEmpty(visitorId) && steamId == visitorId;
+
+            // 本人访问：返回完整数据
+            if (isOwner)
+            {
+                return BeginDb(DAL => DAL.GetDailyScoreHistory(steamId));
+            }
+
+            // 非本人访问：检查隐私设置
+            MPrivacySettings privacySettings = BeginDb(DAL => DAL.GetPrivacySettings(steamId));
+
+            // 主页关闭或禁止获取天梯分：返回空列表
+            if (privacySettings.ShowProfile == 0 || privacySettings.RequestRankData == 0)
             {
                 return new List<MDailyScore>();
             }
@@ -112,8 +225,23 @@ namespace SpeedRunners.BLL
         /// <summary>
         /// 获取玩家成就
         /// </summary>
-        public async Task<List<MAchievement>> GetAchievements(string steamId)
+        public async Task<List<MAchievement>> GetAchievements(string steamId, string visitorId = null)
         {
+            // 判断是否本人
+            bool isOwner = !string.IsNullOrEmpty(visitorId) && steamId == visitorId;
+
+            // 非本人访问：检查隐私设置
+            if (!isOwner)
+            {
+                MPrivacySettings privacySettings = BeginDb(DAL => DAL.GetPrivacySettings(steamId));
+                
+                // 主页关闭：返回空列表
+                if (privacySettings.ShowProfile == 0)
+                {
+                    return new List<MAchievement>();
+                }
+            }
+
             // 从缓存服务获取SpeedRunners游戏的成就定义
             var achievementSchemas = await _achievementSchemaService.GetAchievementSchemaAsync();
             
@@ -170,33 +298,41 @@ namespace SpeedRunners.BLL
         /// <summary>
         /// 构建游戏统计数据
         /// </summary>
-        private List<MGameStat> BuildGameStats(MRankInfo playerInfo, Microsoft.Extensions.Localization.IStringLocalizer localizer)
+        /// <param name="playerInfo">玩家信息</param>
+        /// <param name="privacySettings">隐私设置（本人访问时为null）</param>
+        private List<MGameStat> BuildGameStats(MRankInfo playerInfo, MPrivacySettings privacySettings)
         {
             var stats = new List<MGameStat>();
+            bool isOwner = privacySettings == null;
 
-            // 段位
-            string rankName = GetRankName(playerInfo.RankLevel, localizer);
-            stats.Add(new MGameStat { Name = localizer["rank"], Value = rankName });
-
-            // 天梯分
-            if (playerInfo.RankScore.HasValue)
+            // 段位（受 RequestRankData 控制）
+            if (isOwner || privacySettings.RequestRankData == 1)
             {
-                stats.Add(new MGameStat { Name = localizer["score"], Value = playerInfo.RankScore.Value.ToString("N0") });
+                string rankName = GetRankName(playerInfo.RankLevel, Localizer);
+                stats.Add(new MGameStat { Name = Localizer["rank"], Value = rankName });
             }
 
-            // 排位场次
-            if (playerInfo.RankCount.HasValue)
+            // 天梯分已移除，统一从 MProfileData.RankScore 获取
+
+            // 排位场次（受 RequestRankData 控制）
+            if (isOwner || privacySettings.RequestRankData == 1)
             {
-                stats.Add(new MGameStat { Name = localizer["rankCount"], Value = playerInfo.RankCount.Value.ToString() });
+                if (playerInfo.RankCount.HasValue)
+                {
+                    stats.Add(new MGameStat { Name = Localizer["rankCount"], Value = playerInfo.RankCount.Value.ToString() });
+                }
             }
 
-            // 总游戏时长
+            // 总游戏时长（始终显示）
             var totalHours = Math.Round((decimal)playerInfo.PlayTime / 60, 1);
-            stats.Add(new MGameStat { Name = localizer["totalPlaytime"], Value = $"{totalHours} {localizer["hours"]}" });
+            stats.Add(new MGameStat { Name = Localizer["totalPlaytime"], Value = $"{totalHours} {Localizer["hours"]}" });
 
-            // 最近两周游戏时长
-            var weekHours = Math.Round((decimal)playerInfo.WeekPlayTime / 60, 1);
-            stats.Add(new MGameStat { Name = localizer["recentPlaytime"], Value = $"{weekHours} {localizer["hours"]}" });
+            // 最近两周游戏时长（受 ShowWeekPlayTime 控制）
+            if (isOwner || privacySettings.ShowWeekPlayTime == 1)
+            {
+                var weekHours = Math.Round((decimal)playerInfo.WeekPlayTime / 60, 1);
+                stats.Add(new MGameStat { Name = Localizer["recentPlaytime"], Value = $"{weekHours} {Localizer["hours"]}" });
+            }
 
             return stats;
         }

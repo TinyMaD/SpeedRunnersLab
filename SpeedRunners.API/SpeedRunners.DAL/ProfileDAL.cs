@@ -1,5 +1,6 @@
 using SpeedRunners.Model.Profile;
 using SpeedRunners.Model.Rank;
+using SpeedRunners.Model.User;
 using SpeedRunners.Utils;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,26 @@ namespace SpeedRunners.DAL
         {
             return Db.QueryFirstOrDefault<MRankInfo>(
                 @"SELECT * FROM RankInfo WHERE PlatformID = ?steamId",
+                new { steamId });
+        }
+
+        /// <summary>
+        /// 获取用户隐私设置
+        /// </summary>
+        public MPrivacySettings GetPrivacySettings(string steamId)
+        {
+            return Db.QueryFirstOrDefault<MPrivacySettings>(
+                $@"SELECT
+                     a.PlatformID,
+                     CASE WHEN a.State = -1 THEN -1 ELSE 0 END AS State,
+                     a.RankType,
+                     IFNULL(b.ShowProfile, 1) ShowProfile,
+                     IFNULL(b.RequestRankData, 1) RequestRankData,
+                     IFNULL(b.ShowAddScore, 1) ShowAddScore,
+                     IFNULL(b.ShowWeekPlayTime, 1) ShowWeekPlayTime
+                    FROM RankInfo a
+                    LEFT JOIN PrivacySettings b ON a.PlatformID = b.PlatformID
+                    WHERE a.PlatformID = ?steamId",
                 new { steamId });
         }
 
@@ -108,8 +129,9 @@ namespace SpeedRunners.DAL
         }
 
         /// <summary>
-        /// 检查隐私设置
+        /// 检查隐私设置（已废弃，请使用 GetPrivacySettings）
         /// </summary>
+        [Obsolete("Use GetPrivacySettings instead")]
         public bool CheckPrivacy(string steamId)
         {
             var settings = Db.QueryFirstOrDefault<int?>(
