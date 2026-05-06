@@ -6,9 +6,9 @@
   "scripts": {
     "test:unit": "jest --clearCache && vue-cli-service test:unit",
     "lint": "eslint --ext .js,.vue src",
-    "build:prod": "vue-cli-service build",
-    "build:stage": "vue-cli-service build --mode staging",
-    "dev": "vue-cli-service serve --open",
+    "build:prod": "vue-cli-service build --openssl-legacy-provider",
+    "build:stage": "vue-cli-service build --mode staging --openssl-legacy-provider",
+    "dev": "vue-cli-service serve --open --openssl-legacy-provider",
     "preview": "node build/index.js --preview",
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
   },

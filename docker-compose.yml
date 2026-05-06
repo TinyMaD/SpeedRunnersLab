@@ -20,6 +20,8 @@ services:
   srlab.api:
     build: ./SpeedRunners.API/
     container_name: srlab-api
+    volumes:
+      - ./SpeedRunners.API/Logs:/app/Logs
     restart: always
     environment:
       - TZ=Asia/Shanghai
