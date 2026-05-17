@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
-# ECS 一键初始化脚本：把当前手动维护的 srlab 目录改造成可被 CI 自动部署的状态
+# ECS 一键初始化脚本（ghcr.io 方案）
 #
 # 用法（SSH 进 ECS 后执行）：
 #   cd /root/home/srlab
-#   bash scripts/setup-ecs.sh
-# 或在线一行版：
-#   curl -fsSL https://raw.githubusercontent.com/<你的GH用户>/<仓库>/master/scripts/setup-ecs.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/TinyMaD/SpeedRunnersLab/master/scripts/setup-ecs.sh | bash
 
 set -e
 
@@ -15,27 +13,31 @@ ok()   { echo -e "  ${C_GREEN}✓${C_RESET} $1"; }
 warn() { echo -e "  ${C_YELLOW}⚠${C_RESET} $1"; }
 err()  { echo -e "  ${C_RED}✗${C_RESET} $1" >&2; }
 
+# 仓库相关常量
+GIT_URL="https://github.com/TinyMaD/SpeedRunnersLab.git"
+GHCR_OWNER="tinymad"  # ghcr.io 上小写
+EXPECTED_DIR="/root/home/srlab"
+
 cat <<'BANNER'
 
 ╔══════════════════════════════════════════════════════════╗
-║   SpeedRunnersLab ECS 一键初始化                            ║
+║   SpeedRunnersLab ECS 一键初始化（ghcr.io 方案）            ║
 ╚══════════════════════════════════════════════════════════╝
 
 BANNER
 
 # ----------------------------------------------------------
-step 1 5 "前置检查"
+step 1 4 "前置检查"
 # ----------------------------------------------------------
 
-EXPECTED_DIR="/root/home/srlab"
 if [ "$(pwd)" != "$EXPECTED_DIR" ]; then
-    err "期望在 $EXPECTED_DIR 执行，当前在 $(pwd)。请先 cd $EXPECTED_DIR"
+    err "期望在 $EXPECTED_DIR 执行，当前在 $(pwd)。先 cd $EXPECTED_DIR"
     exit 1
 fi
 ok "工作目录正确"
 
 if ! command -v docker >/dev/null 2>&1; then
-    err "docker 没装。请先装 docker 后再跑此脚本"
+    err "docker 没装"
     exit 1
 fi
 ok "docker 已安装"
@@ -47,20 +49,15 @@ fi
 ok "git 已安装"
 
 # ----------------------------------------------------------
-step 2 5 "把目录改造成 git 仓库"
+step 2 4 "把目录改造成 git 仓库"
 # ----------------------------------------------------------
 
 if [ -d ".git" ]; then
-    warn "已经是 git 仓库，跳过 init"
+    warn "已经是 git 仓库，跳过 init，直接拉最新"
+    git fetch origin master
+    git reset --hard origin/master
+    ok "已对齐 origin/master"
 else
-    echo "  当前目录会被绑定到一个 GitHub 仓库。"
-    read -r -p "  请输入仓库的 git URL (如 https://github.com/youruser/SpeedRunnersLab.git)：" GIT_URL
-    if [ -z "$GIT_URL" ]; then
-        err "URL 不能为空"
-        exit 1
-    fi
-
-    # 备份当前文件夹里 git 跟踪的文件，以防 reset 后丢失改动
     BACKUP_DIR="/root/srlab-backup-$(date +%Y%m%d-%H%M%S)"
     mkdir -p "$BACKUP_DIR"
     cp -r docker-compose.yml "$BACKUP_DIR/" 2>/dev/null || true
@@ -74,45 +71,36 @@ else
 fi
 
 # ----------------------------------------------------------
-step 3 5 "确保 docker compose v2 可用"
+step 3 4 "确保 docker compose v2 可用"
 # ----------------------------------------------------------
 
 if docker compose version >/dev/null 2>&1; then
     ok "docker compose v2 已就绪：$(docker compose version | head -1)"
 else
-    warn "未检测到 docker compose v2，正在安装 plugin..."
+    warn "未检测到 docker compose v2，安装中..."
     mkdir -p /usr/local/lib/docker/cli-plugins
     COMPOSE_VER="v2.27.0"
     curl -SL "https://github.com/docker/compose/releases/download/${COMPOSE_VER}/docker-compose-linux-x86_64" \
         -o /usr/local/lib/docker/cli-plugins/docker-compose
     chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
     if docker compose version >/dev/null 2>&1; then
-        ok "已安装 docker compose $(docker compose version | head -1)"
+        ok "已安装 $(docker compose version | head -1)"
     else
-        err "安装失败，请手动处理"
+        err "安装失败"
         exit 1
     fi
 fi
 
 # ----------------------------------------------------------
-step 4 5 "登录阿里云 ACR"
+step 4 4 "写入 .env 并检查敏感配置"
 # ----------------------------------------------------------
 
-read -r -p "  ACR Registry 地址 (如 registry.cn-hangzhou.aliyuncs.com)：" REGISTRY
-read -r -p "  ACR 用户名：" ACR_USER
-read -r -s -p "  ACR 密码：" ACR_PASS; echo
-
-echo "$ACR_PASS" | docker login "$REGISTRY" -u "$ACR_USER" --password-stdin
-if [ $? -eq 0 ]; then
-    ok "已登录 $REGISTRY（凭据保存在 ~/.docker/config.json）"
-else
-    err "登录失败，密码错误或网络不通"
-    exit 1
-fi
-
-# ----------------------------------------------------------
-step 5 5 "检查敏感配置文件是否就位"
-# ----------------------------------------------------------
+# 写入 .env，docker compose 会自动读
+cat > .env <<EOF
+GHCR_OWNER=$GHCR_OWNER
+IMAGE_TAG=latest
+EOF
+ok "已写入 .env (GHCR_OWNER=$GHCR_OWNER)"
 
 CHECK_FILES=(
     "./SpeedRunners.API/SpeedRunners/appsettings.Production.json"
@@ -128,24 +116,25 @@ for f in "${CHECK_FILES[@]}"; do
     fi
 done
 
-# 顺手清理旧的本地构建产物
+# 清旧的本地构建产物
 if [ -d "./SpeedRunners.UI/dist" ]; then
     rm -rf ./SpeedRunners.UI/dist
-    ok "已删除旧的 SpeedRunners.UI/dist（CI 镜像里自带 dist，不再需要挂载）"
+    ok "已删除旧的 SpeedRunners.UI/dist"
 fi
 
 # ----------------------------------------------------------
 echo
 if [ $MISSING -gt 0 ]; then
     echo -e "${C_YELLOW}╔══════════════════════════════════════════════════════════╗"
-    echo -e "║   ECS 初始化完成 ⚠  有 $MISSING 个敏感配置文件缺失！                  ║"
-    echo -e "║   请把它们从你本地或备份恢复到对应路径再触发 CI                ║"
+    echo -e "║   ECS 初始化完成 ⚠  有 $MISSING 个敏感配置文件缺失！                ║"
+    echo -e "║   请从本地或备份恢复后再触发 CI                              ║"
     echo -e "╚══════════════════════════════════════════════════════════╝${C_RESET}"
 else
     echo -e "${C_GREEN}╔══════════════════════════════════════════════════════════╗"
     echo -e "║   ECS 初始化完成 ✓                                          ║"
     echo -e "║                                                            ║"
-    echo -e "║   下一步：浏览器打开 GitHub 仓库 → Actions →                  ║"
+    echo -e "║   下一步：浏览器打开                                          ║"
+    echo -e "║   https://github.com/TinyMaD/SpeedRunnersLab/actions       ║"
     echo -e "║   选 'Build & Deploy to Production' → 点 'Run workflow'      ║"
     echo -e "║                                                            ║"
     echo -e "║   首次构建约 10~15 分钟，之后每次 3~5 分钟                     ║"

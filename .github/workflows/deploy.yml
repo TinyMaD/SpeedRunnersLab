@@ -10,8 +10,9 @@ on:
         default: ''
 
 env:
-  REGISTRY: ${{ secrets.ALIYUN_REGISTRY }}
-  NAMESPACE: ${{ secrets.ALIYUN_NAMESPACE }}
+  REGISTRY: ghcr.io
+  # ghcr.io 上用户名/组织名必须小写
+  OWNER: ${{ github.repository_owner }}
 
 jobs:
   # ---------- 决定本次构建用什么 tag ----------
@@ -19,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.set-tag.outputs.value }}
+      owner_lc: ${{ steps.lc.outputs.value }}
     steps:
       - uses: actions/checkout@v4
       - id: set-tag
@@ -29,68 +31,80 @@ jobs:
           else
             echo "value=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
           fi
+      - id: lc
+        shell: bash
+        run: echo "value=$(echo '${{ env.OWNER }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
 
-  # ---------- 三个镜像并行构建 + 推 ACR ----------
+  # ---------- 三个镜像并行构建 + 推 ghcr.io ----------
   build-api:
     needs: prepare
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v3
       - uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ secrets.ALIYUN_USERNAME }}
-          password: ${{ secrets.ALIYUN_PASSWORD }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v5
         with:
           context: ./SpeedRunners.API
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/srlab-api:latest
-            ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/srlab-api:${{ needs.prepare.outputs.tag }}
+            ${{ env.REGISTRY }}/${{ needs.prepare.outputs.owner_lc }}/srlab-api:latest
+            ${{ env.REGISTRY }}/${{ needs.prepare.outputs.owner_lc }}/srlab-api:${{ needs.prepare.outputs.tag }}
           cache-from: type=gha,scope=api
           cache-to: type=gha,scope=api,mode=max
 
   build-ui:
     needs: prepare
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v3
       - uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ secrets.ALIYUN_USERNAME }}
-          password: ${{ secrets.ALIYUN_PASSWORD }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v5
         with:
           context: ./SpeedRunners.UI
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/srlab-ui:latest
-            ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/srlab-ui:${{ needs.prepare.outputs.tag }}
+            ${{ env.REGISTRY }}/${{ needs.prepare.outputs.owner_lc }}/srlab-ui:latest
+            ${{ env.REGISTRY }}/${{ needs.prepare.outputs.owner_lc }}/srlab-ui:${{ needs.prepare.outputs.tag }}
           cache-from: type=gha,scope=ui
           cache-to: type=gha,scope=ui,mode=max
 
   build-scheduler:
     needs: prepare
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v3
       - uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
-          username: ${{ secrets.ALIYUN_USERNAME }}
-          password: ${{ secrets.ALIYUN_PASSWORD }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - uses: docker/build-push-action@v5
         with:
           context: ./SpeedRunners.Scheduler
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/srlab-scheduler:latest
-            ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/srlab-scheduler:${{ needs.prepare.outputs.tag }}
+            ${{ env.REGISTRY }}/${{ needs.prepare.outputs.owner_lc }}/srlab-scheduler:latest
+            ${{ env.REGISTRY }}/${{ needs.prepare.outputs.owner_lc }}/srlab-scheduler:${{ needs.prepare.outputs.tag }}
           cache-from: type=gha,scope=scheduler
           cache-to: type=gha,scope=scheduler,mode=max
 
@@ -103,13 +117,12 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         env:
           IMAGE_TAG: ${{ needs.prepare.outputs.tag }}
-          ALIYUN_REGISTRY: ${{ secrets.ALIYUN_REGISTRY }}
-          ALIYUN_NAMESPACE: ${{ secrets.ALIYUN_NAMESPACE }}
+          GHCR_OWNER: ${{ needs.prepare.outputs.owner_lc }}
         with:
           host: ${{ secrets.SSH_HOST }}
           username: root
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: IMAGE_TAG,ALIYUN_REGISTRY,ALIYUN_NAMESPACE
+          envs: IMAGE_TAG,GHCR_OWNER
           script: |
             set -e
             cd /root/home/srlab
@@ -118,7 +131,7 @@ jobs:
             git fetch origin master
             git reset --hard origin/master
 
-            echo "==> 部署 tag=$IMAGE_TAG"
+            echo "==> 部署 tag=$IMAGE_TAG owner=$GHCR_OWNER"
             docker compose -f docker-compose.prod.yml pull
             docker compose -f docker-compose.prod.yml up -d
 

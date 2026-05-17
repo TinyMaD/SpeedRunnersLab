@@ -1,10 +1,9 @@
-# 生产环境用：所有应用容器从镜像仓库拉，不再本地构建
-# ECS 上的部署命令：docker compose -f docker-compose.prod.yml up -d
+# 生产环境用：所有应用容器从 ghcr.io 拉，不再本地构建
+# ECS 上的部署命令：GHCR_OWNER=tinymad docker compose -f docker-compose.prod.yml up -d
 #
 # 依赖的环境变量（来自 .env 文件或 CI 注入）：
-#   ALIYUN_REGISTRY   例如 registry.cn-hangzhou.aliyuncs.com
-#   ALIYUN_NAMESPACE  例如 srlab
-#   IMAGE_TAG         例如 latest 或 a1b2c3d（git 短 sha）
+#   GHCR_OWNER   GitHub 用户名/组织名（小写），如 tinymad
+#   IMAGE_TAG    镜像标签，如 latest 或 a1b2c3d（git 短 sha）
 
 version: '3'
 
@@ -26,7 +25,7 @@ services:
       - srlab-net
 
   srlab.api:
-    image: ${ALIYUN_REGISTRY}/${ALIYUN_NAMESPACE}/srlab-api:${IMAGE_TAG:-latest}
+    image: ghcr.io/${GHCR_OWNER}/srlab-api:${IMAGE_TAG:-latest}
     container_name: srlab-api
     restart: always
     environment:
@@ -42,7 +41,7 @@ services:
       - host.docker.internal:host-gateway
 
   srlab.ui:
-    image: ${ALIYUN_REGISTRY}/${ALIYUN_NAMESPACE}/srlab-ui:${IMAGE_TAG:-latest}
+    image: ghcr.io/${GHCR_OWNER}/srlab-ui:${IMAGE_TAG:-latest}
     container_name: srlab-ui
     restart: always
     ports:
@@ -57,7 +56,7 @@ services:
       - srlab-net
 
   srlab.scheduler:
-    image: ${ALIYUN_REGISTRY}/${ALIYUN_NAMESPACE}/srlab-scheduler:${IMAGE_TAG:-latest}
+    image: ghcr.io/${GHCR_OWNER}/srlab-scheduler:${IMAGE_TAG:-latest}
     container_name: srlab-scheduler
     restart: always
     environment:
