@@ -31,14 +31,23 @@ namespace SpeedRunners.DAL
 
         public List<MRankInfo> GetRankList()
         {
-            var allList = GetAllRankList();
-
-            return allList.Where(x => x.RankType == 1).ToList();
+            return Db.Query<MRankInfo>($@"SELECT info.*
+                FROM RankInfo info
+                LEFT JOIN PrivacySettings ps ON ps.PlatformID = info.PlatformID
+                WHERE info.RankType = 1
+                  AND IFNULL(ps.ShowProfile, 1) = 1
+                  AND IFNULL(ps.RequestRankData, 1) = 1
+                ORDER BY info.RankScore DESC").ToList();
         }
 
         public List<MRankInfo> GetPlaySRList()
         {
-            return Db.Query<MRankInfo>($"SELECT * FROM RankInfo WHERE GameID = '207140' ORDER BY RankScore DESC").ToList();
+            return Db.Query<MRankInfo>($@"SELECT info.*
+                FROM RankInfo info
+                LEFT JOIN PrivacySettings ps ON ps.PlatformID = info.PlatformID
+                WHERE info.GameID = '207140'
+                  AND IFNULL(ps.ShowProfile, 1) = 1
+                ORDER BY info.RankScore DESC").ToList();
         }
 
         public List<MRankInfo> GetAddedChart()
@@ -72,8 +81,10 @@ namespace SpeedRunners.DAL
                                                 ) a 
                                                 LEFT JOIN RankInfo b ON a.PlatformID = b.PlatformID
                                                 LEFT JOIN PrivacySettings ps ON ps.PlatformID = a.PlatformID
-                                                WHERE b.RankScore - a.minScore > 0 
-                                                        AND (ISNULL(ps.ShowAddScore) OR ps.ShowAddScore = 1)
+                                                WHERE b.RankScore - a.minScore > 0
+                                                        AND IFNULL(ps.ShowProfile, 1) = 1
+                                                        AND IFNULL(ps.RequestRankData, 1) = 1
+                                                        AND IFNULL(ps.ShowAddScore, 1) = 1
                                                 ORDER BY RankScore DESC; ").ToList();
 
             HandleSameName(list);
@@ -82,10 +93,12 @@ namespace SpeedRunners.DAL
 
         public List<MRankInfo> GetHourChart()
         {
-            var list = Db.Query<MRankInfo>($@"SELECT info.PlatformID, info.PersonaName, info.WeekPlayTime, info.AvatarS 
+            var list = Db.Query<MRankInfo>($@"SELECT info.PlatformID, info.PersonaName, info.WeekPlayTime, info.AvatarS
                                             FROM RankInfo info
                                             LEFT JOIN PrivacySettings ps ON ps.PlatformID = info.PlatformID
-                                            WHERE info.WeekPlayTime > 0 AND (ISNULL(ps.ShowWeekPlayTime) OR ps.ShowWeekPlayTime = 1)
+                                            WHERE info.WeekPlayTime > 0
+                                              AND IFNULL(ps.ShowProfile, 1) = 1
+                                              AND IFNULL(ps.ShowWeekPlayTime, 1) = 1
                                             ORDER BY info.WeekPlayTime DESC").ToList();
             HandleSameName(list);
             return list;

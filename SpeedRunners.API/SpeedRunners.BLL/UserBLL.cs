@@ -68,7 +68,12 @@ namespace SpeedRunners.BLL
         /// <returns></returns>
         public MRankInfo GetInfo()
         {
-            return _rankBLL.GetAllRankList(new[] { CurrentUser.PlatformID }).FirstOrDefault();
+            var info = _rankBLL.GetAllRankList(new[] { CurrentUser.PlatformID }).FirstOrDefault();
+            if (info != null)
+            {
+                info.IsAdmin = AdminHelper.IsAdmin(CurrentUser.PlatformID);
+            }
+            return info;
         }
 
         public async Task<MResponse> Login(string query, string browser)

@@ -31,5 +31,10 @@ namespace SpeedRunners.Model.Rank
         public int WeekPlayTime { get; set; }
         public int PlayTime { get; set; }
         public int Participate { get; set; }
+
+        /// <summary>
+        /// 是否为管理员（非数据库字段，仅 GetInfo 返回当前登录用户时赋值）
+        /// </summary>
+        public bool IsAdmin { get; set; }
     }
 }

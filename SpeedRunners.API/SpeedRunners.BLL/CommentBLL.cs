@@ -115,7 +115,7 @@ namespace SpeedRunners.BLL
                 }
 
                 // 只有评论作者或管理员可以删除
-                if (comment.PlatformID != CurrentUser.PlatformID && CurrentUser.PlatformID != "76561198062688821")
+                if (comment.PlatformID != CurrentUser.PlatformID && !AdminHelper.IsAdmin(CurrentUser.PlatformID))
                 {
                     throw new Exception(Localizer["permission_error"] ?? "没有权限执行此操作");
                 }

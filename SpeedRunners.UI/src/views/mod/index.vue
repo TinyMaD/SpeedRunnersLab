@@ -140,7 +140,7 @@
                     <span>{{ $t('mod.share') }}</span>
                   </v-tooltip>
 
-                  <v-tooltip v-if="steamId === '76561198062688821'||mod.authorID === steamId" bottom>
+                  <v-tooltip v-if="isAdmin||mod.authorID === steamId" bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <v-hover v-slot="{ hover }">
                         <v-btn
@@ -242,7 +242,7 @@ export default {
     deleteID: 0
   }),
   computed: {
-    ...mapGetters(["name", "steamId"]),
+    ...mapGetters(["name", "steamId", "isAdmin"]),
     isZh() {
       return this.$i18n.locale === "zh";
     },

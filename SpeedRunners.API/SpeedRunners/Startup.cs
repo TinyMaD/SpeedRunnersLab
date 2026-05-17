@@ -54,6 +54,8 @@ namespace SpeedRunners
             services.AddMemoryCache();
             // 注册成就定义缓存服务
             services.AddScoped<AchievementSchemaService>();
+            // 注册玩家成就解锁状态缓存服务
+            services.AddScoped<PlayerAchievementsService>();
             services.AddScoped<MUser>();
             services.Configure<KestrelServerOptions>(options =>
             {

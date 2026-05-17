@@ -124,12 +124,12 @@ namespace SpeedRunners.BLL
             {
                 mod = DAL.GetMod(param.ModID);
 
-                if (mod != null && (mod.AuthorID == CurrentUser.PlatformID|| CurrentUser.PlatformID == "76561198062688821"))
+                if (mod != null && (mod.AuthorID == CurrentUser.PlatformID || AdminHelper.IsAdmin(CurrentUser.PlatformID)))
                 {
                     DAL.DeleteMod(param.ModID);
                 }
             });
-            if (mod != null && (mod.AuthorID == CurrentUser.PlatformID || CurrentUser.PlatformID == "76561198062688821"))
+            if (mod != null && (mod.AuthorID == CurrentUser.PlatformID || AdminHelper.IsAdmin(CurrentUser.PlatformID)))
             {
                 MResponse res = await DeleteFile("sr-img", mod.ImgUrl);
                 if (res.Code != 666)

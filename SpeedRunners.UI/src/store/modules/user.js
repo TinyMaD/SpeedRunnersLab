@@ -7,7 +7,8 @@ const getDefaultState = () => {
     name: "",
     avatar: "",
     rankType: 0,
-    participate: 0
+    participate: 0,
+    isAdmin: false
   };
 };
 
@@ -31,6 +32,9 @@ const mutations = {
   },
   SET_PARTICIPATE: (state, participate) => {
     state.participate = participate;
+  },
+  SET_ISADMIN: (state, isAdmin) => {
+    state.isAdmin = isAdmin;
   }
 };
 
@@ -45,13 +49,14 @@ const actions = {
           reject("获取信息失败，请重新登录");
         }
 
-        const { personaName, avatarM, platformID, rankType, participate } = data;
+        const { personaName, avatarM, platformID, rankType, participate, isAdmin } = data;
 
         commit("SET_STEAMID", platformID);
         commit("SET_NAME", personaName);
         commit("SET_AVATAR", avatarM);
         commit("SET_RANKTYPE", rankType);
         commit("SET_PARTICIPATE", participate);
+        commit("SET_ISADMIN", !!isAdmin);
         resolve(data);
       }).catch(error => {
         reject(error);

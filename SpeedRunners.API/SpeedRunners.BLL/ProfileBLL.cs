@@ -14,11 +14,13 @@ namespace SpeedRunners.BLL
     {
         private readonly SteamBLL _steamBLL;
         private readonly AchievementSchemaService _achievementSchemaService;
+        private readonly PlayerAchievementsService _playerAchievementsService;
 
-        public ProfileBLL(SteamBLL steamBLL, AchievementSchemaService achievementSchemaService)
+        public ProfileBLL(SteamBLL steamBLL, AchievementSchemaService achievementSchemaService, PlayerAchievementsService playerAchievementsService)
         {
             _steamBLL = steamBLL;
             _achievementSchemaService = achievementSchemaService;
+            _playerAchievementsService = playerAchievementsService;
         }
 
         /// <summary>
@@ -264,8 +266,8 @@ namespace SpeedRunners.BLL
             
             try
             {
-                // 从Steam获取玩家成就状态
-                var playerAchievements = await _steamBLL.GetPlayerAchievements(steamId);
+                // 从Steam获取玩家成就状态（带缓存）
+                var playerAchievements = await _playerAchievementsService.GetPlayerAchievementsAsync(steamId);
                 
                 if (playerAchievements?.Any() == true)
                 {

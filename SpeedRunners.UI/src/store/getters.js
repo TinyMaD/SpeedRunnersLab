@@ -6,6 +6,7 @@ const getters = {
   name: state => state.user.name,
   rankType: state => state.user.rankType,
   participate: state => state.user.participate,
+  isAdmin: state => state.user.isAdmin,
   permission_routes: state => state.permission.routes
 };
 export default getters;
