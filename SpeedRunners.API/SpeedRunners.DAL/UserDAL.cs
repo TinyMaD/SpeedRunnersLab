@@ -3,11 +3,22 @@ using SpeedRunners.Model;
 using SpeedRunners.Model.User;
 using SpeedRunners.Utils;
 using System;
+using System.Collections.Generic;
 
 namespace SpeedRunners.DAL
 {
     public class UserDAL : DALBase
     {
+        private static readonly HashSet<string> AllowedRankInfoCols = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "State", "RankType"
+        };
+
+        private static readonly HashSet<string> AllowedPrivacyCols = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+        {
+            "ShowProfile", "ShowWeekPlayTime", "RequestRankData", "ShowAddScore"
+        };
+
         public UserDAL(DbHelper db) : base(db) { }
 
         public MPrivacySettings GetPrivacySettings(string platformID)
@@ -37,11 +48,19 @@ namespace SpeedRunners.DAL
 
         public void SetStateOrRankType(string platformID, string colName, int value)
         {
+            if (!AllowedRankInfoCols.Contains(colName))
+            {
+                throw new ArgumentException($"Invalid column name: {colName}", nameof(colName));
+            }
             Db.Execute($"UPDATE RankInfo SET {colName} = ?{nameof(value)} WHERE PlatformID = ?{nameof(platformID)}", new { platformID, value });
         }
 
         public void SetPrivacySettings(string platformID, string colName, int value)
         {
+            if (!AllowedPrivacyCols.Contains(colName))
+            {
+                throw new ArgumentException($"Invalid column name: {colName}", nameof(colName));
+            }
             string sql = "";
             if (colName.Equals("RequestRankData", StringComparison.OrdinalIgnoreCase))
             {

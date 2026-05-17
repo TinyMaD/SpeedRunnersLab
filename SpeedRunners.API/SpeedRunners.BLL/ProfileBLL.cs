@@ -63,13 +63,12 @@ namespace SpeedRunners.BLL
                 }
             }
 
-            // 判断是否本人
-            bool isOwner = !string.IsNullOrEmpty(visitorId) && steamId == visitorId;
+            // 本人或管理员视同完整访问权限
+            bool isOwner = IsOwnerOrAdmin(steamId, visitorId);
 
             // 获取隐私设置
             MPrivacySettings privacySettings = BeginDb(DAL => DAL.GetPrivacySettings(steamId));
 
-            // 本人访问：返回完整数据
             if (isOwner)
             {
                 return BuildFullProfileData(playerInfo, privacySettings);
@@ -78,12 +77,20 @@ namespace SpeedRunners.BLL
             // 非本人访问：检查个人主页开关
             if (privacySettings.ShowProfile == 0)
             {
-                // 主页关闭：返回最小化数据
                 return BuildMinimalProfileData(playerInfo);
             }
 
             // 主页开启：根据隐私设置过滤数据
             return BuildFilteredProfileData(playerInfo, privacySettings);
+        }
+
+        /// <summary>
+        /// 本人访问或管理员访问视同完整访问权限
+        /// </summary>
+        private static bool IsOwnerOrAdmin(string steamId, string visitorId)
+        {
+            if (string.IsNullOrEmpty(visitorId)) return false;
+            return steamId == visitorId || AdminHelper.IsAdmin(visitorId);
         }
 
         /// <summary>
@@ -201,16 +208,11 @@ namespace SpeedRunners.BLL
         /// </summary>
         public List<MDailyScore> GetDailyScoreHistory(string steamId, string visitorId = null)
         {
-            // 判断是否本人
-            bool isOwner = !string.IsNullOrEmpty(visitorId) && steamId == visitorId;
-
-            // 本人访问：返回完整数据
-            if (isOwner)
+            if (IsOwnerOrAdmin(steamId, visitorId))
             {
                 return BeginDb(DAL => DAL.GetDailyScoreHistory(steamId));
             }
 
-            // 非本人访问：检查隐私设置
             MPrivacySettings privacySettings = BeginDb(DAL => DAL.GetPrivacySettings(steamId));
 
             // 主页关闭或禁止获取天梯分：返回空列表
@@ -227,14 +229,10 @@ namespace SpeedRunners.BLL
         /// </summary>
         public async Task<List<MAchievement>> GetAchievements(string steamId, string visitorId = null)
         {
-            // 判断是否本人
-            bool isOwner = !string.IsNullOrEmpty(visitorId) && steamId == visitorId;
-
-            // 非本人访问：检查隐私设置
-            if (!isOwner)
+            if (!IsOwnerOrAdmin(steamId, visitorId))
             {
                 MPrivacySettings privacySettings = BeginDb(DAL => DAL.GetPrivacySettings(steamId));
-                
+
                 // 主页关闭：返回空列表
                 if (privacySettings.ShowProfile == 0)
                 {

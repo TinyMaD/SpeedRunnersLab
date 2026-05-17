@@ -34,6 +34,16 @@ namespace SpeedRunners.BLL
 
         public void SetStateOrRankType(string colName, int value)
         {
+            if (colName.Equals("State", StringComparison.OrdinalIgnoreCase))
+            {
+                if (value != -1 && value != 0)
+                    throw new ArgumentOutOfRangeException(nameof(value), "State must be -1 or 0");
+            }
+            else if (colName.Equals("RankType", StringComparison.OrdinalIgnoreCase))
+            {
+                if (value != 1 && value != 2)
+                    throw new ArgumentOutOfRangeException(nameof(value), "RankType must be 1 or 2");
+            }
             BeginDb(DAL =>
             {
                 DAL.SetStateOrRankType(CurrentUser.PlatformID, colName, value);
@@ -42,6 +52,10 @@ namespace SpeedRunners.BLL
 
         public void SetPrivacySettings(string colName, int value)
         {
+            if (value != 0 && value != 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), "Privacy switch value must be 0 or 1");
+            }
             BeginDb(DAL =>
             {
                 DAL.SetPrivacySettings(CurrentUser.PlatformID, colName, value);

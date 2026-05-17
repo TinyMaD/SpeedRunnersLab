@@ -128,20 +128,5 @@ namespace SpeedRunners.DAL
             return result;
         }
 
-        /// <summary>
-        /// 检查隐私设置（已废弃，请使用 GetPrivacySettings）
-        /// </summary>
-        [Obsolete("Use GetPrivacySettings instead")]
-        public bool CheckPrivacy(string steamId)
-        {
-            var settings = Db.QueryFirstOrDefault<int?>(
-                @"SELECT ShowAddScore FROM PrivacySettings WHERE PlatformID = ?steamId",
-                new { steamId });
-            
-            // 默认公开，ShowAddScore为0时表示公开
-            if (settings == null) return true;
-            
-            return settings == 0;
-        }
     }
 }
