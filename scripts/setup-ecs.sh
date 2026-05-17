@@ -54,7 +54,8 @@ step 2 4 "把目录改造成 git 仓库"
 
 if [ -d ".git" ]; then
     warn "已经是 git 仓库，跳过 init，直接拉最新"
-    git fetch origin master
+    # 显式 refspec 确保 origin/master 引用被创建
+    git fetch origin "+refs/heads/master:refs/remotes/origin/master" --depth 1
     git reset --hard origin/master
     ok "已对齐 origin/master"
 else
@@ -65,8 +66,10 @@ else
 
     git init -q
     git remote add origin "$GIT_URL"
-    git fetch origin master --depth 1
+    # 关键：用显式 refspec，否则浅 fetch 不会创建 refs/remotes/origin/master
+    git fetch origin "+refs/heads/master:refs/remotes/origin/master" --depth 1
     git checkout -B master origin/master
+    git branch --set-upstream-to=origin/master master 2>/dev/null || true
     ok "已绑定到 $GIT_URL 的 master 分支"
 fi
 
