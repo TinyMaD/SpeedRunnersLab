@@ -27,3 +27,10 @@ appsettings.Development.json
 appsettings.Production.json
 SpeedRunners.API/.vscode
 .vscode/*
+
+# SSL 证书 / Nginx 私有配置（只放在服务器本地）
+/SpeedRunners.UI/nginx/*.pem
+/SpeedRunners.UI/nginx/*.key
+
+# MySQL 数据目录（容器运行时生成，体积大且含敏感数据）
+/mysql/

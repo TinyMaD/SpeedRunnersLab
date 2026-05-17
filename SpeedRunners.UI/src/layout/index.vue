@@ -353,6 +353,7 @@ import { AppMain } from "./components";
 import PrivacySettings from "@/views/other/privacySettings";
 import NotificationDrawer from "@/components/NotificationDrawer";
 import { goLoginURL } from "@/utils/auth";
+import { goToUserProfile } from "@/utils/profile";
 import { mapGetters, mapState } from "vuex";
 import getPageTitle from "@/utils/get-page-title";
 
@@ -487,10 +488,9 @@ export default {
       });
     },
     goToMyProfile() {
-      if (this.steamId) {
-        this.drawerRight = false;
-        this.$router.push(`/profile/${this.steamId}`);
-      }
+      if (!this.steamId) return;
+      this.drawerRight = false;
+      goToUserProfile(this.$router, this.steamId);
     }
   }
 };

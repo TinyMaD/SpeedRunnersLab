@@ -1,27 +1,31 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
+# 多阶段构建：build 阶段 publish，runtime 阶段只带运行时
+# CI 构建命令：docker build -t srlab-api ./SpeedRunners.API
 
-FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS base
+# ===== Build stage =====
+FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
+WORKDIR /src
+
+# 先只复制 csproj，restore 一次就缓存住 NuGet
+COPY SpeedRunners/SpeedRunners.csproj            SpeedRunners/
+COPY SpeedRunners.BLL/SpeedRunners.BLL.csproj    SpeedRunners.BLL/
+COPY SpeedRunners.DAL/SpeedRunners.DAL.csproj    SpeedRunners.DAL/
+COPY SpeedRunners.Model/SpeedRunners.Model.csproj SpeedRunners.Model/
+COPY SpeedRunners.Utils/SpeedRunners.Utils.csproj SpeedRunners.Utils/
+RUN dotnet restore SpeedRunners/SpeedRunners.csproj
+
+# 再复制其余源码并 publish
+COPY . .
+RUN dotnet publish SpeedRunners/SpeedRunners.csproj \
+    -c Release \
+    -o /app/publish \
+    /p:UseAppHost=false
+
+# ===== Runtime stage =====
+FROM mcr.microsoft.com/dotnet/aspnet:3.1 AS runtime
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-# FROM mcr.microsoft.com/dotnet/sdk:3.1 AS build
-# WORKDIR /src
-# COPY ["SpeedRunners/SpeedRunners.csproj", "SpeedRunners/"]
-# COPY ["SpeedRunners.BLL/SpeedRunners.BLL.csproj", "SpeedRunners.BLL/"]
-# COPY ["SpeedRunners.DAL/SpeedRunners.DAL.csproj", "SpeedRunners.DAL/"]
-# COPY ["SpeedRunners.Utils/SpeedRunners.Utils.csproj", "SpeedRunners.Utils/"]
-# COPY ["SpeedRunners.Model/SpeedRunners.Model.csproj", "SpeedRunners.Model/"]
-# RUN dotnet restore "SpeedRunners/SpeedRunners.csproj"
-# COPY . .
-# WORKDIR "/src/SpeedRunners"
-# RUN dotnet build "SpeedRunners.csproj" -c debug -o /app/build
-
-# FROM build AS publish
-# RUN dotnet publish "SpeedRunners.csproj" -c debug -o /app/publish /p:UseAppHost=false
-#WORKDIR /app
-#COPY --from=publish /app/publish .
-
-COPY ./publish .
+COPY --from=build /app/publish .
 
 ENTRYPOINT ["dotnet", "SpeedRunners.dll"]

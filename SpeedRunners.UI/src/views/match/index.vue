@@ -56,10 +56,21 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="(item,index) in participateList" :key="index">
+                  <tr v-for="(item,index) in participateList" :key="item.platformID">
                     <td>{{ index + 1 }}</td>
-                    <td><v-avatar size="35"><img :src="item.avatarM"></v-avatar></td>
-                    <td>{{ item.personaName }}</td>
+                    <td>
+                      <UserAvatar
+                        :platform-i-d="item.platformID"
+                        :avatar-url="item.avatarM"
+                        :size="35"
+                      />
+                    </td>
+                    <td>
+                      <UserName
+                        :platform-i-d="item.platformID"
+                        :persona-name="item.personaName"
+                      />
+                    </td>
                     <td>{{ item.rankScore }}</td>
                     <td>{{ item.playTime }}</td>
                     <td>{{ item.weekPlayTime }}</td>
@@ -213,13 +224,17 @@
 </template>
 <script>
 import Odometer from "@/components/Odometer";
+import UserAvatar from "@/components/UserAvatar";
+import UserName from "@/components/UserName";
 import { getSponsor, updateParticipate, getParticipateList } from "@/api/rank";
 import { mapGetters } from "vuex";
 import { sectionToChinese } from "@/utils";
 export default {
   name: "Match",
   components: {
-    Odometer
+    Odometer,
+    UserAvatar,
+    UserName
   },
   data: () => ({
     loading: false,

@@ -1,0 +1,18 @@
+# 不要把这些塞进 docker build context（影响速度也会污染镜像）
+node_modules
+dist
+.git
+.gitignore
+.vscode
+.vs
+.idea
+.editorconfig
+.eslintignore
+.eslintrc.js
+.travis.yml
+README*.md
+yarn-error.log
+npm-debug.log
+Dockerfile
+.dockerignore
+nginx

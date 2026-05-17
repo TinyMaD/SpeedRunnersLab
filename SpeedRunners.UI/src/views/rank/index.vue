@@ -59,6 +59,7 @@
 
 <script>
 import { getRankList } from "@/api/rank";
+import { goToUserProfile } from "@/utils/profile";
 export default {
   name: "Rank",
 
@@ -151,9 +152,7 @@ export default {
       }
     },
     goToProfile(player) {
-      if (player.platformID) {
-        this.$router.push(`/profile/${player.platformID}`);
-      }
+      goToUserProfile(this.$router, player.platformID);
     }
   },
   metaInfo() {

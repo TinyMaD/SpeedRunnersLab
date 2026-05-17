@@ -6,12 +6,14 @@
 - [SpeedRunners.API/SpeedRunners/Controllers/RankController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/RankController.cs)
 - [SpeedRunners.API/SpeedRunners/Controllers/SteamController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/SteamController.cs)
 - [SpeedRunners.API/SpeedRunners/Controllers/AssetController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/AssetController.cs)
+- [SpeedRunners.API/SpeedRunners/Controllers/ProfileController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/ProfileController.cs)
 - [SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs)
 - [SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs](file://SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs)
 - [SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs](file://SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs)
 - [SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs](file://SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs)
 - [SpeedRunners.API/SpeedRunners.Model/MResponse.cs](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs)
 - [SpeedRunners.API/SpeedRunners.Model/UserAttribute.cs](file://SpeedRunners.API/SpeedRunners.Model/UserAttribute.cs)
+- [SpeedRunners.API/SpeedRunners.Model/User/MPrivacySettings.cs](file://SpeedRunners.API/SpeedRunners.Model/User/MPrivacySettings.cs)
 - [SpeedRunners.API/SpeedRunners.Model/Rank/MRankInfo.cs](file://SpeedRunners.API/SpeedRunners.Model/Rank/MRankInfo.cs)
 - [SpeedRunners.API/SpeedRunners.Model/Asset/MMod.cs](file://SpeedRunners.API/SpeedRunners.Model/Asset/MMod.cs)
 - [SpeedRunners.API/SpeedRunners.Model/Steam/MSearchPlayerResult.cs](file://SpeedRunners.API/SpeedRunners.Model/Steam/MSearchPlayerResult.cs)
@@ -22,6 +24,7 @@
 - [SpeedRunners.UI/src/api/rank.js](file://SpeedRunners.UI/src/api/rank.js)
 - [SpeedRunners.UI/src/api/steam.js](file://SpeedRunners.UI/src/api/steam.js)
 - [SpeedRunners.UI/src/api/asset.js](file://SpeedRunners.UI/src/api/asset.js)
+- [SpeedRunners.UI/src/api/profile.js](file://SpeedRunners.UI/src/api/profile.js)
 - [SpeedRunners.UI/src/utils/request.js](file://SpeedRunners.UI/src/utils/request.js)
 </cite>
 
@@ -38,7 +41,7 @@
 10. [附录](#附录)
 
 ## 简介
-本文件为 SpeedRunnersLab 的完整 API 接口参考，覆盖用户管理、排名统计、MOD 管理、Steam 集成等模块。内容包括：
+本文件为 SpeedRunnersLab 的完整 API 接口参考，覆盖用户管理、排名统计、MOD 管理、Steam 集成、个人主页等模块。内容包括：
 - 所有 RESTful 接口的 HTTP 方法、URL 模式、请求参数、响应格式与错误码
 - 认证授权要求、请求头设置与数据验证规则
 - 常见使用场景的请求/响应示例（以路径代替代码）
@@ -58,6 +61,7 @@ C_User["UserController"]
 C_Rank["RankController"]
 C_Steam["SteamController"]
 C_Asset["AssetController"]
+C_Profile["ProfileController"]
 MW_Auth["SRLabTokenAuthMidd 中间件"]
 F_Glob["GlobalExceptionsFilter"]
 F_Res["ResponseFilter"]
@@ -66,39 +70,42 @@ FE --> |"HTTP 请求"| C_User
 FE --> |"HTTP 请求"| C_Rank
 FE --> |"HTTP 请求"| C_Steam
 FE --> |"HTTP 请求"| C_Asset
+FE --> |"HTTP 请求"| C_Profile
 MW_Auth --> C_User
 MW_Auth --> C_Rank
 MW_Auth --> C_Steam
 MW_Auth --> C_Asset
+MW_Auth --> C_Profile
 F_Res --> |"统一响应包装"| FE
 F_Glob --> |"异常捕获"| FE
 ```
 
-图表来源
-- [SpeedRunners.API/SpeedRunners/Controllers/UserController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/UserController.cs#L1-L58)
-- [SpeedRunners.API/SpeedRunners/Controllers/RankController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/RankController.cs#L1-L48)
-- [SpeedRunners.API/SpeedRunners/Controllers/SteamController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/SteamController.cs#L1-L28)
-- [SpeedRunners.API/SpeedRunners/Controllers/AssetController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/AssetController.cs#L1-L48)
-- [SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs](file://SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs#L1-L123)
-- [SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs](file://SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs#L1-L114)
-- [SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs](file://SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs#L1-L54)
+**图表来源**
+- [SpeedRunners.API/SpeedRunners/Controllers/UserController.cs:1-62](file://SpeedRunners.API/SpeedRunners/Controllers/UserController.cs#L1-L62)
+- [SpeedRunners.API/SpeedRunners/Controllers/RankController.cs:1-48](file://SpeedRunners.API/SpeedRunners/Controllers/RankController.cs#L1-L48)
+- [SpeedRunners.API/SpeedRunners/Controllers/SteamController.cs:1-28](file://SpeedRunners.API/SpeedRunners/Controllers/SteamController.cs#L1-L28)
+- [SpeedRunners.API/SpeedRunners/Controllers/AssetController.cs:1-48](file://SpeedRunners.API/SpeedRunners/Controllers/AssetController.cs#L1-L48)
+- [SpeedRunners.API/SpeedRunners/Controllers/ProfileController.cs:1-53](file://SpeedRunners.API/SpeedRunners/Controllers/ProfileController.cs#L1-L53)
+- [SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs:1-123](file://SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs#L1-L123)
+- [SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs:1-114](file://SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs#L1-L114)
+- [SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs:1-54](file://SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs#L1-L54)
 
-章节来源
-- [SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs#L1-L26)
+**章节来源**
+- [SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs:1-26](file://SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs#L1-L26)
 - [SpeedRunners.API/SpeedRunners/Startup.cs](file://SpeedRunners.API/SpeedRunners/Startup.cs)
 
 ## 核心组件
 - 控制器层：按模块划分，统一继承 BaseController，自动注入当前用户上下文与本地化资源。
 - 中间件层：SRLabTokenAuthMidd 实现基于 srlab-token 的认证与授权判定。
 - 过滤器层：ResponseFilter 统一响应包装与 Token 刷新；GlobalExceptionsFilter 捕获生产环境异常并记录日志。
-- 模型层：MResponse 统一响应结构；各业务模型如 MRankInfo、MMod、MSearchPlayerResult 定义数据结构。
+- 模型层：MResponse 统一响应结构；各业务模型如 MRankInfo、MMod、MSearchPlayerResult、MPrivacySettings 定义数据结构。
 
-章节来源
-- [SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs#L1-L26)
-- [SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs](file://SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs#L1-L123)
-- [SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs](file://SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs#L1-L114)
-- [SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs](file://SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs#L1-L54)
-- [SpeedRunners.API/SpeedRunners.Model/MResponse.cs](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L1-L42)
+**章节来源**
+- [SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs:1-26](file://SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs#L1-L26)
+- [SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs:1-123](file://SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs#L1-L123)
+- [SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs:1-114](file://SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs#L1-L114)
+- [SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs:1-54](file://SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs#L1-L54)
+- [SpeedRunners.API/SpeedRunners.Model/MResponse.cs:1-42](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L1-L42)
 
 ## 架构总览
 下图展示了从客户端到控制器、中间件与过滤器的整体调用链路。
@@ -122,10 +129,10 @@ Ctrl-->>ResF : "统一包装响应"
 ResF-->>Client : "返回 {Code,Message,Token,Data}"
 ```
 
-图表来源
-- [SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs](file://SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs#L31-L101)
-- [SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs](file://SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs#L24-L111)
-- [SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs#L14-L23)
+**图表来源**
+- [SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs:31-101](file://SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs#L31-L101)
+- [SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs:24-111](file://SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs#L24-L111)
+- [SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs:14-23](file://SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs#L14-L23)
 
 ## 详细组件分析
 
@@ -141,10 +148,10 @@ ResF-->>Client : "返回 {Code,Message,Token,Data}"
 - 响应刷新
   - ResponseFilter 在每次响应时根据配置刷新 Token 并回传
 
-章节来源
-- [SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs](file://SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs#L54-L101)
-- [SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs](file://SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs#L57-L111)
-- [SpeedRunners.API/SpeedRunners.Model/UserAttribute.cs](file://SpeedRunners.API/SpeedRunners.Model/UserAttribute.cs#L1-L13)
+**章节来源**
+- [SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs:54-101](file://SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs#L54-L101)
+- [SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs:57-111](file://SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs#L57-L111)
+- [SpeedRunners.API/SpeedRunners.Model/UserAttribute.cs:1-13](file://SpeedRunners.API/SpeedRunners.Model/UserAttribute.cs#L1-L13)
 
 ### 用户管理模块
 - 路由前缀：/api/User
@@ -183,6 +190,11 @@ ResF-->>Client : "返回 {Code,Message,Token,Data}"
     - 权限：User
     - 请求体：包含 value 字段（整数）
     - 响应：MResponse
+  - POST /SetShowProfile
+    - 功能：设置个人主页开关
+    - 权限：User
+    - 请求体：包含 value 字段（整数）
+    - 响应：MResponse
   - POST /Login
     - 功能：登录（用户名密码）
     - 权限：匿名
@@ -197,19 +209,21 @@ ResF-->>Client : "返回 {Code,Message,Token,Data}"
     - 权限：User
     - 响应：MResponse
 
-请求示例（路径）
-- POST /api/User/Login
-  - 请求头：Content-Type: application/json
-  - 请求体：{"query":"..."}
-  - 参考实现：[SpeedRunners.API/SpeedRunners/Controllers/UserController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/UserController.cs#L43-L47)
+**更新** 新增了 SetShowProfile 接口，用于控制个人主页的开关状态
 
-响应示例（路径）
+**请求示例（路径）**
+- POST /api/User/SetShowProfile
+  - 请求头：Content-Type: application/json
+  - 请求体：{"value":1}
+  - 参考实现：[SpeedRunners.API/SpeedRunners/Controllers/UserController.cs:42-44](file://SpeedRunners.API/SpeedRunners/Controllers/UserController.cs#L42-L44)
+
+**响应示例（路径）**
 - 成功：{"Code":666,"Message":"成功","Token":"...","Data":{...}}
 - 失败：{"Code":-1,"Message":"...","Token":null}
-- 参考模型：[SpeedRunners.API/SpeedRunners.Model/MResponse.cs](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L1-L42)
+- 参考模型：[SpeedRunners.API/SpeedRunners.Model/MResponse.cs:1-42](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L1-L42)
 
-章节来源
-- [SpeedRunners.API/SpeedRunners/Controllers/UserController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/UserController.cs#L1-L58)
+**章节来源**
+- [SpeedRunners.API/SpeedRunners/Controllers/UserController.cs:1-62](file://SpeedRunners.API/SpeedRunners/Controllers/UserController.cs#L1-L62)
 
 ### 排名统计模块
 - 路由前缀：/api/Rank
@@ -251,17 +265,17 @@ ResF-->>Client : "返回 {Code,Message,Token,Data}"
     - 权限：匿名
     - 响应：MResponse 包裹 MParticipateList 列表
 
-请求示例（路径）
+**请求示例（路径）**
 - GET /api/Rank/GetRankList
   - 权限：Persona
-  - 参考实现：[SpeedRunners.API/SpeedRunners/Controllers/RankController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/RankController.cs#L17-L17)
+  - 参考实现：[SpeedRunners.API/SpeedRunners/Controllers/RankController.cs:17-17](file://SpeedRunners.API/SpeedRunners/Controllers/RankController.cs#L17-L17)
 
-响应示例（路径）
+**响应示例（路径）**
 - 成功：{"Code":666,"Message":"成功","Token":"...","Data":[{...},{...}]}
-- 参考模型：[SpeedRunners.API/SpeedRunners.Model/MResponse.cs](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L1-L42)
+- 参考模型：[SpeedRunners.API/SpeedRunners.Model/MResponse.cs:1-42](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L1-L42)
 
-章节来源
-- [SpeedRunners.API/SpeedRunners/Controllers/RankController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/RankController.cs#L1-L48)
+**章节来源**
+- [SpeedRunners.API/SpeedRunners/Controllers/RankController.cs:1-48](file://SpeedRunners.API/SpeedRunners/Controllers/RankController.cs#L1-L48)
 - [SpeedRunners.API/SpeedRunners.Model/Rank/MRankInfo.cs](file://SpeedRunners.API/SpeedRunners.Model/Rank/MRankInfo.cs)
 
 ### MOD 管理模块
@@ -304,18 +318,18 @@ ResF-->>Client : "返回 {Code,Message,Token,Data}"
     - 权限：匿名
     - 响应：MResponse
 
-请求示例（路径）
+**请求示例（路径）**
 - POST /api/Asset/AddMod
   - 权限：User
   - 请求体：MMod 对象
-  - 参考实现：[SpeedRunners.API/SpeedRunners/Controllers/AssetController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/AssetController.cs#L38-L38)
+  - 参考实现：[SpeedRunners.API/SpeedRunners/Controllers/AssetController.cs:38-38](file://SpeedRunners.API/SpeedRunners/Controllers/AssetController.cs#L38-L38)
 
-响应示例（路径）
+**响应示例（路径）**
 - 成功：{"Code":666,"Message":"成功","Token":"...","Data":{...}}
-- 参考模型：[SpeedRunners.API/SpeedRunners.Model/MResponse.cs](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L1-L42)
+- 参考模型：[SpeedRunners.API/SpeedRunners.Model/MResponse.cs:1-42](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L1-L42)
 
-章节来源
-- [SpeedRunners.API/SpeedRunners/Controllers/AssetController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/AssetController.cs#L1-L48)
+**章节来源**
+- [SpeedRunners.API/SpeedRunners/Controllers/AssetController.cs:1-48](file://SpeedRunners.API/SpeedRunners/Controllers/AssetController.cs#L1-L48)
 - [SpeedRunners.API/SpeedRunners.Model/Asset/MMod.cs](file://SpeedRunners.API/SpeedRunners.Model/Asset/MMod.cs)
 
 ### Steam 集成模块
@@ -342,27 +356,77 @@ ResF-->>Client : "返回 {Code,Message,Token,Data}"
     - 权限：匿名
     - 响应：MResponse 包裹 uint
 
-请求示例（路径）
+**请求示例（路径）**
 - GET /api/Steam/SearchPlayer/abc
   - 权限：匿名
-  - 参考实现：[SpeedRunners.API/SpeedRunners/Controllers/SteamController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/SteamController.cs#L13-L13)
+  - 参考实现：[SpeedRunners.API/SpeedRunners/Controllers/SteamController.cs:13-13](file://SpeedRunners.API/SpeedRunners/Controllers/SteamController.cs#L13-L13)
 
-响应示例（路径）
+**响应示例（路径）**
 - 成功：{"Code":666,"Message":"成功","Token":"...","Data":{...}}
-- 参考模型：[SpeedRunners.API/SpeedRunners.Model/MResponse.cs](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L1-L42)
+- 参考模型：[SpeedRunners.API/SpeedRunners.Model/MResponse.cs:1-42](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L1-L42)
 
-章节来源
-- [SpeedRunners.API/SpeedRunners/Controllers/SteamController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/SteamController.cs#L1-L28)
+**章节来源**
+- [SpeedRunners.API/SpeedRunners/Controllers/SteamController.cs:1-28](file://SpeedRunners.API/SpeedRunners/Controllers/SteamController.cs#L1-L28)
 - [SpeedRunners.API/SpeedRunners.Model/Steam/MSearchPlayerResult.cs](file://SpeedRunners.API/SpeedRunners.Model/Steam/MSearchPlayerResult.cs)
+
+### 个人主页模块
+- 路由前缀：/api/Profile
+- 接口列表
+  - GET /GetData/{steamId}
+    - 功能：获取个人主页数据
+    - 权限：Persona
+    - 参数：steamId（Steam ID）
+    - 响应：MResponse 包裹 MProfileData
+    - **更新**：新增 visitorId 参数，用于判断访问者身份
+  - GET /GetDailyScoreHistory/{steamId}
+    - 功能：获取每日天梯分历史记录（用于热度图）
+    - 权限：Persona
+    - 参数：steamId（Steam ID）
+    - 响应：MResponse 包裹 MDailyScore 列表
+    - **更新**：新增 visitorId 参数，用于判断访问者身份
+  - GET /GetAchievements/{steamId}
+    - 功能：获取玩家成就
+    - 权限：Persona
+    - 参数：steamId（Steam ID）
+    - 响应：MResponse 包裹 MAchievement 列表
+    - **更新**：新增 visitorId 参数，用于判断访问者身份
+
+**更新** ProfileController 中的三个接口都新增了 visitorId 参数说明，该参数用于判断当前访问者是否为页面所有者，从而决定返回的数据范围和隐私级别。
+
+**请求示例（路径）**
+- GET /api/Profile/GetData/76561198800000000
+  - 权限：Persona
+  - 参考实现：[SpeedRunners.API/SpeedRunners/Controllers/ProfileController.cs:19-26](file://SpeedRunners.API/SpeedRunners/Controllers/ProfileController.cs#L19-L26)
+
+**响应示例（路径）**
+- 成功：{"Code":666,"Message":"成功","Token":"...","Data":{...}}
+- 参考模型：[SpeedRunners.API/SpeedRunners.Model/MResponse.cs:1-42](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L1-L42)
+
+**章节来源**
+- [SpeedRunners.API/SpeedRunners/Controllers/ProfileController.cs:1-53](file://SpeedRunners.API/SpeedRunners/Controllers/ProfileController.cs#L1-L53)
+
+### 隐私设置模块
+- 隐私设置字段说明
+  - ShowProfile：个人主页开关（0关闭，1开启，默认1）
+  - State：状态显示控制（-1隐藏，0显示，默认0）
+  - ShowWeekPlayTime：周游玩时长显示（0不显示，1显示，默认1）
+  - RequestRankData：排行数据请求权限（0不允许，1允许，默认1）
+  - ShowAddScore：新增天梯分显示（0不显示，1显示，默认1）
+  - RankType：排行类型（1公开，2私密，默认1）
+
+**更新** 隐私设置相关API得到增强，支持更精细的隐私控制
+
+**章节来源**
+- [SpeedRunners.API/SpeedRunners.Model/User/MPrivacySettings.cs:1-27](file://SpeedRunners.API/SpeedRunners.Model/User/MPrivacySettings.cs#L1-L27)
 
 ### 统一响应与错误码
 - 成功：Code=666，Message="成功"
 - 失败：默认 Code=-1，Message 为错误描述
 - Token：成功时可能返回新 Token，失败时为 null
-- 参考模型：[SpeedRunners.API/SpeedRunners.Model/MResponse.cs](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L1-L42)
+- 参考模型：[SpeedRunners.API/SpeedRunners.Model/MResponse.cs:1-42](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L1-L42)
 
-章节来源
-- [SpeedRunners.API/SpeedRunners.Model/MResponse.cs](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L1-L42)
+**章节来源**
+- [SpeedRunners.API/SpeedRunners.Model/MResponse.cs:1-42](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L1-L42)
 
 ## 依赖关系分析
 - 控制器依赖 BaseController 注入具体 BLL
@@ -395,18 +459,29 @@ class MResponse {
 +Success()
 +Fail()
 }
+class MPrivacySettings {
++string PlatformID
++int ShowProfile
++int State
++int ShowWeekPlayTime
++int RequestRankData
++int ShowAddScore
++int RankType
+}
 BaseController --> MResponse : "返回统一响应"
 SRLabTokenAuthMidd --> BaseController : "前置校验"
 ResponseFilter --> MResponse : "封装响应"
 GlobalExceptionsFilter --> MResponse : "异常包装"
+MPrivacySettings --> MResponse : "隐私设置模型"
 ```
 
-图表来源
-- [SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs#L10-L23)
-- [SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs](file://SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs#L31-L101)
-- [SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs](file://SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs#L24-L111)
-- [SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs](file://SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs#L31-L50)
-- [SpeedRunners.API/SpeedRunners.Model/MResponse.cs](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L3-L27)
+**图表来源**
+- [SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs:10-23](file://SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs#L10-L23)
+- [SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs:31-101](file://SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs#L31-L101)
+- [SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs:24-111](file://SpeedRunners.API/SpeedRunners/Filter/ResponseFilter.cs#L24-L111)
+- [SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs:31-50](file://SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs#L31-L50)
+- [SpeedRunners.API/SpeedRunners.Model/MResponse.cs:3-27](file://SpeedRunners.API/SpeedRunners.Model/MResponse.cs#L3-L27)
+- [SpeedRunners.API/SpeedRunners.Model/User/MPrivacySettings.cs:7-25](file://SpeedRunners.API/SpeedRunners.Model/User/MPrivacySettings.cs#L7-L25)
 
 ## 性能与安全
 - 性能
@@ -416,30 +491,37 @@ GlobalExceptionsFilter --> MResponse : "异常包装"
   - 使用 srlab-token 进行会话识别与权限控制
   - 中间件对 User 接口缺失令牌直接拒绝
   - 生产环境异常统一包装并记录日志
+  - 隐私设置确保用户数据的安全访问控制
 - 速率限制
   - 当前仓库未发现显式的速率限制实现，建议在网关或中间件层增加限流策略
 
-章节来源
-- [SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs#L14-L23)
-- [SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs](file://SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs#L66-L91)
-- [SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs](file://SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs#L31-L50)
+**更新** 新增了隐私设置的安全控制机制
+
+**章节来源**
+- [SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs:14-23](file://SpeedRunners.API/SpeedRunners/Controllers/BaseController.cs#L14-L23)
+- [SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs:66-91](file://SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs#L66-L91)
+- [SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs:31-50](file://SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs#L31-L50)
 
 ## 故障排查指南
 - 常见错误
   - 未登录访问 User 接口：返回 Code=-1，Message 为未登录提示
   - 参数缺失或格式错误：由模型绑定与业务逻辑处理，最终统一返回 MResponse
   - 生产环境异常：返回固定提示并记录日志
+  - 隐私设置导致数据访问受限：检查 ShowProfile 和 RequestRankData 设置
 - 排查步骤
   - 确认请求头是否包含有效的 srlab-token
   - 检查接口权限特性（User/Persona）与实际访问方式
   - 查看响应中的 Code 与 Message，必要时查看服务端日志
+  - 检查隐私设置是否正确配置
 
-章节来源
-- [SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs](file://SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs#L42-L46)
-- [SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs](file://SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs#L35-L49)
+**更新** 新增了隐私设置相关的故障排查指导
+
+**章节来源**
+- [SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs:42-46](file://SpeedRunners.API/SpeedRunners/Middleware/SRLabTokenAuthMidd.cs#L42-L46)
+- [SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs:35-49](file://SpeedRunners.API/SpeedRunners/Filter/GlobalExceptionsFilter.cs#L35-L49)
 
 ## 结论
-本接口参考文档梳理了 SpeedRunnersLab 的核心 API，明确了认证授权、统一响应、异常处理与数据模型。建议在生产环境中补充速率限制与更细粒度的鉴权策略，并持续完善前端 SDK 与文档示例。
+本接口参考文档梳理了 SpeedRunnersLab 的核心 API，明确了认证授权、统一响应、异常处理与数据模型。最新更新包括新增的个人主页开关接口、增强的隐私设置控制以及更完善的访问权限管理。建议在生产环境中补充速率限制与更细粒度的鉴权策略，并持续完善前端 SDK 与文档示例。
 
 ## 附录
 
@@ -456,14 +538,20 @@ GlobalExceptionsFilter --> MResponse : "异常包装"
     - 参考路径：[SpeedRunners.UI/src/api/steam.js](file://SpeedRunners.UI/src/api/steam.js)
   - asset.js：MOD 管理接口封装
     - 参考路径：[SpeedRunners.UI/src/api/asset.js](file://SpeedRunners.UI/src/api/asset.js)
+  - profile.js：个人主页接口封装
+    - 参考路径：[SpeedRunners.UI/src/api/profile.js](file://SpeedRunners.UI/src/api/profile.js)
 - 使用流程
   - 登录后保存 srlab-token
   - 调用对应模块方法，SDK 自动处理统一响应与 Token 刷新
   - 错误处理：根据 Code 与 Message 进行提示或重定向
+  - 隐私设置：通过 SetShowProfile 控制个人主页开关
 
-章节来源
+**更新** 新增了 profile.js 模块，用于个人主页相关接口
+
+**章节来源**
 - [SpeedRunners.UI/src/utils/request.js](file://SpeedRunners.UI/src/utils/request.js)
 - [SpeedRunners.UI/src/api/user.js](file://SpeedRunners.UI/src/api/user.js)
 - [SpeedRunners.UI/src/api/rank.js](file://SpeedRunners.UI/src/api/rank.js)
 - [SpeedRunners.UI/src/api/steam.js](file://SpeedRunners.UI/src/api/steam.js)
 - [SpeedRunners.UI/src/api/asset.js](file://SpeedRunners.UI/src/api/asset.js)
+- [SpeedRunners.UI/src/api/profile.js](file://SpeedRunners.UI/src/api/profile.js)

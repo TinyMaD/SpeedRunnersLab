@@ -1,0 +1,75 @@
+# 生产环境用：所有应用容器从镜像仓库拉，不再本地构建
+# ECS 上的部署命令：docker compose -f docker-compose.prod.yml up -d
+#
+# 依赖的环境变量（来自 .env 文件或 CI 注入）：
+#   ALIYUN_REGISTRY   例如 registry.cn-hangzhou.aliyuncs.com
+#   ALIYUN_NAMESPACE  例如 srlab
+#   IMAGE_TAG         例如 latest 或 a1b2c3d（git 短 sha）
+
+version: '3'
+
+services:
+  srlab.mysql:
+    image: mysql:8.0.18
+    container_name: srlab-mysql
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=tmd@123
+      - MYSQL_DATABASE=tmdsr
+      - TZ=Asia/Shanghai
+    volumes:
+      - ./mysql:/var/lib/mysql
+      - ./mysql-dump:/docker-entrypoint-initdb.d
+    networks:
+      - srlab-net
+
+  srlab.api:
+    image: ${ALIYUN_REGISTRY}/${ALIYUN_NAMESPACE}/srlab-api:${IMAGE_TAG:-latest}
+    container_name: srlab-api
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+      - ASPNETCORE_ENVIRONMENT=Production
+    volumes:
+      - ./SpeedRunners.API/Logs:/app/Logs
+      # 敏感配置永远只在服务器本地，挂载进容器，镜像里不打包
+      - ./SpeedRunners.API/SpeedRunners/appsettings.Production.json:/app/appsettings.Production.json:ro
+    networks:
+      - srlab-net
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+  srlab.ui:
+    image: ${ALIYUN_REGISTRY}/${ALIYUN_NAMESPACE}/srlab-ui:${IMAGE_TAG:-latest}
+    container_name: srlab-ui
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      # nginx 配置和 SSL 证书永远只在服务器本地
+      - ./SpeedRunners.UI/nginx:/etc/nginx/conf.d
+    networks:
+      - srlab-net
+
+  srlab.scheduler:
+    image: ${ALIYUN_REGISTRY}/${ALIYUN_NAMESPACE}/srlab-scheduler:${IMAGE_TAG:-latest}
+    container_name: srlab-scheduler
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      # Scheduler 用 .NET ConfigurationManager 读 App.config，需挂载成 <assembly>.dll.config
+      - ./SpeedRunners.Scheduler/App.config:/app/SpeedRunners.Scheduler.dll.config:ro
+    networks:
+      - srlab-net
+    extra_hosts:
+      - host.docker.internal:host-gateway
+
+networks:
+  srlab-net:
+    driver: bridge

@@ -1,0 +1,129 @@
+name: Build & Deploy to Production
+
+# 仅手动触发：在 Actions 页面点 "Run workflow"
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: '镜像标签（留空则用 git 短 sha）'
+        required: false
+        default: ''
+
+env:
+  REGISTRY: ${{ secrets.ALIYUN_REGISTRY }}
+  NAMESPACE: ${{ secrets.ALIYUN_NAMESPACE }}
+
+jobs:
+  # ---------- 决定本次构建用什么 tag ----------
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.set-tag.outputs.value }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: set-tag
+        shell: bash
+        run: |
+          if [ -n "${{ github.event.inputs.tag }}" ]; then
+            echo "value=${{ github.event.inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+          fi
+
+  # ---------- 三个镜像并行构建 + 推 ACR ----------
+  build-api:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.ALIYUN_USERNAME }}
+          password: ${{ secrets.ALIYUN_PASSWORD }}
+      - uses: docker/build-push-action@v5
+        with:
+          context: ./SpeedRunners.API
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/srlab-api:latest
+            ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/srlab-api:${{ needs.prepare.outputs.tag }}
+          cache-from: type=gha,scope=api
+          cache-to: type=gha,scope=api,mode=max
+
+  build-ui:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.ALIYUN_USERNAME }}
+          password: ${{ secrets.ALIYUN_PASSWORD }}
+      - uses: docker/build-push-action@v5
+        with:
+          context: ./SpeedRunners.UI
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/srlab-ui:latest
+            ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/srlab-ui:${{ needs.prepare.outputs.tag }}
+          cache-from: type=gha,scope=ui
+          cache-to: type=gha,scope=ui,mode=max
+
+  build-scheduler:
+    needs: prepare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.ALIYUN_USERNAME }}
+          password: ${{ secrets.ALIYUN_PASSWORD }}
+      - uses: docker/build-push-action@v5
+        with:
+          context: ./SpeedRunners.Scheduler
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/srlab-scheduler:latest
+            ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/srlab-scheduler:${{ needs.prepare.outputs.tag }}
+          cache-from: type=gha,scope=scheduler
+          cache-to: type=gha,scope=scheduler,mode=max
+
+  # ---------- SSH 到 ECS 拉镜像并启动 ----------
+  deploy:
+    needs: [prepare, build-api, build-ui, build-scheduler]
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH to ECS and roll out new images
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          IMAGE_TAG: ${{ needs.prepare.outputs.tag }}
+          ALIYUN_REGISTRY: ${{ secrets.ALIYUN_REGISTRY }}
+          ALIYUN_NAMESPACE: ${{ secrets.ALIYUN_NAMESPACE }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: IMAGE_TAG,ALIYUN_REGISTRY,ALIYUN_NAMESPACE
+          script: |
+            set -e
+            cd /root/home/srlab
+
+            echo "==> 拉取最新 compose 文件"
+            git fetch origin master
+            git reset --hard origin/master
+
+            echo "==> 部署 tag=$IMAGE_TAG"
+            docker compose -f docker-compose.prod.yml pull
+            docker compose -f docker-compose.prod.yml up -d
+
+            echo "==> 清理悬空镜像"
+            docker image prune -f
+
+            echo "==> 容器状态"
+            docker compose -f docker-compose.prod.yml ps

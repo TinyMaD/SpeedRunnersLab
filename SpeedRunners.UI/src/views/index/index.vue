@@ -10,18 +10,18 @@
                   <div style="color:#03a245">{{ $t("index.online") }}</div>
                   <Odometer :value="onlineCount" class="text-h4" color="#03a245" />
                   <v-divider />
-                  <v-avatar v-for="player in playSRlist" :key="player.platformID" class="ma-1">
-                    <v-tooltip top>
-                      <template v-slot:activator="{ on, attrs }">
-                        <img
-                          :src="player.avatarM"
-                          v-bind="attrs"
-                          v-on="on"
-                        >
-                      </template>
-                      <span>{{ player.personaName }}</span>
-                    </v-tooltip>
-                  </v-avatar>
+                  <v-tooltip v-for="player in playSRlist" :key="player.platformID" top>
+                    <template v-slot:activator="{ on, attrs }">
+                      <div class="d-inline-block ma-1" v-bind="attrs" v-on="on">
+                        <UserAvatar
+                          :platform-i-d="player.platformID"
+                          :avatar-url="player.avatarM"
+                          :size="48"
+                        />
+                      </div>
+                    </template>
+                    <span>{{ player.personaName }}</span>
+                  </v-tooltip>
                   <AddedChart />
                   <p class="text-center mt-2">
                     <a
@@ -58,6 +58,7 @@ import AddedChart from "./addedChart";
 import HourChart from "./hourChart";
 import Sponsor from "./sponsor";
 import Odometer from "@/components/Odometer";
+import UserAvatar from "@/components/UserAvatar";
 import { getOnlineCount } from "@/api/steam";
 import { getPlaySRList } from "@/api/rank";
 export default {
@@ -66,7 +67,8 @@ export default {
     AddedChart,
     HourChart,
     Odometer,
-    Sponsor
+    Sponsor,
+    UserAvatar
   },
   data: () => ({
     onlineCount: 0,

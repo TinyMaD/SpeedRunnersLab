@@ -11,10 +11,11 @@
         <!-- Post comment box -->
         <div v-if="isLoggedIn" class="comment-section__post mb-4">
           <div class="d-flex align-start" style="gap: 12px">
-            <v-avatar size="36">
-              <v-img v-if="userAvatar" :src="userAvatar" />
-              <v-icon v-else>mdi-account-circle</v-icon>
-            </v-avatar>
+            <UserAvatar
+              :platform-i-d="steamId"
+              :avatar-url="avatar"
+              :size="36"
+            />
             <div style="flex: 1">
               <v-textarea
                 v-model="newComment"
@@ -58,7 +59,7 @@
             :key="comment.id"
             :comment="comment"
             :is-logged-in="isLoggedIn"
-            :current-user="currentUser"
+            :current-user="steamId"
             @reply-posted="onReplyPosted"
             @comment-deleted="onCommentDeleted"
           />
@@ -88,13 +89,14 @@
 
 <script>
 import CommentItem from "./CommentItem";
+import UserAvatar from "@/components/UserAvatar";
 import { getCommentList, addComment } from "@/api/comment";
 import { getToken } from "@/utils/auth";
 import { mapGetters } from "vuex";
 
 export default {
   name: "CommentSection",
-  components: { CommentItem },
+  components: { CommentItem, UserAvatar },
   data() {
     return {
       comments: [],
@@ -110,12 +112,6 @@ export default {
     ...mapGetters(["avatar", "steamId"]),
     isLoggedIn() {
       return !!getToken();
-    },
-    currentUser() {
-      return this.steamId || "";
-    },
-    userAvatar() {
-      return this.avatar || "";
     },
     pagePath() {
       return this.$route.path;

@@ -69,12 +69,20 @@
                 @click="handleNotificationClick(item)"
               >
                 <v-list-item-avatar size="36">
-                  <v-img :src="item.senderAvatar || '/img/default-avatar.png'" />
+                  <UserAvatar
+                    :platform-i-d="item.senderID"
+                    :avatar-url="item.senderAvatar"
+                    :size="36"
+                  />
                 </v-list-item-avatar>
 
                 <v-list-item-content>
                   <v-list-item-title class="text-subtitle-2">
-                    <span class="font-weight-bold">{{ item.senderName }}</span>
+                    <UserName
+                      :platform-i-d="item.senderID"
+                      :persona-name="item.senderName"
+                      class="font-weight-bold"
+                    />
                     <span class="grey--text text--darken-1 ml-1">{{ $t('comment.reply') }}</span>
                   </v-list-item-title>
                   <v-list-item-subtitle class="text-caption mt-1 text-truncate">
@@ -115,12 +123,20 @@
                 @click="handleNotificationClick(item)"
               >
                 <v-list-item-avatar size="36">
-                  <v-img :src="item.senderAvatar || '/img/default-avatar.png'" />
+                  <UserAvatar
+                    :platform-i-d="item.senderID"
+                    :avatar-url="item.senderAvatar"
+                    :size="36"
+                  />
                 </v-list-item-avatar>
 
                 <v-list-item-content>
                   <v-list-item-title class="text-subtitle-2">
-                    <span class="font-weight-bold">{{ item.senderName }}</span>
+                    <UserName
+                      :platform-i-d="item.senderID"
+                      :persona-name="item.senderName"
+                      class="font-weight-bold"
+                    />
                     <span class="pink--text ml-1">
                       <v-icon x-small color="pink">mdi-heart</v-icon>
                       {{ $t('comment.like') }}
@@ -158,9 +174,12 @@
 
 <script>
 import { mapState } from "vuex";
+import UserAvatar from "@/components/UserAvatar";
+import UserName from "@/components/UserName";
 
 export default {
   name: "NotificationDrawer",
+  components: { UserAvatar, UserName },
   props: {
     value: {
       type: Boolean,

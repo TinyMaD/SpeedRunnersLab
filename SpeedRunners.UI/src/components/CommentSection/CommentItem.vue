@@ -1,13 +1,19 @@
 <template>
   <div class="comment-item">
     <div class="comment-item__main">
-      <v-avatar size="36" class="comment-item__avatar">
-        <v-img v-if="comment.avatarS" :src="comment.avatarS" />
-        <v-icon v-else>mdi-account-circle</v-icon>
-      </v-avatar>
+      <UserAvatar
+        :platform-i-d="comment.platformID"
+        :avatar-url="comment.avatarS"
+        :size="36"
+        class="comment-item__avatar"
+      />
       <div class="comment-item__body">
         <div class="comment-item__header">
-          <span class="comment-item__name">{{ comment.personaName || comment.platformID }}</span>
+          <UserName
+            :platform-i-d="comment.platformID"
+            :persona-name="comment.personaName"
+            class="comment-item__name"
+          />
           <span v-if="comment.replyToPersonaName" class="comment-item__reply-to">
             {{ $t('comment.reply') }} <strong>@{{ comment.replyToPersonaName }}</strong>
           </span>
@@ -117,9 +123,12 @@
 
 <script>
 import { addComment, deleteComment, getCommentList, toggleLike } from "@/api/comment";
+import UserAvatar from "@/components/UserAvatar";
+import UserName from "@/components/UserName";
 
 export default {
   name: "CommentItem",
+  components: { UserAvatar, UserName },
   props: {
     comment: { type: Object, required: true },
     isLoggedIn: { type: Boolean, default: false },
