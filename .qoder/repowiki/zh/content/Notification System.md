@@ -9,11 +9,20 @@
 - [notification.js](file://SpeedRunners.UI/src/api/notification.js)
 - [notification.js](file://SpeedRunners.UI/src/store/modules/notification.js)
 - [index.vue](file://SpeedRunners.UI/src/components/NotificationDrawer/index.vue)
+- [index.vue](file://SpeedRunners.UI/src/components/UserAvatar/index.vue)
+- [index.vue](file://SpeedRunners.UI/src/components/UserName/index.vue)
 - [CommentBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/CommentBLL.cs)
 - [Startup.cs](file://SpeedRunners.API/SpeedRunners/Startup.cs)
 - [BLLHelper.cs](file://SpeedRunners.API/SpeedRunners.Utils/BLLHelper.cs)
 - [notification_table.sql](file://mysql-dump/notification_table.sql)
 </cite>
+
+## 更新摘要
+**变更内容**
+- 更新通知抽屉组件以反映UserAvatar和UserName组件的集成
+- 新增发送者头像和用户名显示功能的详细说明
+- 更新前端组件架构图以包含新的用户展示组件
+- 增强用户交互体验的描述
 
 ## 目录
 1. [简介](#简介)
@@ -30,16 +39,19 @@
 
 SpeedRunnersLab 项目的通知系统是一个完整的实时消息通知解决方案，主要负责处理用户之间的互动通知，包括回复通知和点赞通知。该系统采用分层架构设计，包含前端Vue组件、后端API控制器、业务逻辑层和数据访问层，实现了从消息生成到展示的完整生命周期管理。
 
+**更新** 系统现已集成专门的用户展示组件，提供更丰富和直观的用户身份识别体验。
+
 通知系统支持以下核心功能：
 - 实时消息推送和展示
 - 未读消息计数统计
 - 消息分类管理（回复通知、点赞通知）
 - 自动清理过期消息
 - 用户友好的通知抽屉界面
+- **新增** 发送者头像和用户名的统一展示组件
 
 ## 项目结构
 
-通知系统在项目中采用清晰的分层架构组织：
+通知系统在项目中采用清晰的分层架构组织，现已集成专门的用户展示组件：
 
 ```mermaid
 graph TB
@@ -47,6 +59,8 @@ subgraph "前端层"
 UI[Vue组件]
 API[API接口]
 Store[Vuex状态管理]
+UserAvatar[UserAvatar组件]
+UserName[UserName组件]
 end
 subgraph "后端层"
 Controller[控制器层]
@@ -64,23 +78,28 @@ BLL --> DAL
 DAL --> DB
 Store --> API
 UI --> Store
+UI --> UserAvatar
+UI --> UserName
+UserAvatar --> Store
+UserName --> Store
 ```
 
 **图表来源**
-- [NotificationController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L1-L48)
-- [NotificationBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L1-L107)
-- [NotificationDAL.cs](file://SpeedRunners.API/SpeedRunners.DAL/NotificationDAL.cs#L1-L155)
+- [NotificationController.cs:1-48](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L1-L48)
+- [NotificationBLL.cs:1-107](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L1-L107)
+- [NotificationDAL.cs:1-155](file://SpeedRunners.API/SpeedRunners.DAL/NotificationDAL.cs#L1-L155)
+- [index.vue:177-182](file://SpeedRunners.UI/src/components/NotificationDrawer/index.vue#L177-L182)
 
 **章节来源**
-- [NotificationController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L1-L48)
-- [Startup.cs](file://SpeedRunners.API/SpeedRunners/Startup.cs#L33-L62)
+- [NotificationController.cs:1-48](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L1-L48)
+- [Startup.cs:33-62](file://SpeedRunners.API/SpeedRunners/Startup.cs#L33-L62)
 
 ## 核心组件
 
 通知系统由多个核心组件构成，每个组件都有明确的职责分工：
 
 ### 数据模型层
-- **MNotification**: 消息实体类，定义了通知的基本属性和结构
+- **MNotification**: 消息实体类，定义了通知的基本属性和结构，现包含发送者信息字段
 - **NotificationType**: 枚举类型，定义消息类型（回复通知、点赞通知）
 - **查询参数类**: 支持分页查询和条件过滤
 
@@ -93,17 +112,19 @@ UI --> Store
 - **BLLHelper**: 通用的业务逻辑基类，提供数据库连接和事务管理
 
 ### 前端组件层
-- **NotificationDrawer**: Vue通知抽屉组件，提供用户界面交互
+- **NotificationDrawer**: Vue通知抽屉组件，提供用户界面交互，现已集成用户展示组件
+- **UserAvatar**: 专用头像组件，负责发送者头像的显示和交互
+- **UserName**: 专用用户名组件，负责发送者用户名的显示和交互
 - **Vuex模块**: 状态管理和异步操作处理
 
 **章节来源**
-- [MNotification.cs](file://SpeedRunners.API/SpeedRunners.Model/User/MNotification.cs#L1-L145)
-- [NotificationBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L1-L107)
-- [NotificationDAL.cs](file://SpeedRunners.API/SpeedRunners.DAL/NotificationDAL.cs#L1-L155)
+- [MNotification.cs:1-145](file://SpeedRunners.API/SpeedRunners.Model/User/MNotification.cs#L1-L145)
+- [NotificationBLL.cs:1-107](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L1-L107)
+- [NotificationDAL.cs:1-155](file://SpeedRunners.API/SpeedRunners.DAL/NotificationDAL.cs#L1-L155)
 
 ## 架构概览
 
-通知系统采用经典的三层架构模式，确保了良好的代码分离和可维护性：
+通知系统采用经典的三层架构模式，现已集成专门的用户展示组件，确保了良好的代码分离和可维护性：
 
 ```mermaid
 classDiagram
@@ -132,20 +153,33 @@ class MNotification {
 +int ID
 +string ReceiverID
 +string SenderID
++string SenderName
++string SenderAvatar
 +NotificationType Type
 +bool IsRead
 +DateTime CreateTime
 }
+class UserAvatar {
++props : platformID, avatarUrl, size
++onClick() void
+}
+class UserName {
++props : platformID, personaName, tag
++onClick() void
+}
 NotificationController --> NotificationBLL : "依赖"
 NotificationBLL --> NotificationDAL : "依赖"
 NotificationDAL --> MNotification : "操作"
+NotificationDrawer --> UserAvatar : "使用"
+NotificationDrawer --> UserName : "使用"
 ```
 
 **图表来源**
-- [NotificationController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L10-L46)
-- [NotificationBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L9-L34)
-- [NotificationDAL.cs](file://SpeedRunners.API/SpeedRunners.DAL/NotificationDAL.cs#L10-L26)
-- [MNotification.cs](file://SpeedRunners.API/SpeedRunners.Model/User/MNotification.cs#L24-L90)
+- [NotificationController.cs:10-46](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L10-L46)
+- [NotificationBLL.cs:9-34](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L9-L34)
+- [NotificationDAL.cs:10-26](file://SpeedRunners.API/SpeedRunners.DAL/NotificationDAL.cs#L10-L26)
+- [MNotification.cs:24-90](file://SpeedRunners.API/SpeedRunners.Model/User/MNotification.cs#L24-L90)
+- [index.vue:177-182](file://SpeedRunners.UI/src/components/NotificationDrawer/index.vue#L177-L182)
 
 ## 详细组件分析
 
@@ -163,7 +197,7 @@ NotificationController 是通知系统的核心入口点，提供了三个主要
 将指定的通知标记为已读，支持按通知ID或通知类型进行批量标记。
 
 **章节来源**
-- [NotificationController.cs](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L12-L45)
+- [NotificationController.cs:12-45](file://SpeedRunners.API/SpeedRunners/Controllers/NotificationController.cs#L12-L45)
 
 ### 业务逻辑层实现
 
@@ -184,7 +218,7 @@ NotificationBLL 类封装了所有业务逻辑处理，包括：
 定期清理30天前的过期消息，保持数据库性能。
 
 **章节来源**
-- [NotificationBLL.cs](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L15-L104)
+- [NotificationBLL.cs:15-104](file://SpeedRunners.API/SpeedRunners.BLL/NotificationBLL.cs#L15-L104)
 
 ### 数据访问层设计
 
@@ -206,27 +240,71 @@ NotificationDAL 提供了完整的数据持久化操作：
 - 过期数据清理
 
 **章节来源**
-- [NotificationDAL.cs](file://SpeedRunners.API/SpeedRunners.DAL/NotificationDAL.cs#L17-L136)
+- [NotificationDAL.cs:17-136](file://SpeedRunners.API/SpeedRunners.DAL/NotificationDAL.cs#L17-L136)
 
 ### 前端组件实现
 
 #### NotificationDrawer 抽屉组件
-这是一个功能完整的Vue组件，提供用户友好的通知界面：
+
+**更新** NotificationDrawer 组件现已深度集成了 UserAvatar 和 UserName 两个专用组件，显著提升了用户展示体验：
 
 ##### 核心功能
 - **标签页切换**: 区分回复通知和点赞通知
 - **实时轮询**: 每30秒自动检查未读消息
 - **消息点击跳转**: 点击通知自动跳转到相关内容
 - **批量标记**: 支持一键标记所有通知为已读
+- ****新增** 用户展示**: 集成UserAvatar和UserName组件提供统一的用户信息展示
 
 ##### 界面特性
 - **响应式设计**: 适配不同屏幕尺寸
 - **主题适配**: 支持明暗主题切换
 - **加载状态**: 提供加载指示器
 - **空状态**: 无通知时的友好提示
+- ****新增** 交互体验**: 点击头像或用户名可跳转到用户资料页
+
+##### 用户展示组件集成
+- **UserAvatar**: 专门负责发送者头像的显示，支持点击跳转到用户资料
+- **UserName**: 专门负责发送者用户名的显示，支持点击跳转到用户资料
+- **统一样式**: 两个组件提供一致的视觉风格和交互行为
 
 **章节来源**
-- [index.vue](file://SpeedRunners.UI/src/components/NotificationDrawer/index.vue#L1-L325)
+- [index.vue:1-344](file://SpeedRunners.UI/src/components/NotificationDrawer/index.vue#L1-L344)
+
+#### UserAvatar 组件
+
+**新增** UserAvatar 是一个专门的用户头像展示组件：
+
+##### 核心功能
+- **头像显示**: 显示用户的头像图片
+- **默认头像**: 当没有头像时显示默认的账户图标
+- **点击交互**: 点击头像可跳转到用户个人资料页面
+- **尺寸控制**: 支持自定义头像尺寸
+
+##### 设计特点
+- **响应式**: 支持不同的头像尺寸
+- **可点击**: 当有平台ID时提供点击交互
+- **平滑过渡**: 悬停时提供透明度变化的视觉反馈
+
+**章节来源**
+- [index.vue:1-39](file://SpeedRunners.UI/src/components/UserAvatar/index.vue#L1-L39)
+
+#### UserName 组件
+
+**新增** UserName 是一个专门的用户名展示组件：
+
+##### 核心功能
+- **用户名显示**: 显示用户的个人名称
+- **回退机制**: 当没有个人名称时显示平台ID
+- **点击交互**: 点击用户名可跳转到用户个人资料页面
+- **标签定制**: 支持自定义HTML标签类型
+
+##### 设计特点
+- **可点击**: 当有平台ID时提供点击交互
+- **悬停效果**: 悬停时提供下划线装饰
+- **灵活标签**: 支持span、a等不同HTML标签
+
+**章节来源**
+- [index.vue:1-35](file://SpeedRunners.UI/src/components/UserName/index.vue#L1-L35)
 
 ### Vuex状态管理
 
@@ -244,7 +322,7 @@ notification.js 模块管理通知相关的状态和异步操作：
 - **startPolling/stopPolling**: 控制轮询功能
 
 **章节来源**
-- [notification.js](file://SpeedRunners.UI/src/store/modules/notification.js#L1-L138)
+- [notification.js:1-138](file://SpeedRunners.UI/src/store/modules/notification.js#L1-L138)
 
 ## 依赖关系分析
 
@@ -268,10 +346,16 @@ BLL[NotificationBLL]
 DAL[NotificationDAL]
 Model[MNotification]
 Drawer[NotificationDrawer]
+UserAvatar[UserAvatar]
+UserName[UserName]
 Store[Notification Store]
 end
 Vue --> Drawer
 Drawer --> Store
+Drawer --> UserAvatar
+Drawer --> UserName
+UserAvatar --> Store
+UserName --> Store
 Store --> API[API接口]
 API --> Controller
 Controller --> BLL
@@ -284,8 +368,8 @@ Store --> Axios
 ```
 
 **图表来源**
-- [Startup.cs](file://SpeedRunners.API/SpeedRunners/Startup.cs#L33-L62)
-- [BLLHelper.cs](file://SpeedRunners.API/SpeedRunners.Utils/BLLHelper.cs#L7-L71)
+- [Startup.cs:33-62](file://SpeedRunners.API/SpeedRunners/Startup.cs#L33-L62)
+- [BLLHelper.cs:7-71](file://SpeedRunners.API/SpeedRunners.Utils/BLLHelper.cs#L7-L71)
 
 ### 数据库设计
 
@@ -300,13 +384,18 @@ Store --> Axios
 #### 字段说明
 - **ReceiverID**: 接收用户标识
 - **SenderID**: 发送用户标识  
+- **SenderName**: 发送用户名称
+- **SenderAvatar**: 发送用户头像URL
 - **Type**: 消息类型（1-回复，2-点赞）
 - **ContentID**: 关联内容ID
+- **ContentType**: 关联内容类型
+- **ContentTitle**: 关联内容标题
+- **Message**: 消息内容摘要
 - **IsRead**: 已读状态标志
 - **CreateTime**: 创建时间戳
 
 **章节来源**
-- [notification_table.sql](file://mysql-dump/notification_table.sql#L1-L22)
+- [notification_table.sql:1-22](file://mysql-dump/notification_table.sql#L1-L22)
 
 ## 性能考虑
 
@@ -321,6 +410,7 @@ Store --> Axios
 - **虚拟滚动**: 大量通知时使用虚拟滚动技术
 - **懒加载**: 按需加载通知数据
 - **缓存策略**: 合理使用浏览器缓存
+- ****新增** 组件优化**: UserAvatar和UserName组件提供高效的渲染和交互
 
 ### 后端性能优化
 - **连接池**: 使用连接池管理数据库连接
@@ -346,8 +436,13 @@ Store --> Axios
 2. **监控查询**: 使用数据库性能分析工具
 3. **优化查询**: 减少不必要的数据传输
 
+#### **新增** 用户展示组件问题
+1. **头像加载失败**: 检查头像URL的有效性和网络连接
+2. **用户名显示异常**: 验证平台ID和个人名称数据
+3. **点击跳转失效**: 检查路由配置和用户资料页面
+
 **章节来源**
-- [notification.js](file://SpeedRunners.UI/src/store/modules/notification.js#L61-L109)
+- [notification.js:61-109](file://SpeedRunners.UI/src/store/modules/notification.js#L61-L109)
 
 ### 错误处理机制
 
@@ -357,6 +452,7 @@ Store --> Axios
 - **API调用错误**: 捕获HTTP请求异常
 - **数据解析错误**: 处理JSON解析失败
 - **用户反馈**: 提供友好的错误提示
+- ****新增** 组件错误处理**: UserAvatar和UserName组件提供优雅降级
 
 #### 后端错误处理
 - **数据库异常**: 处理连接和查询异常
@@ -364,22 +460,26 @@ Store --> Axios
 - **全局异常捕获**: 统一处理未捕获的异常
 
 **章节来源**
-- [Startup.cs](file://SpeedRunners.API/SpeedRunners/Startup.cs#L46-L48)
+- [Startup.cs:46-48](file://SpeedRunners.API/SpeedRunners/Startup.cs#L46-L48)
 
 ## 结论
 
 SpeedRunnersLab 项目的通知系统是一个设计精良、功能完整的实时消息通知解决方案。系统采用了清晰的分层架构，实现了前后端的良好分离，提供了优秀的用户体验。
+
+**更新** 最新的版本进一步增强了用户展示体验，通过集成专门的UserAvatar和UserName组件，为用户提供了更加直观和友好的身份识别方式。
 
 ### 系统优势
 - **架构清晰**: 分层设计便于维护和扩展
 - **性能优秀**: 合理的数据库设计和查询优化
 - **用户体验**: 直观的界面设计和流畅的交互体验
 - **可靠性强**: 完善的错误处理和异常恢复机制
+- ****新增** 用户展示**: 专业的用户头像和用户名组件提升识别度
 
 ### 技术亮点
 - **实时性**: 通过轮询机制实现实时通知更新
 - **可扩展性**: 模块化设计支持功能扩展
 - **国际化**: 支持多语言界面
 - **响应式**: 适配多种设备和屏幕尺寸
+- ****新增** 组件化**: 专业化的用户展示组件提供更好的用户体验
 
 该通知系统为SpeedRunnersLab平台的用户互动提供了坚实的技术基础，为后续的功能扩展和性能优化奠定了良好基础。
