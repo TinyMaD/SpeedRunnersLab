@@ -13,16 +13,6 @@ namespace SpeedRunners.DAL
         public ProfileDAL(DbHelper db) : base(db) { }
 
         /// <summary>
-        /// 获取玩家基础信息
-        /// </summary>
-        public MRankInfo GetPlayerInfo(string steamId)
-        {
-            return Db.QueryFirstOrDefault<MRankInfo>(
-                @"SELECT * FROM RankInfo WHERE PlatformID = ?steamId",
-                new { steamId });
-        }
-
-        /// <summary>
         /// 获取用户隐私设置
         /// </summary>
         public MPrivacySettings GetPrivacySettings(string steamId)
@@ -40,6 +30,31 @@ namespace SpeedRunners.DAL
                     LEFT JOIN PrivacySettings b ON a.PlatformID = b.PlatformID
                     WHERE a.PlatformID = ?steamId",
                 new { steamId });
+        }
+
+        /// <summary>
+        /// 一次连接拿玩家基础信息 + 隐私设置（个人主页接口热路径）
+        /// </summary>
+        public (MRankInfo PlayerInfo, MPrivacySettings PrivacySettings) GetPlayerInfoAndPrivacy(string steamId)
+        {
+            using var multi = Db.QueryMultiple(@"
+                SELECT * FROM RankInfo WHERE PlatformID = ?steamId;
+                SELECT
+                     a.PlatformID,
+                     CASE WHEN a.State = -1 THEN -1 ELSE 0 END AS State,
+                     a.RankType,
+                     IFNULL(b.ShowProfile, 1) ShowProfile,
+                     IFNULL(b.RequestRankData, 1) RequestRankData,
+                     IFNULL(b.ShowAddScore, 1) ShowAddScore,
+                     IFNULL(b.ShowWeekPlayTime, 1) ShowWeekPlayTime
+                    FROM RankInfo a
+                    LEFT JOIN PrivacySettings b ON a.PlatformID = b.PlatformID
+                    WHERE a.PlatformID = ?steamId;",
+                new { steamId });
+
+            var playerInfo = multi.ReadFirstOrDefault<MRankInfo>();
+            var privacySettings = multi.ReadFirstOrDefault<MPrivacySettings>();
+            return (playerInfo, privacySettings);
         }
 
         /// <summary>

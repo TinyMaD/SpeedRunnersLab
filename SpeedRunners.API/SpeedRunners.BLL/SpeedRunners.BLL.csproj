@@ -17,4 +17,8 @@
     <ProjectReference Include="..\SpeedRunners.Utils\SpeedRunners.Utils.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="SpeedRunners.Tests" />
+  </ItemGroup>
+
 </Project>

@@ -18,4 +18,8 @@
     <ProjectReference Include="..\SpeedRunners.Model\SpeedRunners.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="SpeedRunners.Tests" />
+  </ItemGroup>
+
 </Project>

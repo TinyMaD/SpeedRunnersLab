@@ -30,9 +30,9 @@ namespace SpeedRunners.BLL
         /// <param name="visitorId">访问者的Steam ID（未登录时为null）</param>
         public async Task<MProfileData> GetProfileData(string steamId, string visitorId = null)
         {
-            // 从数据库获取基础信息
-            MRankInfo playerInfo = BeginDb(DAL => DAL.GetPlayerInfo(steamId));
-            
+            // 一次连接拿玩家基础信息 + 隐私设置
+            var (playerInfo, privacySettings) = BeginDb(DAL => DAL.GetPlayerInfoAndPrivacy(steamId));
+
             if (playerInfo == null)
             {
                 // 尝试从Steam API获取
@@ -68,9 +68,6 @@ namespace SpeedRunners.BLL
             // 本人或管理员视同完整访问权限
             bool isOwner = IsOwnerOrAdmin(steamId, visitorId);
 
-            // 获取隐私设置
-            MPrivacySettings privacySettings = BeginDb(DAL => DAL.GetPrivacySettings(steamId));
-
             if (isOwner)
             {
                 return BuildFullProfileData(playerInfo, privacySettings);
@@ -89,7 +86,7 @@ namespace SpeedRunners.BLL
         /// <summary>
         /// 本人访问或管理员访问视同完整访问权限
         /// </summary>
-        private static bool IsOwnerOrAdmin(string steamId, string visitorId)
+        internal static bool IsOwnerOrAdmin(string steamId, string visitorId)
         {
             if (string.IsNullOrEmpty(visitorId)) return false;
             return steamId == visitorId || AdminHelper.IsAdmin(visitorId);
@@ -118,7 +115,7 @@ namespace SpeedRunners.BLL
                 TotalPlaytime = totalPlaytime,
                 Past2WeeksPlaytime = past2WeeksPlaytime,
                 Past2WeeksScore = past2WeeksScore,
-                Stats = BuildGameStats(playerInfo, null), // 本人访问不过滤
+                Stats = BuildGameStats(playerInfo, privacySettings, isOwner: true),
                 IsPrivate = false
             };
         }
@@ -200,7 +197,7 @@ namespace SpeedRunners.BLL
                 TotalPlaytime = totalPlaytime,
                 Past2WeeksPlaytime = past2WeeksPlaytime,
                 Past2WeeksScore = past2WeeksScore,
-                Stats = BuildGameStats(playerInfo, privacySettings),
+                Stats = BuildGameStats(playerInfo, privacySettings, isOwner: false),
                 IsPrivate = false
             };
         }
@@ -299,35 +296,26 @@ namespace SpeedRunners.BLL
         /// 构建游戏统计数据
         /// </summary>
         /// <param name="playerInfo">玩家信息</param>
-        /// <param name="privacySettings">隐私设置（本人访问时为null）</param>
-        private List<MGameStat> BuildGameStats(MRankInfo playerInfo, MPrivacySettings privacySettings)
+        /// <param name="privacySettings">隐私设置；isOwner=true 时不读取</param>
+        /// <param name="isOwner">本人或管理员视角，true 时返回完整数据</param>
+        private List<MGameStat> BuildGameStats(MRankInfo playerInfo, MPrivacySettings privacySettings, bool isOwner)
         {
             var stats = new List<MGameStat>();
-            bool isOwner = privacySettings == null;
 
-            // 段位（受 RequestRankData 控制）
             if (isOwner || privacySettings.RequestRankData == 1)
             {
                 string rankName = GetRankName(playerInfo.RankLevel, Localizer);
                 stats.Add(new MGameStat { Name = Localizer["rank"], Value = rankName });
-            }
 
-            // 天梯分已移除，统一从 MProfileData.RankScore 获取
-
-            // 排位场次（受 RequestRankData 控制）
-            if (isOwner || privacySettings.RequestRankData == 1)
-            {
                 if (playerInfo.RankCount.HasValue)
                 {
                     stats.Add(new MGameStat { Name = Localizer["rankCount"], Value = playerInfo.RankCount.Value.ToString() });
                 }
             }
 
-            // 总游戏时长（始终显示）
             var totalHours = Math.Round((decimal)playerInfo.PlayTime / 60, 1);
             stats.Add(new MGameStat { Name = Localizer["totalPlaytime"], Value = $"{totalHours} {Localizer["hours"]}" });
 
-            // 最近两周游戏时长（受 ShowWeekPlayTime 控制）
             if (isOwner || privacySettings.ShowWeekPlayTime == 1)
             {
                 var weekHours = Math.Round((decimal)playerInfo.WeekPlayTime / 60, 1);

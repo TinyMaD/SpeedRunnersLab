@@ -28,6 +28,8 @@ namespace SpeedRunners.DAL
                 Db.Execute($@"INSERT INTO PrivacySettings (PlatformID) VALUES (?{nameof(platformID)}) ", new { platformID });
             }
 
+            // 注意：RankInfo.State 同时承担"实时在线状态"和"是否公开状态的隐私开关"两个语义
+            // 这里只需要隐私开关含义，所以把任何非 -1 的值统一映射成 0（参见 MPrivacySettings.State 注释）
             return Db.QueryFirstOrDefault<MPrivacySettings>(
                 $@"SELECT
                      a.PlatformID,

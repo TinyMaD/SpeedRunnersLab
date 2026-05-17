@@ -26,5 +26,13 @@ namespace SpeedRunners
 
         public static bool IsAdmin(string platformId)
             => !string.IsNullOrEmpty(platformId) && AdminIds.Contains(platformId);
+
+        /// <summary>
+        /// 仅供单元测试覆盖 admin id 集合
+        /// </summary>
+        internal static void OverrideAdminIdsForTesting(IEnumerable<string> ids)
+        {
+            _adminIds = new HashSet<string>(ids ?? Array.Empty<string>(), StringComparer.OrdinalIgnoreCase);
+        }
     }
 }
