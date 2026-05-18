@@ -419,7 +419,7 @@ export default {
       return this.permission_routes.find(route => route.path === "/").children.filter(x => x.hidden !== true);
     },
     sideBars() {
-      return this.permission_routes.find(route => route.path === "/").children.filter(x => x.hidden === true && x.meta);
+      return this.permission_routes.find(route => route.path === "/").children.filter(x => x.hidden === true && x.meta && x.meta.title !== "profile");
     }
   },
   mounted() {
