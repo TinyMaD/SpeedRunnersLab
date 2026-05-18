@@ -8,9 +8,15 @@ WORKDIR /app
 # 先只复制依赖描述，命中 yarn install 缓存
 COPY package.json yarn.lock ./
 
-# 修复 yarn.lock 里硬编码的 registry.npm.taobao.org（已废弃、SSL 证书过期）
-# 替换成新域名 registry.npmmirror.com（同一个镜像服务，tarball 内容一致 hash 不变）
-RUN sed -i 's|registry\.npm\.taobao\.org|registry.npmmirror.com|g' yarn.lock
+# 修复 yarn.lock 里硬编码的废弃 registry（taobao/nlark/cnpmjs 都已停服）
+# tarball 内容一致 hash 不变，所以 sed 替换后 --frozen-lockfile 仍可通过
+RUN sed -i \
+        -e 's|registry\.npm\.taobao\.org|registry.npmmirror.com|g' \
+        -e 's|registry\.nlark\.com|registry.npmmirror.com|g' \
+        -e 's|registry\.cnpmjs\.org|registry.npmmirror.com|g' \
+        yarn.lock && \
+    echo "== yarn.lock 中残余的 registry 域名 ==" && \
+    grep -oE 'https?://[^/]+' yarn.lock | sort -u
 
 RUN yarn install --frozen-lockfile --network-timeout 600000
 
