@@ -59,6 +59,63 @@ curl -fsSL https://raw.githubusercontent.com/TinyMaD/SpeedRunnersLab/master/scri
 
 ---
 
+## 换新云服务器迁移
+
+数据库迁移（mysqldump）独立做，这里只覆盖**项目 + SSL 自动续期**。
+
+### Step 1：旧机打包敏感配置（30 秒）
+
+```bash
+bash /root/home/srlab/scripts/backup-secrets.sh
+# 产出 /root/srlab-secrets-bak-YYYYMMDD-HHMMSS.tar.gz
+```
+
+包里有：
+- `/root/.acme.sh/`（账号 + 通配符证书 + 七牛 deploy hook 状态）
+- `/root/deploy_qiniu_all.sh`（RenewHook）
+- `appsettings.Production.json`、`App.config`、SSL 证书、`.env`
+
+⚠ **此包含明文敏感信息**（七牛 AK/SK、数据库密码、阿里 DNS Key），scp 后立刻在两端删干净，别留在网盘/聊天工具/git 里。
+
+### Step 2：拷到新机
+
+```bash
+scp /root/srlab-secrets-bak-*.tar.gz root@<新机IP>:/root/
+rm /root/srlab-secrets-bak-*.tar.gz   # 旧机立刻删
+```
+
+### Step 3：新机一行命令搞定（5 分钟）
+
+SSH 进新机，确保 `docker` `git` `curl` 装好（一般云镜像自带，没有就 `yum install -y docker git curl`），然后：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/TinyMaD/SpeedRunnersLab/master/scripts/bootstrap.sh \
+  | bash -s /root/srlab-secrets-bak-YYYYMMDD-HHMMSS.tar.gz
+```
+
+脚本自动做：
+1. 跑 `setup-ecs.sh`：git 初始化项目、装 docker compose v2、写 `.env`
+2. 跑 `restore-secrets.sh`：解包 → 还原 `/root/.acme.sh/` + 证书 + appsettings + App.config + RenewHook 脚本 → 重建 acme.sh 的 cron（每天 5:00 自动续期）
+3. `docker compose pull && up -d` 启动所有容器
+4. 输出 `acme.sh --list` 让你看到下次续期日期
+
+### Step 4：切流量（5 分钟）
+
+| 改什么 | 在哪改 |
+|---|---|
+| GitHub Secret `SSH_HOST` 改新机 IP | github.com/TinyMaD/SpeedRunnersLab/settings/secrets/actions |
+| 阿里云 DNS 把 `api.speedrunners.cn` A 记录指新机 IP | 阿里云控制台 |
+| 七牛 CDN 源站 IP 改新机 | 七牛云控制台 |
+| 新机阿里云安全组开 22/80/443 | 阿里云控制台 |
+
+完成后浏览器开 `https://www.speedrunners.cn/` 验证。OK 就把老 ECS 释放。
+
+### 备份 / 恢复脚本如果你想本地测一遍
+
+不要在生产 ECS 直接测 restore（会覆盖现有配置）。要测就用临时 ECS 或本地 Linux。
+
+---
+
 ## 为什么不用阿里云 ACR？
 
 阿里云 2024 年末调整了政策，**新账号不再开放 ACR 个人版**，只能企业版（付费/试用）。
@@ -169,6 +226,9 @@ GHCR_OWNER=tinymad IMAGE_TAG=a1b2c3d docker compose -f docker-compose.prod.yml u
 | `.github/workflows/deploy.yml` | CI 流水线（手动触发 → build × 3 → SSH 部署） |
 | `scripts/setup-local.ps1` | 本地一键配置脚本 |
 | `scripts/setup-ecs.sh` | ECS 一键配置脚本 |
+| `scripts/bootstrap.sh` | 换机迁移入口脚本（setup-ecs + restore-secrets + 启动） |
+| `scripts/backup-secrets.sh` | 旧机：打包敏感配置 + acme.sh 状态 |
+| `scripts/restore-secrets.sh` | 新机：解包 + 重建 acme.sh cron |
 
 ---
 
