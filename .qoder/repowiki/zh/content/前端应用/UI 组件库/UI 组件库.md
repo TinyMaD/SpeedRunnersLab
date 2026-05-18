@@ -32,10 +32,10 @@
 
 ## 更新摘要
 **变更内容**
-- 新增 UserAvatar 和 UserName 组件章节，详细介绍统一的用户头像显示和点击导航功能
-- 更新组件详解章节，补充用户头像和用户名组件的设计理念、属性配置和导航功能
-- 更新评论系统章节，说明新组件在评论区中的应用和统一用户信息显示
-- 更新故障排查指南，增加用户头像组件相关问题解决方案
+- 新增图表组件交互功能章节，详细介绍 addedChart.vue 和 hourChart.vue 的点击交互增强
+- 更新图表组件与骨架加载器优化章节，补充事件监听器、智能 platformID 提取逻辑、指针光标效果和增强的 tooltip 格式化
+- 更新用户导航功能章节，说明图表点击如何触发用户资料跳转
+- 更新故障排查指南，增加图表交互功能相关问题解决方案
 
 ## 目录
 1. [简介](#简介)
@@ -99,8 +99,8 @@ A --> T["settings.js<br/>站点配置"]
 - [ScoreHeatmap/index.vue:1-362](file://SpeedRunners.UI/src/components/ScoreHeatmap/index.vue#L1-L362)
 - [UserAvatar/index.vue:1-39](file://SpeedRunners.UI/src/components/UserAvatar/index.vue#L1-L39)
 - [UserName/index.vue:1-35](file://SpeedRunners.UI/src/components/UserName/index.vue#L1-L35)
-- [addedChart.vue:1-158](file://SpeedRunners.UI/src/views/index/addedChart.vue#L1-L158)
-- [hourChart.vue:1-171](file://SpeedRunners.UI/src/views/index/hourChart.vue#L1-L171)
+- [addedChart.vue:1-174](file://SpeedRunners.UI/src/views/index/addedChart.vue#L1-L174)
+- [hourChart.vue:1-187](file://SpeedRunners.UI/src/views/index/hourChart.vue#L1-L187)
 - [resize.js:1-55](file://SpeedRunners.UI/src/utils/resize.js#L1-L55)
 - [profile.js:1-4](file://SpeedRunners.UI/src/utils/profile.js#L1-L4)
 - [vue.config.js:1-129](file://SpeedRunners.UI/vue.config.js#L1-L129)
@@ -120,7 +120,7 @@ A --> T["settings.js<br/>站点配置"]
 - UserAvatar：统一用户头像显示组件，支持点击跳转到个人资料页面
 - UserName：统一用户名显示组件，支持点击跳转到个人资料页面
 - 布局容器：顶部栏、侧边抽屉、页脚、回到顶部按钮
-- 图表组件：ECharts 图表，支持骨架加载器优化与响应式自适应
+- 图表组件：ECharts 图表，支持骨架加载器优化、响应式自适应、点击交互功能
 - 国际化：自动识别语言、持久化选择、切换与页面标题更新
 - 样式系统：SCSS 变量导出、过渡与工具类、侧边栏响应式
 
@@ -135,15 +135,15 @@ A --> T["settings.js<br/>站点配置"]
 - [UserAvatar/index.vue:1-39](file://SpeedRunners.UI/src/components/UserAvatar/index.vue#L1-L39)
 - [UserName/index.vue:1-35](file://SpeedRunners.UI/src/components/UserName/index.vue#L1-L35)
 - [layout/index.vue:1-556](file://SpeedRunners.UI/src/layout/index.vue#L1-L556)
-- [addedChart.vue:1-158](file://SpeedRunners.UI/src/views/index/addedChart.vue#L1-L158)
-- [hourChart.vue:1-171](file://SpeedRunners.UI/src/views/index/hourChart.vue#L1-L171)
+- [addedChart.vue:1-174](file://SpeedRunners.UI/src/views/index/addedChart.vue#L1-L174)
+- [hourChart.vue:1-187](file://SpeedRunners.UI/src/views/index/hourChart.vue#L1-L187)
 - [index.js:1-35](file://SpeedRunners.UI/src/i18n/index.js#L1-L35)
 - [index.scss:1-68](file://SpeedRunners.UI/src/styles/index.scss#L1-L68)
 - [variables.scss:1-26](file://SpeedRunners.UI/src/styles/variables.scss#L1-L26)
 - [sidebar.scss:1-84](file://SpeedRunners.UI/src/styles/sidebar.scss#L1-L84)
 
 ## 架构总览
-下图展示应用启动到组件渲染的关键路径，以及 Vuetify、图标系统、布局与图表组件之间的交互，包括新增的用户头像和用户名组件。
+下图展示应用启动到组件渲染的关键路径，以及 Vuetify、图标系统、布局与图表组件之间的交互，包括新增的用户头像和用户名组件以及图表点击交互功能。
 
 ```mermaid
 sequenceDiagram
@@ -176,6 +176,10 @@ Layout->>AddedChart : 渲染新增图表
 Layout->>HourChart : 渲染小时图表
 AddedChart->>Icon : 使用骨架加载器优化
 HourChart->>Icon : 使用骨架加载器优化
+AddedChart->>AddedChart : 注册点击事件监听器
+HourChart->>HourChart : 注册点击事件监听器
+AddedChart->>Profile : 点击图表元素跳转到个人资料
+HourChart->>Profile : 点击图表元素跳转到个人资料
 ```
 
 **图表来源**
@@ -191,8 +195,8 @@ HourChart->>Icon : 使用骨架加载器优化
 - [UserAvatar/index.vue:1-39](file://SpeedRunners.UI/src/components/UserAvatar/index.vue#L1-L39)
 - [UserName/index.vue:1-35](file://SpeedRunners.UI/src/components/UserName/index.vue#L1-L35)
 - [profile.js:1-4](file://SpeedRunners.UI/src/utils/profile.js#L1-L4)
-- [addedChart.vue:1-158](file://SpeedRunners.UI/src/views/index/addedChart.vue#L1-L158)
-- [hourChart.vue:1-171](file://SpeedRunners.UI/src/views/index/hourChart.vue#L1-L171)
+- [addedChart.vue:1-174](file://SpeedRunners.UI/src/views/index/addedChart.vue#L1-L174)
+- [hourChart.vue:1-187](file://SpeedRunners.UI/src/views/index/hourChart.vue#L1-L187)
 
 ## 组件详解
 
@@ -424,8 +428,12 @@ UserName --> ProfileUtils : "调用导航函数"
 - 响应式自适应：集成 resize mixin，支持窗口大小变化时图表重新计算
 - ECharts 集成：按需引入图表组件，支持主题切换与国际化
 - 性能优化：骨架加载器减少首屏等待时间，提升用户体验
+- **交互功能增强**：新增点击事件监听器，支持用户通过点击图表元素直接跳转到玩家个人资料
+- **智能 platformID 提取**：支持从系列数据和Y轴标签中智能提取用户平台ID
+- **指针光标效果**：设置鼠标悬停时的指针样式为手型光标
+- **增强的 tooltip 格式化**：提供更友好的数据展示格式
 
-**更新** 新增图表组件性能优化章节
+**更新** 新增图表组件交互功能增强章节
 
 ```mermaid
 flowchart TD
@@ -434,17 +442,24 @@ Chart --> Resize["resize mixin<br/>响应式自适应"]
 Resize --> Theme["主题切换<br/>深色/浅色"]
 Resize --> I18n["国际化<br/>多语言支持"]
 Chart --> Data["数据加载<br/>getAddedChart/getHourChart"]
+Chart --> Click["点击事件监听器<br/>handleChartClick"]
+Click --> PlatformID["智能 platformID 提取<br/>series/yAxis"]
+PlatformID --> Router["路由跳转<br/>/profile/:platformID"]
+Chart --> Cursor["指针光标效果<br/>cursor: 'pointer'"]
+Chart --> Tooltip["增强的 tooltip 格式化"]
 ```
 
 **图表来源**
-- [addedChart.vue:1-158](file://SpeedRunners.UI/src/views/index/addedChart.vue#L1-L158)
-- [hourChart.vue:1-171](file://SpeedRunners.UI/src/views/index/hourChart.vue#L1-L171)
+- [addedChart.vue:1-174](file://SpeedRunners.UI/src/views/index/addedChart.vue#L1-L174)
+- [hourChart.vue:1-187](file://SpeedRunners.UI/src/views/index/hourChart.vue#L1-L187)
 - [resize.js:1-55](file://SpeedRunners.UI/src/utils/resize.js#L1-L55)
+- [profile.js:1-4](file://SpeedRunners.UI/src/utils/profile.js#L1-L4)
 
 **章节来源**
-- [addedChart.vue:1-158](file://SpeedRunners.UI/src/views/index/addedChart.vue#L1-L158)
-- [hourChart.vue:1-171](file://SpeedRunners.UI/src/views/index/hourChart.vue#L1-L171)
+- [addedChart.vue:1-174](file://SpeedRunners.UI/src/views/index/addedChart.vue#L1-L174)
+- [hourChart.vue:1-187](file://SpeedRunners.UI/src/views/index/hourChart.vue#L1-L187)
 - [resize.js:1-55](file://SpeedRunners.UI/src/utils/resize.js#L1-L55)
+- [profile.js:1-4](file://SpeedRunners.UI/src/utils/profile.js#L1-L4)
 
 ### 布局与导航
 - 顶部栏：Logo、主题切换、语言切换、导航标签
@@ -454,8 +469,9 @@ Chart --> Data["数据加载<br/>getAddedChart/getHourChart"]
 - 语言切换：更新 i18n 语言并同步持久化
 - 评论区布局：支持侧边栏评论区，根据用户状态动态显示
 - 用户导航：UserAvatar 和 UserName 组件提供统一的用户信息点击导航
+- **图表导航**：addedChart 和 hourChart 组件支持点击图表元素跳转到用户个人资料
 
-**更新** AppMain 布局组件支持评论区侧边栏显示，新增用户头像和用户名组件导航功能
+**更新** AppMain 布局组件支持评论区侧边栏显示，新增用户头像和用户名组件导航功能，以及图表组件的点击导航功能
 
 ```mermaid
 sequenceDiagram
@@ -466,6 +482,8 @@ participant I18n as "i18n"
 participant AppMain as "AppMain.vue"
 participant Avatar as "UserAvatar"
 participant Name as "UserName"
+participant AddedChart as "addedChart.vue"
+participant HourChart as "hourChart.vue"
 User->>Layout : 点击主题切换
 Layout->>Vuetify : 切换深色/浅色
 Layout->>Layout : 写入本地存储
@@ -476,6 +494,8 @@ AppMain->>AppMain : 评论区显示控制
 AppMain->>CommentSection : 条件渲染评论区
 Avatar->>Layout : 点击头像导航
 Name->>Layout : 点击用户名导航
+AddedChart->>Layout : 点击图表元素导航
+HourChart->>Layout : 点击图表元素导航
 Layout->>Layout : 路由跳转到个人资料
 ```
 
@@ -486,6 +506,8 @@ Layout->>Layout : 路由跳转到个人资料
 - [AppMain.vue:1-139](file://SpeedRunners.UI/src/layout/components/AppMain.vue#L1-L139)
 - [UserAvatar/index.vue:22-26](file://SpeedRunners.UI/src/components/UserAvatar/index.vue#L22-L26)
 - [UserName/index.vue:19-23](file://SpeedRunners.UI/src/components/UserName/index.vue#L19-L23)
+- [addedChart.vue:102-113](file://SpeedRunners.UI/src/views/index/addedChart.vue#L102-L113)
+- [hourChart.vue:173-184](file://SpeedRunners.UI/src/views/index/hourChart.vue#L173-L184)
 
 **章节来源**
 - [layout/index.vue:1-556](file://SpeedRunners.UI/src/layout/index.vue#L1-L556)
@@ -493,6 +515,8 @@ Layout->>Layout : 路由跳转到个人资料
 - [AppMain.vue:1-139](file://SpeedRunners.UI/src/layout/components/AppMain.vue#L1-L139)
 - [UserAvatar/index.vue:1-39](file://SpeedRunners.UI/src/components/UserAvatar/index.vue#L1-L39)
 - [UserName/index.vue:1-35](file://SpeedRunners.UI/src/components/UserName/index.vue#L1-L35)
+- [addedChart.vue:102-113](file://SpeedRunners.UI/src/views/index/addedChart.vue#L102-L113)
+- [hourChart.vue:173-184](file://SpeedRunners.UI/src/views/index/hourChart.vue#L173-L184)
 
 ### 样式系统与主题定制
 - SCSS 变量：侧边栏宽度、菜单文本/背景色等，通过 :export 导出供 JS 使用
@@ -503,8 +527,9 @@ Layout->>Layout : 路由跳转到个人资料
 - 热力图样式：五级强度色彩系统，支持主题适配
 - 用户头像样式：可点击状态的悬停效果和过渡动画
 - 用户名样式：可点击状态的手型光标和下划线效果
+- **图表样式**：支持指针光标效果，增强用户交互体验
 
-**更新** 新增用户头像和用户名组件样式说明
+**更新** 新增图表组件样式说明
 
 ```mermaid
 flowchart TD
@@ -516,6 +541,7 @@ CommentStyle["CommentSection 样式<br/>侧边栏特殊处理"] --> Global
 HeatmapStyle["ScoreHeatmap 样式<br/>五级强度色彩"] --> Global
 AvatarStyle["UserAvatar 样式<br/>可点击悬停效果"] --> Global
 NameStyle["UserName 样式<br/>可点击下划线效果"] --> Global
+ChartCursor["图表样式<br/>指针光标效果"] --> Global
 ```
 
 **图表来源**
@@ -545,13 +571,15 @@ NameStyle["UserName 样式<br/>可点击下划线效果"] --> Global
 - 图表自适应：addedChart 和 hourChart 通过 resize mixin 实现响应式图表
 - 热力图响应式：支持横向滚动，适配不同屏幕尺寸
 - 用户头像响应式：在不同屏幕尺寸下保持合适的显示比例和交互效果
+- **图表交互响应式**：点击事件在不同屏幕尺寸下保持一致的交互体验
 
-**更新** 新增用户头像组件响应式说明
+**更新** 新增图表组件响应式说明
 
 ```mermaid
 flowchart TD
 Breakpoint["$vuetify.breakpoint<br/>断点判断"] --> CardPadding["XCard 内边距策略"]
 Breakpoint --> AvatarSize["UserAvatar 尺寸适配"]
+Breakpoint --> ChartClick["图表点击交互适配"]
 Resize["resize.js<br/>窗口/侧边栏尺寸监听"] --> Chart["图表自适应"]
 Resize --> Layout["布局适配"]
 Chart --> AddedChart["addedChart.vue<br/>骨架加载器优化"]
@@ -559,6 +587,7 @@ Chart --> HourChart["hourChart.vue<br/>骨架加载器优化"]
 Chart --> Heatmap["ScoreHeatmap<br/>横向滚动适配"]
 Sidebar["sidebar.scss<br/>移动端/折叠逻辑"] --> Layout
 AvatarSize --> CommentSection["评论区用户信息显示"]
+ChartClick --> ProfileNav["用户资料导航"]
 ```
 
 **图表来源**
@@ -583,14 +612,15 @@ AvatarSize --> CommentSection["评论区用户信息显示"]
 - 语言支持：中文（zh）和英文（en）双语支持
 - 翻译键：包含基础界面、图表、个人主页等模块的翻译
 - 热力图翻译：新增 scoreHeatmap、totalAdded、less、more、mon、wed、fri、scoreUnit 等翻译键
+- **图表国际化**：新增 addedChartTitle、hourChartTile、hourChartUnit 等图表标题和单位翻译键
 - 动态切换：支持运行时语言切换，自动更新界面显示
 
-**更新** 新增热力图组件相关翻译键
+**更新** 新增图表组件相关翻译键
 
 **章节来源**
 - [index.js:1-35](file://SpeedRunners.UI/src/i18n/index.js#L1-L35)
-- [zh.json:249-281](file://SpeedRunners.UI/src/i18n/lang/zh.json#L249-L281)
-- [en.json:249-281](file://SpeedRunners.UI/src/i18n/lang/en.json#L249-L281)
+- [zh.json:17-20](file://SpeedRunners.UI/src/i18n/lang/zh.json#L17-L20)
+- [en.json:17-19](file://SpeedRunners.UI/src/i18n/lang/en.json#L17-L19)
 
 ## 依赖关系分析
 - 依赖版本：Vuetify 2.3.11、Vue 2.6.10、vue-i18n、mdi 字体等
@@ -623,8 +653,9 @@ Pkg --> ECharts["echarts"]
 - 响应式优化：resize mixin 防抖处理，提升图表自适应性能
 - 热力图优化：虚拟滚动和按需渲染，提升大数据量显示性能
 - 用户头像优化：懒加载头像图片，提升页面加载速度
+- **图表交互优化**：事件监听器优化，避免重复绑定，提升交互性能
 
-**更新** 新增用户头像组件性能优化说明
+**更新** 新增图表交互性能优化说明
 
 **章节来源**
 - [vuetify.js:10-16](file://SpeedRunners.UI/src/plugins/vuetify.js#L10-L16)
@@ -668,8 +699,14 @@ Pkg --> ECharts["echarts"]
   - 检查 personaName 和 platformID 属性是否正确传递
   - 确认点击导航功能是否正常工作
   - 检查标签类型是否符合预期
+- **图表点击交互问题**
+  - 检查 handleChartClick 方法是否正确绑定到图表事件
+  - 确认 platformID 提取逻辑是否正确处理 series 和 yAxis 两种情况
+  - 检查 tooltip 格式化函数是否正确配置
+  - 确认指针光标效果是否正确应用
+  - 检查 goToUserProfile 函数是否正确导入和使用
 
-**更新** 新增用户头像和用户名组件相关故障排查
+**更新** 新增图表交互功能相关故障排查
 
 **章节来源**
 - [SvgIcon/index.vue:1-66](file://SpeedRunners.UI/src/components/SvgIcon/index.vue#L1-L66)
@@ -685,26 +722,29 @@ Pkg --> ECharts["echarts"]
 - [ScoreHeatmap/index.vue:85-91](file://SpeedRunners.UI/src/components/ScoreHeatmap/index.vue#L85-L91)
 - [UserAvatar/index.vue:1-39](file://SpeedRunners.UI/src/components/UserAvatar/index.vue#L1-L39)
 - [UserName/index.vue:1-35](file://SpeedRunners.UI/src/components/UserName/index.vue#L1-L35)
+- [addedChart.vue:102-113](file://SpeedRunners.UI/src/views/index/addedChart.vue#L102-L113)
+- [hourChart.vue:173-184](file://SpeedRunners.UI/src/views/index/hourChart.vue#L173-L184)
 
 ## 结论
-本组件库以 Vuetify 为核心，结合自定义 SvgIcon、XCard、CommentSection、ScoreHeatmap、UserAvatar、UserName，形成统一的图标、卡片、评论区、数据可视化和用户信息显示体系；通过 SCSS 变量与布局样式实现主题与响应式一致性；借助 i18n 与构建配置保障国际化与性能。新增的 UserAvatar 和 UserName 组件显著提升了用户信息显示的一致性和交互体验，统一了用户头像和用户名的展示方式，并提供了便捷的点击导航功能。建议在新功能开发中遵循现有命名与结构约定，优先使用自定义组件与统一样式变量，确保风格一致与维护性。
+本组件库以 Vuetify 为核心，结合自定义 SvgIcon、XCard、CommentSection、ScoreHeatmap、UserAvatar、UserName，形成统一的图标、卡片、评论区、数据可视化和用户信息显示体系；通过 SCSS 变量与布局样式实现主题与响应式一致性；借助 i18n 与构建配置保障国际化与性能。新增的 UserAvatar 和 UserName 组件显著提升了用户信息显示的一致性和交互体验，统一了用户头像和用户名的展示方式，并提供了便捷的点击导航功能。**最新增强的图表组件交互功能进一步提升了用户体验，用户可以通过点击图表元素直接跳转到对应的玩家个人资料页面，实现了更直观的数据探索体验。** 建议在新功能开发中遵循现有命名与结构约定，优先使用自定义组件与统一样式变量，确保风格一致与维护性。
 
 ## 附录
 - 站点配置：标题、固定头部、侧边栏 Logo 等
 - 国际化语言包：中文/英文
 - 图标清单：通过 icons/svg 目录集中管理，构建时批量注册
-- 图表组件：ECharts 集成，支持主题切换与国际化
+- 图表组件：ECharts 集成，支持主题切换与国际化，具备点击交互功能
 - 评论系统：支持登录用户评论、分页加载、回复功能，使用统一的用户信息组件
 - 热力图组件：支持五级强度色彩系统、月份数字标签、主题适配
 - 用户头像组件：统一头像显示和点击导航功能
 - 用户名组件：统一用户名显示和点击导航功能
+- **图表交互功能**：支持点击图表元素跳转到用户个人资料，具备智能 platformID 提取和增强的 tooltip 格式化
 
 **章节来源**
 - [settings.js:1-16](file://SpeedRunners.UI/src/settings.js#L1-L16)
 - [index.js:1-35](file://SpeedRunners.UI/src/i18n/index.js#L1-L35)
 - [icons/index.js:1-9](file://SpeedRunners.UI/src/icons/index.js#L1-L9)
-- [addedChart.vue:1-158](file://SpeedRunners.UI/src/views/index/addedChart.vue#L1-L158)
-- [hourChart.vue:1-171](file://SpeedRunners.UI/src/views/index/hourChart.vue#L1-L171)
+- [addedChart.vue:1-174](file://SpeedRunners.UI/src/views/index/addedChart.vue#L1-L174)
+- [hourChart.vue:1-187](file://SpeedRunners.UI/src/views/index/hourChart.vue#L1-L187)
 - [CommentSection/index.vue:1-191](file://SpeedRunners.UI/src/components/CommentSection/index.vue#L1-L191)
 - [CommentSection/CommentItem.vue:1-341](file://SpeedRunners.UI/src/components/CommentSection/CommentItem.vue#L1-L341)
 - [ScoreHeatmap/index.vue:1-362](file://SpeedRunners.UI/src/components/ScoreHeatmap/index.vue#L1-L362)
