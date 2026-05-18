@@ -15,7 +15,7 @@ RUN apk add --no-cache python3 make g++ && \
 # 先只复制依赖描述，命中 yarn install 缓存
 COPY package.json yarn.lock ./
 
-RUN yarn install --frozen-lockfile --network-timeout 600000
+RUN yarn install --frozen-lockfile --ignore-engines --network-timeout 600000
 
 # 再复制源码并构建
 COPY . .
