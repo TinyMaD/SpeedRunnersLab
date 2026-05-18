@@ -131,9 +131,13 @@ namespace SpeedRunners.DAL
             }
         }
 
-        public bool ExistRankInfo(string steamID)
+        /// <summary>
+        /// 返回 RankInfo 中该用户的 RankType；行不存在时返回 null。
+        /// RankType==0 表示登录时还没买 SR 留下的空壳行，调用方应继续走补齐流程。
+        /// </summary>
+        public int? GetRankType(string steamID)
         {
-            return Db.ExecuteScalar<int>($"SELECT 1 FROM RankInfo WHERE PlatformID = ?{nameof(steamID)}", new { steamID }) > 0;
+            return Db.ExecuteScalar<int?>($"SELECT RankType FROM RankInfo WHERE PlatformID = ?{nameof(steamID)}", new { steamID });
         }
 
         /// <summary>

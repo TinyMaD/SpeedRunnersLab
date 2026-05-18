@@ -3,9 +3,10 @@
 <cite>
 **本文引用的文件**
 - [SpeedRunners.UI/Dockerfile](file://SpeedRunners.UI/Dockerfile)
-- [SpeedRunners.UI/nginx/default.conf](file://SpeedRunners.UI/nginx/default.conf)
 - [SpeedRunners.UI/package.json](file://SpeedRunners.UI/package.json)
+- [SpeedRunners.UI/yarn.lock](file://SpeedRunners.UI/yarn.lock)
 - [SpeedRunners.UI/vue.config.js](file://SpeedRunners.UI/vue.config.js)
+- [SpeedRunners.UI/nginx/default.conf](file://SpeedRunners.UI/nginx/default.conf)
 - [SpeedRunners.API/Dockerfile](file://SpeedRunners.API/Dockerfile)
 - [SpeedRunners.API/.dockerignore](file://SpeedRunners.API/.dockerignore)
 - [SpeedRunners.Scheduler/Dockerfile](file://SpeedRunners.Scheduler/Dockerfile)
@@ -17,10 +18,10 @@
 
 ## 更新摘要
 **变更内容**
-- 更新了三个Dockerfile的现代化多阶段构建策略
-- 新增了生产环境docker-compose配置
-- 改进了安全性和镜像优化策略
-- 增强了环境变量管理和敏感信息处理
+- **Node.js版本降级**：前端Dockerfile中Node.js版本从16.14.0降至14.21.3，解决node-sass 4.x兼容性问题
+- **移除--openssl-legacy-provider**：Node 14版本无需此环境变量，简化构建配置
+- **优化构建缓存策略**：改进依赖安装和构建流程，提升构建效率
+- **增强原生模块编译支持**：保持Python3到Python的符号链接，兼容老版本node-gyp
 
 ## 目录
 1. [简介](#简介)
@@ -71,17 +72,18 @@ E --> S
 
 **图表来源**
 - [docker-compose.yml:1-61](file://docker-compose.yml#L1-L61)
-- [docker-compose.prod.yml:1-76](file://docker-compose.prod.yml#L1-L76)
+- [docker-compose.prod.yml:1-75](file://docker-compose.prod.yml#L1-L75)
 
 **章节来源**
 - [docker-compose.yml:1-61](file://docker-compose.yml#L1-L61)
-- [docker-compose.prod.yml:1-76](file://docker-compose.prod.yml#L1-L76)
+- [docker-compose.prod.yml:1-75](file://docker-compose.prod.yml#L1-L75)
 
 ## 核心组件
 - **前端容器（srlab.ui）**
   - 基于 Nginx 静态托管构建产物，暴露 80/443 端口
-  - 采用多阶段构建：Node.js 构建阶段 + Nginx 运行阶段
+  - 采用多阶段构建：**Node.js 14.21.3** 构建阶段 + Nginx 运行阶段
   - 挂载 Nginx 配置与构建产物目录
+  - **新增**：内置 Python3、Make、G++ 编译工具链，支持原生模块编译
 - **Nginx 反向代理**
   - 提供静态资源服务、SPA 路由回退、HTTPS 与 CORS 控制
   - 将 API 请求代理到 srlab-api 服务名
@@ -95,7 +97,7 @@ E --> S
   - 定时任务执行，连接数据库
 
 **章节来源**
-- [SpeedRunners.UI/Dockerfile:1-29](file://SpeedRunners.UI/Dockerfile#L1-L29)
+- [SpeedRunners.UI/Dockerfile:1-44](file://SpeedRunners.UI/Dockerfile#L1-L44)
 - [SpeedRunners.UI/nginx/default.conf:1-30](file://SpeedRunners.UI/nginx/default.conf#L1-L30)
 - [SpeedRunners.API/Dockerfile:1-32](file://SpeedRunners.API/Dockerfile#L1-L32)
 - [SpeedRunners.Scheduler/Dockerfile:1-24](file://SpeedRunners.Scheduler/Dockerfile#L1-L24)
@@ -108,7 +110,7 @@ E --> S
 graph TB
 subgraph "前端侧"
 F["srlab.ui<br/>多阶段构建"]
-F1["构建阶段<br/>Node.js 16.14.0"]
+F1["构建阶段<br/>Node.js 14.21.3-alpine3.16"]
 F2["运行阶段<br/>Nginx stable-alpine"]
 N["Nginx 配置<br/>default.conf"]
 end
@@ -130,7 +132,7 @@ S2 --> M
 ```
 
 **图表来源**
-- [SpeedRunners.UI/Dockerfile:1-29](file://SpeedRunners.UI/Dockerfile#L1-L29)
+- [SpeedRunners.UI/Dockerfile:1-44](file://SpeedRunners.UI/Dockerfile#L1-L44)
 - [SpeedRunners.API/Dockerfile:1-32](file://SpeedRunners.API/Dockerfile#L1-L32)
 - [SpeedRunners.Scheduler/Dockerfile:1-24](file://SpeedRunners.Scheduler/Dockerfile#L1-L24)
 
@@ -140,20 +142,29 @@ S2 --> M
 **更新** 采用现代化多阶段构建策略，显著提升安全性与效率
 
 - **多阶段构建策略**
-  - **构建阶段**：使用 Node.js 16.14.0-alpine3.15，仅安装依赖并执行构建
+  - **构建阶段**：使用 Node.js 14.21.3-alpine3.16，仅安装依赖并执行构建
   - **运行阶段**：使用 nginx:stable-alpine，仅包含运行时所需的 Nginx
 - **智能缓存策略**
   - 先复制 package.json 和 yarn.lock，确保依赖安装缓存命中
   - 再复制源码并执行构建，避免重复安装依赖
+- **原生模块编译支持**
+  - **新增**：安装 Python3、Make、G++ 工具链，支持 node-sass、deasync 等原生模块编译
+  - 创建 Python3 到 Python 的符号链接，兼容老版本 node-gyp
+- **yarn.lock 注册表修复**
+  - **新增**：自动替换废弃的淘宝/阿里/NPMCNPM 注册表为 npmmirror.com
+  - 确保构建过程中依赖下载的稳定性
 - **关键优化**
-  - 使用 `--openssl-legacy-provider` 环境变量兼容 Vue CLI 4.x
+  - **移除**：--openssl-legacy-provider 环境变量（Node 14 不需要）
   - 仅复制构建产物到 Nginx HTML 目录，移除构建工具
   - 暴露 80/443 端口，前台运行 Nginx
 
 ```mermaid
 flowchart TD
-Start(["开始"]) --> CopyPkg["复制 package.json & yarn.lock"]
-CopyPkg --> InstallDeps["安装依赖命中缓存"]
+Start(["开始"]) --> InstallTools["安装编译工具链<br/>python3 make g++"]
+InstallTools --> CreateLink["创建 Python 符号链接<br/>兼容老版本 node-gyp"]
+CreateLink --> CopyPkg["复制 package.json & yarn.lock"]
+CopyPkg --> FixRegistry["修复废弃注册表<br/>替换为 npmmirror.com"]
+FixRegistry --> InstallDeps["安装依赖命中缓存"]
 InstallDeps --> CopySrc["复制源码"]
 CopySrc --> BuildStage["执行构建脚本<br/>yarn build:prod"]
 BuildStage --> FromNginx["使用 nginx:stable-alpine 作为运行镜像"]
@@ -164,10 +175,10 @@ CmdNginx --> End(["结束"])
 ```
 
 **图表来源**
-- [SpeedRunners.UI/Dockerfile:1-29](file://SpeedRunners.UI/Dockerfile#L1-L29)
+- [SpeedRunners.UI/Dockerfile:1-44](file://SpeedRunners.UI/Dockerfile#L1-L44)
 
 **章节来源**
-- [SpeedRunners.UI/Dockerfile:1-29](file://SpeedRunners.UI/Dockerfile#L1-L29)
+- [SpeedRunners.UI/Dockerfile:1-44](file://SpeedRunners.UI/Dockerfile#L1-L44)
 - [SpeedRunners.UI/package.json:1-76](file://SpeedRunners.UI/package.json#L1-L76)
 - [SpeedRunners.UI/vue.config.js:1-135](file://SpeedRunners.UI/vue.config.js#L1-L135)
 
@@ -273,7 +284,7 @@ Port443 --> |否| Redirect["重定向到 https://www.speedrunners.cn"]
 
 - **镜像来源**
   - 从镜像仓库拉取预构建镜像，避免本地构建
-  - 支持环境变量注入：ALIYUN_REGISTRY、ALIYUN_NAMESPACE、IMAGE_TAG
+  - 支持环境变量注入：GHCR_OWNER、IMAGE_TAG
 - **安全配置**
   - API：挂载生产配置文件，敏感信息不打包进镜像
   - UI：挂载 Nginx 配置与 SSL 证书，保持本地化管理
@@ -286,7 +297,7 @@ Port443 --> |否| Redirect["重定向到 https://www.speedrunners.cn"]
   - 持久化卷配置保持数据安全
 
 **章节来源**
-- [docker-compose.prod.yml:1-76](file://docker-compose.prod.yml#L1-L76)
+- [docker-compose.prod.yml:1-75](file://docker-compose.prod.yml#L1-L75)
 
 ## 依赖关系分析
 **更新** 增强了多阶段构建的依赖管理与缓存策略
@@ -294,6 +305,8 @@ Port443 --> |否| Redirect["重定向到 https://www.speedrunners.cn"]
 - **前端构建链路**
   - package.json 定义构建脚本与依赖
   - vue.config.js 控制输出目录、资源目录、分包策略与运行时优化
+  - **新增**：Dockerfile 包含 Python3、Make、G++ 编译工具链
+  - **新增**：yarn.lock 注册表修复逻辑
   - Dockerfile 实现智能缓存与多阶段构建
 - **前端运行链路**
   - 构建阶段仅包含 Node.js 和构建工具
@@ -310,7 +323,8 @@ graph LR
 Pkg["package.json<br/>构建脚本/依赖"] --> VC["vue.config.js<br/>输出/优化配置"]
 VC --> Dist["dist 构建产物"]
 Dist --> DFUI["srlab.ui Dockerfile<br/>多阶段构建"]
-DFUI --> NConf["default.conf"]
+DFUI --> Tools["编译工具链<br/>python3 make g++"]
+Tools --> NConf["default.conf"]
 NConf --> UI["前端容器<br/>Nginx 运行时"]
 API["srlab.api Dockerfile<br/>多阶段构建"] --> APIImg["ASP.NET Core 运行时镜像"]
 Sched["srlab.scheduler Dockerfile<br/>多阶段构建"] --> SchedImg[".NET Core 运行时镜像"]
@@ -323,7 +337,7 @@ API --> MySQL["srlab.mysql"]
 **图表来源**
 - [SpeedRunners.UI/package.json:1-76](file://SpeedRunners.UI/package.json#L1-L76)
 - [SpeedRunners.UI/vue.config.js:1-135](file://SpeedRunners.UI/vue.config.js#L1-L135)
-- [SpeedRunners.UI/Dockerfile:1-29](file://SpeedRunners.UI/Dockerfile#L1-L29)
+- [SpeedRunners.UI/Dockerfile:1-44](file://SpeedRunners.UI/Dockerfile#L1-L44)
 - [SpeedRunners.API/Dockerfile:1-32](file://SpeedRunners.API/Dockerfile#L1-L32)
 - [SpeedRunners.Scheduler/Dockerfile:1-24](file://SpeedRunners.Scheduler/Dockerfile#L1-L24)
 - [docker-compose.yml:1-61](file://docker-compose.yml#L1-L61)
@@ -331,7 +345,7 @@ API --> MySQL["srlab.mysql"]
 **章节来源**
 - [SpeedRunners.UI/package.json:1-76](file://SpeedRunners.UI/package.json#L1-L76)
 - [SpeedRunners.UI/vue.config.js:1-135](file://SpeedRunners.UI/vue.config.js#L1-L135)
-- [SpeedRunners.UI/Dockerfile:1-29](file://SpeedRunners.UI/Dockerfile#L1-L29)
+- [SpeedRunners.UI/Dockerfile:1-44](file://SpeedRunners.UI/Dockerfile#L1-L44)
 - [SpeedRunners.API/Dockerfile:1-32](file://SpeedRunners.API/Dockerfile#L1-L32)
 - [SpeedRunners.Scheduler/Dockerfile:1-24](file://SpeedRunners.Scheduler/Dockerfile#L1-L24)
 - [docker-compose.yml:1-61](file://docker-compose.yml#L1-L61)
@@ -341,6 +355,8 @@ API --> MySQL["srlab.mysql"]
 
 - **前端构建与缓存**
   - 智能缓存策略：先复制依赖描述文件，确保 yarn install 缓存命中
+  - **新增**：原生模块编译工具链，支持 node-sass、deasync 等依赖
+  - **新增**：yarn.lock 注册表修复，提升构建稳定性
   - 输出目录与静态资源目录分离，利于 CDN 缓存与版本控制
   - 分包策略与运行时独立，减少首屏体积
 - **多阶段构建优化**
@@ -360,7 +376,7 @@ API --> MySQL["srlab.mysql"]
   - 持久化卷与初始化脚本，保障数据安全与可恢复性
 
 **章节来源**
-- [SpeedRunners.UI/Dockerfile:1-29](file://SpeedRunners.UI/Dockerfile#L1-L29)
+- [SpeedRunners.UI/Dockerfile:1-44](file://SpeedRunners.UI/Dockerfile#L1-L44)
 - [SpeedRunners.API/Dockerfile:1-32](file://SpeedRunners.API/Dockerfile#L1-L32)
 - [SpeedRunners.Scheduler/Dockerfile:1-24](file://SpeedRunners.Scheduler/Dockerfile#L1-L24)
 - [SpeedRunners.UI/vue.config.js:1-135](file://SpeedRunners.UI/vue.config.js#L1-L135)
@@ -374,6 +390,8 @@ API --> MySQL["srlab.mysql"]
   - 检查 Nginx 配置中的来源校验逻辑与证书路径
   - 确认 default.conf 已正确挂载到容器
   - 验证多阶段构建是否正确复制了构建产物
+  - **新增**：检查编译工具链是否正确安装（python3、make、g++）
+  - **新增**：确认 Node.js 版本为 14.21.3，而非 16.x
 - **API 无响应或超时**
   - 检查 srlab-net 网络连通性与服务名解析
   - 确认 API 入口点与运行时镜像一致
@@ -385,6 +403,8 @@ API --> MySQL["srlab.mysql"]
   - 检查 .dockerignore 是否排除了不必要的文件
   - 确认多阶段构建未遗漏必要文件
   - 验证缓存策略是否正常工作
+  - **新增**：检查 yarn.lock 注册表替换是否成功
+  - **新增**：确认 Node.js 版本降级操作已生效
 - **生产环境部署问题**
   - 检查环境变量是否正确注入
   - 确认镜像仓库访问权限
@@ -401,10 +421,10 @@ API --> MySQL["srlab.mysql"]
 - [SpeedRunners.Scheduler/Dockerfile:1-24](file://SpeedRunners.Scheduler/Dockerfile#L1-L24)
 - [SpeedRunners.Scheduler/.dockerignore:1-30](file://SpeedRunners.Scheduler/.dockerignore#L1-L30)
 - [docker-compose.yml:1-61](file://docker-compose.yml#L1-L61)
-- [docker-compose.prod.yml:1-76](file://docker-compose.prod.yml#L1-L76)
+- [docker-compose.prod.yml:1-75](file://docker-compose.prod.yml#L1-L75)
 
 ## 结论
-本方案通过现代化的多阶段构建策略实现了显著的安全性与性能提升：前端镜像体积减少约 95%，后端镜像体积减少约 90%。借助 docker-compose 实现开发与生产环境的差异化配置，配合严格的来源校验与 HTTPS 配置提升安全性。建议在生产环境中进一步引入健康检查、日志聚合与性能监控，持续优化镜像层与缓存策略。
+本方案通过现代化的多阶段构建策略实现了显著的安全性与性能提升：前端镜像体积减少约 95%，后端镜像体积减少约 90%。借助 docker-compose 实现开发与生产环境的差异化配置，配合严格的来源校验与 HTTPS 配置提升安全性。**新增**的编译工具链支持和 yarn.lock 注册表修复逻辑进一步提升了构建稳定性和可靠性。**Node.js 14.21.3 的降级**解决了 node-sass 4.x 的兼容性问题，移除了不必要的 --openssl-legacy-provider 环境变量，简化了构建配置。建议在生产环境中进一步引入健康检查、日志聚合与性能监控，持续优化镜像层与缓存策略。
 
 ## 附录
 
@@ -429,8 +449,7 @@ docker-compose logs -f
 #### 生产环境部署
 ```bash
 # 设置环境变量
-export ALIYUN_REGISTRY=registry.cn-hangzhou.aliyuncs.com
-export ALIYUN_NAMESPACE=srlab
+export GHCR_OWNER=tinymad
 export IMAGE_TAG=latest
 
 # 启动生产环境服务
@@ -458,8 +477,11 @@ docker-compose -f docker-compose.prod.yml ps
 - **生产环境配置挂载**：避免将敏感信息打包进镜像
 - **镜像仓库管理**：使用企业级镜像仓库，支持版本控制
 - **CI/CD 集成**：自动化构建与部署流程
+- **原生模块支持**：确保编译工具链完整安装
+- **依赖注册表监控**：定期检查 npm 注册表可用性
+- **Node.js 版本管理**：确保与项目依赖兼容性
 
 **章节来源**
 - [README.md:1-5](file://README.md#L1-L5)
 - [docker-compose.yml:1-61](file://docker-compose.yml#L1-L61)
-- [docker-compose.prod.yml:1-76](file://docker-compose.prod.yml#L1-L76)
+- [docker-compose.prod.yml:1-75](file://docker-compose.prod.yml#L1-L75)

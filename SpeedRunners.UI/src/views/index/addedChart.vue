@@ -25,6 +25,7 @@ require("echarts/lib/component/dataset");
 require("echarts/lib/component/grid");
 
 import { getAddedChart } from "@/api/rank";
+import { goToUserProfile } from "@/utils/profile";
 
 // const animationDuration = 6000;
 
@@ -96,6 +97,19 @@ export default {
     initChart() {
       this.chart = echarts.init(this.$refs.chart);
       this.chart.setOption(this.getOption());
+      this.chart.on("click", this.handleChartClick);
+    },
+    handleChartClick(params) {
+      let platformID = null;
+      if (params.componentType === "series" && params.data) {
+        platformID = params.data.platformID;
+      } else if (params.componentType === "yAxis") {
+        const item = this.list.find(x => x.personaName === params.value);
+        platformID = item && item.platformID;
+      }
+      if (platformID) {
+        goToUserProfile(this.$router, platformID);
+      }
     },
     getOption() {
       var that = this;
@@ -125,12 +139,14 @@ export default {
             formatter: function(value, index) {
               return `{a${index}|}`;
             },
-            rich: that.richStyle
+            rich: that.richStyle,
+            triggerEvent: true
           }
         },
         series: [
           {
             type: "bar",
+            cursor: "pointer",
             encode: {
               x: "rankScore",
               y: "personaName"

@@ -25,6 +25,7 @@ require("echarts/lib/component/dataset");
 require("echarts/lib/component/grid");
 
 import { getHourChart } from "@/api/rank";
+import { goToUserProfile } from "@/utils/profile";
 
 // const animationDuration = 6000;
 
@@ -106,6 +107,7 @@ export default {
       var that = this;
       var titleColor = that.$vuetify.theme.dark ? "#fff" : "#333";
       this.chart = echarts.init(this.$refs.chart);
+      this.chart.on("click", this.handleChartClick);
       this.chart.setOption({
         title: {
           text: that.$t("index.hourChartTile"),
@@ -138,12 +140,14 @@ export default {
             formatter: function(value, index) {
               return `{a${index}|}`;
             },
-            rich: that.richStyle
+            rich: that.richStyle,
+            triggerEvent: true
           }
         },
         series: [
           {
             type: "bar",
+            cursor: "pointer",
             encode: {
               x: "weekPlayTime",
               y: "personaName"
@@ -165,6 +169,18 @@ export default {
           }
         ]
       });
+    },
+    handleChartClick(params) {
+      let platformID = null;
+      if (params.componentType === "series" && params.data) {
+        platformID = params.data.platformID;
+      } else if (params.componentType === "yAxis") {
+        const item = this.list.find(x => x.personaName === params.value);
+        platformID = item && item.platformID;
+      }
+      if (platformID) {
+        goToUserProfile(this.$router, platformID);
+      }
     }
   }
 };
