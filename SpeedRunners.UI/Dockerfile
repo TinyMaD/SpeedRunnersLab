@@ -5,6 +5,10 @@
 FROM node:16.14.0-alpine3.15 AS build
 WORKDIR /app
 
+# 装 node-gyp 编译原生模块（如 deasync / node-sass）需要的工具链
+# 放最前面以便最大化 docker layer 缓存
+RUN apk add --no-cache python3 make g++
+
 # 先只复制依赖描述，命中 yarn install 缓存
 COPY package.json yarn.lock ./
 
