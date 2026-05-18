@@ -143,9 +143,9 @@ function markVisited() {
 function reload() {
   // 清除缓存后刷新
   clearCache();
-  // 添加时间戳强制刷新
-  const separator = window.location.href.indexOf("?") > -1 ? "&" : "?";
-  window.location.href = window.location.href + separator + "_v=" + Date.now();
+  // 使用 location.reload() 触发标准刷新，配合 nginx 对 index.html 的 no-cache 头
+  // 可保证每次都从源站拿最新 HTML，避免带 query 参数跳转留下的 _v 残留
+  window.location.reload();
 }
 
 /**
