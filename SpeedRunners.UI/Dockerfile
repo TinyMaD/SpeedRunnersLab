@@ -2,12 +2,15 @@
 # CI 构建命令：docker build -t srlab-ui ./SpeedRunners.UI
 
 # ===== Build stage =====
-FROM node:16.14.0-alpine3.15 AS build
+# 用 node 14 而非 16：node-sass 4.9 + vue-cli 3 + webpack 4 是 node 14 时代的栈
+# node 16+ 上 node-sass 4.x 编译困难，且需要 --openssl-legacy-provider；node 14 都不用
+FROM node:14.21.3-alpine3.16 AS build
 WORKDIR /app
 
-# 装 node-gyp 编译原生模块（如 deasync / node-sass）需要的工具链
-# 放最前面以便最大化 docker layer 缓存
-RUN apk add --no-cache python3 make g++
+# node-gyp 编译原生模块（node-sass / deasync）需要的工具链
+# 老版 node-gyp 只识别 python/python2，不认 python3，所以建符号链接
+RUN apk add --no-cache python3 make g++ && \
+    ln -sf /usr/bin/python3 /usr/bin/python
 
 # 先只复制依赖描述，命中 yarn install 缓存
 COPY package.json yarn.lock ./
@@ -26,9 +29,6 @@ RUN yarn install --frozen-lockfile --network-timeout 600000
 
 # 再复制源码并构建
 COPY . .
-
-# vue-cli 在 node 16+ webpack 4 上需要 legacy provider
-ENV NODE_OPTIONS=--openssl-legacy-provider
 RUN yarn build:prod
 
 # ===== Runtime stage =====
