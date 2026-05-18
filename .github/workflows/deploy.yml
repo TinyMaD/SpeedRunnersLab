@@ -127,8 +127,8 @@ jobs:
             set -e
             cd /root/home/srlab
 
-            echo "==> 拉取最新 compose 文件"
-            git fetch origin master
+            echo "==> 拉取最新代码"
+            git fetch origin
             git reset --hard origin/master
 
             echo "==> 部署 tag=$IMAGE_TAG owner=$GHCR_OWNER"

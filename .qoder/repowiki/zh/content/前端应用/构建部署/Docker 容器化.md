@@ -4,7 +4,6 @@
 **本文引用的文件**
 - [SpeedRunners.UI/Dockerfile](file://SpeedRunners.UI/Dockerfile)
 - [SpeedRunners.UI/package.json](file://SpeedRunners.UI/package.json)
-- [SpeedRunners.UI/yarn.lock](file://SpeedRunners.UI/yarn.lock)
 - [SpeedRunners.UI/vue.config.js](file://SpeedRunners.UI/vue.config.js)
 - [SpeedRunners.UI/nginx/default.conf](file://SpeedRunners.UI/nginx/default.conf)
 - [SpeedRunners.API/Dockerfile](file://SpeedRunners.API/Dockerfile)
@@ -97,7 +96,7 @@ E --> S
   - 定时任务执行，连接数据库
 
 **章节来源**
-- [SpeedRunners.UI/Dockerfile:1-44](file://SpeedRunners.UI/Dockerfile#L1-L44)
+- [SpeedRunners.UI/Dockerfile:1-34](file://SpeedRunners.UI/Dockerfile#L1-L34)
 - [SpeedRunners.UI/nginx/default.conf:1-30](file://SpeedRunners.UI/nginx/default.conf#L1-L30)
 - [SpeedRunners.API/Dockerfile:1-32](file://SpeedRunners.API/Dockerfile#L1-L32)
 - [SpeedRunners.Scheduler/Dockerfile:1-24](file://SpeedRunners.Scheduler/Dockerfile#L1-L24)
@@ -132,7 +131,7 @@ S2 --> M
 ```
 
 **图表来源**
-- [SpeedRunners.UI/Dockerfile:1-44](file://SpeedRunners.UI/Dockerfile#L1-L44)
+- [SpeedRunners.UI/Dockerfile:1-34](file://SpeedRunners.UI/Dockerfile#L1-L34)
 - [SpeedRunners.API/Dockerfile:1-32](file://SpeedRunners.API/Dockerfile#L1-L32)
 - [SpeedRunners.Scheduler/Dockerfile:1-24](file://SpeedRunners.Scheduler/Dockerfile#L1-L24)
 
@@ -175,10 +174,10 @@ CmdNginx --> End(["结束"])
 ```
 
 **图表来源**
-- [SpeedRunners.UI/Dockerfile:1-44](file://SpeedRunners.UI/Dockerfile#L1-L44)
+- [SpeedRunners.UI/Dockerfile:1-34](file://SpeedRunners.UI/Dockerfile#L1-L34)
 
 **章节来源**
-- [SpeedRunners.UI/Dockerfile:1-44](file://SpeedRunners.UI/Dockerfile#L1-L44)
+- [SpeedRunners.UI/Dockerfile:1-34](file://SpeedRunners.UI/Dockerfile#L1-L34)
 - [SpeedRunners.UI/package.json:1-76](file://SpeedRunners.UI/package.json#L1-L76)
 - [SpeedRunners.UI/vue.config.js:1-135](file://SpeedRunners.UI/vue.config.js#L1-L135)
 
@@ -337,7 +336,7 @@ API --> MySQL["srlab.mysql"]
 **图表来源**
 - [SpeedRunners.UI/package.json:1-76](file://SpeedRunners.UI/package.json#L1-L76)
 - [SpeedRunners.UI/vue.config.js:1-135](file://SpeedRunners.UI/vue.config.js#L1-L135)
-- [SpeedRunners.UI/Dockerfile:1-44](file://SpeedRunners.UI/Dockerfile#L1-L44)
+- [SpeedRunners.UI/Dockerfile:1-34](file://SpeedRunners.UI/Dockerfile#L1-L34)
 - [SpeedRunners.API/Dockerfile:1-32](file://SpeedRunners.API/Dockerfile#L1-L32)
 - [SpeedRunners.Scheduler/Dockerfile:1-24](file://SpeedRunners.Scheduler/Dockerfile#L1-L24)
 - [docker-compose.yml:1-61](file://docker-compose.yml#L1-L61)
@@ -345,7 +344,7 @@ API --> MySQL["srlab.mysql"]
 **章节来源**
 - [SpeedRunners.UI/package.json:1-76](file://SpeedRunners.UI/package.json#L1-L76)
 - [SpeedRunners.UI/vue.config.js:1-135](file://SpeedRunners.UI/vue.config.js#L1-L135)
-- [SpeedRunners.UI/Dockerfile:1-44](file://SpeedRunners.UI/Dockerfile#L1-L44)
+- [SpeedRunners.UI/Dockerfile:1-34](file://SpeedRunners.UI/Dockerfile#L1-L34)
 - [SpeedRunners.API/Dockerfile:1-32](file://SpeedRunners.API/Dockerfile#L1-L32)
 - [SpeedRunners.Scheduler/Dockerfile:1-24](file://SpeedRunners.Scheduler/Dockerfile#L1-L24)
 - [docker-compose.yml:1-61](file://docker-compose.yml#L1-L61)
@@ -376,7 +375,7 @@ API --> MySQL["srlab.mysql"]
   - 持久化卷与初始化脚本，保障数据安全与可恢复性
 
 **章节来源**
-- [SpeedRunners.UI/Dockerfile:1-44](file://SpeedRunners.UI/Dockerfile#L1-L44)
+- [SpeedRunners.UI/Dockerfile:1-34](file://SpeedRunners.UI/Dockerfile#L1-L34)
 - [SpeedRunners.API/Dockerfile:1-32](file://SpeedRunners.API/Dockerfile#L1-L32)
 - [SpeedRunners.Scheduler/Dockerfile:1-24](file://SpeedRunners.Scheduler/Dockerfile#L1-L24)
 - [SpeedRunners.UI/vue.config.js:1-135](file://SpeedRunners.UI/vue.config.js#L1-L135)
