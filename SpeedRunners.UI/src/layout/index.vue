@@ -334,7 +334,7 @@
     <v-scale-transition origin="center center">
       <v-btn
         v-show="fab"
-        v-scroll="onScroll"
+        class="back-to-top-btn"
         fab
         fixed
         bottom
@@ -427,10 +427,19 @@ export default {
     if (this.avatar !== "") {
       this.$store.dispatch("notification/startPolling");
     }
+    if (typeof window !== "undefined") {
+      window.addEventListener("scroll", this.onScroll, { passive: true });
+      document.addEventListener("scroll", this.onScroll, true);
+      this.onScroll();
+    }
   },
   beforeDestroy() {
     // 停止消息轮询
     this.$store.dispatch("notification/stopPolling");
+    if (typeof window !== "undefined") {
+      window.removeEventListener("scroll", this.onScroll);
+      document.removeEventListener("scroll", this.onScroll, true);
+    }
   },
   methods: {
     changeTheme() {
@@ -477,7 +486,12 @@ export default {
     },
     onScroll(e) {
       if (typeof window === "undefined") return;
-      const top = window.pageYOffset || e.target.scrollTop || 0;
+      const eventTarget = e && e.target;
+      const top = window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop ||
+        (eventTarget && eventTarget.scrollTop) ||
+        0;
       this.fab = top > 20;
     },
     toTop() {
@@ -552,5 +566,8 @@ export default {
 .profile-hint {
   font-size: 11px;
   opacity: 0.7;
+}
+.back-to-top-btn {
+  z-index: 7;
 }
 </style>
