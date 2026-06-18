@@ -108,35 +108,28 @@ jobs:
           cache-from: type=gha,scope=scheduler
           cache-to: type=gha,scope=scheduler,mode=max
 
-  # ---------- SSH 到 ECS 拉镜像并启动 ----------
+  # ---------- ECS self-hosted runner 本机拉镜像并启动 ----------
   deploy:
     needs: [prepare, build-api, build-ui, build-scheduler]
-    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    runs-on: [self-hosted, speedrunners-prod]
+    environment: production
+    concurrency:
+      group: production-deploy
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      packages: read
     steps:
-      - name: SSH to ECS and roll out new images
-        uses: appleboy/ssh-action@v1.0.3
+      - uses: actions/checkout@v4
+
+      - name: Roll out new images on ECS
+        shell: bash
         env:
           IMAGE_TAG: ${{ needs.prepare.outputs.tag }}
           GHCR_OWNER: ${{ needs.prepare.outputs.owner_lc }}
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: root
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: IMAGE_TAG,GHCR_OWNER
-          script: |
-            set -e
-            cd /root/home/srlab
-
-            echo "==> 拉取最新代码"
-            git fetch origin
-            git reset --hard origin/master
-
-            echo "==> 部署 tag=$IMAGE_TAG owner=$GHCR_OWNER"
-            docker compose -f docker-compose.prod.yml pull
-            docker compose -f docker-compose.prod.yml up -d
-
-            echo "==> 清理悬空镜像"
-            docker image prune -f
-
-            echo "==> 容器状态"
-            docker compose -f docker-compose.prod.yml ps
+          GHCR_USERNAME: ${{ github.actor }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIT_URL: ${{ github.server_url }}/${{ github.repository }}.git
+          DEPLOY_BRANCH: master
+        run: bash scripts/deploy-prod.sh

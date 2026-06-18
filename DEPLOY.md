@@ -1,5 +1,7 @@
 # 发版操作手册
 
+> 当前推荐方案已经切到 ECS self-hosted runner：不再通过 GitHub Actions SSH 到服务器，也不需要日常开放 22 端口。新流程见 [DEPLOY_RUNNER.md](DEPLOY_RUNNER.md)。下面内容保留为旧 SSH 发版方案参考。
+
 把手动发版改造为 GitHub Actions 自动发版到阿里云 ECS。
 **方案：GitHub Container Registry (ghcr.io) —— 全链路在 GitHub 里，不需要阿里云 ACR。**
 

@@ -9,6 +9,12 @@ yarn-error.log*
 package-lock.json
 tests/**/coverage/
 
+# Root runtime env files. The runner env contains a GitHub PAT.
+/.env
+/.env.runner
+/srlab-runner.env
+/runner-data/
+
 # Editor directories and files
 .idea
 .vs

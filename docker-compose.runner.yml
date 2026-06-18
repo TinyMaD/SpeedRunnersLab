@@ -1,0 +1,32 @@
+# GitHub Actions self-hosted runner for production deployment.
+#
+# Start on the ECS host:
+#   docker compose --env-file /root/srlab-runner.env -f docker-compose.runner.yml up -d
+#
+# Keep this compose file separate from the application compose files. The runner is
+# the deployment channel and should stay online while app containers are replaced.
+
+services:
+  github-runner:
+    image: myoung34/github-runner:latest
+    container_name: srlab-github-runner
+    restart: unless-stopped
+    environment:
+      ACCESS_TOKEN: ${GITHUB_RUNNER_PAT:?set GITHUB_RUNNER_PAT in /root/srlab-runner.env}
+      REPO_URL: ${GITHUB_RUNNER_REPO_URL:-https://github.com/TinyMaD/SpeedRunnersLab}
+      RUNNER_NAME: ${GITHUB_RUNNER_NAME:-speedrunners-prod}
+      RUNNER_SCOPE: repo
+      RUNNER_WORKDIR: /tmp/runner
+      CONFIGURED_ACTIONS_RUNNER_FILES_DIR: /runner-config
+      LABELS: ${GITHUB_RUNNER_LABELS:-speedrunners-prod}
+      RUN_AS_ROOT: "true"
+      UNSET_CONFIG_VARS: "true"
+      SRLAB_APP_DIR: ${SRLAB_APP_DIR:-/root/home/srlab}
+      TZ: Asia/Shanghai
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # The host path and container path must be identical because docker compose
+      # bind mounts are resolved by the host Docker daemon.
+      - ${SRLAB_APP_DIR:-/root/home/srlab}:${SRLAB_APP_DIR:-/root/home/srlab}
+      - ${GITHUB_RUNNER_DATA_DIR:-/root/srlab-runner-data}/work:/tmp/runner
+      - ${GITHUB_RUNNER_DATA_DIR:-/root/srlab-runner-data}/config:/runner-config
