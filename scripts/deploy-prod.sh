@@ -88,7 +88,7 @@ if ! git remote get-url origin >/dev/null 2>&1; then
 fi
 
 echo "==> Sync repository: origin/${DEPLOY_BRANCH}"
-git fetch origin "+refs/heads/${DEPLOY_BRANCH}:refs/remotes/origin/${DEPLOY_BRANCH}" --depth 1
+git fetch origin "+refs/heads/${DEPLOY_BRANCH}:refs/remotes/origin/${DEPLOY_BRANCH}"
 git reset --hard "origin/${DEPLOY_BRANCH}"
 
 require_file "$COMPOSE_FILE"

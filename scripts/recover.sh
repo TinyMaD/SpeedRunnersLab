@@ -14,7 +14,7 @@ echo "==> [1/5] 强制把 git 对齐到 origin/master"
 [ -d ".git" ] || git init -q
 git remote remove origin 2>/dev/null || true
 git remote add origin "$GIT_URL"
-git fetch origin "+refs/heads/master:refs/remotes/origin/master" --depth 1
+git fetch origin "+refs/heads/master:refs/remotes/origin/master"
 
 BACKUP_DIR="/root/srlab-backup-$TS"
 mkdir -p "$BACKUP_DIR"
