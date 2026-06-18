@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using SpeedRunners.Model.Steam;
 using SpeedRunners.Utils;
@@ -17,15 +18,17 @@ namespace SpeedRunners.BLL
     {
         private readonly IMemoryCache _cache;
         private readonly SteamBLL _steamBLL;
+        private readonly ILogger<AchievementSchemaService> _logger;
         private const string CacheKey = "SpeedRunners_AchievementSchema";
         // 缓存24小时，成就定义不会频繁变化
         private readonly TimeSpan _cacheDuration = TimeSpan.FromHours(24);
         private static readonly uint AppId = 207140;
 
-        public AchievementSchemaService(IMemoryCache cache, SteamBLL steamBLL)
+        public AchievementSchemaService(IMemoryCache cache, SteamBLL steamBLL, ILogger<AchievementSchemaService> logger)
         {
             _cache = cache;
             _steamBLL = steamBLL;
+            _logger = logger;
         }
 
         /// <summary>
@@ -61,6 +64,7 @@ namespace SpeedRunners.BLL
                 string response = await HttpHelper.HttpGet(url);
                 if (string.IsNullOrWhiteSpace(response))
                 {
+                    _logger.LogWarning("获取成就定义失败：Steam 返回空响应");
                     return new List<MAchievementSchema>();
                 }
 
@@ -71,6 +75,7 @@ namespace SpeedRunners.BLL
 
                 if (achievements == null)
                 {
+                    _logger.LogWarning("获取成就定义失败：响应中缺少 achievements 字段");
                     return new List<MAchievementSchema>();
                 }
 
@@ -91,8 +96,9 @@ namespace SpeedRunners.BLL
 
                 return result;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                _logger.LogWarning(ex, "获取成就定义失败");
                 return new List<MAchievementSchema>();
             }
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using SpeedRunners.Model.Rank;
 using SpeedRunners.Model.Steam;
@@ -8,8 +9,10 @@ using SteamWebAPI2.Interfaces;
 using SteamWebAPI2.Utilities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -21,6 +24,12 @@ namespace SpeedRunners.BLL
         private static string ApiKey => AppSettings.GetConfig("ApiKey");
         private static uint AppId => 207140;
         private static SteamWebInterfaceFactory WebInterfaceFactory => new SteamWebInterfaceFactory(ApiKey);
+        private readonly ILogger<SteamBLL> _logger;
+
+        public SteamBLL(ILogger<SteamBLL> logger)
+        {
+            _logger = logger;
+        }
         /// <summary>
         /// 获取全球游戏中人数
         /// </summary>
@@ -106,11 +115,11 @@ namespace SpeedRunners.BLL
         }
 
         /// <summary>
-        /// 获取玩家成就
+        /// 获取玩家成就解锁状态，区分“资料不公开”和“调用失败”
         /// </summary>
         /// <param name="steamID"></param>
         /// <returns></returns>
-        public async Task<List<MSteamAchievement>> GetPlayerAchievements(string steamID)
+        public virtual async Task<MPlayerAchievementsResult> GetPlayerAchievements(string steamID)
         {
             string httpUrl = $"{BaseUrl}/ISteamUserStats/GetPlayerAchievements/v1/?key={ApiKey}&steamid={steamID}&appid={AppId}";
             string response;
@@ -118,13 +127,27 @@ namespace SpeedRunners.BLL
             {
                 response = await HttpHelper.HttpGet(httpUrl);
             }
-            catch (Exception)
+            catch (WebException ex) when (ex.Response is HttpWebResponse errorResponse)
             {
-                return null;
+                // Steam 对私密资料返回 403 + 错误 JSON，从响应体里区分出来
+                string errorBody = ReadResponseBody(errorResponse);
+                if (IsProfilePrivateError(errorBody))
+                {
+                    _logger.LogInformation("玩家 {SteamID} 的 Steam 资料不公开，无法获取成就", steamID);
+                    return new MPlayerAchievementsResult { Status = PlayerAchievementsStatus.ProfilePrivate };
+                }
+                _logger.LogWarning(ex, "获取玩家 {SteamID} 成就失败，HTTP {StatusCode}，响应：{Body}", steamID, (int)errorResponse.StatusCode, errorBody);
+                return new MPlayerAchievementsResult { Status = PlayerAchievementsStatus.Failed };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "获取玩家 {SteamID} 成就失败（网络错误）", steamID);
+                return new MPlayerAchievementsResult { Status = PlayerAchievementsStatus.Failed };
             }
             if (string.IsNullOrWhiteSpace(response))
             {
-                return null;
+                _logger.LogWarning("获取玩家 {SteamID} 成就失败：Steam 返回空响应", steamID);
+                return new MPlayerAchievementsResult { Status = PlayerAchievementsStatus.Failed };
             }
             try
             {
@@ -132,12 +155,20 @@ namespace SpeedRunners.BLL
                 var playerstats = obj["playerstats"];
                 if (playerstats?["success"]?.ToString() != "True")
                 {
-                    return null;
+                    string error = playerstats?["error"]?.ToString();
+                    if (IsProfilePrivateMessage(error))
+                    {
+                        _logger.LogInformation("玩家 {SteamID} 的 Steam 资料不公开，无法获取成就", steamID);
+                        return new MPlayerAchievementsResult { Status = PlayerAchievementsStatus.ProfilePrivate };
+                    }
+                    _logger.LogWarning("获取玩家 {SteamID} 成就失败：Steam 返回 success=false，error：{Error}", steamID, error);
+                    return new MPlayerAchievementsResult { Status = PlayerAchievementsStatus.Failed };
                 }
                 var achievements = playerstats["achievements"];
                 if (achievements == null)
                 {
-                    return null;
+                    _logger.LogWarning("获取玩家 {SteamID} 成就失败：响应中缺少 achievements 字段", steamID);
+                    return new MPlayerAchievementsResult { Status = PlayerAchievementsStatus.Failed };
                 }
                 var result = new List<MSteamAchievement>();
                 foreach (var ach in achievements)
@@ -154,12 +185,51 @@ namespace SpeedRunners.BLL
                     }
                     result.Add(steamAch);
                 }
-                return result;
+                return new MPlayerAchievementsResult { Status = PlayerAchievementsStatus.Success, Achievements = result };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "解析玩家 {SteamID} 成就响应失败", steamID);
+                return new MPlayerAchievementsResult { Status = PlayerAchievementsStatus.Failed };
+            }
+        }
+
+        private static string ReadResponseBody(HttpWebResponse response)
+        {
+            try
+            {
+                using (Stream stream = response.GetResponseStream())
+                using (StreamReader reader = new StreamReader(stream, Encoding.UTF8))
+                {
+                    return reader.ReadToEnd();
+                }
             }
             catch
             {
                 return null;
             }
+        }
+
+        private static bool IsProfilePrivateError(string responseBody)
+        {
+            if (string.IsNullOrWhiteSpace(responseBody))
+            {
+                return false;
+            }
+            try
+            {
+                JObject obj = JObject.Parse(responseBody);
+                return IsProfilePrivateMessage(obj["playerstats"]?["error"]?.ToString());
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static bool IsProfilePrivateMessage(string error)
+        {
+            return error != null && error.Contains("not public", StringComparison.OrdinalIgnoreCase);
         }
 
         /// <summary>

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -11,11 +11,22 @@ namespace SpeedRunners.Utils
     {
         public static async Task<string> HttpGet(string url, CookieContainer cookie = null)
         {
-            HttpWebResponse response = null;
-            string result = null;
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
+            IWebProxy proxy = GetConfiguredProxy();
+            try
+            {
+                return await DoHttpGet(url, cookie, proxy);
+            }
+            catch (WebException ex) when (proxy != null && ex.Response == null)
+            {
+                // 代理链路失败（无服务端响应）时直连重试一次；
+                // 服务端已明确响应的错误（如 403）直接抛出，保留原始信息供调用方判断
+                return await DoHttpGet(url, cookie, null);
+            }
+        }
+
+        private static async Task<string> DoHttpGet(string url, CookieContainer cookie, IWebProxy proxy)
+        {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            IWebProxy noProxy = request.Proxy;
             request.Timeout = 10000;
             request.Method = "GET";
             request.KeepAlive = false;
@@ -23,109 +34,63 @@ namespace SpeedRunners.Utils
             {
                 request.CookieContainer = cookie;
             }
-            try
+            if (proxy != null)
             {
-                var enable = AppSettings.GetConfig("Proxy:Enable");
-                if (enable == "true")
-                {
-                    var Address = AppSettings.GetConfig("Proxy:Address");//地址
-                    var proxyObject = new WebProxy(Address, false);
-                    request.Proxy = proxyObject; //设置代理 
-                }
-
-                //request.ContentType = "application/x-www-form-urlencoded";
-                response = await request.GetResponseAsync() as HttpWebResponse;
-                Stream stream = response.GetResponseStream();
-                if (stream != null)
-                {
-                    StreamReader sr = new StreamReader(stream, Encoding.UTF8);
-                    result = sr.ReadToEnd();
-                    stream.Close();
-                    stream = null;
-                }
+                request.Proxy = proxy;
             }
-            catch (Exception)
+            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader sr = new StreamReader(stream, Encoding.UTF8))
             {
-                try
-                {
-                    request.Proxy = noProxy;
-                    response = await request.GetResponseAsync() as HttpWebResponse;
-                    Stream stream = response.GetResponseStream();
-                    if (stream != null)
-                    {
-                        StreamReader sr = new StreamReader(stream, Encoding.UTF8);
-                        result = sr.ReadToEnd();
-                        stream.Close();
-                        stream = null;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                return sr.ReadToEnd();
             }
-            finally
-            {
-                if (request != null)
-                    request.Abort();
-                if (response != null)
-                    response.Close();
-            }
-            return result;
         }
 
         public static async Task<string> HttpPost(string TheURL, string data)
         {
-            string PageStr = string.Empty;
-            Uri url = new Uri(TheURL);
+            IWebProxy proxy = GetConfiguredProxy();
+            try
+            {
+                return await DoHttpPost(TheURL, data, proxy);
+            }
+            catch (WebException ex) when (proxy != null && ex.Response == null)
+            {
+                return await DoHttpPost(TheURL, data, null);
+            }
+        }
+
+        private static async Task<string> DoHttpPost(string url, string data, IWebProxy proxy)
+        {
             byte[] reqbytes = Encoding.UTF8.GetBytes(data);
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
-            IWebProxy noProxy = req.Proxy;
-            req.Method = "post";
+            req.Method = "POST";
             req.Timeout = 10000;
             req.ContentType = "application/x-www-form-urlencoded";
             req.ContentLength = reqbytes.Length;
-            try
+            if (proxy != null)
             {
-                var enable = AppSettings.GetConfig("Proxy:Enable");
-                if (enable == "true")
-                {
-                    var Address = AppSettings.GetConfig("Proxy:Address");//地址
-                    var proxyObject = new WebProxy(Address, false);
-                    req.Proxy = proxyObject; //设置代理 
-                }
-
-                Stream stm = req.GetRequestStream();
+                req.Proxy = proxy;
+            }
+            using (Stream stm = await req.GetRequestStreamAsync())
+            {
                 stm.Write(reqbytes, 0, reqbytes.Length);
-                stm.Close();
-                HttpWebResponse wr = await req.GetResponseAsync() as HttpWebResponse;
-                Stream stream = wr.GetResponseStream();
-                StreamReader srd = new StreamReader(stream, Encoding.GetEncoding("utf-8"));
-                PageStr += srd.ReadToEnd();
-                stream.Close();
-                srd.Close();
             }
-            catch (Exception)
+            using (HttpWebResponse wr = (HttpWebResponse)await req.GetResponseAsync())
+            using (Stream stream = wr.GetResponseStream())
+            using (StreamReader srd = new StreamReader(stream, Encoding.UTF8))
             {
-                try
-                {
-                    req.Proxy = noProxy;
-                    Stream stm = req.GetRequestStream();
-                    stm.Write(reqbytes, 0, reqbytes.Length);
-                    stm.Close();
-                    HttpWebResponse wr = await req.GetResponseAsync() as HttpWebResponse;
-                    Stream stream = wr.GetResponseStream();
-                    StreamReader srd = new StreamReader(stream, Encoding.GetEncoding("utf-8"));
-                    PageStr += srd.ReadToEnd();
-                    stream.Close();
-                    srd.Close();
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
+                return srd.ReadToEnd();
             }
-            return PageStr;
+        }
+
+        private static IWebProxy GetConfiguredProxy()
+        {
+            if (AppSettings.GetConfig("Proxy:Enable") != "true")
+            {
+                return null;
+            }
+            var address = AppSettings.GetConfig("Proxy:Address");
+            return new WebProxy(address, false);
         }
 
         public static void SetProxy()

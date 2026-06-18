@@ -1,6 +1,7 @@
 using SpeedRunners.DAL;
 using SpeedRunners.Model.Profile;
 using SpeedRunners.Model.Rank;
+using SpeedRunners.Model.Steam;
 using SpeedRunners.Model.User;
 using SpeedRunners.Utils;
 using System;
@@ -226,7 +227,7 @@ namespace SpeedRunners.BLL
         /// <summary>
         /// 获取玩家成就
         /// </summary>
-        public async Task<List<MAchievement>> GetAchievements(string steamId, string visitorId = null)
+        public async Task<MAchievementsResponse> GetAchievements(string steamId, string visitorId = null)
         {
             if (!IsOwnerOrAdmin(steamId, visitorId))
             {
@@ -235,16 +236,31 @@ namespace SpeedRunners.BLL
                 // 主页关闭：返回空列表
                 if (privacySettings.ShowProfile == 0)
                 {
-                    return new List<MAchievement>();
+                    return new MAchievementsResponse();
                 }
             }
 
             // 从缓存服务获取SpeedRunners游戏的成就定义
             var achievementSchemas = await _achievementSchemaService.GetAchievementSchemaAsync();
-            
+
             if (achievementSchemas == null || !achievementSchemas.Any())
             {
-                return new List<MAchievement>();
+                // 成就定义拿不到说明 Steam 不可达，明确告知前端加载失败，而不是当作“无成就”
+                return new MAchievementsResponse { Status = MAchievementsResponse.StatusFailed };
+            }
+
+            // 从Steam获取玩家成就解锁状态（带缓存，失败时回退上一次成功数据）
+            var playerResult = await _playerAchievementsService.GetPlayerAchievementsAsync(steamId);
+
+            if (playerResult.Status == PlayerAchievementsStatus.ProfilePrivate)
+            {
+                return new MAchievementsResponse { Status = MAchievementsResponse.StatusPrivate };
+            }
+
+            if (playerResult.Status == PlayerAchievementsStatus.Failed)
+            {
+                // 解锁状态获取失败且无备份数据：告知前端，避免误显示“全部未解锁”
+                return new MAchievementsResponse { Status = MAchievementsResponse.StatusFailed };
             }
 
             // 转换为成就列表
@@ -252,44 +268,34 @@ namespace SpeedRunners.BLL
             {
                 ApiName = schema.ApiName,
                 Name = schema.DisplayName,
-                Description = schema.Hidden && string.IsNullOrEmpty(schema.Description) 
-                    ? Localizer["hiddenAchievement"] 
+                Description = schema.Hidden && string.IsNullOrEmpty(schema.Description)
+                    ? Localizer["hiddenAchievement"]
                     : schema.Description,
                 IconUrl = schema.Icon,
                 IconGrayUrl = schema.IconGray,
                 Hidden = schema.Hidden,
                 Unlocked = false
             }).ToList();
-            
-            try
+
+            foreach (var ach in achievements)
             {
-                // 从Steam获取玩家成就状态（带缓存）
-                var playerAchievements = await _playerAchievementsService.GetPlayerAchievementsAsync(steamId);
-                
-                if (playerAchievements?.Any() == true)
+                var playerAch = playerResult.Achievements.FirstOrDefault(a => a.ApiName == ach.ApiName);
+                if (playerAch != null)
                 {
-                    foreach (var ach in achievements)
-                    {
-                        var playerAch = playerAchievements.FirstOrDefault(a => a.ApiName == ach.ApiName);
-                        if (playerAch != null)
-                        {
-                            ach.Unlocked = playerAch.Achieved == 1;
-                            ach.UnlockedAt = playerAch.UnlockTime;
-                        }
-                    }
+                    ach.Unlocked = playerAch.Achieved == 1;
+                    ach.UnlockedAt = playerAch.UnlockTime;
                 }
-            }
-            catch
-            {
-                // Steam API调用失败时返回成就列表（全部未解锁状态）
             }
 
             // 按解锁状态排序：已解锁的在前，已解锁按达成时间正序，未解锁按名称排序
-            return achievements
-                .OrderBy(a => a.Unlocked ? 0 : 1)
-                .ThenBy(a => a.UnlockedAt ?? DateTime.MaxValue)
-                .ThenBy(a => a.Name)
-                .ToList();
+            return new MAchievementsResponse
+            {
+                Achievements = achievements
+                    .OrderBy(a => a.Unlocked ? 0 : 1)
+                    .ThenBy(a => a.UnlockedAt ?? DateTime.MaxValue)
+                    .ThenBy(a => a.Name)
+                    .ToList()
+            };
         }
 
         /// <summary>

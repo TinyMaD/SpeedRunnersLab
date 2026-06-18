@@ -43,7 +43,7 @@ namespace SpeedRunners.Controllers
         /// <param name="steamId">Steam ID</param>
         [Persona]
         [HttpGet("{steamId}")]
-        public async Task<List<MAchievement>> GetAchievements(string steamId)
+        public async Task<MAchievementsResponse> GetAchievements(string steamId)
         {
             string visitorId = BLL.CurrentUser?.PlatformID;
             return await BLL.GetAchievements(steamId, visitorId);

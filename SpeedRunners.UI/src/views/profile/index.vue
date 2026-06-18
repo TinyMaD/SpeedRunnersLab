@@ -189,12 +189,28 @@
                 <v-icon left size="18">mdi-medal</v-icon>
                 {{ $t('profile.achievements') }}
                 <v-spacer />
-                <span class="text-caption text--secondary">
+                <span v-if="achievements.length" class="text-caption text--secondary">
                   {{ unlockedCount }}/{{ achievements.length }}
                 </span>
               </v-card-title>
               <v-card-text>
-                <div v-if="achievements.length === 0" class="no-data text-caption">
+                <div v-if="achievementsStatus === 'failed'" class="no-data text-caption text-center">
+                  <div>{{ $t('profile.achievementsLoadFailed') }}</div>
+                  <v-btn
+                    small
+                    outlined
+                    color="primary"
+                    class="mt-2"
+                    :loading="achievementsLoading"
+                    @click="fetchAchievements"
+                  >
+                    {{ $t('profile.retry') }}
+                  </v-btn>
+                </div>
+                <div v-else-if="achievementsStatus === 'private'" class="no-data text-caption">
+                  {{ $t('profile.achievementsPrivate') }}
+                </div>
+                <div v-else-if="achievements.length === 0" class="no-data text-caption">
                   {{ $t('profile.noAchievements') }}
                 </div>
                 <div v-else class="achievements-grid">
@@ -274,7 +290,9 @@ export default {
       loading: true,
       profileData: null,
       dailyScoreData: [],
-      achievements: []
+      achievements: [],
+      achievementsStatus: "ok",
+      achievementsLoading: false
     };
   },
 
@@ -388,16 +406,30 @@ export default {
       Promise.all([
         getProfileData(self.steamId).catch(function() { return { data: null } }),
         getDailyScoreHistory(self.steamId).catch(function() { return { data: [] } }),
-        getAchievements(self.steamId).catch(function() { return { data: [] } })
+        self.fetchAchievements()
       ]).then(function(results) {
         self.profileData = results[0].data;
         self.dailyScoreData = results[1].data || [];
-        self.achievements = results[2].data || [];
       }).catch(function(error) {
         console.error("Failed to load profile:", error);
         self.profileData = null;
       }).finally(function() {
         self.loading = false;
+      });
+    },
+
+    fetchAchievements: function() {
+      var self = this;
+      self.achievementsLoading = true;
+      return getAchievements(self.steamId).then(function(res) {
+        var data = res.data || {};
+        self.achievements = data.achievements || [];
+        self.achievementsStatus = data.status || "ok";
+      }).catch(function() {
+        self.achievements = [];
+        self.achievementsStatus = "failed";
+      }).finally(function() {
+        self.achievementsLoading = false;
       });
     },
 
