@@ -44,3 +44,8 @@ SpeedRunners.API/.vscode
 
 # 迁移备份包（含明文 acme.sh + 七牛 AK SK + 数据库密码，绝不进 git）
 srlab-secrets-bak-*.tar.gz
+
+# Local agent config
+.codex/
+.claude/
+.agents/
