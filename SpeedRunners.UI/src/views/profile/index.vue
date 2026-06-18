@@ -10,7 +10,7 @@
         <v-row>
           <!-- 顶部融合卡片骨架屏 -->
           <v-col cols="12" class="pt-0 pb-1 px-1">
-            <v-card flat tile class="glass-card">
+            <v-card flat tile class="glass-card skeleton-hero-card">
               <div class="hero-card">
                 <div class="hero-top">
                   <v-skeleton-loader type="avatar" class="mr-4" />
@@ -29,7 +29,7 @@
             </v-card>
           </v-col>
           <v-col cols="12" md="6" class="pa-1">
-            <v-card flat tile class="glass-card">
+            <v-card flat tile class="glass-card skeleton-stats-card">
               <v-card-title class="glass-card-title">
                 <v-skeleton-loader type="text" width="120" />
               </v-card-title>
@@ -39,7 +39,7 @@
             </v-card>
           </v-col>
           <v-col cols="12" md="6" class="pa-1">
-            <v-card flat tile class="glass-card">
+            <v-card flat tile class="glass-card skeleton-achievements-card">
               <v-card-title class="glass-card-title">
                 <v-skeleton-loader type="text" width="100" />
                 <v-spacer />
@@ -52,7 +52,7 @@
           </v-col>
           <!-- 天梯热力图骨架屏 -->
           <v-col cols="12" class="pa-1">
-            <v-card flat tile class="glass-card">
+            <v-card flat tile class="glass-card skeleton-heatmap-card">
               <v-card-text class="pa-3">
                 <v-skeleton-loader type="image" height="120" />
               </v-card-text>
@@ -497,7 +497,9 @@ export default {
   position: relative;
   z-index: 1;
   /* padding: 8px 16px; */
-  max-width: 880px;
+  width: 880px;
+  max-width: 100%;
+  box-sizing: border-box;
   margin: 0 auto;
 }
 
@@ -787,8 +789,8 @@ export default {
 }
 
 .skeleton-wrapper .row {
-  width: 100%;
-  margin: 0;
+  width: auto;
+  margin: 0 -12px;
 }
 
 .skeleton-wrapper .v-card {
@@ -817,6 +819,22 @@ export default {
 
 .skeleton-wrapper .skeleton-info .v-skeleton-loader {
   max-width: 200px;
+}
+
+.skeleton-hero-card {
+  min-height: 222px;
+}
+
+.skeleton-stats-card {
+  min-height: 226px;
+}
+
+.skeleton-achievements-card {
+  min-height: 275px;
+}
+
+.skeleton-heatmap-card {
+  min-height: 247px;
 }
 
 /* ======================= */
