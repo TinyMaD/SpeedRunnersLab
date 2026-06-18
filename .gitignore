@@ -49,3 +49,9 @@ srlab-secrets-bak-*.tar.gz
 .codex/
 .claude/
 .agents/
+
+# Local agent instruction files
+/[Cc][Ll][Aa][Uu][Dd][Ee].md
+/[Cc][Oo][Dd][Ee][Xx].md
+/[Aa][Gg][Ee][Nn][Tt].md
+/[Aa][Gg][Ee][Nn][Tt][Ss].md
