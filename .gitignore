@@ -55,3 +55,6 @@ srlab-secrets-bak-*.tar.gz
 /[Cc][Oo][Dd][Ee][Xx].md
 /[Aa][Gg][Ee][Nn][Tt].md
 /[Aa][Gg][Ee][Nn][Tt][Ss].md
+
+# 前端构建时自动生成的版本号文件（每次 build 重写，不入库）
+/SpeedRunners.UI/public/verify.json

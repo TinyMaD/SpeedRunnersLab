@@ -21,6 +21,7 @@ services:
       LABELS: ${GITHUB_RUNNER_LABELS:-speedrunners-prod}
       RUN_AS_ROOT: "true"
       UNSET_CONFIG_VARS: "true"
+      DISABLE_AUTOMATIC_DEREGISTRATION: "true"
       SRLAB_APP_DIR: ${SRLAB_APP_DIR:-/root/home/srlab}
       TZ: Asia/Shanghai
     volumes:

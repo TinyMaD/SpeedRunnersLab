@@ -4,7 +4,11 @@ const defaultSettings = require("./src/settings.js");
 const NyanProgressPlugin = require("nyan-progress-webpack-plugin");
 // 前端发布后浏览器缓存问题解决
 const { create: createVersionFile } = require("./build/version-create");
-createVersionFile();
+// 同一个构建版本号：既写入 verify.json，又通过 VUE_APP_VERSION 编译进 bundle，
+// 让前端用「当前运行代码的版本」与服务器 verify.json 比对（详见 src/utils/version.js）
+const APP_VERSION = Date.now();
+createVersionFile("public/verify.json", APP_VERSION);
+process.env.VUE_APP_VERSION = String(APP_VERSION);
 
 function resolve(dir) {
   return path.join(__dirname, dir);

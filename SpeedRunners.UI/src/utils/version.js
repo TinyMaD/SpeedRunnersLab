@@ -1,9 +1,18 @@
 // 浏览器端版本检测工具（纯前端，不依赖 Node.js 模块）
 
-// 本地版本号缓存 key
+// 当前运行代码的版本号：构建时由 vue.config.js 通过 VUE_APP_VERSION 注入，
+// 与同一次构建写入的 verify.json 取同一个时间戳。用「编译进 bundle 的版本」
+// 与服务器 verify.json 比对，才能真实反映「当前页面跑的代码 vs 线上最新代码」，
+// 不再依赖 localStorage（localStorage 记录的是“上次见过的服务器版本”，会与实际运行代码脱钩）
+const CURRENT_VERSION = (typeof process !== "undefined" && process.env && process.env.VUE_APP_VERSION) || "";
+// 本地版本号缓存 key（仅作调试留痕，不参与新版判断）
 const storageKey = "currentVersion";
 // 首次访问标记 key
 const firstVisitKey = "app_first_visit";
+// 防止「刷新后仍是旧代码」导致无限刷新的计数 key（放 sessionStorage，仅本会话有效）
+const reloadGuardKey = "version_reload_guard";
+// 同一目标版本最多自动刷新次数，超过则停止刷新并告警（兜底 CDN 仍命中旧缓存的情况）
+const MAX_RELOAD = 1;
 // 更新延迟时间（毫秒）
 const UPDATE_DELAY = 3000;
 
@@ -21,18 +30,26 @@ function getPro(path = "verify.json", isReload = true) {
         const serverVersion = res.version;
         const isNew = isNewAvailable(serverVersion);
 
-        // 缓存版本号
+        // 缓存版本号（仅调试留痕）
         save(serverVersion);
 
         // 标记已访问
         markVisited();
 
-        // 有新版本且需要自动刷新
         if (isNew && isReload) {
-          console.log(`[Version] 检测到新版本: ${serverVersion}，${UPDATE_DELAY / 1000}秒后自动刷新...`);
-          setTimeout(() => {
-            reload();
-          }, UPDATE_DELAY);
+          // 仅当本会话尚未为该目标版本反复刷新时才自动刷新，避免 CDN 仍吐旧缓存时无限刷新
+          if (canReload(serverVersion)) {
+            markReloadAttempt(serverVersion);
+            console.log(`[Version] 检测到新版本: ${serverVersion}（当前 ${CURRENT_VERSION}），${UPDATE_DELAY / 1000}秒后自动刷新...`);
+            setTimeout(() => {
+              reload();
+            }, UPDATE_DELAY);
+          } else {
+            console.warn(`[Version] 已尝试刷新到 ${serverVersion} 但仍在运行旧代码（当前 ${CURRENT_VERSION}），疑似 CDN/边缘缓存未更新，已停止自动刷新以避免死循环。`);
+          }
+        } else if (!isNew) {
+          // 已运行到最新版，清掉刷新计数，为下次发版复位
+          clearReloadGuard();
         }
 
         resolve({ version: serverVersion, new: isNew });
@@ -119,15 +136,13 @@ function isNewAvailable(serverVersion) {
     return false;
   }
 
-  const localVersion = localStorage.getItem(storageKey);
-
-  // 首次访问：本地无版本号，保存服务器版本，不刷新
-  if (!localVersion || localVersion === "undefined" || localVersion === "null") {
+  // 开发环境或未注入版本号时（CURRENT_VERSION 为空）不做检测，避免本地误刷
+  if (!CURRENT_VERSION) {
     return false;
   }
 
-  // 对比版本号
-  return serverVersion.toString() !== localVersion;
+  // 用「当前运行代码的版本」与服务器版本比对：不一致即说明本页面是旧代码
+  return serverVersion.toString() !== CURRENT_VERSION.toString();
 }
 
 /**
@@ -149,28 +164,67 @@ function reload() {
 }
 
 /**
- * 清除浏览器缓存（保留登录相关数据）
+ * 清除会话缓存（登录态在 localStorage，不受影响；保留防死循环刷新计数）
  */
 function clearCache() {
-  // 保留的 keys（登录态等）
-  const preserveKeys = ["token", "userInfo", "locale"];
-  const preserved = {};
-
-  // 保存需要保留的数据
-  preserveKeys.forEach(key => {
-    const value = localStorage.getItem(key);
-    if (value) {
-      preserved[key] = value;
-    }
-  });
-
-  // 清除 sessionStorage
+  // 防死循环计数需跨 reload 存活，clear 前后手动保留
+  const guard = sessionStorage.getItem(reloadGuardKey);
   sessionStorage.clear();
+  if (guard !== null) {
+    sessionStorage.setItem(reloadGuardKey, guard);
+  }
+}
 
-  // 恢复保留的数据
-  Object.keys(preserved).forEach(key => {
-    localStorage.setItem(key, preserved[key]);
-  });
+/**
+ * 读取防死循环刷新计数（sessionStorage）
+ * @returns {{version?: string, count?: number}}
+ */
+function readGuard() {
+  try {
+    return JSON.parse(sessionStorage.getItem(reloadGuardKey)) || {};
+  } catch (e) {
+    return {};
+  }
+}
+
+/**
+ * 是否允许为该目标版本自动刷新（同一目标版本超过 MAX_RELOAD 次则拒绝，防止死循环）
+ * @param {number|string} serverVersion
+ * @returns {boolean}
+ */
+function canReload(serverVersion) {
+  const guard = readGuard();
+  // 目标版本变了，说明又发了新版，重新允许刷新
+  if (guard.version !== serverVersion.toString()) {
+    return true;
+  }
+  return (guard.count || 0) < MAX_RELOAD;
+}
+
+/**
+ * 记录一次针对某目标版本的刷新尝试
+ * @param {number|string} serverVersion
+ */
+function markReloadAttempt(serverVersion) {
+  const guard = readGuard();
+  const version = serverVersion.toString();
+  const count = guard.version === version ? (guard.count || 0) + 1 : 1;
+  try {
+    sessionStorage.setItem(reloadGuardKey, JSON.stringify({ version, count }));
+  } catch (e) {
+    // sessionStorage 不可用时忽略，最坏退化为无防护
+  }
+}
+
+/**
+ * 清除刷新计数（已运行到最新版时调用）
+ */
+function clearReloadGuard() {
+  try {
+    sessionStorage.removeItem(reloadGuardKey);
+  } catch (e) {
+    // ignore
+  }
 }
 
 /**
