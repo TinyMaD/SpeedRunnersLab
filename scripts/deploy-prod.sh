@@ -69,6 +69,37 @@ has_origin_remote() {
     git config --get remote.origin.url >/dev/null 2>&1
 }
 
+sync_repository() {
+    if [ -n "${GITHUB_WORKSPACE:-}" ] && [ -d "$GITHUB_WORKSPACE/.git" ] && [ "$GITHUB_WORKSPACE" != "$APP_DIR" ]; then
+        echo "==> Sync repository from GitHub Actions workspace"
+        git -C "$GITHUB_WORKSPACE" archive --format=tar HEAD | tar -x -C "$APP_DIR"
+        return
+    fi
+
+    if [ ! -d .git ]; then
+        if [ -z "${GIT_URL:-}" ]; then
+            echo "$APP_DIR is not a git repository and GIT_URL is not set" >&2
+            exit 1
+        fi
+
+        git init -q
+        git remote add origin "$GIT_URL"
+    fi
+
+    if ! has_origin_remote; then
+        if [ -z "${GIT_URL:-}" ]; then
+            echo "git remote origin is missing and GIT_URL is not set" >&2
+            exit 1
+        fi
+
+        git remote add origin "$GIT_URL"
+    fi
+
+    echo "==> Sync repository: origin/${DEPLOY_BRANCH}"
+    git fetch origin "+refs/heads/${DEPLOY_BRANCH}:refs/remotes/origin/${DEPLOY_BRANCH}"
+    git reset --hard "origin/${DEPLOY_BRANCH}"
+}
+
 print_resource_snapshot() {
     echo "==> Resource snapshot: $(date '+%Y-%m-%d %H:%M:%S')"
     docker stats --no-stream --format 'table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.PIDs}}' || true
@@ -103,28 +134,7 @@ fi
 
 cd "$APP_DIR"
 
-if [ ! -d .git ]; then
-    if [ -z "${GIT_URL:-}" ]; then
-        echo "$APP_DIR is not a git repository and GIT_URL is not set" >&2
-        exit 1
-    fi
-
-    git init -q
-    git remote add origin "$GIT_URL"
-fi
-
-if ! has_origin_remote; then
-    if [ -z "${GIT_URL:-}" ]; then
-        echo "git remote origin is missing and GIT_URL is not set" >&2
-        exit 1
-    fi
-
-    git remote add origin "$GIT_URL"
-fi
-
-echo "==> Sync repository: origin/${DEPLOY_BRANCH}"
-git fetch origin "+refs/heads/${DEPLOY_BRANCH}:refs/remotes/origin/${DEPLOY_BRANCH}"
-git reset --hard "origin/${DEPLOY_BRANCH}"
+sync_repository
 
 require_file "$COMPOSE_FILE"
 require_file "SpeedRunners.API/SpeedRunners/appsettings.Production.json"
