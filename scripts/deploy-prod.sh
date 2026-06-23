@@ -65,6 +65,10 @@ compose() {
     docker compose -p "$APP_COMPOSE_PROJECT" -f "$COMPOSE_FILE" "$@"
 }
 
+has_origin_remote() {
+    git config --get remote.origin.url >/dev/null 2>&1
+}
+
 print_resource_snapshot() {
     echo "==> Resource snapshot: $(date '+%Y-%m-%d %H:%M:%S')"
     docker stats --no-stream --format 'table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.PIDs}}' || true
@@ -109,7 +113,7 @@ if [ ! -d .git ]; then
     git remote add origin "$GIT_URL"
 fi
 
-if ! git remote get-url origin >/dev/null 2>&1; then
+if ! has_origin_remote; then
     if [ -z "${GIT_URL:-}" ]; then
         echo "git remote origin is missing and GIT_URL is not set" >&2
         exit 1
