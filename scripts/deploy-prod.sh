@@ -9,6 +9,7 @@ set -euo pipefail
 APP_DIR="${SRLAB_APP_DIR:-/root/home/srlab}"
 DEPLOY_BRANCH="${DEPLOY_BRANCH:-master}"
 COMPOSE_FILE="${COMPOSE_FILE:-docker-compose.prod.yml}"
+APP_COMPOSE_PROJECT="${APP_COMPOSE_PROJECT:-srlab}"
 LOCK_DIR="${LOCK_DIR:-/tmp/srlab-deploy.lock}"
 
 if [ -z "${GHCR_OWNER:-}" ]; then
@@ -104,11 +105,11 @@ if [ -n "${GHCR_USERNAME:-}" ] && [ -n "${GHCR_TOKEN:-}" ]; then
 fi
 
 echo "==> Deploy images: owner=${GHCR_OWNER} tag=${IMAGE_TAG}"
-docker compose -f "$COMPOSE_FILE" pull
-docker compose -f "$COMPOSE_FILE" up -d --remove-orphans
+docker compose -p "$APP_COMPOSE_PROJECT" -f "$COMPOSE_FILE" pull
+docker compose -p "$APP_COMPOSE_PROJECT" -f "$COMPOSE_FILE" up -d --remove-orphans
 
 echo "==> Prune dangling images"
 docker image prune -f
 
 echo "==> Container status"
-docker compose -f "$COMPOSE_FILE" ps
+docker compose -p "$APP_COMPOSE_PROJECT" -f "$COMPOSE_FILE" ps

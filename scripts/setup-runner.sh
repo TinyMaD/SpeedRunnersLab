@@ -76,7 +76,7 @@ ok "runner data directory: $DATA_DIR"
 
 step "Start runner"
 cd "$APP_DIR"
-docker compose --env-file "$ENV_FILE" -f docker-compose.runner.yml up -d
+docker compose -p srlab-runner --env-file "$ENV_FILE" -f docker-compose.runner.yml up -d
 ok "runner container started"
 
 echo

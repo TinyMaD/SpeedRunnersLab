@@ -58,7 +58,7 @@ docker restart srlab-github-runner
 
 ```bash
 cd /root/home/srlab
-docker compose --env-file /root/srlab-runner.env -f docker-compose.runner.yml down
+docker compose -p srlab-runner --env-file /root/srlab-runner.env -f docker-compose.runner.yml down
 ```
 
 ## 权限控制

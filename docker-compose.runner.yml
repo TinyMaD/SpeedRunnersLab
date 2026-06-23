@@ -1,10 +1,12 @@
 # GitHub Actions self-hosted runner for production deployment.
 #
 # Start on the ECS host:
-#   docker compose --env-file /root/srlab-runner.env -f docker-compose.runner.yml up -d
+#   docker compose -p srlab-runner --env-file /root/srlab-runner.env -f docker-compose.runner.yml up -d
 #
 # Keep this compose file separate from the application compose files. The runner is
 # the deployment channel and should stay online while app containers are replaced.
+
+name: srlab-runner
 
 services:
   github-runner:
