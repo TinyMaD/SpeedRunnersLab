@@ -11,6 +11,13 @@ DEPLOY_BRANCH="${DEPLOY_BRANCH:-master}"
 COMPOSE_FILE="${COMPOSE_FILE:-docker-compose.prod.yml}"
 APP_COMPOSE_PROJECT="${APP_COMPOSE_PROJECT:-srlab}"
 LOCK_DIR="${LOCK_DIR:-/tmp/srlab-deploy.lock}"
+COMPOSE_PARALLEL_LIMIT="${COMPOSE_PARALLEL_LIMIT:-1}"
+DEPLOY_STEP_TIMEOUT_SECONDS="${DEPLOY_STEP_TIMEOUT_SECONDS:-900}"
+DEPLOY_LOW_IMPACT_SLEEP_SECONDS="${DEPLOY_LOW_IMPACT_SLEEP_SECONDS:-5}"
+PRUNE_IMAGES="${PRUNE_IMAGES:-false}"
+DEPLOY_SERVICES="${DEPLOY_SERVICES:-srlab.api srlab.ui srlab.scheduler}"
+
+export COMPOSE_PARALLEL_LIMIT
 
 if [ -z "${GHCR_OWNER:-}" ]; then
     echo "GHCR_OWNER is required" >&2
@@ -51,6 +58,29 @@ set_env_value() {
         sed -i "s|^${key}=.*|${key}=${value}|" .env
     else
         printf '%s=%s\n' "$key" "$value" >> .env
+    fi
+}
+
+compose() {
+    docker compose -p "$APP_COMPOSE_PROJECT" -f "$COMPOSE_FILE" "$@"
+}
+
+print_resource_snapshot() {
+    echo "==> Resource snapshot: $(date '+%Y-%m-%d %H:%M:%S')"
+    docker stats --no-stream --format 'table {{.Name}}\t{{.CPUPerc}}\t{{.MemUsage}}\t{{.PIDs}}' || true
+    ps -eo pid,ppid,pcpu,pmem,comm,args --sort=-pcpu | head -20 || true
+    df -h / /var/lib/docker 2>/dev/null || df -h || true
+}
+
+run_compose_step() {
+    local name="$1"
+    shift
+
+    echo "==> ${name}: docker compose $*"
+    if command -v timeout >/dev/null 2>&1; then
+        timeout "$DEPLOY_STEP_TIMEOUT_SECONDS" docker compose -p "$APP_COMPOSE_PROJECT" -f "$COMPOSE_FILE" "$@"
+    else
+        docker compose -p "$APP_COMPOSE_PROJECT" -f "$COMPOSE_FILE" "$@"
     fi
 }
 
@@ -105,11 +135,27 @@ if [ -n "${GHCR_USERNAME:-}" ] && [ -n "${GHCR_TOKEN:-}" ]; then
 fi
 
 echo "==> Deploy images: owner=${GHCR_OWNER} tag=${IMAGE_TAG}"
-docker compose -p "$APP_COMPOSE_PROJECT" -f "$COMPOSE_FILE" pull
-docker compose -p "$APP_COMPOSE_PROJECT" -f "$COMPOSE_FILE" up -d --remove-orphans
+echo "==> Compose project: ${APP_COMPOSE_PROJECT}, parallel limit: ${COMPOSE_PARALLEL_LIMIT}"
+print_resource_snapshot
 
-echo "==> Prune dangling images"
-docker image prune -f
+run_compose_step "Ensure mysql is running" up -d srlab.mysql
+
+for service in $DEPLOY_SERVICES; do
+    run_compose_step "Pull ${service}" pull "$service"
+    print_resource_snapshot
+
+    run_compose_step "Start ${service}" up -d --no-deps "$service"
+    print_resource_snapshot
+
+    sleep "$DEPLOY_LOW_IMPACT_SLEEP_SECONDS"
+done
+
+if [ "$PRUNE_IMAGES" = "true" ]; then
+    echo "==> Prune dangling images"
+    docker image prune -f
+else
+    echo "==> Skip image prune (set PRUNE_IMAGES=true to enable)"
+fi
 
 echo "==> Container status"
-docker compose -p "$APP_COMPOSE_PROJECT" -f "$COMPOSE_FILE" ps
+compose ps

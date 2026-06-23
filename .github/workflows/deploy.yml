@@ -113,6 +113,7 @@ jobs:
     needs: [prepare, build-api, build-ui, build-scheduler]
     if: github.ref == 'refs/heads/master'
     runs-on: [self-hosted, speedrunners-prod]
+    timeout-minutes: 30
     environment: production
     concurrency:
       group: production-deploy
@@ -132,4 +133,8 @@ jobs:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIT_URL: ${{ github.server_url }}/${{ github.repository }}.git
           DEPLOY_BRANCH: master
+          COMPOSE_PARALLEL_LIMIT: "1"
+          DEPLOY_STEP_TIMEOUT_SECONDS: "900"
+          DEPLOY_LOW_IMPACT_SLEEP_SECONDS: "8"
+          PRUNE_IMAGES: "false"
         run: bash scripts/deploy-prod.sh
