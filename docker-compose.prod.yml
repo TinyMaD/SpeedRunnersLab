@@ -25,7 +25,7 @@ services:
       - srlab-net
 
   srlab.api:
-    image: ghcr.io/${GHCR_OWNER}/srlab-api:${IMAGE_TAG:-latest}
+    image: ghcr.io/${GHCR_OWNER}/srlab-api:${API_IMAGE_TAG:-latest}
     container_name: srlab-api
     restart: always
     environment:
@@ -41,7 +41,7 @@ services:
       - host.docker.internal:host-gateway
 
   srlab.ui:
-    image: ghcr.io/${GHCR_OWNER}/srlab-ui:${IMAGE_TAG:-latest}
+    image: ghcr.io/${GHCR_OWNER}/srlab-ui:${UI_IMAGE_TAG:-latest}
     container_name: srlab-ui
     restart: always
     ports:
@@ -56,7 +56,7 @@ services:
       - srlab-net
 
   srlab.scheduler:
-    image: ghcr.io/${GHCR_OWNER}/srlab-scheduler:${IMAGE_TAG:-latest}
+    image: ghcr.io/${GHCR_OWNER}/srlab-scheduler:${SCHEDULER_IMAGE_TAG:-latest}
     container_name: srlab-scheduler
     restart: always
     environment:

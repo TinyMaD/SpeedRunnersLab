@@ -1,21 +1,22 @@
 name: Build & Deploy to Production
 
-# 仅手动触发：在 Actions 页面点 "Run workflow"
 on:
   workflow_dispatch:
     inputs:
       tag:
-        description: '镜像标签（留空则用 git 短 sha）'
+        description: 'Image tag. Empty uses the short git SHA.'
         required: false
         default: ''
+      services:
+        description: 'Deploy services: auto, all, or comma-separated api,ui,scheduler.'
+        required: false
+        default: 'auto'
 
 env:
   REGISTRY: ghcr.io
-  # ghcr.io 上用户名/组织名必须小写
   OWNER: ${{ github.repository_owner }}
 
 jobs:
-  # ---------- 决定本次构建用什么 tag ----------
   prepare:
     runs-on: ubuntu-latest
     outputs:
@@ -23,6 +24,7 @@ jobs:
       owner_lc: ${{ steps.lc.outputs.value }}
     steps:
       - uses: actions/checkout@v4
+
       - id: set-tag
         shell: bash
         run: |
@@ -31,13 +33,37 @@ jobs:
           else
             echo "value=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
           fi
+
       - id: lc
         shell: bash
         run: echo "value=$(echo '${{ env.OWNER }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
 
-  # ---------- 三个镜像并行构建 + 推 ghcr.io ----------
-  build-api:
+  detect-changes:
     needs: prepare
+    if: github.ref == 'refs/heads/master'
+    runs-on: [self-hosted, speedrunners-prod]
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    outputs:
+      build_api: ${{ steps.detect.outputs.build_api }}
+      build_ui: ${{ steps.detect.outputs.build_ui }}
+      build_scheduler: ${{ steps.detect.outputs.build_scheduler }}
+      deploy_services: ${{ steps.detect.outputs.deploy_services }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: detect
+        shell: bash
+        env:
+          DEPLOY_SERVICE_SELECTION: ${{ github.event.inputs.services }}
+        run: bash scripts/detect-deploy-services.sh
+
+  build-api:
+    needs: [prepare, detect-changes]
+    if: github.ref == 'refs/heads/master' && needs.detect-changes.outputs.build_api == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -61,7 +87,8 @@ jobs:
           cache-to: type=gha,scope=api,mode=max
 
   build-ui:
-    needs: prepare
+    needs: [prepare, detect-changes]
+    if: github.ref == 'refs/heads/master' && needs.detect-changes.outputs.build_ui == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -85,7 +112,8 @@ jobs:
           cache-to: type=gha,scope=ui,mode=max
 
   build-scheduler:
-    needs: prepare
+    needs: [prepare, detect-changes]
+    if: github.ref == 'refs/heads/master' && needs.detect-changes.outputs.build_scheduler == 'true'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -108,10 +136,19 @@ jobs:
           cache-from: type=gha,scope=scheduler
           cache-to: type=gha,scope=scheduler,mode=max
 
-  # ---------- ECS self-hosted runner 本机拉镜像并启动 ----------
   deploy:
-    needs: [prepare, build-api, build-ui, build-scheduler]
-    if: github.ref == 'refs/heads/master'
+    needs: [prepare, detect-changes, build-api, build-ui, build-scheduler]
+    if: >
+      ${{
+        always() &&
+        github.ref == 'refs/heads/master' &&
+        needs.prepare.result == 'success' &&
+        needs.detect-changes.result == 'success' &&
+        needs.detect-changes.outputs.deploy_services != '' &&
+        (needs.build-api.result == 'success' || needs.build-api.result == 'skipped') &&
+        (needs.build-ui.result == 'success' || needs.build-ui.result == 'skipped') &&
+        (needs.build-scheduler.result == 'success' || needs.build-scheduler.result == 'skipped')
+      }}
     runs-on: [self-hosted, speedrunners-prod]
     timeout-minutes: 30
     environment: production
@@ -137,4 +174,5 @@ jobs:
           DEPLOY_STEP_TIMEOUT_SECONDS: "900"
           DEPLOY_LOW_IMPACT_SLEEP_SECONDS: "8"
           PRUNE_IMAGES: "false"
+          DEPLOY_SERVICES: ${{ needs.detect-changes.outputs.deploy_services }}
         run: bash scripts/deploy-prod.sh

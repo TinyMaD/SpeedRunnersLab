@@ -2,7 +2,7 @@
 # Production deployment entrypoint.
 #
 # This script is executed by the ECS self-hosted GitHub Actions runner after the
-# three production images have been built and pushed to ghcr.io.
+# selected production images have been built and pushed to ghcr.io.
 
 set -euo pipefail
 
@@ -16,6 +16,7 @@ DEPLOY_STEP_TIMEOUT_SECONDS="${DEPLOY_STEP_TIMEOUT_SECONDS:-900}"
 DEPLOY_LOW_IMPACT_SLEEP_SECONDS="${DEPLOY_LOW_IMPACT_SLEEP_SECONDS:-5}"
 PRUNE_IMAGES="${PRUNE_IMAGES:-false}"
 DEPLOY_SERVICES="${DEPLOY_SERVICES:-srlab.api srlab.ui srlab.scheduler}"
+DEPLOY_STATE_DIR="${DEPLOY_STATE_DIR:-$APP_DIR/.deploy-state}"
 
 export COMPOSE_PARALLEL_LIMIT
 
@@ -59,6 +60,58 @@ set_env_value() {
     else
         printf '%s=%s\n' "$key" "$value" >> .env
     fi
+}
+
+get_env_value() {
+    local key="$1"
+
+    if [ ! -f .env ]; then
+        return 1
+    fi
+
+    grep "^${key}=" .env | tail -1 | cut -d= -f2-
+}
+
+ensure_service_tag_defaults() {
+    local legacy_tag
+    legacy_tag="$(get_env_value IMAGE_TAG || true)"
+    if [ -z "$legacy_tag" ]; then
+        legacy_tag="latest"
+    fi
+
+    for key in API_IMAGE_TAG UI_IMAGE_TAG SCHEDULER_IMAGE_TAG; do
+        if ! grep -q "^${key}=" .env 2>/dev/null; then
+            set_env_value "$key" "$legacy_tag"
+        fi
+    done
+}
+
+service_tag_key() {
+    case "$1" in
+        srlab.api) echo "API_IMAGE_TAG" ;;
+        srlab.ui) echo "UI_IMAGE_TAG" ;;
+        srlab.scheduler) echo "SCHEDULER_IMAGE_TAG" ;;
+        *)
+            echo "Unknown deploy service: $1" >&2
+            exit 1
+            ;;
+    esac
+}
+
+service_state_name() {
+    case "$1" in
+        srlab.api) echo "api" ;;
+        srlab.ui) echo "ui" ;;
+        srlab.scheduler) echo "scheduler" ;;
+        *)
+            echo "Unknown deploy service: $1" >&2
+            exit 1
+            ;;
+    esac
+}
+
+normalize_deploy_services() {
+    printf '%s' "$1" | tr ',;' '  ' | xargs
 }
 
 compose() {
@@ -119,6 +172,27 @@ run_compose_step() {
     fi
 }
 
+record_deploy_state() {
+    local deploy_sha="${GITHUB_SHA:-}"
+    if [ -z "$deploy_sha" ]; then
+        deploy_sha="$(git rev-parse HEAD 2>/dev/null || true)"
+    fi
+
+    if [ -z "$deploy_sha" ]; then
+        echo "==> Skip deploy state update: deploy SHA is unknown"
+        return
+    fi
+
+    mkdir -p "$DEPLOY_STATE_DIR"
+    for service in $DEPLOY_SERVICES; do
+        local state_name
+        state_name="$(service_state_name "$service")"
+        printf '%s\n' "$deploy_sha" > "$DEPLOY_STATE_DIR/${state_name}.sha"
+    done
+    printf '%s\n' "$deploy_sha" > "$DEPLOY_STATE_DIR/compose.sha"
+    echo "==> Updated deploy state: $deploy_sha"
+}
+
 require_command git
 require_command docker
 
@@ -140,8 +214,19 @@ require_file "$COMPOSE_FILE"
 require_file "SpeedRunners.API/SpeedRunners/appsettings.Production.json"
 require_file "SpeedRunners.Scheduler/App.config"
 
+DEPLOY_SERVICES="$(normalize_deploy_services "$DEPLOY_SERVICES")"
+if [ -z "$DEPLOY_SERVICES" ]; then
+    echo "No services selected for deployment"
+    exit 0
+fi
+
+ensure_service_tag_defaults
 set_env_value GHCR_OWNER "$GHCR_OWNER"
 set_env_value IMAGE_TAG "$IMAGE_TAG"
+for service in $DEPLOY_SERVICES; do
+    tag_key="$(service_tag_key "$service")"
+    set_env_value "$tag_key" "$IMAGE_TAG"
+done
 
 if [ -n "${GHCR_USERNAME:-}" ] && [ -n "${GHCR_TOKEN:-}" ]; then
     echo "==> Login to ghcr.io"
@@ -173,3 +258,4 @@ fi
 
 echo "==> Container status"
 compose ps
+record_deploy_state
