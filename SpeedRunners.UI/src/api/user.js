@@ -17,7 +17,14 @@ export function login(query) {
 
 export function logoutOther(tokenID) {
   return request({
-    url: `/user/logoutOther/${tokenID}}`,
+    url: `/user/logoutOther/${tokenID}`,
+    method: "post"
+  });
+}
+
+export function getDevices() {
+  return request({
+    url: "/user/getDevices",
     method: "get"
   });
 }

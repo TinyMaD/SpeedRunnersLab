@@ -43,6 +43,7 @@
     "plaza": "Descoperă",
     "log": "Jurnal modificări",
     "privacy": "Setări confidențialitate",
+    "devices": "Login Devices",
     "profile": "Profil"
   },
   "mod": {
@@ -247,6 +248,18 @@
     "publishAddScoreDetail": "Afișat în 'Puncte crescute în ultimele 2 săptămâni' pe pagina principală",
     "publishTotalScore": "Publică punctele totale de clasament SR",
     "publishTotalScoreDetail": "Afișat în lista de pe pagina clasament"
+  },
+  "devices": {
+    "title": "Login Devices",
+    "currentDevice": "Current",
+    "deviceName": "Device",
+    "loginTime": "Login Time",
+    "lastActive": "Last Active",
+    "logoutThis": "Log out this device",
+    "cannotLogoutNewer": "Log in again to get the highest permission",
+    "reloginHint": "Please log in again to get the highest permission",
+    "logoutSucc": "Device logged out",
+    "noOther": "No other login devices"
   },
   "profile": {
     "privateProfile": "Profil Privat",

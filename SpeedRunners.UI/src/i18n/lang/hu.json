@@ -43,6 +43,7 @@
     "plaza": "Felfedezés",
     "log": "Változásnapló",
     "privacy": "Adatvédelmi beállítások",
+    "devices": "Login Devices",
     "profile": "Profil"
   },
   "mod": {
@@ -227,6 +228,18 @@
     "publishAddScoreDetail": "Megjelenik a főoldalon",
     "publishTotalScore": "SR összes rangpont közzététele",
     "publishTotalScoreDetail": "Megjelenik a ranglistán"
+  },
+  "devices": {
+    "title": "Login Devices",
+    "currentDevice": "Current",
+    "deviceName": "Device",
+    "loginTime": "Login Time",
+    "lastActive": "Last Active",
+    "logoutThis": "Log out this device",
+    "cannotLogoutNewer": "Log in again to get the highest permission",
+    "reloginHint": "Please log in again to get the highest permission",
+    "logoutSucc": "Device logged out",
+    "noOther": "No other login devices"
   },
   "profile": {
     "privateProfile": "Privát Profil",

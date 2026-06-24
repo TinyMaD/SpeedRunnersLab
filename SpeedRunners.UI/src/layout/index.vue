@@ -191,6 +191,15 @@
             </v-list-item-content>
           </v-list-item>
 
+          <v-list-item v-if="avatar!==''" @click="() => { deviceVisible = true }">
+            <v-list-item-icon>
+              <svg-icon icon-class="mdi-devices" />
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title> {{ $t('routes.devices') }}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+
         </v-list-item-group>
       </v-list>
       <template v-if="avatar!==''" v-slot:append>
@@ -203,6 +212,7 @@
     </v-navigation-drawer>
 
     <PrivacySettings v-if="name && rankType != 0" :visible.sync="privacyVisible" />
+    <DeviceManager v-if="avatar!==''" :visible.sync="deviceVisible" />
 
     <!-- 消息通知抽屉 -->
     <NotificationDrawer v-model="showNotificationDrawer" />
@@ -351,6 +361,7 @@
 <script>
 import { AppMain } from "./components";
 import PrivacySettings from "@/views/other/privacySettings";
+import DeviceManager from "@/views/other/deviceManager";
 import NotificationDrawer from "@/components/NotificationDrawer";
 import { goLoginURL } from "@/utils/auth";
 import { goToUserProfile } from "@/utils/profile";
@@ -362,6 +373,7 @@ export default {
   components: {
     AppMain,
     PrivacySettings,
+    DeviceManager,
     NotificationDrawer
   },
   data: () => ({
@@ -371,6 +383,7 @@ export default {
     left: false,
     fab: false,
     privacyVisible: false,
+    deviceVisible: false,
     showNotificationDrawer: false,
     languages: [
       { code: "zh", label: "简体中文" },

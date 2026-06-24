@@ -11,6 +11,7 @@ namespace SpeedRunners.Model.User
         public string Browser { get; set; }
         public string Token { get; set; }
         public DateTime LoginDate { get; set; }
+        public DateTime? LastActiveTime { get; set; }
         public string ExToken { get; set; }
     }
 }

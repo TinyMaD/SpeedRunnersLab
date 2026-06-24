@@ -43,6 +43,7 @@
     "plaza": "Ontdekken",
     "log": "Wijzigingslog",
     "privacy": "Privacy-instellingen",
+    "devices": "Login Devices",
     "profile": "Profiel"
   },
   "mod": {
@@ -247,6 +248,18 @@
     "publishAddScoreDetail": "Weergegeven in 'Toegenomen punten afgelopen 2 weken' op de startpagina",
     "publishTotalScore": "Totale SR-rangpunten publiceren",
     "publishTotalScoreDetail": "Weergegeven in de lijst op de ranglijstpagina"
+  },
+  "devices": {
+    "title": "Login Devices",
+    "currentDevice": "Current",
+    "deviceName": "Device",
+    "loginTime": "Login Time",
+    "lastActive": "Last Active",
+    "logoutThis": "Log out this device",
+    "cannotLogoutNewer": "Log in again to get the highest permission",
+    "reloginHint": "Please log in again to get the highest permission",
+    "logoutSucc": "Device logged out",
+    "noOther": "No other login devices"
   },
   "profile": {
     "privateProfile": "Privé Profiel",

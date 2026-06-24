@@ -10,6 +10,15 @@ const service = axios.create({
   // withCredentials: true // send cookies when cross-domain requests
   timeout: 30000 // request timeout
 });
+
+function isLoginRequest(config) {
+  return config && config.url && config.url.toLowerCase() === "/user/login";
+}
+
+function canApplyTokenFromResponse(config) {
+  return isLoginRequest(config) || (config.__srlabToken || "") === (getToken() || "");
+}
+
 // request interceptor
 service.interceptors.request.use(
   config => {
@@ -17,6 +26,7 @@ service.interceptors.request.use(
     config.headers["locale"] = i18n.locale;
     // let each request carry token
     const token = getToken();
+    config.__srlabToken = token || "";
     if (token) {
       config.headers["srlab-token"] = token;
     }
@@ -43,31 +53,32 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data;
-    if (res.token === null) {
-      removeToken();
-    } else {
-      setToken(res.token);
+    const canApplyToken = canApplyTokenFromResponse(response.config);
+    if (canApplyToken) {
+      if (res.token === null) {
+        removeToken();
+      } else if (res.token) {
+        setToken(res.token);
+      }
     }
     // if the custom code is not 666, it is judged as an error.
     if (res.code !== 666) {
-      Vue.prototype.$toast.error(res.message || "Error");
+      const error = new Error(res.message || "Error");
+      error.code = res.code;
 
       if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-        // to re-login
-        // MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-        //   confirmButtonText: 'Re-Login',
-        //   cancelButtonText: 'Cancel',
-        //   type: 'warning'
-        // }).then(() => {
-        //   store.dispatch('user/resetToken').then(() => {
-        //     location.reload()
-        //   })
-        // })
-        store.dispatch("user/resetToken").then(() => {
-          location.reload();
-        });
+        if (canApplyToken) {
+          Vue.prototype.$toast.error(res.message || i18n.t("devices.reloginHint"));
+          store.dispatch("user/resetToken").then(() => {
+            setTimeout(() => {
+              window.location.href = "/";
+            }, 800);
+          });
+        }
+      } else {
+        Vue.prototype.$toast.error(res.message || "Error");
       }
-      return Promise.reject(new Error(res.message || "Error"));
+      return Promise.reject(error);
     } else {
       return res;
     }

@@ -43,6 +43,7 @@
     "plaza": "Objevit",
     "log": "Seznam změn",
     "privacy": "Nastavení soukromí",
+    "devices": "Login Devices",
     "profile": "Profil"
   },
   "mod": {
@@ -247,6 +248,18 @@
     "publishAddScoreDetail": "Zobrazeno v 'Zvýšené body za poslední 2 týdny' na domovské stránce",
     "publishTotalScore": "Zveřejnit celkové žebříčkové body SR",
     "publishTotalScoreDetail": "Zobrazeno v seznamu na stránce žebříčku"
+  },
+  "devices": {
+    "title": "Login Devices",
+    "currentDevice": "Current",
+    "deviceName": "Device",
+    "loginTime": "Login Time",
+    "lastActive": "Last Active",
+    "logoutThis": "Log out this device",
+    "cannotLogoutNewer": "Log in again to get the highest permission",
+    "reloginHint": "Please log in again to get the highest permission",
+    "logoutSucc": "Device logged out",
+    "noOther": "No other login devices"
   },
   "profile": {
     "privateProfile": "Soukromý Profil",

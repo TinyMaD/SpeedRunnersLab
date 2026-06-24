@@ -43,6 +43,7 @@
     "plaza": "广 场",
     "log": "开发日志",
     "privacy": "隐私设置",
+    "devices": "登录设备",
     "profile": "个人主页"
   },
   "mod": {
@@ -247,6 +248,18 @@
     "publishAddScoreDetail": "展示在首页“最近两周新增天梯分”中",
     "publishTotalScore": "公开SR总天梯分",
     "publishTotalScoreDetail": "展示在SR总分排行榜中"
+  },
+  "devices": {
+    "title": "登录设备",
+    "currentDevice": "当前设备",
+    "deviceName": "设备",
+    "loginTime": "登录时间",
+    "lastActive": "最后活跃",
+    "logoutThis": "踢出设备",
+    "cannotLogoutNewer": "请重新登录以获取最高权限",
+    "reloginHint": "请重新登录以获取最高权限",
+    "logoutSucc": "已踢出设备",
+    "noOther": "暂无其他登录设备"
   },
   "profile": {
     "privateProfile": "隐私主页",

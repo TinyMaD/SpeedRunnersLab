@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using SpeedRunners.BLL;
 using SpeedRunners.Model;
-using SpeedRunners.Model.User;
 using System;
 
 namespace SpeedRunners.Filter
@@ -66,7 +65,7 @@ namespace SpeedRunners.Filter
             // 请求不需认证的接口，返回原Token
             if (!isPersona && !isUser)
             {
-                if (!string.IsNullOrWhiteSpace(token))
+                if (string.IsNullOrWhiteSpace(response.Token) && !string.IsNullOrWhiteSpace(token))
                 {
                     response.Token = token;
                 }
@@ -78,36 +77,16 @@ namespace SpeedRunners.Filter
                 response.Token = null;
                 return;
             }
-            _currentUser.Token = token;
-            response.Token = RefreshToken();
-        }
-
-        /// <summary>
-        /// 刷新AccessToken
-        /// </summary>
-        /// <param name="token"></param>
-        /// <returns></returns>
-        private string RefreshToken()
-        {
-            DateTime create = Convert.ToDateTime(_currentUser.Token.Split("&")[1]);
-            int refresh = Convert.ToInt32(AppSettings.GetConfig("Refresh"));
-            if (DateTime.Now - create > TimeSpan.FromMinutes(refresh))
+            response.Token = _currentUser.Token;
+            int touchMinutes = 10;
+            if (int.TryParse(AppSettings.GetConfig("LastActiveTouchMinutes"), out int configTouchMinutes) && configTouchMinutes > 0)
             {
-                // 过期则生成新的Token
-                string newToken = CommonUtils.CreateToken();
-                MAccessToken param = new MAccessToken
-                {
-                    TokenID = _currentUser.TokenID,
-                    PlatformID = _currentUser.PlatformID,
-                    Browser = _currentUser.Browser,
-                    Token = newToken,
-                    ExToken = _currentUser.Token,
-                    LoginDate = _currentUser.LoginDate
-                };
-                _loginBLL.UpdateAccessToken(param);
-                return newToken;
+                touchMinutes = configTouchMinutes;
             }
-            return _currentUser.Token;
+            if (_currentUser.LastActiveTime == null || DateTime.Now - _currentUser.LastActiveTime.Value > TimeSpan.FromMinutes(touchMinutes))
+            {
+                _loginBLL.TouchLastActive(_currentUser.TokenID);
+            }
         }
     }
 }

@@ -56,6 +56,12 @@ namespace SpeedRunners.Scheduler
                 }).ToRunEvery(1).Days()
                     .At(17, 30);
 
+                _ = timer.ScheduleEx(_log, delegate
+                {
+                    DeleteExpiredAccessTokens();
+                }).ToRunEvery(1).Days()
+                    .At(3, 0);
+
                 JobManager.Initialize(timer);
             }
             catch (Exception ex)
@@ -75,6 +81,22 @@ namespace SpeedRunners.Scheduler
                 FROM RankInfo
                 WHERE RankScore > 0 AND RankScore <> OldRankScore");
                 Console.WriteLine($"成功添加{rows}条【天梯分日志】({DateTime.Now})");
+            }
+        }
+
+        private void DeleteExpiredAccessTokens()
+        {
+            int days = 180;
+            if (int.TryParse(ConfigurationManager.AppSettings["TokenExpireDays"], out int configDays) && configDays > 0)
+            {
+                days = configDays;
+            }
+            using (IDbConnection conn = DbHelper.GetConnection())
+            {
+                int rows = conn.Execute($@"
+                DELETE FROM AccessToken
+                WHERE COALESCE(LastActiveTime, LoginDate) < DATE_SUB(NOW(), INTERVAL ?{nameof(days)} DAY)", new { days });
+                Console.WriteLine($"成功清理{rows}条【过期登录凭证】({DateTime.Now})");
             }
         }
 

@@ -43,6 +43,7 @@
     "plaza": "발견",
     "log": "변경 로그",
     "privacy": "개인정보 설정",
+    "devices": "Login Devices",
     "profile": "프로필"
   },
   "mod": {
@@ -247,6 +248,18 @@
     "publishAddScoreDetail": "홈의 '지난 2주 증가 포인트'에 표시",
     "publishTotalScore": "SR 총 랭크 포인트 공개",
     "publishTotalScoreDetail": "랭킹 페이지 목록에 표시"
+  },
+  "devices": {
+    "title": "Login Devices",
+    "currentDevice": "Current",
+    "deviceName": "Device",
+    "loginTime": "Login Time",
+    "lastActive": "Last Active",
+    "logoutThis": "Log out this device",
+    "cannotLogoutNewer": "Log in again to get the highest permission",
+    "reloginHint": "Please log in again to get the highest permission",
+    "logoutSucc": "Device logged out",
+    "noOther": "No other login devices"
   },
   "profile": {
     "privateProfile": "비공개 프로필",

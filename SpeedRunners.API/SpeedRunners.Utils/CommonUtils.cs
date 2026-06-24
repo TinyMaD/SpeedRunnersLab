@@ -25,7 +25,7 @@ namespace SpeedRunners
         /// 生成新AccessToken
         /// </summary>
         /// <returns></returns>
-        public static string CreateToken() => Guid.NewGuid().ToString("N") + "&" + DateTime.Now.ToString("s");
+        public static string CreateToken() => Guid.NewGuid().ToString("N");
 
         public static StringBuilder WhereIf(this StringBuilder builder, bool condition, string where)
         {

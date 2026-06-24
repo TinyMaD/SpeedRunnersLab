@@ -13,14 +13,21 @@ namespace SpeedRunners.Model
 
         public string RankID
         {
-            get => (_rankID == 0 ? ulong.Parse(PlatformID) - 76561197960265728 : _rankID).ToString();
+            get
+            {
+                if (_rankID != 0)
+                {
+                    return _rankID.ToString();
+                }
+                if (ulong.TryParse(PlatformID, out ulong platformID))
+                {
+                    return (platformID - 76561197960265728).ToString();
+                }
+                return "0";
+            }
             set
             {
-                if (ulong.TryParse(value, out ulong x))
-                {
-                    _rankID = x;
-                }
-                _rankID = 0;
+                _rankID = ulong.TryParse(value, out ulong x) ? x : 0;
             }
         }
         private ulong _rankID;
@@ -30,5 +37,7 @@ namespace SpeedRunners.Model
         public string Token { get; set; }
 
         public DateTime LoginDate { get; set; }
+
+        public DateTime? LastActiveTime { get; set; }
     }
 }

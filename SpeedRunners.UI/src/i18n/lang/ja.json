@@ -43,6 +43,7 @@
     "plaza": "発見",
     "log": "変更ログ",
     "privacy": "プライバシー設定",
+    "devices": "Login Devices",
     "profile": "プロフィール"
   },
   "mod": {
@@ -247,6 +248,18 @@
     "publishAddScoreDetail": "ホームの「過去2週間の増加ポイント」に表示",
     "publishTotalScore": "SR総ランクポイントを公開",
     "publishTotalScoreDetail": "ランクページのリストに表示"
+  },
+  "devices": {
+    "title": "Login Devices",
+    "currentDevice": "Current",
+    "deviceName": "Device",
+    "loginTime": "Login Time",
+    "lastActive": "Last Active",
+    "logoutThis": "Log out this device",
+    "cannotLogoutNewer": "Log in again to get the highest permission",
+    "reloginHint": "Please log in again to get the highest permission",
+    "logoutSucc": "Device logged out",
+    "noOther": "No other login devices"
   },
   "profile": {
     "privateProfile": "プライベートプロフィール",

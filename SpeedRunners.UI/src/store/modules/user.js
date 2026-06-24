@@ -1,5 +1,6 @@
 import { getInfo, logoutLocal } from "@/api/user";
 import { resetRouter } from "@/router";
+import { removeToken } from "@/utils/auth";
 
 const getDefaultState = () => {
   return {
@@ -79,6 +80,15 @@ const actions = {
 
   resetState({ commit }) {
     return new Promise(resolve => {
+      commit("RESET_STATE");
+      resolve();
+    });
+  },
+
+  resetToken({ commit }) {
+    return new Promise(resolve => {
+      removeToken();
+      resetRouter();
       commit("RESET_STATE");
       resolve();
     });

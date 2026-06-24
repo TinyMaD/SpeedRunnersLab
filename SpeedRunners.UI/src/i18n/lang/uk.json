@@ -43,6 +43,7 @@
     "plaza": "Відкрити",
     "log": "Журнал змін",
     "privacy": "Налаштування приватності",
+    "devices": "Login Devices",
     "profile": "Профіль"
   },
   "mod": {
@@ -227,6 +228,18 @@
     "publishAddScoreDetail": "Відображається на головній",
     "publishTotalScore": "Публікувати загальні рейтингові очки SR",
     "publishTotalScoreDetail": "Відображається у списку рейтингу"
+  },
+  "devices": {
+    "title": "Login Devices",
+    "currentDevice": "Current",
+    "deviceName": "Device",
+    "loginTime": "Login Time",
+    "lastActive": "Last Active",
+    "logoutThis": "Log out this device",
+    "cannotLogoutNewer": "Log in again to get the highest permission",
+    "reloginHint": "Please log in again to get the highest permission",
+    "logoutSucc": "Device logged out",
+    "noOther": "No other login devices"
   },
   "profile": {
     "privateProfile": "Приватний профіль",

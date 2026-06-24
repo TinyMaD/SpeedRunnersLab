@@ -43,6 +43,7 @@
     "plaza": "Ανακαλύψτε",
     "log": "Αρχείο αλλαγών",
     "privacy": "Ρυθμίσεις απορρήτου",
+    "devices": "Login Devices",
     "profile": "Προφίλ"
   },
   "mod": {
@@ -227,6 +228,18 @@
     "publishAddScoreDetail": "Εμφανίζεται στην αρχική σελίδα",
     "publishTotalScore": "Δημοσίευση συνολικών πόντων κατάταξης SR",
     "publishTotalScoreDetail": "Εμφανίζεται στη λίστα κατάταξης"
+  },
+  "devices": {
+    "title": "Login Devices",
+    "currentDevice": "Current",
+    "deviceName": "Device",
+    "loginTime": "Login Time",
+    "lastActive": "Last Active",
+    "logoutThis": "Log out this device",
+    "cannotLogoutNewer": "Log in again to get the highest permission",
+    "reloginHint": "Please log in again to get the highest permission",
+    "logoutSucc": "Device logged out",
+    "noOther": "No other login devices"
   },
   "profile": {
     "privateProfile": "Ιδιωτικό Προφίλ",

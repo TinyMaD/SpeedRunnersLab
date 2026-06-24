@@ -43,6 +43,7 @@
     "plaza": "Scopri",
     "log": "Registro modifiche",
     "privacy": "Impostazioni privacy",
+    "devices": "Login Devices",
     "profile": "Profilo"
   },
   "mod": {
@@ -247,6 +248,18 @@
     "publishAddScoreDetail": "Mostrato in 'Punti aumentati ultime 2 settimane' nella homepage",
     "publishTotalScore": "Pubblica il totale dei punti classifica SR",
     "publishTotalScoreDetail": "Mostrato nella lista della pagina classifica"
+  },
+  "devices": {
+    "title": "Login Devices",
+    "currentDevice": "Current",
+    "deviceName": "Device",
+    "loginTime": "Login Time",
+    "lastActive": "Last Active",
+    "logoutThis": "Log out this device",
+    "cannotLogoutNewer": "Log in again to get the highest permission",
+    "reloginHint": "Please log in again to get the highest permission",
+    "logoutSucc": "Device logged out",
+    "noOther": "No other login devices"
   },
   "profile": {
     "privateProfile": "Profilo Privato",

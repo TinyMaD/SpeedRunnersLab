@@ -3,6 +3,7 @@ using SpeedRunners.BLL;
 using SpeedRunners.Model;
 using SpeedRunners.Model.Rank;
 using SpeedRunners.Model.User;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SpeedRunners.Controllers
@@ -47,11 +48,16 @@ namespace SpeedRunners.Controllers
         public async Task<MResponse> Login([FromBody] dynamic data)
         {
             string browser = HttpContext.Request?.Headers?["User-Agent"] ?? "未知设备";
-            return await BLL.Login(data.query.Value, browser);
+            string oldToken = HttpContext.Request.Headers["srlab-token"];
+            return await BLL.Login(data.query.Value, browser, oldToken);
         }
 
         [User]
-        [HttpGet("{tokenID}")]
+        [HttpGet]
+        public List<MDevice> GetDevices() => BLL.GetDevices();
+
+        [User]
+        [HttpPost("{tokenID}")]
         public MResponse LogoutOther(int tokenID) => BLL.DeleteAccessToken(tokenID);
 
         [User]

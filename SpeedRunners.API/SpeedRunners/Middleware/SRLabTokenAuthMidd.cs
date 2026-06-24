@@ -40,8 +40,10 @@ namespace SpeedRunners.Middleware
                     break;
                 case AuthResult.AuthFail:
                     // 未登录，不能访问目标接口
-                    context.Request.ContentType = "application/json;charset=utf-8";
-                    await context.Response.WriteAsync(JsonConvert.SerializeObject(MResponse.Fail(_localizer["not_login"]), new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
+                    string token = context.Request.Headers["srlab-token"];
+                    int code = string.IsNullOrWhiteSpace(token) ? -1 : 50008;
+                    context.Response.ContentType = "application/json;charset=utf-8";
+                    await context.Response.WriteAsync(JsonConvert.SerializeObject(MResponse.Fail(_localizer["not_login"], code), new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }));
                     break;
             }
         }
@@ -97,6 +99,7 @@ namespace SpeedRunners.Middleware
             currentUser.Token = user.Token;
             currentUser.PlatformID = user.PlatformID;
             currentUser.LoginDate = user.LoginDate;
+            currentUser.LastActiveTime = user.LastActiveTime;
             return AuthResult.AuthSuccess;
         }
     }

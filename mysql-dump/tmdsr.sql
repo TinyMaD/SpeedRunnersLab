@@ -4,13 +4,16 @@
 -- ----------------------------
 DROP TABLE IF EXISTS `AccessToken`;
 CREATE TABLE `AccessToken`  (
-  `TokenID` int(11) NOT NULL,
+  `TokenID` int(11) NOT NULL AUTO_INCREMENT,
   `PlatformID` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '平台ID(steamID64)',
   `Browser` text CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '浏览器',
   `Token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `LoginDate` datetime NOT NULL COMMENT '登录时间',
+  `LastActiveTime` datetime NULL DEFAULT NULL COMMENT '最后活跃时间',
   `ExToken` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`TokenID`) USING BTREE
+  PRIMARY KEY (`TokenID`) USING BTREE,
+  INDEX `idx_token`(`Token`) USING BTREE,
+  INDEX `idx_platform_active`(`PlatformID`, `LastActiveTime`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------

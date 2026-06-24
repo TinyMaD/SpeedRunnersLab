@@ -6,6 +6,7 @@ using SpeedRunners.Model.Rank;
 using SpeedRunners.Model.User;
 using SpeedRunners.Utils;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -76,7 +77,7 @@ namespace SpeedRunners.BLL
             return info;
         }
 
-        public async Task<MResponse> Login(string query, string browser)
+        public async Task<MResponse> Login(string query, string browser, string oldToken)
         {
             string openIDUrl = "https://steamcommunity.com/openid/login";
             query = Regex.Replace(query, "(?<=openid.mode=).+?(?=\\&)", "check_authentication", RegexOptions.IgnoreCase).Trim('?');
@@ -93,19 +94,33 @@ namespace SpeedRunners.BLL
             if (result.ToLower().Contains("is_valid:true"))
             {
                 string steamID = Regex.Match(HttpUtility.UrlDecode(query), "(?<=openid/id/)\\d+", RegexOptions.IgnoreCase).Value;
-                string newToken = CommonUtils.CreateToken();
+                string responseToken = null;
                 // 保存登录凭证
                 BeginDb(DAL =>
                 {
+                    MAccessToken oldSession = string.IsNullOrWhiteSpace(oldToken) ? null : DAL.GetUserByToken(oldToken);
+                    if (oldSession?.PlatformID == steamID)
+                    {
+                        DAL.RefreshSession(new MAccessToken
+                        {
+                            TokenID = oldSession.TokenID,
+                            PlatformID = steamID,
+                            Browser = browser
+                        });
+                        responseToken = oldSession.Token;
+                        return;
+                    }
+
+                    responseToken = CommonUtils.CreateToken();
                     DAL.AddAccessToken(new MUser
                     {
                         PlatformID = steamID,
                         Browser = browser,
-                        Token = newToken
+                        Token = responseToken
                     });
                 });
                 MResponse response = MResponse.Success();
-                response.Token = newToken;
+                response.Token = responseToken;
                 return response;
             }
             return MResponse.Fail(Localizer["login_fail"]);
@@ -115,25 +130,37 @@ namespace SpeedRunners.BLL
         {
             return BeginDb(DAL =>
             {
-                MAccessToken user = DAL.GetUserByToken(token);
-                if (token.Equals(user?.ExToken))
-                {
-                    DateTime create = Convert.ToDateTime(user.Token.Split("&")[1]);
-                    int expire = Convert.ToInt32(AppSettings.GetConfig("Refresh")) - 1;
-                    if (DateTime.Now - create > TimeSpan.FromMinutes(expire))
-                    {
-                        return null;
-                    }
-                }
-                return user;
+                return DAL.GetUserByToken(token);
             });
         }
 
-        public void UpdateAccessToken(MAccessToken user)
+        public List<MDevice> GetDevices()
+        {
+            return BeginDb(DAL =>
+            {
+                return DAL.GetDevicesByPlatformID(CurrentUser.PlatformID)
+                    .Select(x =>
+                    {
+                        bool isCurrent = x.TokenID == CurrentUser.TokenID;
+                        return new MDevice
+                        {
+                            TokenID = x.TokenID,
+                            DeviceName = GetDeviceName(x.Browser),
+                            LoginDate = x.LoginDate,
+                            LastActiveTime = x.LastActiveTime ?? x.LoginDate,
+                            IsCurrent = isCurrent,
+                            CanLogout = !isCurrent && x.LoginDate <= CurrentUser.LoginDate
+                        };
+                    })
+                    .ToList();
+            });
+        }
+
+        public void TouchLastActive(int tokenID)
         {
             BeginDb(DAL =>
             {
-                DAL.UpdateAccessToken(user);
+                DAL.TouchLastActive(tokenID);
             });
         }
 
@@ -166,6 +193,56 @@ namespace SpeedRunners.BLL
                 DAL.DeleteAccessToken(CurrentUser.Token);
             });
             CurrentUser.PlatformID = null;
+        }
+
+        private string GetDeviceName(string browser)
+        {
+            if (string.IsNullOrWhiteSpace(browser))
+            {
+                return "Unknown Device";
+            }
+
+            string browserName = browser;
+            if (browser.Contains("Edg/", StringComparison.OrdinalIgnoreCase))
+            {
+                browserName = "Microsoft Edge";
+            }
+            else if (browser.Contains("Chrome/", StringComparison.OrdinalIgnoreCase))
+            {
+                browserName = "Chrome";
+            }
+            else if (browser.Contains("Firefox/", StringComparison.OrdinalIgnoreCase))
+            {
+                browserName = "Firefox";
+            }
+            else if (browser.Contains("Safari/", StringComparison.OrdinalIgnoreCase))
+            {
+                browserName = "Safari";
+            }
+
+            string osName = "";
+            if (browser.Contains("Windows", StringComparison.OrdinalIgnoreCase))
+            {
+                osName = "Windows";
+            }
+            else if (browser.Contains("Mac OS", StringComparison.OrdinalIgnoreCase))
+            {
+                osName = "macOS";
+            }
+            else if (browser.Contains("Android", StringComparison.OrdinalIgnoreCase))
+            {
+                osName = "Android";
+            }
+            else if (browser.Contains("iPhone", StringComparison.OrdinalIgnoreCase) || browser.Contains("iPad", StringComparison.OrdinalIgnoreCase))
+            {
+                osName = "iOS";
+            }
+            else if (browser.Contains("Linux", StringComparison.OrdinalIgnoreCase))
+            {
+                osName = "Linux";
+            }
+
+            return string.IsNullOrWhiteSpace(osName) ? browserName : $"{browserName} · {osName}";
         }
     }
 }
