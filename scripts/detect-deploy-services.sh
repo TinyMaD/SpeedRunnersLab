@@ -50,6 +50,35 @@ add_deploy_service() {
     deploy_services+=("$service")
 }
 
+state_env_name() {
+    case "$1" in
+        api) echo "DEPLOY_STATE_API_SHA" ;;
+        ui) echo "DEPLOY_STATE_UI_SHA" ;;
+        scheduler) echo "DEPLOY_STATE_SCHEDULER_SHA" ;;
+        compose) echo "DEPLOY_STATE_COMPOSE_SHA" ;;
+        *)
+            echo "Unknown deploy state: $1" >&2
+            exit 1
+            ;;
+    esac
+}
+
+get_state_sha() {
+    local state_name="$1"
+    local env_name
+    env_name="$(state_env_name "$state_name")"
+
+    if [ -n "${!env_name:-}" ]; then
+        printf '%s' "${!env_name}" | tr -d '[:space:]'
+        return
+    fi
+
+    local state_file="$STATE_DIR/$state_name.sha"
+    if [ -f "$state_file" ]; then
+        tr -d '[:space:]' < "$state_file"
+    fi
+}
+
 set_service_selected() {
     case "$1" in
         api)
@@ -75,13 +104,8 @@ changed_since_service_deploy() {
     local state_name="$1"
     shift
 
-    local state_file="$STATE_DIR/$state_name.sha"
-    if [ ! -f "$state_file" ]; then
-        return 0
-    fi
-
     local base_sha
-    base_sha="$(tr -d '[:space:]' < "$state_file")"
+    base_sha="$(get_state_sha "$state_name")"
     if [ -z "$base_sha" ]; then
         return 0
     fi

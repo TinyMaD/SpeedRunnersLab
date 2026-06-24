@@ -17,6 +17,7 @@ DEPLOY_LOW_IMPACT_SLEEP_SECONDS="${DEPLOY_LOW_IMPACT_SLEEP_SECONDS:-5}"
 PRUNE_IMAGES="${PRUNE_IMAGES:-false}"
 DEPLOY_SERVICES="${DEPLOY_SERVICES:-srlab.api srlab.ui srlab.scheduler}"
 DEPLOY_STATE_DIR="${DEPLOY_STATE_DIR:-$APP_DIR/.deploy-state}"
+SKIP_REPOSITORY_SYNC="${SKIP_REPOSITORY_SYNC:-false}"
 
 export COMPOSE_PARALLEL_LIMIT
 
@@ -208,7 +209,11 @@ fi
 
 cd "$APP_DIR"
 
-sync_repository
+if [ "$SKIP_REPOSITORY_SYNC" = "true" ]; then
+    echo "==> Skip repository sync"
+else
+    sync_repository
+fi
 
 require_file "$COMPOSE_FILE"
 require_file "SpeedRunners.API/SpeedRunners/appsettings.Production.json"

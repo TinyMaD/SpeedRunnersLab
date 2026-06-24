@@ -38,10 +38,37 @@ jobs:
         shell: bash
         run: echo "value=$(echo '${{ env.OWNER }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
 
-  detect-changes:
+  read-deploy-state:
     needs: prepare
     if: github.ref == 'refs/heads/master'
     runs-on: [self-hosted, speedrunners-prod]
+    timeout-minutes: 5
+    outputs:
+      api_sha: ${{ steps.state.outputs.api_sha }}
+      ui_sha: ${{ steps.state.outputs.ui_sha }}
+      scheduler_sha: ${{ steps.state.outputs.scheduler_sha }}
+      compose_sha: ${{ steps.state.outputs.compose_sha }}
+    steps:
+      - id: state
+        shell: bash
+        run: |
+          state_dir="${SRLAB_APP_DIR:-/root/home/srlab}/.deploy-state"
+          read_state() {
+            local name="$1"
+            local file="${state_dir}/${name}.sha"
+            if [ -f "$file" ]; then
+              tr -d '[:space:]' < "$file"
+            fi
+          }
+          echo "api_sha=$(read_state api)" >> "$GITHUB_OUTPUT"
+          echo "ui_sha=$(read_state ui)" >> "$GITHUB_OUTPUT"
+          echo "scheduler_sha=$(read_state scheduler)" >> "$GITHUB_OUTPUT"
+          echo "compose_sha=$(read_state compose)" >> "$GITHUB_OUTPUT"
+
+  detect-changes:
+    needs: [prepare, read-deploy-state]
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
       contents: read
@@ -59,7 +86,24 @@ jobs:
         shell: bash
         env:
           DEPLOY_SERVICE_SELECTION: ${{ github.event.inputs.services }}
+          DEPLOY_STATE_API_SHA: ${{ needs.read-deploy-state.outputs.api_sha }}
+          DEPLOY_STATE_UI_SHA: ${{ needs.read-deploy-state.outputs.ui_sha }}
+          DEPLOY_STATE_SCHEDULER_SHA: ${{ needs.read-deploy-state.outputs.scheduler_sha }}
+          DEPLOY_STATE_COMPOSE_SHA: ${{ needs.read-deploy-state.outputs.compose_sha }}
         run: bash scripts/detect-deploy-services.sh
+
+      - name: Package deployment files
+        shell: bash
+        run: |
+          mkdir -p deploy-files/scripts
+          cp docker-compose.prod.yml deploy-files/
+          cp scripts/deploy-prod.sh deploy-files/scripts/
+
+      - uses: actions/upload-artifact@v6
+        with:
+          name: deploy-files
+          path: deploy-files/
+          retention-days: 1
 
   build-api:
     needs: [prepare, detect-changes]
@@ -137,12 +181,13 @@ jobs:
           cache-to: type=gha,scope=scheduler,mode=max
 
   deploy:
-    needs: [prepare, detect-changes, build-api, build-ui, build-scheduler]
+    needs: [prepare, read-deploy-state, detect-changes, build-api, build-ui, build-scheduler]
     if: >
       ${{
         always() &&
         github.ref == 'refs/heads/master' &&
         needs.prepare.result == 'success' &&
+        needs.read-deploy-state.result == 'success' &&
         needs.detect-changes.result == 'success' &&
         needs.detect-changes.outputs.deploy_services != '' &&
         (needs.build-api.result == 'success' || needs.build-api.result == 'skipped') &&
@@ -158,8 +203,12 @@ jobs:
     permissions:
       contents: read
       packages: read
+      actions: read
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/download-artifact@v7
+        with:
+          name: deploy-files
+          path: deploy-files
 
       - name: Roll out new images on ECS
         shell: bash
@@ -175,4 +224,11 @@ jobs:
           DEPLOY_LOW_IMPACT_SLEEP_SECONDS: "8"
           PRUNE_IMAGES: "false"
           DEPLOY_SERVICES: ${{ needs.detect-changes.outputs.deploy_services }}
-        run: bash scripts/deploy-prod.sh
+          SKIP_REPOSITORY_SYNC: "true"
+        run: |
+          app_dir="${SRLAB_APP_DIR:-/root/home/srlab}"
+          mkdir -p "$app_dir/scripts"
+          cp deploy-files/docker-compose.prod.yml "$app_dir/docker-compose.prod.yml"
+          cp deploy-files/scripts/deploy-prod.sh "$app_dir/scripts/deploy-prod.sh"
+          chmod +x "$app_dir/scripts/deploy-prod.sh"
+          bash "$app_dir/scripts/deploy-prod.sh"
