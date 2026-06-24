@@ -222,13 +222,31 @@ jobs:
           COMPOSE_PARALLEL_LIMIT: "1"
           DEPLOY_STEP_TIMEOUT_SECONDS: "900"
           DEPLOY_LOW_IMPACT_SLEEP_SECONDS: "8"
+          DEPLOY_PULL_RETRIES: "5"
+          DEPLOY_PULL_RETRY_SLEEP_SECONDS: "20"
           PRUNE_IMAGES: "false"
           DEPLOY_SERVICES: ${{ needs.detect-changes.outputs.deploy_services }}
           SKIP_REPOSITORY_SYNC: "true"
         run: |
           app_dir="${SRLAB_APP_DIR:-/root/home/srlab}"
+          echo "==> App dir: $app_dir"
+          echo "==> Deploy services: ${DEPLOY_SERVICES}"
+          echo "==> Downloaded deployment files"
+          find deploy-files -maxdepth 4 -type f -print | sort
+
+          compose_file="$(find deploy-files -name docker-compose.prod.yml -type f | head -1)"
+          deploy_script="$(find deploy-files -path '*/scripts/deploy-prod.sh' -type f | head -1)"
+          if [ -z "$compose_file" ] || [ -z "$deploy_script" ]; then
+            echo "Missing deployment artifact files" >&2
+            echo "compose_file=${compose_file:-<missing>}" >&2
+            echo "deploy_script=${deploy_script:-<missing>}" >&2
+            exit 1
+          fi
+
           mkdir -p "$app_dir/scripts"
-          cp deploy-files/docker-compose.prod.yml "$app_dir/docker-compose.prod.yml"
-          cp deploy-files/scripts/deploy-prod.sh "$app_dir/scripts/deploy-prod.sh"
+          cp "$compose_file" "$app_dir/docker-compose.prod.yml"
+          cp "$deploy_script" "$app_dir/scripts/deploy-prod.sh"
           chmod +x "$app_dir/scripts/deploy-prod.sh"
+          test -f "$app_dir/SpeedRunners.API/SpeedRunners/appsettings.Production.json" || echo "Missing appsettings.Production.json before deploy" >&2
+          test -f "$app_dir/SpeedRunners.Scheduler/App.config" || echo "Missing Scheduler App.config before deploy" >&2
           bash "$app_dir/scripts/deploy-prod.sh"

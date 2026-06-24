@@ -14,6 +14,8 @@ LOCK_DIR="${LOCK_DIR:-/tmp/srlab-deploy.lock}"
 COMPOSE_PARALLEL_LIMIT="${COMPOSE_PARALLEL_LIMIT:-1}"
 DEPLOY_STEP_TIMEOUT_SECONDS="${DEPLOY_STEP_TIMEOUT_SECONDS:-900}"
 DEPLOY_LOW_IMPACT_SLEEP_SECONDS="${DEPLOY_LOW_IMPACT_SLEEP_SECONDS:-5}"
+DEPLOY_PULL_RETRIES="${DEPLOY_PULL_RETRIES:-5}"
+DEPLOY_PULL_RETRY_SLEEP_SECONDS="${DEPLOY_PULL_RETRY_SLEEP_SECONDS:-20}"
 PRUNE_IMAGES="${PRUNE_IMAGES:-false}"
 DEPLOY_SERVICES="${DEPLOY_SERVICES:-srlab.api srlab.ui srlab.scheduler}"
 DEPLOY_STATE_DIR="${DEPLOY_STATE_DIR:-$APP_DIR/.deploy-state}"
@@ -166,11 +168,46 @@ run_compose_step() {
     shift
 
     echo "==> ${name}: docker compose $*"
+    set +e
     if command -v timeout >/dev/null 2>&1; then
         timeout "$DEPLOY_STEP_TIMEOUT_SECONDS" docker compose -p "$APP_COMPOSE_PROJECT" -f "$COMPOSE_FILE" "$@"
+        local code="$?"
     else
         docker compose -p "$APP_COMPOSE_PROJECT" -f "$COMPOSE_FILE" "$@"
+        local code="$?"
     fi
+    set -e
+
+    if [ "$code" -ne 0 ]; then
+        echo "Compose step failed: ${name} (exit ${code})" >&2
+        return "$code"
+    fi
+}
+
+run_compose_step_with_retry() {
+    local name="$1"
+    local attempts="$2"
+    shift 2
+
+    local attempt
+    local code
+    local sleep_seconds
+
+    for attempt in $(seq 1 "$attempts"); do
+        if run_compose_step "${name} (attempt ${attempt}/${attempts})" "$@"; then
+            return 0
+        fi
+
+        code="$?"
+        if [ "$attempt" -ge "$attempts" ]; then
+            echo "Step failed after ${attempts} attempts: ${name}" >&2
+            return "$code"
+        fi
+
+        sleep_seconds=$((DEPLOY_PULL_RETRY_SLEEP_SECONDS * attempt))
+        echo "Retrying ${name} in ${sleep_seconds}s"
+        sleep "$sleep_seconds"
+    done
 }
 
 record_deploy_state() {
@@ -240,12 +277,13 @@ fi
 
 echo "==> Deploy images: owner=${GHCR_OWNER} tag=${IMAGE_TAG}"
 echo "==> Compose project: ${APP_COMPOSE_PROJECT}, parallel limit: ${COMPOSE_PARALLEL_LIMIT}"
+echo "==> Pull retries: ${DEPLOY_PULL_RETRIES}, retry base sleep: ${DEPLOY_PULL_RETRY_SLEEP_SECONDS}s"
 print_resource_snapshot
 
 run_compose_step "Ensure mysql is running" up -d srlab.mysql
 
 for service in $DEPLOY_SERVICES; do
-    run_compose_step "Pull ${service}" pull "$service"
+    run_compose_step_with_retry "Pull ${service}" "$DEPLOY_PULL_RETRIES" pull "$service"
     print_resource_snapshot
 
     run_compose_step "Start ${service}" up -d --no-deps "$service"
