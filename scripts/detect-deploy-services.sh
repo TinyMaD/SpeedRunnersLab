@@ -13,6 +13,25 @@ build_ui=false
 build_scheduler=false
 deploy_services=()
 
+ensure_commit_available() {
+    local sha="$1"
+    local attempt
+
+    if git cat-file -e "$sha^{commit}" 2>/dev/null; then
+        return 0
+    fi
+
+    for attempt in 1 2 3; do
+        echo "Fetching comparison commit ${sha} (attempt ${attempt})"
+        if git fetch --no-tags --depth=1 origin "$sha" >/dev/null 2>&1; then
+            git cat-file -e "$sha^{commit}" 2>/dev/null && return 0
+        fi
+        sleep $((attempt * 3))
+    done
+
+    return 1
+}
+
 normalize_selection() {
     printf '%s' "$1" \
         | tr '[:upper:]' '[:lower:]' \
@@ -67,7 +86,8 @@ changed_since_service_deploy() {
         return 0
     fi
 
-    if ! git cat-file -e "$base_sha^{commit}" 2>/dev/null; then
+    if ! ensure_commit_available "$base_sha"; then
+        echo "Comparison commit ${base_sha} is unavailable; selecting ${state_name} for a safe deployment"
         return 0
     fi
 
