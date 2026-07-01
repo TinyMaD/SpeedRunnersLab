@@ -291,7 +291,7 @@
     "notFoundDesc": "플레이어가 존재하지 않거나 프로필이 비공개입니다",
     "rankUpTo": "승격",
     "unlocked": "해제됨",
-    "unlockTime": "{0}년 {1}월 {2}일 해제",
+    "unlockTime": "{2}년 {0} {1}일 해제",
     "pageTitle": "{0} - SpeedRunners 프로필",
     "pageTitleDefault": "플레이어 프로필",
     "pageKeywords": "SpeedRunners 플레이어,{0},프로필,게임 데이터",
@@ -309,7 +309,7 @@
       "11월",
       "12월"
     ],
-    "heatmapDate": "{0}년 {1}월 {2}일",
+    "heatmapDate": "{2}년 {0} {1}일",
     "activity": {
       "scoreChange": "포인트 변동",
       "rankUp": "랭크 업",

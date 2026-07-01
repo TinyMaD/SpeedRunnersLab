@@ -291,7 +291,7 @@
     "notFoundDesc": "プレイヤーが存在しないか、プロフィールが非公開です",
     "rankUpTo": "昇格先",
     "unlocked": "解除済み",
-    "unlockTime": "{0}年{1}月{2}日解除",
+    "unlockTime": "{2}年{0}{1}日解除",
     "pageTitle": "{0} - SpeedRunners プロフィール",
     "pageTitleDefault": "プレイヤープロフィール",
     "pageKeywords": "SpeedRunnersプレイヤー,{0},プロフィール,ゲームデータ",
@@ -309,7 +309,7 @@
       "11月",
       "12月"
     ],
-    "heatmapDate": "{0}年{1}月{2}日",
+    "heatmapDate": "{2}年{0}{1}日",
     "activity": {
       "scoreChange": "ポイント変動",
       "rankUp": "ランクアップ",
