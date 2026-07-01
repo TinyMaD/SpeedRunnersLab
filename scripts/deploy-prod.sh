@@ -14,14 +14,21 @@ LOCK_DIR="${LOCK_DIR:-/tmp/srlab-deploy.lock}"
 COMPOSE_PARALLEL_LIMIT="${COMPOSE_PARALLEL_LIMIT:-1}"
 DEPLOY_STEP_TIMEOUT_SECONDS="${DEPLOY_STEP_TIMEOUT_SECONDS:-900}"
 DEPLOY_LOW_IMPACT_SLEEP_SECONDS="${DEPLOY_LOW_IMPACT_SLEEP_SECONDS:-5}"
+DEPLOY_LOGIN_RETRIES="${DEPLOY_LOGIN_RETRIES:-5}"
+DEPLOY_LOGIN_RETRY_SLEEP_SECONDS="${DEPLOY_LOGIN_RETRY_SLEEP_SECONDS:-20}"
+DEPLOY_LOGIN_TIMEOUT_SECONDS="${DEPLOY_LOGIN_TIMEOUT_SECONDS:-120}"
 DEPLOY_PULL_RETRIES="${DEPLOY_PULL_RETRIES:-5}"
 DEPLOY_PULL_RETRY_SLEEP_SECONDS="${DEPLOY_PULL_RETRY_SLEEP_SECONDS:-20}"
 PRUNE_IMAGES="${PRUNE_IMAGES:-false}"
 DEPLOY_SERVICES="${DEPLOY_SERVICES:-srlab.api srlab.ui srlab.scheduler}"
 DEPLOY_STATE_DIR="${DEPLOY_STATE_DIR:-$APP_DIR/.deploy-state}"
 SKIP_REPOSITORY_SYNC="${SKIP_REPOSITORY_SYNC:-false}"
+DOCKER_CLIENT_TIMEOUT="${DOCKER_CLIENT_TIMEOUT:-120}"
+COMPOSE_HTTP_TIMEOUT="${COMPOSE_HTTP_TIMEOUT:-120}"
 
 export COMPOSE_PARALLEL_LIMIT
+export DOCKER_CLIENT_TIMEOUT
+export COMPOSE_HTTP_TIMEOUT
 
 if [ -z "${GHCR_OWNER:-}" ]; then
     echo "GHCR_OWNER is required" >&2
@@ -210,6 +217,38 @@ run_compose_step_with_retry() {
     done
 }
 
+login_ghcr_with_retry() {
+    local attempt
+    local code
+    local sleep_seconds
+
+    for attempt in $(seq 1 "$DEPLOY_LOGIN_RETRIES"); do
+        echo "==> Login to ghcr.io (attempt ${attempt}/${DEPLOY_LOGIN_RETRIES})"
+        set +e
+        if command -v timeout >/dev/null 2>&1; then
+            timeout "$DEPLOY_LOGIN_TIMEOUT_SECONDS" docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin <<< "$GHCR_TOKEN"
+            code="$?"
+        else
+            docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin <<< "$GHCR_TOKEN"
+            code="$?"
+        fi
+        set -e
+
+        if [ "$code" -eq 0 ]; then
+            return 0
+        fi
+
+        if [ "$attempt" -ge "$DEPLOY_LOGIN_RETRIES" ]; then
+            echo "Login to ghcr.io failed after ${DEPLOY_LOGIN_RETRIES} attempts" >&2
+            return "$code"
+        fi
+
+        sleep_seconds=$((DEPLOY_LOGIN_RETRY_SLEEP_SECONDS * attempt))
+        echo "Retrying ghcr.io login in ${sleep_seconds}s"
+        sleep "$sleep_seconds"
+    done
+}
+
 record_deploy_state() {
     local deploy_sha="${GITHUB_SHA:-}"
     if [ -z "$deploy_sha" ]; then
@@ -271,12 +310,12 @@ for service in $DEPLOY_SERVICES; do
 done
 
 if [ -n "${GHCR_USERNAME:-}" ] && [ -n "${GHCR_TOKEN:-}" ]; then
-    echo "==> Login to ghcr.io"
-    printf '%s' "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USERNAME" --password-stdin
+    login_ghcr_with_retry
 fi
 
 echo "==> Deploy images: owner=${GHCR_OWNER} tag=${IMAGE_TAG}"
 echo "==> Compose project: ${APP_COMPOSE_PROJECT}, parallel limit: ${COMPOSE_PARALLEL_LIMIT}"
+echo "==> Login retries: ${DEPLOY_LOGIN_RETRIES}, login timeout: ${DEPLOY_LOGIN_TIMEOUT_SECONDS}s"
 echo "==> Pull retries: ${DEPLOY_PULL_RETRIES}, retry base sleep: ${DEPLOY_PULL_RETRY_SLEEP_SECONDS}s"
 print_resource_snapshot
 
