@@ -3,6 +3,7 @@ using SpeedRunners.BLL;
 
 namespace SpeedRunners.Tests
 {
+    [Collection("AdminHelper")]
     public class ProfilePrivacyTests
     {
         private const string Owner = "76561198000000100";

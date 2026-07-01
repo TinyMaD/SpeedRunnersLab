@@ -67,6 +67,8 @@ namespace SpeedRunners.BLL
             }
 
             // 本人或管理员视同完整访问权限
+            BeginDb(DAL => DAL.TouchProfileView(steamId, GetProfileViewTouchMinutes()));
+
             bool isOwner = IsOwnerOrAdmin(steamId, visitorId);
 
             if (isOwner)
@@ -91,6 +93,17 @@ namespace SpeedRunners.BLL
         {
             if (string.IsNullOrEmpty(visitorId)) return false;
             return steamId == visitorId || AdminHelper.IsAdmin(visitorId);
+        }
+
+        private static int GetProfileViewTouchMinutes()
+        {
+            int touchMinutes;
+            if (int.TryParse(AppSettings.GetConfig("ProfileViewTouchMinutes"), out touchMinutes) && touchMinutes > 0)
+            {
+                return touchMinutes;
+            }
+
+            return 1;
         }
 
         /// <summary>

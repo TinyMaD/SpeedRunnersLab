@@ -57,6 +57,17 @@ namespace SpeedRunners.DAL
             return (playerInfo, privacySettings);
         }
 
+        public void TouchProfileView(string steamId, int touchMinutes)
+        {
+            touchMinutes = Math.Max(1, touchMinutes);
+            Db.Execute(
+                $@"UPDATE RankInfo
+                   SET LastProfileViewTime = NOW()
+                   WHERE PlatformID = ?{nameof(steamId)}
+                     AND (LastProfileViewTime IS NULL OR LastProfileViewTime < DATE_SUB(NOW(), INTERVAL {touchMinutes} MINUTE))",
+                new { steamId });
+        }
+
         /// <summary>
         /// 获取最近两周新增天梯分
         /// </summary>

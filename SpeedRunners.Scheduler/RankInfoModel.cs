@@ -8,6 +8,7 @@ namespace SpeedRunners.Scheduler
     {
         public int WeekPlayTime { get; set; }
         public int PlayTime { get; set; }
+        public DateTime? PlayTimeModifyTime { get; set; }
 
         #region Model
         private string _platformid;

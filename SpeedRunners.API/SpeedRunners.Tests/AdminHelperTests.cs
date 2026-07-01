@@ -2,6 +2,7 @@ using SpeedRunners;
 
 namespace SpeedRunners.Tests
 {
+    [Collection("AdminHelper")]
     public class AdminHelperTests
     {
         public AdminHelperTests()

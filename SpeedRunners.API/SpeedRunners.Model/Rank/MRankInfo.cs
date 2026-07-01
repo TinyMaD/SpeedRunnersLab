@@ -30,6 +30,8 @@ namespace SpeedRunners.Model.Rank
         public decimal? OldRankScore { get; set; }
         public int WeekPlayTime { get; set; }
         public int PlayTime { get; set; }
+        public DateTime? PlayTimeModifyTime { get; set; }
+        public DateTime? LastProfileViewTime { get; set; }
         public int Participate { get; set; }
 
         /// <summary>

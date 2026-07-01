@@ -21,9 +21,18 @@ namespace SpeedRunners.Scheduler
         private static readonly string SECOND_NUM = ConfigurationManager.AppSettings["SecondNum"];
         private static readonly string RUN_UPDATESTEAMINFO = ConfigurationManager.AppSettings["RunUpdateSteamInfo"];
         private static readonly string ApiKey = ConfigurationManager.AppSettings["ApiKey"];
+        private static readonly int SteamActiveWindowMinutes = GetIntAppSetting("SteamActiveWindowMinutes", 30);
+        private static readonly int SteamSummaryActiveTtlMinutes = GetIntAppSetting("SteamSummaryActiveTtlMinutes", 5);
+        private static readonly int SteamPlayTimeActiveTtlMinutes = GetIntAppSetting("SteamPlayTimeActiveTtlMinutes", 60);
+        private static readonly int SteamDailyTtlHours = GetIntAppSetting("SteamDailyTtlHours", 24);
+        private static readonly int SteamSummaryBatchSize = GetIntAppSetting("SteamSummaryBatchSize", 100);
+        private static readonly int SteamPlayTimeBatchSize = GetIntAppSetting("SteamPlayTimeBatchSize", 5);
+        private static readonly int SteamUpdateLoopDelaySeconds = GetIntAppSetting("SteamUpdateLoopDelaySeconds", 30);
+        private static readonly int SteamFailureBackoffMinutes = GetIntAppSetting("SteamFailureBackoffMinutes", 15);
+        private static readonly int SteamPlayTimeRequestDelayMilliseconds = GetIntAppSetting("SteamPlayTimeRequestDelayMilliseconds", 500);
         private static readonly LogHelper _log = LogHelper.GetCurrentClassLogHelper();
-        private string _lastID;
-        public async void Execute()
+        private readonly Dictionary<string, DateTime> _steamFailureUntil = new Dictionary<string, DateTime>();
+        public void Execute()
         {
             try
             {
@@ -32,34 +41,17 @@ namespace SpeedRunners.Scheduler
                 //await UpdateScore();
 
                 Registry timer = new Registry();
-                _ = timer.ScheduleEx(_log, delegate
-                {
-                    UpdateScore();
-                }).ToRunNow().AndEvery(10)
+                timer.NonReentrantAsDefault();
+                _ = timer.ScheduleEx(_log, () => UpdateScore()).ToRunNow().AndEvery(10)
                     .Minutes();
 
-                _ = timer.ScheduleEx(_log, delegate
-                {
-                    UpdateOldScore();
-                }).ToRunEvery(1).Days()
+                _ = timer.ScheduleEx(_log, () => UpdateOldScore()).ToRunEvery(1).Days()
                     .At(18, 0);
 
-                timer.ScheduleEx(_log, delegate
-                {
-                    _ = UpdatePlayTime();
-                }).ToRunEvery(1).Days()
-                    .At(5, 0);
-
-                _ = timer.ScheduleEx(_log, delegate
-                {
-                    InsertRankLog();
-                }).ToRunEvery(1).Days()
+                _ = timer.ScheduleEx(_log, () => InsertRankLog()).ToRunEvery(1).Days()
                     .At(17, 30);
 
-                _ = timer.ScheduleEx(_log, delegate
-                {
-                    DeleteExpiredAccessTokens();
-                }).ToRunEvery(1).Days()
+                _ = timer.ScheduleEx(_log, () => DeleteExpiredAccessTokens()).ToRunEvery(1).Days()
                     .At(3, 0);
 
                 JobManager.Initialize(timer);
@@ -100,69 +92,147 @@ namespace SpeedRunners.Scheduler
             }
         }
 
-        private async System.Threading.Tasks.Task UpdatePlayTime()
+        private async System.Threading.Tasks.Task UpdatePlayTime(List<string> platformIDs, HttpClient httpClient)
         {
-            using (HttpClient httpClient = HttpRequestBase.CreateHttpClient())
+            if (platformIDs == null || !platformIDs.Any())
             {
-                List<string> idList = new List<string>();
-                using (IDbConnection conn = DbHelper.GetConnection())
-                {
-                    Console.WriteLine($"更新【两周游戏时间】({DateTime.Now})");
-                    idList = conn.Query<string>("select PlatformID from RankInfo where RankType<>0").ToList();
-                }
-                List<RankInfoModel> rankParamList = new List<RankInfoModel>();
-                foreach (string platformID in idList)
-                {
-                    string url = "https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=" + ApiKey + $"&steamid={platformID}";
-                    string res = await httpClient.HttpGetAsync(url);
-                    await System.Threading.Tasks.Task.Delay(500); // 延迟0.5秒
-                    int weekTime = 0;
-                    int time = 0;
-                    if (!string.IsNullOrEmpty(res))
-                    {
-                        JToken jt = JObject.Parse(res)["response"];
-                        if (jt["total_count"] != null && (int)jt["total_count"] > 0)
-                        {
-                            JArray games = JArray.Parse(jt["games"].ToString());
-                            foreach (JToken g in games)
-                            {
-                                if (g["appid"].ToString() == "207140")
-                                {
-                                    weekTime = (int)g["playtime_2weeks"];
-                                }
-                            }
-                        }
-                    }
-                    string url2 = "https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=" + ApiKey + $"&steamid={platformID}";
-                    string res2 = await httpClient.HttpGetAsync(url2);
-                    if (!string.IsNullOrEmpty(res2))
-                    {
-                        JToken jt = JObject.Parse(res2)["response"];
-                        if (jt["game_count"] != null && (int)jt["game_count"] > 0)
-                        {
-                            JArray games = JArray.Parse(jt["games"].ToString());
-                            foreach (JToken g in games)
-                            {
-                                if (g["appid"].ToString() == "207140")
-                                {
-                                    time = (int)g["playtime_forever"];
-                                }
-                            }
-                        }
-                    }
-                    rankParamList.Add(new RankInfoModel
-                    {
-                        PlatformID = platformID,
-                        PlayTime = time,
-                        WeekPlayTime = weekTime,
-                    });
-                }
-                using (IDbConnection conn = DbHelper.GetConnection())
-                {
-                    conn.Execute($"update RankInfo set WeekPlayTime=?{nameof(RankInfoModel.WeekPlayTime)}, PlayTime=?{nameof(RankInfoModel.PlayTime)} where PlatformID=?{nameof(RankInfoModel.PlatformID)}", rankParamList);
-                }
-                Console.WriteLine($"【两周游戏时间】更新结束({DateTime.Now})");
+                return;
             }
+
+            Console.WriteLine($"更新【{platformIDs.Count}】个Steam游戏时间({DateTime.Now})");
+            List<RankInfoModel> rankParamList = new List<RankInfoModel>();
+            List<string> failedIDs = new List<string>();
+            foreach (string platformID in platformIDs)
+            {
+                RankInfoModel playTime = await FetchPlayTime(platformID, httpClient);
+                if (playTime == null)
+                {
+                    failedIDs.Add(platformID);
+                    continue;
+                }
+                rankParamList.Add(playTime);
+            }
+
+            if (rankParamList.Any())
+            {
+                using (IDbConnection conn = DbHelper.GetConnection())
+                {
+                    conn.Execute($@"
+                        UPDATE RankInfo
+                        SET WeekPlayTime = ?{nameof(RankInfoModel.WeekPlayTime)},
+                            PlayTime = ?{nameof(RankInfoModel.PlayTime)},
+                            PlayTimeModifyTime = NOW()
+                        WHERE PlatformID = ?{nameof(RankInfoModel.PlatformID)}",
+                        rankParamList);
+                }
+            }
+
+            MarkSteamFailures(failedIDs);
+            Console.WriteLine($"Steam游戏时间更新【{rankParamList.Count}/{platformIDs.Count}】({DateTime.Now})");
+        }
+
+        private async Task<RankInfoModel> FetchPlayTime(string platformID, HttpClient httpClient)
+        {
+            try
+            {
+                string recentUrl = "https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key=" + ApiKey + $"&steamid={platformID}";
+                string recentResponse = await httpClient.HttpGetAsync(recentUrl);
+                int? weekTime = TryReadWeekPlayTime(recentResponse);
+                await System.Threading.Tasks.Task.Delay(SteamPlayTimeRequestDelayMilliseconds);
+
+                string ownedUrl = "https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=" + ApiKey + $"&steamid={platformID}";
+                string ownedResponse = await httpClient.HttpGetAsync(ownedUrl);
+                int? totalTime = TryReadTotalPlayTime(ownedResponse);
+
+                if (!weekTime.HasValue || !totalTime.HasValue)
+                {
+                    return null;
+                }
+
+                return new RankInfoModel
+                {
+                    PlatformID = platformID,
+                    PlayTime = totalTime.Value,
+                    WeekPlayTime = weekTime.Value
+                };
+            }
+            catch (Exception ex)
+            {
+                _log.Log($"更新Steam游戏时间失败【{platformID}】：{ex}");
+                return null;
+            }
+        }
+
+        private static int? TryReadWeekPlayTime(string response)
+        {
+            if (string.IsNullOrWhiteSpace(response))
+            {
+                return null;
+            }
+
+            JObject obj = JObject.Parse(response);
+            JToken jt = obj["response"];
+            if (jt == null || jt["total_count"] == null)
+            {
+                return null;
+            }
+
+            if ((int)jt["total_count"] <= 0)
+            {
+                return 0;
+            }
+
+            JArray games = jt["games"] as JArray;
+            if (games == null)
+            {
+                return 0;
+            }
+
+            foreach (JToken game in games)
+            {
+                if (game["appid"]?.ToString() == "207140")
+                {
+                    return game["playtime_2weeks"] == null ? 0 : (int)game["playtime_2weeks"];
+                }
+            }
+
+            return 0;
+        }
+
+        private static int? TryReadTotalPlayTime(string response)
+        {
+            if (string.IsNullOrWhiteSpace(response))
+            {
+                return null;
+            }
+
+            JObject obj = JObject.Parse(response);
+            JToken jt = obj["response"];
+            if (jt == null || jt["game_count"] == null)
+            {
+                return null;
+            }
+
+            if ((int)jt["game_count"] <= 0)
+            {
+                return 0;
+            }
+
+            JArray games = jt["games"] as JArray;
+            if (games == null)
+            {
+                return 0;
+            }
+
+            foreach (JToken game in games)
+            {
+                if (game["appid"]?.ToString() == "207140")
+                {
+                    return game["playtime_forever"] == null ? 0 : (int)game["playtime_forever"];
+                }
+            }
+
+            return 0;
         }
         private void UpdateOldScore()
         {
@@ -246,43 +316,127 @@ namespace SpeedRunners.Scheduler
 
         public async System.Threading.Tasks.Task UpdateSteamState()
         {
-            List<string> platformIDs = new List<string>();
-            using (IDbConnection connection = DbHelper.GetConnection())
+            try
             {
-                platformIDs = connection.Query<string>("select PlatformID from RankInfo ORDER BY PlatformID").ToList();
+                if (string.Equals(RUN_UPDATESTEAMINFO, "false", StringComparison.OrdinalIgnoreCase))
+                {
+                    return;
+                }
+
+                List<string> summaryIDs = GetSteamSummaryCandidates();
+                List<string> playTimeIDs = GetPlayTimeCandidates();
+
+                using (HttpClient httpClient = HttpRequestBase.CreateHttpClient())
+                {
+                    await UpdateSteamInfo(summaryIDs, httpClient);
+                    await UpdatePlayTime(playTimeIDs, httpClient);
+                }
             }
-
-            int count = platformIDs.Count / (int.Parse(MINUTES_NUM) * 60 / 30);
-
-            platformIDs.AddRange(platformIDs);// platformIDs x2;
-
-            var cursor = platformIDs.FindIndex(x => x == _lastID);
-
-            var paramList = platformIDs.GetRange(cursor + 1, count);
-
-            _lastID = paramList.LastOrDefault();
-
-            await UpdateSteamInfo(paramList);
-
-            Thread.Sleep(30 * 1000);
+            finally
+            {
+                Thread.Sleep(SteamUpdateLoopDelaySeconds * 1000);
+            }
         }
 
-        private async System.Threading.Tasks.Task UpdateSteamInfo(List<string> platformIDs)
+        private List<string> GetSteamSummaryCandidates()
         {
-            if (RUN_UPDATESTEAMINFO == "false") return;
+            int limit = GetCandidateReadLimit(SteamSummaryBatchSize);
+            string sql = $@"
+                SELECT r.PlatformID
+                FROM RankInfo r
+                LEFT JOIN (
+                    SELECT PlatformID, MAX(LastActiveTime) LastActiveTime
+                    FROM AccessToken
+                    WHERE LastActiveTime >= DATE_SUB(NOW(), INTERVAL {SteamActiveWindowMinutes} MINUTE)
+                    GROUP BY PlatformID
+                ) active ON active.PlatformID = r.PlatformID
+                WHERE (
+                        (active.LastActiveTime IS NOT NULL
+                         OR r.LastProfileViewTime >= DATE_SUB(NOW(), INTERVAL {SteamActiveWindowMinutes} MINUTE))
+                        AND (r.ModifyTime IS NULL
+                             OR r.ModifyTime < DATE_SUB(NOW(), INTERVAL {SteamSummaryActiveTtlMinutes} MINUTE))
+                      )
+                   OR (r.ModifyTime IS NULL
+                       OR r.ModifyTime < DATE_SUB(NOW(), INTERVAL {SteamDailyTtlHours} HOUR))
+                ORDER BY
+                    CASE
+                        WHEN (active.LastActiveTime IS NOT NULL
+                              OR r.LastProfileViewTime >= DATE_SUB(NOW(), INTERVAL {SteamActiveWindowMinutes} MINUTE))
+                             AND (r.ModifyTime IS NULL
+                                  OR r.ModifyTime < DATE_SUB(NOW(), INTERVAL {SteamSummaryActiveTtlMinutes} MINUTE))
+                        THEN 0 ELSE 1
+                    END,
+                    COALESCE(active.LastActiveTime, r.LastProfileViewTime) DESC,
+                    COALESCE(r.ModifyTime, r.CreateTime, '1970-01-01') ASC
+                LIMIT {limit}";
+
+            using (IDbConnection connection = DbHelper.GetConnection())
+            {
+                return FilterSteamBackoff(connection.Query<string>(sql).ToList(), SteamSummaryBatchSize);
+            }
+        }
+
+        private List<string> GetPlayTimeCandidates()
+        {
+            int limit = GetCandidateReadLimit(SteamPlayTimeBatchSize);
+            string sql = $@"
+                SELECT r.PlatformID
+                FROM RankInfo r
+                LEFT JOIN (
+                    SELECT PlatformID, MAX(LastActiveTime) LastActiveTime
+                    FROM AccessToken
+                    WHERE LastActiveTime >= DATE_SUB(NOW(), INTERVAL {SteamActiveWindowMinutes} MINUTE)
+                    GROUP BY PlatformID
+                ) active ON active.PlatformID = r.PlatformID
+                WHERE r.RankType <> 0
+                  AND (
+                        (
+                            active.LastActiveTime IS NOT NULL
+                            OR r.LastProfileViewTime >= DATE_SUB(NOW(), INTERVAL {SteamActiveWindowMinutes} MINUTE)
+                        )
+                        AND (
+                            r.PlayTimeModifyTime IS NULL
+                            OR r.PlayTimeModifyTime < DATE_SUB(NOW(), INTERVAL {SteamPlayTimeActiveTtlMinutes} MINUTE)
+                        )
+                      OR (
+                            r.PlayTimeModifyTime IS NULL
+                            OR r.PlayTimeModifyTime < DATE_SUB(NOW(), INTERVAL {SteamDailyTtlHours} HOUR)
+                         )
+                  )
+                ORDER BY
+                    CASE
+                        WHEN (active.LastActiveTime IS NOT NULL
+                              OR r.LastProfileViewTime >= DATE_SUB(NOW(), INTERVAL {SteamActiveWindowMinutes} MINUTE))
+                             AND (r.PlayTimeModifyTime IS NULL
+                                  OR r.PlayTimeModifyTime < DATE_SUB(NOW(), INTERVAL {SteamPlayTimeActiveTtlMinutes} MINUTE))
+                        THEN 0 ELSE 1
+                    END,
+                    COALESCE(active.LastActiveTime, r.LastProfileViewTime) DESC,
+                    COALESCE(r.PlayTimeModifyTime, r.ModifyTime, r.CreateTime, '1970-01-01') ASC
+                LIMIT {limit}";
+
+            using (IDbConnection connection = DbHelper.GetConnection())
+            {
+                return FilterSteamBackoff(connection.Query<string>(sql).ToList(), SteamPlayTimeBatchSize);
+            }
+        }
+
+        private async System.Threading.Tasks.Task UpdateSteamInfo(List<string> platformIDs, HttpClient httpClient)
+        {
+            if (platformIDs == null || !platformIDs.Any())
+            {
+                return;
+            }
 
             List<PlayersModel> playerInfo = null;
-            using (HttpClient httpClient = HttpRequestBase.CreateHttpClient())
-            {
-                playerInfo = await BatchRequest(httpClient, platformIDs, 100);
-            }
+            playerInfo = await BatchRequest(httpClient, platformIDs, 100);
             int rows = 0;
             if (playerInfo.Any())
             {
                 playerInfo.ForEach(x => x.ModifyTime = DateTime.Now);
 
                 string setSql = $" ,PersonaName = ?{nameof(PlayersModel.Personaname)} ";
-                if (STOP_UPDATE.Equals("true"))
+                if (string.Equals(STOP_UPDATE, "true", StringComparison.OrdinalIgnoreCase))
                 {
                     setSql = $@" ,PersonaName = (CASE Participate
                                         WHEN 0 THEN ?{nameof(PlayersModel.Personaname)} 
@@ -307,11 +461,54 @@ namespace SpeedRunners.Scheduler
                     rows = conn.Execute(sql, playerInfo);
                 }
             }
+
+            HashSet<string> updatedIDs = new HashSet<string>(playerInfo.Select(x => x.Steamid));
+            MarkSteamFailures(platformIDs.Where(x => !updatedIDs.Contains(x)).ToList());
             if (rows != platformIDs.Count)
             {
                 string msg1 = $"更新【{rows}/{platformIDs.Count}】个Steam信息({DateTime.Now})";
                 Console.WriteLine(msg1);
             }
+        }
+
+        private List<string> FilterSteamBackoff(List<string> platformIDs, int take)
+        {
+            DateTime now = DateTime.Now;
+            return platformIDs
+                .Where(x => !_steamFailureUntil.ContainsKey(x) || _steamFailureUntil[x] <= now)
+                .Take(take)
+                .ToList();
+        }
+
+        private void MarkSteamFailures(List<string> platformIDs)
+        {
+            if (platformIDs == null || !platformIDs.Any())
+            {
+                return;
+            }
+
+            DateTime until = DateTime.Now.AddMinutes(SteamFailureBackoffMinutes);
+            foreach (string platformID in platformIDs)
+            {
+                _steamFailureUntil[platformID] = until;
+            }
+        }
+
+        private static int GetCandidateReadLimit(int take)
+        {
+            return Math.Max(take * 3, take);
+        }
+
+        private static int GetIntAppSetting(string key, int defaultValue)
+        {
+            string value = ConfigurationManager.AppSettings[key];
+            int parsed;
+            if (int.TryParse(value, out parsed) && parsed > 0)
+            {
+                return parsed;
+            }
+
+            return defaultValue;
         }
 
         private async Task<List<PlayersModel>> BatchRequest<T>(HttpClient httpClient, List<T> PlatformIDs, int count)
@@ -359,6 +556,22 @@ namespace SpeedRunners.Scheduler
                 try
                 {
                     job?.Invoke();
+                }
+                catch (Exception ex)
+                {
+                    log.Log(ex.ToString());
+                }
+            });
+        }
+
+        internal static Schedule ScheduleEx(this Registry reg, LogHelper log, Func<System.Threading.Tasks.Task> job)
+        {
+            return reg.Schedule(() =>
+            {
+                try
+                {
+                    System.Threading.Tasks.Task task = job?.Invoke();
+                    task?.GetAwaiter().GetResult();
                 }
                 catch (Exception ex)
                 {
