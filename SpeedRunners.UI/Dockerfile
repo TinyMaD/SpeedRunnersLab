@@ -7,9 +7,22 @@
 FROM node:14.21.3-alpine3.16 AS build
 WORKDIR /app
 
+ARG PRERENDER_API=https://api.speedrunners.cn/api
+ARG PRERENDER_TOP_N=100
+ARG PRERENDER_MOD_TAGS=0,1,2,3,4,5,6
+ARG PRERENDER_CONCURRENCY=2
+
+ENV PUPPETEER_SKIP_DOWNLOAD=true \
+    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser \
+    PRERENDER_API=$PRERENDER_API \
+    PRERENDER_TOP_N=$PRERENDER_TOP_N \
+    PRERENDER_MOD_TAGS=$PRERENDER_MOD_TAGS \
+    PRERENDER_CONCURRENCY=$PRERENDER_CONCURRENCY
+
 # node-gyp 编译原生模块（node-sass / deasync）需要的工具链
 # 老版 node-gyp 只识别 python/python2，不认 python3，所以建符号链接
-RUN apk add --no-cache python3 make g++ && \
+RUN apk add --no-cache python3 make g++ chromium nss freetype harfbuzz ca-certificates ttf-freefont && \
     ln -sf /usr/bin/python3 /usr/bin/python
 
 # 先只复制依赖描述，命中 yarn install 缓存

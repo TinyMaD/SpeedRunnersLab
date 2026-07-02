@@ -61,6 +61,8 @@ import Odometer from "@/components/Odometer";
 import UserAvatar from "@/components/UserAvatar";
 import { getOnlineCount } from "@/api/steam";
 import { getPlaySRList } from "@/api/rank";
+import { buildMeta, websiteJsonLd } from "@/utils/seo";
+import { dispatchPrerenderEvent } from "@/utils/prerender";
 export default {
   name: "Index",
   components: {
@@ -75,11 +77,24 @@ export default {
     playSRlist: []
   }),
   mounted() {
-    getOnlineCount().then(response => {
+    const onlineRequest = getOnlineCount().then(response => {
       this.onlineCount = response.data;
     });
-    getPlaySRList().then(response => {
+    const playSRRequest = getPlaySRList().then(response => {
       this.playSRlist = response.data;
+    });
+    Promise.all([onlineRequest, playSRRequest])
+      .catch(error => {
+        console.log(error);
+      })
+      .then(() => dispatchPrerenderEvent(this));
+  },
+  metaInfo() {
+    return buildMeta({
+      title: this.$t("routes.home"),
+      description: this.$t("seo.homeDescription"),
+      path: "/",
+      jsonLd: websiteJsonLd()
     });
   }
 };

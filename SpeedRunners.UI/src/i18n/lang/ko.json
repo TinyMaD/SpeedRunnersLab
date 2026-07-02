@@ -44,7 +44,8 @@
     "log": "변경 로그",
     "privacy": "개인정보 설정",
     "devices": "Login Devices",
-    "profile": "프로필"
+    "profile": "프로필",
+    "login": "로그인"
   },
   "mod": {
     "upload": "업로드",
@@ -317,5 +318,17 @@
       "gameSession": "게임 세션",
       "other": "기타"
     }
+  },
+  "seo": {
+    "defaultDescription": "SpeedRunnersLab provides live SpeedRunners stats, rank leaderboards, player profiles, match information and community MOD downloads.",
+    "homeDescription": "SpeedRunnersLab shows live SpeedRunners activity, active players, two-week score gains, playtime charts and sponsor information.",
+    "rankDescription": "SpeedRunners rank leaderboard with player names, leagues, rank scores, online state and recent score changes.",
+    "modDescription": "SpeedRunnersLab MOD hub for community characters, trails, items, HUDs, sounds and background resources.",
+    "modDetailDescription": "{0} is a SpeedRunnersLab community MOD. File size: {1}. Downloads: {2}.",
+    "profileDefaultDescription": "View SpeedRunners player profiles, rank scores, leagues, game stats, recent score changes and achievements.",
+    "profileDescription": "{0}'s SpeedRunners profile with rank score {1}, league {2}, and {3} hours played in the past two weeks.",
+    "matchDescription": "SpeedRunners community match page with schedule, participants, prize pool, rewards and sponsor information.",
+    "logDescription": "SpeedRunnersLab changelog covering feature updates, fixes, architecture changes and milestones.",
+    "searchDescription": "Search Steam players' SpeedRunners game data by SteamID, vanity URL or name."
   }
 }

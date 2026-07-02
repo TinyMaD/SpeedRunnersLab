@@ -18,7 +18,8 @@ router.beforeEach(async(to, from, next) => {
   NProgress.start();
 
   // set page title
-  document.title = getPageTitle(i18n.t(`routes.${to.meta.title}`));
+  const routeTitle = to.meta && to.meta.title ? i18n.t(`routes.${to.meta.title}`) : "";
+  document.title = getPageTitle(routeTitle);
 
   const hasToken = getToken();
   const hasRoles = store.getters.permission_routes && store.getters.permission_routes.length > 0;

@@ -216,6 +216,8 @@
 import { mapGetters } from "vuex";
 import ModInfo from "./modInfo";
 import { getDownloadUrl, getModList, getMod, operateModStar, deleteMod } from "@/api/asset";
+import { buildMeta, modJsonLd, SITE_ORIGIN } from "@/utils/seo";
+import { dispatchPrerenderEvent } from "@/utils/prerender";
 
 export default {
   name: "Mod",
@@ -277,6 +279,9 @@ export default {
     }
   },
   watch: {
+    "$route.params.id": function() {
+      this.initPage();
+    },
     "$route.query.id": function() {
       this.initPage();
     }
@@ -288,27 +293,30 @@ export default {
   },
   methods: {
     initPage() {
-      const shareId = this.$route.query.id;
+      const shareId = this.$route.params.id || this.$route.query.id;
       if (shareId) {
         this.isShareMode = true;
-        getMod(shareId).then(res => {
+        return getMod(shareId).then(res => {
           if (res.data) {
             this.data = { list: [res.data], total: 1 };
           } else {
             this.data = { list: [], total: 0 };
             this.$toast.error(this.$t("mod.modNotFound"));
           }
-        });
+        }).catch(error => {
+          console.log(error);
+          this.data = { list: [], total: 0 };
+        }).then(() => dispatchPrerenderEvent(this));
       } else {
         this.isShareMode = false;
-        this.getList();
+        return this.getList().then(() => dispatchPrerenderEvent(this));
       }
     },
     backToList() {
       this.$router.push("/mod");
     },
     share(mod) {
-      const url = `${window.location.origin}/mod?id=${mod.id}`;
+      const url = `${SITE_ORIGIN}/mod/${mod.id}`;
       navigator.clipboard.writeText(url);
       this.$toast.success(this.$t("mod.shareSucc"));
     },
@@ -325,8 +333,11 @@ export default {
       this.getList();
     },
     getList() {
-      getModList(this.searchParam).then(res => {
+      return getModList(this.searchParam).then(res => {
         this.data = res.data;
+      }).catch(error => {
+        console.log(error);
+        this.data = { list: [], total: 0 };
       });
     },
     openDialog(modId) {
@@ -401,15 +412,29 @@ export default {
     }
   },
   metaInfo() {
-    return {
-      meta: [
-        {
-          vmid: "keywords",
-          name: "keywords",
-          content: "游戏MOD,轨迹,Trail,Mod of SpeedRunners,HUD," + this.$baseKeywords
-        }
-      ]
-    };
+    const currentMod = this.isShareMode && this.data.list.length ? this.data.list[0] : null;
+    const keywords = "游戏MOD,轨迹,Trail,Mod of SpeedRunners,HUD," + this.$baseKeywords;
+    if (currentMod) {
+      return buildMeta({
+        title: `${currentMod.title} MOD`,
+        description: this.$t("seo.modDetailDescription", [
+          currentMod.title,
+          this.fileSize(currentMod.size || 0),
+          currentMod.download || 0
+        ]),
+        keywords,
+        image: currentMod.imgUrl,
+        path: `/mod/${currentMod.id}`,
+        type: "article",
+        jsonLd: modJsonLd(currentMod)
+      });
+    }
+    return buildMeta({
+      title: this.$t("routes.mod"),
+      description: this.$t("seo.modDescription"),
+      keywords,
+      path: "/mod"
+    });
   }
 };
 </script>

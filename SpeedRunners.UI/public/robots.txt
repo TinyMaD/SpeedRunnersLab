@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /other/
+Sitemap: https://www.speedrunners.cn/sitemap.xml

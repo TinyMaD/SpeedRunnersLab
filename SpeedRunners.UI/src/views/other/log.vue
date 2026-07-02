@@ -72,6 +72,8 @@
 <script>
 import axios from "axios";
 import XCard from "@/components/XCard";
+import { buildMeta } from "@/utils/seo";
+import { dispatchPrerenderEvent } from "@/utils/prerender";
 
 export default {
   components: {
@@ -89,6 +91,9 @@ export default {
       })
       .catch(error => {
         console.log(error);
+      })
+      .then(() => {
+        dispatchPrerenderEvent(this);
       });
   },
   methods: {
@@ -170,6 +175,13 @@ export default {
           break;
       }
     }
+  },
+  metaInfo() {
+    return buildMeta({
+      title: this.$t("routes.log"),
+      description: this.$t("seo.logDescription"),
+      path: "/log"
+    });
   }
 };
 </script>

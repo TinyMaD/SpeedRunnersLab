@@ -73,6 +73,8 @@ import {
   searchPlayerByUrl,
   searchPlayerBySteamID64
 } from "@/api/steam";
+import { buildMeta } from "@/utils/seo";
+import { dispatchPrerenderEvent } from "@/utils/prerender";
 export default {
   name: "SearchPlayer",
   data() {
@@ -99,6 +101,9 @@ export default {
     loadingText() {
       return this.$t("stats.showMore", [this.searchResult.total - this.searchResult.pageNo * 20]);
     }
+  },
+  mounted() {
+    dispatchPrerenderEvent(this);
   },
   methods: {
     searchPlayer() {
@@ -155,15 +160,12 @@ export default {
     }
   },
   metaInfo() {
-    return {
-      meta: [
-        {
-          vmid: "keywords",
-          name: "keywords",
-          content: "SR游戏数据查询,SpeedRunners玩家数据查询," + this.$baseKeywords
-        }
-      ]
-    };
+    return buildMeta({
+      title: this.$t("routes.searchplayer"),
+      description: this.$t("seo.searchDescription"),
+      keywords: "SR游戏数据查询,SpeedRunners玩家数据查询," + this.$baseKeywords,
+      path: "/searchplayer"
+    });
   }
 };
 </script>

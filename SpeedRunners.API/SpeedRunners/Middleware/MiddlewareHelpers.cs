@@ -18,6 +18,11 @@ namespace SpeedRunners.Middleware
             return app.UseMiddleware<SRLabTokenAuthMidd>();
         }
 
+        public static IApplicationBuilder UseSitemap(this IApplicationBuilder app)
+        {
+            return app.UseMiddleware<SitemapMiddleware>();
+        }
+
         public static IApplicationBuilder UseHeaderRequestLocalization(this IApplicationBuilder app)
         {
             return app.UseRequestLocalization(options =>

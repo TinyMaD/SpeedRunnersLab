@@ -229,6 +229,8 @@ import UserName from "@/components/UserName";
 import { getSponsor, updateParticipate, getParticipateList } from "@/api/rank";
 import { mapGetters } from "vuex";
 import { sectionToChinese } from "@/utils";
+import { buildMeta } from "@/utils/seo";
+import { dispatchPrerenderEvent } from "@/utils/prerender";
 export default {
   name: "Match",
   components: {
@@ -299,7 +301,7 @@ export default {
     }
   },
   mounted() {
-    getSponsor().then(response => {
+    const sponsorRequest = getSponsor().then(response => {
       this.sponsorList = response.data;
       var normalRuleList = this.sponsorList.filter(item => item.speRule == null);
       this.speRuleList = this.sponsorList.filter(item => item.speRule != null);
@@ -318,7 +320,12 @@ export default {
       var balance = normalPrizePool - 50 - prizeAll;
       this.prizeList[this.prizeList.length - 1] += balance;
     });
-    this.getParticipators();
+    const participatorRequest = this.getParticipators();
+    Promise.all([sponsorRequest, participatorRequest])
+      .catch(error => {
+        console.log(error);
+      })
+      .then(() => dispatchPrerenderEvent(this));
   },
   methods: {
     showDialog() {
@@ -351,7 +358,7 @@ export default {
       });
     },
     getParticipators() {
-      getParticipateList().then(response => {
+      return getParticipateList().then(response => {
         this.participateList = response.data;
       });
     },
@@ -386,6 +393,13 @@ export default {
       }
       this.calculate(prizeList, total);
     }
+  },
+  metaInfo() {
+    return buildMeta({
+      title: this.$t("routes.match"),
+      description: this.$t("seo.matchDescription"),
+      path: "/match"
+    });
   }
 };
 </script>

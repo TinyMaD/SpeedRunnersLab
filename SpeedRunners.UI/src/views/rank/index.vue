@@ -23,13 +23,19 @@
             <td v-if="index < 3"><img class="rowImg" :src="`img/${index + 1}.png`"></td>
             <td v-else>{{ index+1 }} </td>
             <td class="avator">
-              <div class="avatorImg clickable" :style="getAvatorStyle(player)" @click="goToProfile(player)">
-                <div v-if="isPlayingSR(player)" class="right">
-                  <img class="srIndex" style="height:20px;margin:27px -15px 0 0" src="img/srstate.png">
+              <router-link class="profile-link avatar-link" :to="profilePath(player)">
+                <div class="avatorImg clickable" :style="getAvatorStyle(player)">
+                  <div v-if="isPlayingSR(player)" class="right">
+                    <img class="srIndex" style="height:20px;margin:27px -15px 0 0" src="img/srstate.png">
+                  </div>
                 </div>
-              </div>
+              </router-link>
             </td>
-            <td class="clickable player-name-cell" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;" @click="goToProfile(player)">{{ player.personaName }}</td>
+            <td class="player-name-cell" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">
+              <router-link class="profile-link player-name-link" :to="profilePath(player)">
+                {{ player.personaName }}
+              </router-link>
+            </td>
             <td>
               <div :class="pc?'levelAll-pc':'levelAll'">
                 <div :class="pc?'levelDiv-pc left':'levelDiv left'">
@@ -59,7 +65,8 @@
 
 <script>
 import { getRankList } from "@/api/rank";
-import { goToUserProfile } from "@/utils/profile";
+import { buildMeta, itemListJsonLd } from "@/utils/seo";
+import { dispatchPrerenderEvent } from "@/utils/prerender";
 export default {
   name: "Rank",
 
@@ -93,7 +100,9 @@ export default {
   mounted() {
     getRankList().then(res => {
       this.response = res;
-    });
+    }).catch(error => {
+      console.log(error);
+    }).then(() => dispatchPrerenderEvent(this));
   },
 
   methods: {
@@ -109,6 +118,9 @@ export default {
     },
     isPlayingSR(player) {
       return player.gameID === "207140";
+    },
+    profilePath(player) {
+      return `/profile/${player.platformID}`;
     },
     getLevelStyle(rankLevel) {
       const height = (4 * this.imgSize) / 3;
@@ -150,21 +162,17 @@ export default {
         default:
           return "";
       }
-    },
-    goToProfile(player) {
-      goToUserProfile(this.$router, player.platformID);
     }
   },
   metaInfo() {
-    return {
-      meta: [
-        {
-          vmid: "keywords",
-          name: "keywords",
-          content: "SpeedRunners排行榜,SpeedRunners天梯,Rank,league," + this.$baseKeywords
-        }
-      ]
-    };
+    const players = this.response.data || [];
+    return buildMeta({
+      title: this.$t("routes.rank"),
+      description: this.$t("seo.rankDescription"),
+      keywords: "SpeedRunners排行榜,SpeedRunners天梯,Rank,league," + this.$baseKeywords,
+      path: "/rank",
+      jsonLd: players.length ? itemListJsonLd(players) : undefined
+    });
   }
 };
 </script>
@@ -323,5 +331,21 @@ th {
 .player-name-cell:hover {
   text-decoration: underline;
   color: #4FC3F7;
+}
+
+.profile-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.avatar-link {
+  display: block;
+}
+
+.player-name-link {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 </style>

@@ -44,7 +44,8 @@
     "log": "Change Log",
     "privacy": "Privacy Settings",
     "devices": "Login Devices",
-    "profile": "Profile"
+    "profile": "Profile",
+    "login": "Login"
   },
   "mod": {
     "upload": "Upload",
@@ -295,7 +296,20 @@
     "pageTitle": "{0} - SpeedRunners Profile",
     "pageTitleDefault": "Player Profile",
     "pageKeywords": "SpeedRunners player,{0},profile,game data",
-    "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    "months": [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec"
+    ],
     "heatmapDate": "{0} {1}, {2}",
     "activity": {
       "scoreChange": "Score Change",
@@ -304,5 +318,17 @@
       "gameSession": "Game Session",
       "other": "Other"
     }
+  },
+  "seo": {
+    "defaultDescription": "SpeedRunnersLab provides live SpeedRunners stats, rank leaderboards, player profiles, match information and community MOD downloads.",
+    "homeDescription": "SpeedRunnersLab shows live SpeedRunners activity, active players, two-week score gains, playtime charts and sponsor information.",
+    "rankDescription": "SpeedRunners rank leaderboard with player names, leagues, rank scores, online state and recent score changes.",
+    "modDescription": "SpeedRunnersLab MOD hub for community characters, trails, items, HUDs, sounds and background resources.",
+    "modDetailDescription": "{0} is a SpeedRunnersLab community MOD. File size: {1}. Downloads: {2}.",
+    "profileDefaultDescription": "View SpeedRunners player profiles, rank scores, leagues, game stats, recent score changes and achievements.",
+    "profileDescription": "{0}'s SpeedRunners profile with rank score {1}, league {2}, and {3} hours played in the past two weeks.",
+    "matchDescription": "SpeedRunners community match page with schedule, participants, prize pool, rewards and sponsor information.",
+    "logDescription": "SpeedRunnersLab changelog covering feature updates, fixes, architecture changes and milestones.",
+    "searchDescription": "Search Steam players' SpeedRunners game data by SteamID, vanity URL or name."
   }
 }

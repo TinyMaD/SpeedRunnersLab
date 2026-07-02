@@ -83,6 +83,8 @@ namespace SpeedRunners
 
             app.UseHeaderRequestLocalization();
 
+            app.UseSitemap();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

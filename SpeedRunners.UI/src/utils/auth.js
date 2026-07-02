@@ -23,6 +23,9 @@ export function goLoginURL() {
 
 // 判断用户是否被墙
 export function isInChina() {
+  if (window.__PRERENDER_INJECTED && window.__PRERENDER_INJECTED.prerender) {
+    return Promise.resolve(false);
+  }
   return new Promise(resolve => {
     // 调用一个支持跨域请求的facebook接口
     const url = "https://graph.facebook.com/feed?callback=h";

@@ -11,6 +11,18 @@ on:
         description: 'Deploy services: auto, all, or comma-separated api,ui,scheduler.'
         required: false
         default: 'auto'
+      prerender_top_n:
+        description: 'UI prerender profile count. Use a smaller value for gray rollout.'
+        required: false
+        default: '100'
+      prerender_mod_tags:
+        description: 'UI prerender MOD tags, comma-separated. Empty skips MOD detail prerender.'
+        required: false
+        default: '0,1,2,3,4,5,6'
+      prerender_concurrency:
+        description: 'UI prerender browser concurrency.'
+        required: false
+        default: '2'
 
 env:
   REGISTRY: ghcr.io
@@ -152,6 +164,10 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ needs.prepare.outputs.owner_lc }}/srlab-ui:latest
             ${{ env.REGISTRY }}/${{ needs.prepare.outputs.owner_lc }}/srlab-ui:${{ needs.prepare.outputs.tag }}
+          build-args: |
+            PRERENDER_TOP_N=${{ github.event.inputs.prerender_top_n || '100' }}
+            PRERENDER_MOD_TAGS=${{ github.event.inputs.prerender_mod_tags || '0,1,2,3,4,5,6' }}
+            PRERENDER_CONCURRENCY=${{ github.event.inputs.prerender_concurrency || '2' }}
           cache-from: type=gha,scope=ui
           cache-to: type=gha,scope=ui,mode=max
 

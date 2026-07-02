@@ -58,3 +58,6 @@ srlab-secrets-bak-*.tar.gz
 
 # 前端构建时自动生成的版本号文件（每次 build 重写，不入库）
 /SpeedRunners.UI/public/verify.json
+
+# 前端预渲染路由清单（build:prod 前自动生成）
+/SpeedRunners.UI/build/prerender-routes.json

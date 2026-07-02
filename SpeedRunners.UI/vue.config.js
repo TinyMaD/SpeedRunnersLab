@@ -1,7 +1,10 @@
 "use strict";
+const fs = require("fs");
 const path = require("path");
 const defaultSettings = require("./src/settings.js");
 const NyanProgressPlugin = require("nyan-progress-webpack-plugin");
+const PrerenderSPAPlugin = require("prerender-spa-plugin");
+const PuppeteerRenderer = require("./build/prerender-puppeteer-renderer");
 // 前端发布后浏览器缓存问题解决
 const { create: createVersionFile } = require("./build/version-create");
 // 同一个构建版本号：既写入 verify.json，又通过 VUE_APP_VERSION 编译进 bundle，
@@ -14,7 +17,46 @@ function resolve(dir) {
   return path.join(__dirname, dir);
 }
 
+function getPrerenderRoutes() {
+  const routeFile = path.join(__dirname, "build", "prerender-routes.json");
+  if (process.env.NODE_ENV !== "production" || !fs.existsSync(routeFile)) {
+    return [];
+  }
+  return require(routeFile);
+}
+
 const name = defaultSettings.title || "vue Admin Template"; // page title
+const prerenderRoutes = getPrerenderRoutes();
+const webpackPlugins = [new NyanProgressPlugin()];
+const proxyServer = process.env.HTTPS_PROXY || process.env.HTTP_PROXY || process.env.https_proxy || process.env.http_proxy;
+const puppeteerArgs = ["--no-sandbox", "--disable-setuid-sandbox"];
+if (proxyServer) {
+  puppeteerArgs.push(`--proxy-server=${proxyServer}`);
+}
+
+if (process.env.NODE_ENV === "production" && prerenderRoutes.length > 0) {
+  webpackPlugins.push(new PrerenderSPAPlugin({
+    staticDir: path.join(__dirname, "dist"),
+    routes: prerenderRoutes,
+    renderer: new PuppeteerRenderer({
+      renderAfterDocumentEvent: "render-event",
+      headless: true,
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+      args: puppeteerArgs,
+      headers: { Origin: "https://www.speedrunners.cn" },
+      inject: { prerender: true },
+      maxConcurrentRoutes: Number(process.env.PRERENDER_CONCURRENCY || 4),
+      navigationOptions: {
+        waitUntil: "networkidle0",
+        timeout: 60000
+      },
+      viewport: {
+        width: 1366,
+        height: 900
+      }
+    })
+  }));
+}
 
 // If your port is set to 80,
 // use administrator privileges to execute the command line.
@@ -37,7 +79,7 @@ module.exports = {
         "@": resolve("src")
       }
     },
-    plugins: [new NyanProgressPlugin()]
+    plugins: webpackPlugins
   },
   /**
    * You will need to set publicPath if you plan to deploy your site under a sub path,

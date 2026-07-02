@@ -277,6 +277,8 @@
 <script>
 import ScoreHeatmap from "@/components/ScoreHeatmap";
 import { getProfileData, getDailyScoreHistory, getAchievements } from "@/api/profile";
+import { buildMeta, personJsonLd } from "@/utils/seo";
+import { dispatchPrerenderEvent } from "@/utils/prerender";
 
 export default {
   name: "Profile",
@@ -415,6 +417,7 @@ export default {
         self.profileData = null;
       }).finally(function() {
         self.loading = false;
+        dispatchPrerenderEvent(self);
       });
     },
 
@@ -460,16 +463,23 @@ export default {
     var title = name
       ? this.$t("profile.pageTitle", [name])
       : this.$t("profile.pageTitleDefault");
-    return {
+    var description = this.profileData
+      ? this.$t("seo.profileDescription", [
+        name,
+        this.formatNumber(this.profileData.rankScore),
+        this.getLevelName,
+        this.profileData.past2WeeksPlaytime || 0
+      ])
+      : this.$t("seo.profileDefaultDescription");
+    return buildMeta({
       title: title,
-      meta: [
-        {
-          vmid: "keywords",
-          name: "keywords",
-          content: this.$t("profile.pageKeywords", [name])
-        }
-      ]
-    };
+      description: description,
+      keywords: this.$t("profile.pageKeywords", [name]),
+      image: this.profileData && (this.profileData.avatarL || this.profileData.avatarM),
+      path: `/profile/${this.steamId || ""}`,
+      type: "profile",
+      jsonLd: this.profileData && !this.profileData.isPrivate ? personJsonLd(this.profileData) : undefined
+    });
   }
 };
 </script>
