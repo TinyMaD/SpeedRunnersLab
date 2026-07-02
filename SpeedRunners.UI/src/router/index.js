@@ -62,7 +62,7 @@ export const constantRoutes = [
       {
         path: "/mod/:id",
         component: () => import("@/views/mod/index"),
-        meta: { title: "mod", icon: "mdi-file-download" },
+        meta: { title: "mod", icon: "mdi-file-download", sidebar: false },
         hidden: true
       },
       {
@@ -74,7 +74,7 @@ export const constantRoutes = [
         path: "/login",
         component: () => import("@/views/login/index"),
         props: route => ({ query: route.fullPath.split("?")[1] }),
-        meta: { title: "login" },
+        meta: { title: "login", sidebar: false },
         hidden: true
       },
       {
