@@ -31,7 +31,7 @@
                 </div>
               </router-link>
             </td>
-            <td class="player-name-cell" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">
+            <td class="player-name-cell" :class="{ 'player-name-cell--dark': $vuetify.theme.dark }" style="white-space: nowrap;text-overflow: ellipsis;overflow: hidden;">
               <router-link class="profile-link player-name-link" :to="profilePath(player)">
                 {{ player.personaName }}
               </router-link>
@@ -333,6 +333,14 @@ th {
   color: #4FC3F7;
 }
 
+.player-name-cell {
+  color: #333;
+}
+
+.player-name-cell--dark {
+  color: #fff;
+}
+
 .profile-link {
   color: inherit;
   text-decoration: none;
@@ -347,5 +355,9 @@ th {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.player-name-cell .player-name-link {
+  color: inherit;
 }
 </style>
