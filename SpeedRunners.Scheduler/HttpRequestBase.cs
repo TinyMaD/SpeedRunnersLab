@@ -10,7 +10,7 @@ namespace SpeedRunners.Scheduler
     {
         public static HttpClient CreateHttpClient()
         {
-            var client = new HttpClient() { Timeout = TimeSpan.FromSeconds(5) };
+            var client = new HttpClient() { Timeout = TimeSpan.FromSeconds(30) };
             string proxyAddress = ConfigurationManager.AppSettings["ProxyAddress"];
             var proxy = new WebProxy(proxyAddress, false);
             HttpClient.DefaultProxy = proxy;

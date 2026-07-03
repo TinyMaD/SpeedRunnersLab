@@ -23,10 +23,8 @@ namespace SpeedRunners.Scheduler
         private static readonly string ApiKey = ConfigurationManager.AppSettings["ApiKey"];
         private static readonly int SteamActiveWindowMinutes = GetIntAppSetting("SteamActiveWindowMinutes", 30);
         private static readonly int SteamSummaryActiveTtlMinutes = GetIntAppSetting("SteamSummaryActiveTtlMinutes", 5);
-        private static readonly int SteamPlayTimeActiveTtlMinutes = GetIntAppSetting("SteamPlayTimeActiveTtlMinutes", 60);
         private static readonly int SteamDailyTtlHours = GetIntAppSetting("SteamDailyTtlHours", 24);
         private static readonly int SteamSummaryBatchSize = GetIntAppSetting("SteamSummaryBatchSize", 100);
-        private static readonly int SteamPlayTimeBatchSize = GetIntAppSetting("SteamPlayTimeBatchSize", 5);
         private static readonly int SteamUpdateLoopDelaySeconds = GetIntAppSetting("SteamUpdateLoopDelaySeconds", 30);
         private static readonly int SteamFailureBackoffMinutes = GetIntAppSetting("SteamFailureBackoffMinutes", 15);
         private static readonly int SteamPlayTimeRequestDelayMilliseconds = GetIntAppSetting("SteamPlayTimeRequestDelayMilliseconds", 500);
@@ -50,6 +48,9 @@ namespace SpeedRunners.Scheduler
 
                 _ = timer.ScheduleEx(_log, () => InsertRankLog()).ToRunEvery(1).Days()
                     .At(17, 30);
+
+                _ = timer.ScheduleEx(_log, () => UpdatePlayTime()).ToRunEvery(1).Days()
+                    .At(5, 0);
 
                 _ = timer.ScheduleEx(_log, () => DeleteExpiredAccessTokens()).ToRunEvery(1).Days()
                     .At(3, 0);
@@ -92,6 +93,20 @@ namespace SpeedRunners.Scheduler
             }
         }
 
+        private async System.Threading.Tasks.Task UpdatePlayTime()
+        {
+            List<string> platformIDs;
+            using (IDbConnection conn = DbHelper.GetConnection())
+            {
+                platformIDs = conn.Query<string>("SELECT PlatformID FROM RankInfo WHERE RankType <> 0").ToList();
+            }
+
+            using (HttpClient httpClient = HttpRequestBase.CreateHttpClient())
+            {
+                await UpdatePlayTime(platformIDs, httpClient);
+            }
+        }
+
         private async System.Threading.Tasks.Task UpdatePlayTime(List<string> platformIDs, HttpClient httpClient)
         {
             if (platformIDs == null || !platformIDs.Any())
@@ -101,16 +116,13 @@ namespace SpeedRunners.Scheduler
 
             Console.WriteLine($"更新【{platformIDs.Count}】个Steam游戏时间({DateTime.Now})");
             List<RankInfoModel> rankParamList = new List<RankInfoModel>();
-            List<string> failedIDs = new List<string>();
             foreach (string platformID in platformIDs)
             {
                 RankInfoModel playTime = await FetchPlayTime(platformID, httpClient);
-                if (playTime == null)
+                if (playTime != null)
                 {
-                    failedIDs.Add(platformID);
-                    continue;
+                    rankParamList.Add(playTime);
                 }
-                rankParamList.Add(playTime);
             }
 
             if (rankParamList.Any())
@@ -127,7 +139,6 @@ namespace SpeedRunners.Scheduler
                 }
             }
 
-            MarkSteamFailures(failedIDs);
             Console.WriteLine($"Steam游戏时间更新【{rankParamList.Count}/{platformIDs.Count}】({DateTime.Now})");
         }
 
@@ -324,12 +335,10 @@ namespace SpeedRunners.Scheduler
                 }
 
                 List<string> summaryIDs = GetSteamSummaryCandidates();
-                List<string> playTimeIDs = GetPlayTimeCandidates();
 
                 using (HttpClient httpClient = HttpRequestBase.CreateHttpClient())
                 {
                     await UpdateSteamInfo(summaryIDs, httpClient);
-                    await UpdatePlayTime(playTimeIDs, httpClient);
                 }
             }
             finally
@@ -373,51 +382,6 @@ namespace SpeedRunners.Scheduler
             using (IDbConnection connection = DbHelper.GetConnection())
             {
                 return FilterSteamBackoff(connection.Query<string>(sql).ToList(), SteamSummaryBatchSize);
-            }
-        }
-
-        private List<string> GetPlayTimeCandidates()
-        {
-            int limit = GetCandidateReadLimit(SteamPlayTimeBatchSize);
-            string sql = $@"
-                SELECT r.PlatformID
-                FROM RankInfo r
-                LEFT JOIN (
-                    SELECT PlatformID, MAX(LastActiveTime) LastActiveTime
-                    FROM AccessToken
-                    WHERE LastActiveTime >= DATE_SUB(NOW(), INTERVAL {SteamActiveWindowMinutes} MINUTE)
-                    GROUP BY PlatformID
-                ) active ON active.PlatformID = r.PlatformID
-                WHERE r.RankType <> 0
-                  AND (
-                        (
-                            active.LastActiveTime IS NOT NULL
-                            OR r.LastProfileViewTime >= DATE_SUB(NOW(), INTERVAL {SteamActiveWindowMinutes} MINUTE)
-                        )
-                        AND (
-                            r.PlayTimeModifyTime IS NULL
-                            OR r.PlayTimeModifyTime < DATE_SUB(NOW(), INTERVAL {SteamPlayTimeActiveTtlMinutes} MINUTE)
-                        )
-                      OR (
-                            r.PlayTimeModifyTime IS NULL
-                            OR r.PlayTimeModifyTime < DATE_SUB(NOW(), INTERVAL {SteamDailyTtlHours} HOUR)
-                         )
-                  )
-                ORDER BY
-                    CASE
-                        WHEN (active.LastActiveTime IS NOT NULL
-                              OR r.LastProfileViewTime >= DATE_SUB(NOW(), INTERVAL {SteamActiveWindowMinutes} MINUTE))
-                             AND (r.PlayTimeModifyTime IS NULL
-                                  OR r.PlayTimeModifyTime < DATE_SUB(NOW(), INTERVAL {SteamPlayTimeActiveTtlMinutes} MINUTE))
-                        THEN 0 ELSE 1
-                    END,
-                    COALESCE(active.LastActiveTime, r.LastProfileViewTime) DESC,
-                    COALESCE(r.PlayTimeModifyTime, r.ModifyTime, r.CreateTime, '1970-01-01') ASC
-                LIMIT {limit}";
-
-            using (IDbConnection connection = DbHelper.GetConnection())
-            {
-                return FilterSteamBackoff(connection.Query<string>(sql).ToList(), SteamPlayTimeBatchSize);
             }
         }
 
