@@ -35,7 +35,7 @@ COPY . .
 RUN yarn build:prod
 
 # ===== Runtime stage =====
-FROM nginx:stable-alpine AS runtime
+FROM nginx:1.30.3-alpine AS runtime
 
 # 把构建产物复制到 nginx 默认根目录
 COPY --from=build /app/dist /usr/share/nginx/html
