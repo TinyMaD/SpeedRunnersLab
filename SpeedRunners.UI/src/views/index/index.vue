@@ -32,7 +32,7 @@
                   </p>
                 </v-card>
               </v-col>
-              <v-col cols="12" class="py-0">
+              <v-col v-if="showSponsor" cols="12" class="py-0">
                 <v-card class="mb-2 pa-2 rounded-0">
                   <Sponsor />
                 </v-card>
@@ -76,6 +76,11 @@ export default {
     onlineCount: 0,
     playSRlist: []
   }),
+  computed: {
+    showSponsor() {
+      return process.env.VUE_APP_SHOW_SPONSOR === "true";
+    }
+  },
   mounted() {
     const onlineRequest = getOnlineCount().then(response => {
       this.onlineCount = response.data;
